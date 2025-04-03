@@ -1,9 +1,10 @@
 'use client';
 
-import { ExternalLink, TriangleAlert, Users } from 'lucide-react';
+import { ExternalLink, TriangleAlert } from 'lucide-react';
 import Container from '../container';
 import Comments from './comments';
 import MonthlyPageViews from './page-views';
+import { Icons } from '../icons';
 
 export default function CommentSection() {
   return (
@@ -15,7 +16,7 @@ export default function CommentSection() {
             <span className="box text-base font-normal">(0 Comments)</span>
           </h2>
           <div className="flex items-center gap-2">
-            <Users className="h-4 w-fit text-green-600" />
+            <Icons.usersIcon className="h-4 w-fit fill-green-600 text-green-600" />
             <div className="text-sm">
               <MonthlyPageViews />
             </div>

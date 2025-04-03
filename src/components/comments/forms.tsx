@@ -3,6 +3,7 @@
 import { toast } from 'sonner';
 import { Icons } from '../icons';
 import { SignToggler } from '../header/sign-toggler';
+import { Textarea } from '../ui/textarea';
 
 export function MainForm() {
   return (
@@ -11,18 +12,13 @@ export function MainForm() {
         <label htmlFor="commentText" className="sr-only">
           Add your comment
         </label>
-        <textarea
-          rows={1}
+        <Textarea
           name="commentText"
           id="commentText"
-          className="block w-full resize-none border-0 bg-transparent py-2 text-gray-900 placeholder:text-sm placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-          placeholder="Add your comment..."
           minLength={2}
           maxLength={500}
-          onInput={(e: any) => {
-            e.target.style.height = 'auto'; // Reset height
-            e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height to content
-          }}
+          placeholder="Add your comment..."
+          className="border-0 shadow-none outline-0 focus:border-0 focus:outline-0 focus-visible:border-0 focus-visible:ring-0 focus-visible:outline-none"
         />
 
         {/* Spacer element to match the height of the toolbar */}
@@ -36,15 +32,16 @@ export function MainForm() {
 
       <div className="absolute inset-x-0 bottom-0 flex justify-between px-4 pb-4">
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
+          <div
+            onClick={(e) => {
+              e.preventDefault;
               toast.info('Login/Signup first to clap for article');
             }}
             className="flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:-translate-y-1 hover:text-gray-500"
           >
             <Icons.clapHands className="h-5 w-5 text-gray-600" />
             <span className="sr-only">Clap hands for article</span>
-          </button>
+          </div>
           <div
             aria-label="Article Claps Count"
             className="text-sm text-gray-500"

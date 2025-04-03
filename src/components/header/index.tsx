@@ -128,7 +128,6 @@ export default function Header({
                           <NavigationMenuLink
                             href={nav.href}
                             className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
-                            asChild
                           >
                             <span className="flex items-center">
                               <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
@@ -173,7 +172,7 @@ export default function Header({
                         <li key={nav.name}>
                           <NavigationMenuLink
                             href={nav.href}
-                            className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
+                            className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
                             asChild
                           >
                             <span className="flex items-center">
@@ -200,7 +199,7 @@ export default function Header({
                         <li key={nav.name}>
                           <NavigationMenuLink
                             href={nav.href}
-                            className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
+                            className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
                             asChild
                           >
                             <span className="flex items-center">
