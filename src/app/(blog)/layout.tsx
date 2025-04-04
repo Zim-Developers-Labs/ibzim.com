@@ -11,6 +11,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Suspense } from 'react';
 import GoogleAdsense from '@/components/google-adsense';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -42,7 +43,7 @@ export default async function RootLayout({
         {children}
         <Footer siteShortName={siteConfig.shortName} />
         <Analytics />
-        {/* <SpeedInsights /> */}
+        <SpeedInsights />
         <GoogleAnalytics gaId={process.env.GA_SECRET!} />
         <Suspense fallback={null}>
           <GoogleAdsense pId={process.env.P_ID || ''} />
