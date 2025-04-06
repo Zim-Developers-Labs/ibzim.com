@@ -12,6 +12,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { Suspense } from 'react';
 import GoogleAdsense from '@/components/google-adsense';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { validateRequest } from '@/lib/auth/validate-request';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +31,8 @@ export default async function RootLayout({
     siteConfig.documentPrefix,
   );
 
+  const { user } = await validateRequest();
+
   return (
     <html
       lang="en"
@@ -39,7 +42,11 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <Banner />
-        <Header articles={allArticles} popularArticles={popularArticles} />
+        <Header
+          articles={allArticles}
+          popularArticles={popularArticles}
+          user={user}
+        />
         {children}
         <Footer siteShortName={siteConfig.shortName} />
         <Analytics />

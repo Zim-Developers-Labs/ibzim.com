@@ -319,6 +319,28 @@ function UsersIcon({ ...props }) {
   );
 }
 
+function IBGlobalLogoSM(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      width="158"
+      height="100"
+      viewBox="0 0 158 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M0 100V78.3291H10.6784V21.6709H0V0H54.0201V21.6709H43.3417V78.3291H54.0201V100H0Z"
+        fill="currentColor"
+      />
+      <path
+        d="M61.4322 100V78.3291H71.4824V21.6709H61.4322V0H115.641C129.041 0 139.154 2.30318 145.98 6.90955C152.848 11.5159 156.281 18.3836 156.281 27.5126C156.281 32.3283 155.088 36.5997 152.701 40.3266C150.356 44.0536 146.943 46.9012 142.462 48.8693C147.278 50.7956 151.068 53.706 153.832 57.6005C156.595 61.4531 157.977 66.0804 157.977 71.4824C157.977 80.6533 154.627 87.7094 147.927 92.6508C141.227 97.5503 131.637 100 119.158 100H61.4322ZM111.809 21.0427H103.392V40.2638H111.809C119.598 40.2638 123.492 37.0603 123.492 30.6533C123.492 24.2462 119.598 21.0427 111.809 21.0427ZM103.392 78.9573H113.128C121.168 78.9573 125.188 75.4188 125.188 68.3417C125.188 61.2647 121.168 57.7261 113.128 57.7261H103.392V78.9573Z"
+        fill="#EAB308"
+      />
+    </svg>
+  );
+}
+
 export const Icons = {
   logoSm: logoSm,
   xfinityLogo: XfinityProsLogo,
@@ -332,5 +354,6 @@ export const Icons = {
   clapHands: ClapHands,
   pdfIcon: PDFIcon,
   usersIcon: UsersIcon,
+  ibLogoSM: IBGlobalLogoSM,
   youtube: YoutubeIcon,
 };

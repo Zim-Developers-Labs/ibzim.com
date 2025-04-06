@@ -14,6 +14,7 @@ import { SignToggler } from './sign-toggler';
 import SideBar from './side-bar';
 import Link from 'next/link';
 import Container from '../container';
+import UserToggler from './user-toggler';
 
 type NavType = {
   name: string;
@@ -236,6 +237,7 @@ export default function Header({
               />
             )}
             {!user && <SignToggler />}
+            {user && <UserToggler user={user} />}
           </div>
         </div>
       </Container>
