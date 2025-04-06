@@ -13,7 +13,10 @@ type Props = {
 };
 
 export function SignToggler({ bgColor, linkText, textColor }: Props) {
-  const ibDomain = 'http://localhost:5000';
+  const ibDomain =
+    process.env.NODE_ENV === 'production'
+      ? 'https://www.ibglobal.org'
+      : 'http://localhost:3000';
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
