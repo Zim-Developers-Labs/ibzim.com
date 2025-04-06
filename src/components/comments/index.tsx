@@ -5,8 +5,43 @@ import Container from '../container';
 import Comments from './comments';
 import MonthlyPageViews from './page-views';
 import { Icons } from '../icons';
+import { User } from 'lucia';
+import { CommentType } from '@/server/db/schema';
+import { CommentWithChildren } from './comments-lib';
+import { useCallback, useState } from 'react';
+import Link from 'next/link';
 
-export default function CommentSection() {
+type CommentSectionProps = {
+  user?: User;
+  articleId: string;
+  allComments?: CommentType[];
+  parentComments?: CommentWithChildren[];
+  article: any;
+  handleClap: any;
+  isClapping: boolean;
+  userClapped: boolean;
+  claps: any;
+};
+
+export default function CommentSection({
+  user,
+  articleId,
+  allComments,
+  parentComments,
+  article,
+  claps,
+  handleClap,
+  isClapping,
+  userClapped,
+}: CommentSectionProps) {
+  const [commentCount, setCommentCount] = useState(
+    allComments ? allComments.length : 0,
+  );
+
+  const incrementCommentCount = useCallback(() => {
+    setCommentCount((prevCount) => prevCount + 1);
+  }, []);
+
   return (
     <Container className="max-w-screen-md py-10 md:py-20">
       <aside id="commentSection">
@@ -22,26 +57,29 @@ export default function CommentSection() {
             </div>
           </div>
         </div>
-        <div className="mb-8 border-l-4 border-yellow-400 bg-yellow-50 p-4">
+        <div className="mb-8 border-l-4 border-green-400 bg-green-50 p-4">
           <div className="flex">
             <div className="flex-shrink-0">
               <TriangleAlert
-                className="h-5 w-5 text-yellow-400"
+                className="h-5 w-5 text-green-400"
                 aria-hidden="true"
               />
             </div>
             <div className="ml-3">
-              <div className="text-sm text-yellow-700">
-                IB commenting system is currently being updated, we apologise
-                for the inconvenience. Thank you for your patience, you can
-                comment{' '}
+              <div className="text-sm text-green-700">
+                Feel free to comment your thoughts on the article. You can
+                report Inappropriate comments from the comment menu in
+                accordance to our{' '}
                 <div
                   onClick={() =>
-                    window.open('https://wa.me/+263717238876', '_blank')
+                    window.open(
+                      'https://www.ibglobal.org/policies/commenting',
+                      '_blank',
+                    )
                   }
-                  className="inline cursor-pointer font-medium text-yellow-700 underline hover:text-yellow-600"
+                  className="inline cursor-pointer font-medium text-green-700 underline hover:text-green-600"
                 >
-                  on Whatsapp.
+                  commenting policy.
                   <ExternalLink className="inline h-4 w-4" />
                 </div>
               </div>
@@ -61,7 +99,17 @@ export default function CommentSection() {
             </span>
           </div>
           <div className="w-full min-w-0 flex-1">
-            <Comments />
+            <Comments
+              articleId={articleId}
+              comments={parentComments}
+              user={user}
+              onCommentAdded={incrementCommentCount}
+              article={article}
+              claps={claps}
+              handleClap={handleClap}
+              isClapping={isClapping}
+              userClapped={userClapped}
+            />
           </div>
         </div>
       </aside>

@@ -4,18 +4,135 @@ import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { MainForm } from './forms';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Command, CommandGroup, CommandItem, CommandList } from '../ui/command';
+import { CommentWithChildren } from './comments-lib';
+import { User } from 'lucia';
+import Comment from './comment';
 
-export default function Comments() {
+export default function Comments({
+  comments,
+  user,
+  onCommentAdded,
+  articleId,
+  article,
+  claps,
+  handleClap,
+  isClapping,
+  userClapped,
+}: {
+  comments?: CommentWithChildren[];
+  user?: User;
+  articleId: string;
+  onCommentAdded: () => void;
+  article: any;
+  handleClap: any;
+  isClapping: boolean;
+  userClapped: boolean;
+  claps: any;
+}) {
   const [value, setValue] = useState(sortTypes[0].value);
+  const [updatedComments, setComments] = useState(comments);
+  const [visibleCount, setVisibleCount] = useState(10); // initial count of comments to display
+
+  // Sort comments based on the selected sort type
+  useEffect(() => {
+    if (comments) {
+      const sortedComments = [...comments];
+      switch (value) {
+        case 'best':
+          sortedComments.sort(
+            (a, b) => (b.likesCount || 0) - (a.likesCount || 0),
+          );
+          break;
+        case 'recent':
+          sortedComments.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
+          break;
+        case 'older':
+          sortedComments.sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          );
+          break;
+      }
+      setComments(sortedComments);
+    }
+  }, [value, comments]);
+
+  // Function to load more comments
+  const loadMoreComments = () => {
+    setVisibleCount((prev) => prev + 5); // increase the visible count by 5
+  };
+
+  const handleCommentDeleted = (deletedCommentId: string) => {
+    setComments((prevComments) => {
+      const removeCommentRecursively = (
+        comments: CommentWithChildren[],
+      ): CommentWithChildren[] => {
+        return comments.filter((c) =>
+          c.commentId !== deletedCommentId
+            ? {
+                ...c,
+                children: c.children
+                  ? removeCommentRecursively(c.children)
+                  : [],
+              }
+            : false,
+        );
+      };
+
+      return removeCommentRecursively(prevComments || []);
+    });
+  };
 
   return (
     <div>
-      <MainForm />
+      <MainForm
+        user={user}
+        articleId={articleId}
+        setComments={setComments}
+        updatedComments={updatedComments}
+        onCommentAdded={onCommentAdded}
+        claps={claps}
+        handleClap={handleClap}
+        isClapping={isClapping}
+        userClapped={userClapped}
+      />
       <div>
         <SortFilter value={value} setValue={setValue} />
       </div>
+      <ul>
+        {/* Show only the first 'visibleCount' comments */}
+        {updatedComments
+          ?.slice(0, visibleCount)
+          .map((comment, i) => (
+            <Comment
+              onCommentDeleted={handleCommentDeleted}
+              i={i}
+              key={comment.commentId}
+              comment={comment}
+              articleId={articleId}
+              parentCommentId={comment.parentCommentId!}
+              user={user}
+              setComments={setComments}
+              updatedComments={updatedComments}
+              onCommentAdded={onCommentAdded}
+              article={article}
+            />
+          ))}
+      </ul>
+      {/* Load more button, visible only if there are more comments to show */}
+      {visibleCount < updatedComments!?.length && (
+        <button
+          onClick={loadMoreComments}
+          className="text-primaryColor mt-4 p-2"
+        >
+          Load more
+        </button>
+      )}
     </div>
   );
 }
@@ -31,7 +148,7 @@ function SortFilter({ value, setValue }: { value: any; setValue: any }) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild className="w-fit">
+      <PopoverTrigger asChild className="mb-4 w-fit">
         <div className="flex items-center gap-2">
           <div className="text-sm text-zinc-700">Sort By:</div>
           <Button

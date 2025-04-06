@@ -31,9 +31,17 @@ import Container from '../container';
 import PtRenderer from '../pt-renderer';
 import CommentSection from '../comments';
 import Link from 'next/link';
+import { CommentWithChildren } from '../comments/comments-lib';
+import { CommentType } from '@/server/db/schema';
+import { useEffect, useState } from 'react';
+import { getClaps, toggleClap } from './clap';
+import { getSavedArticles, saveArticle } from './save';
 
 export type ArticleLayoutProps = {
   article: ArticleType;
+  user: any;
+  parentComments?: CommentWithChildren[];
+  allComments?: CommentType[];
 };
 
 function TimeUpdated({ article }: { article: { _updatedAt: string } }) {
@@ -173,7 +181,70 @@ function SocialShare({
   );
 }
 
-export default function ArticleWrapper({ article }: ArticleLayoutProps) {
+export default function ArticleWrapper({
+  article,
+  user,
+  allComments,
+  parentComments,
+}: ArticleLayoutProps) {
+  const [claps, setClaps] = useState(0);
+  const [userClapped, setUserClapped] = useState(false);
+  const [isClapping, setIsClapping] = useState(false);
+
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    getClaps(article._id, user?.id).then((result: any) => {
+      if (result.success) {
+        setClaps(result.claps);
+        setUserClapped(result.userClapped);
+      }
+    });
+
+    if (user) {
+      getSavedArticles(user.id).then((result) => {
+        if (!result.error && result.allSavedArticles) {
+          const isArticleSaved = result.allSavedArticles.some(
+            (savedArticle) => savedArticle.articleId === article._id,
+          );
+          setIsSaved(isArticleSaved);
+        }
+      });
+    }
+  }, [article?._id, user, user?.id]);
+
+  const handleClap = async () => {
+    if (isClapping) return;
+    setIsClapping(true);
+    const result: any = await toggleClap(article._id, user.id);
+    if (result.success) {
+      setClaps(result.claps);
+      setUserClapped(result.userClapped);
+    }
+    setIsClapping(false);
+  };
+
+  const handleSaveArticle = async () => {
+    if (!user) {
+      toast.error('Please log in to save articles');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await saveArticle(user.id, article._id);
+      setIsSaved(!isSaved);
+      toast.success(
+        isSaved ? 'Article removed from library' : 'Article saved to library',
+      );
+    } catch (error) {
+      toast.error(`Error saving article: ${error}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const articleUrl = `/${article.industry.slug}/${article.type}/${article.slug.current}`;
   const articleText = [
     article.title,
@@ -186,6 +257,26 @@ export default function ArticleWrapper({ article }: ArticleLayoutProps) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: article.seo.title,
+            datePublished: article._createdAt,
+            dateModified: article._updatedAt,
+            description: article.seo.description,
+            image: urlForImage(article.seo.image).height(675).width(1200).url(),
+            url: `${siteConfig.url.web}${articleUrl}`,
+            author: {
+              '@type': 'Person',
+              name: article.author.name,
+            },
+          }),
+        }}
+      />
       <BreadCrumb
         name={article.name}
         industry={article.industry.slug}
@@ -258,17 +349,34 @@ export default function ArticleWrapper({ article }: ArticleLayoutProps) {
           </header>
           <div className="mb-8 flex justify-between border border-t border-r-0 border-b border-l-0 border-gray-200 px-2 py-3">
             <div className="flex items-center text-gray-600 sm:gap-2">
-              <button
-                className="cursor-pointer"
-                onClick={() => {
-                  toast.error('Login/Signup first to clap for article');
-                }}
-              >
-                <Icons.clapHands
-                  className="h-5 w-fit hover:-translate-y-1"
-                  title="Clap"
-                />
-              </button>
+              {user ? (
+                <button
+                  onClick={handleClap}
+                  disabled={isClapping || !user}
+                  className={`${!isClapping && 'cursor-pointer hover:-translate-y-1'}`}
+                >
+                  {userClapped ? (
+                    <Icons.clapHandsSolid className="text-primaryColor h-5 w-fit" />
+                  ) : (
+                    <Icons.clapHands className="h-5 w-fit" title="Clap" />
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    toast.error('Login/Signup first to clap for article');
+                  }}
+                >
+                  <Icons.clapHands className="h-5 w-fit" title="Clap" />
+                </button>
+              )}
+              <span className="text-xs" aria-label="Article Claps Count">
+                {isClapping
+                  ? userClapped
+                    ? 'removing...'
+                    : 'clapping...'
+                  : claps}
+              </span>
               <Link
                 href="#commentSection"
                 className="group flex items-center gap-2"
@@ -278,17 +386,23 @@ export default function ArticleWrapper({ article }: ArticleLayoutProps) {
                   className="ml-4 h-5 w-fit cursor-pointer group-hover:-translate-y-1"
                 />
                 <span className="text-xs" aria-label="Article Comments Count">
-                  0
+                  {allComments ? allComments.length : 0}
                 </span>
               </Link>
             </div>
             <div className="flex items-center gap-2">
-              <div className="group flex cursor-pointer items-center gap-2 text-gray-600">
-                <span className="text-xs">Save</span>
-                <Bookmark
-                  strokeWidth={1.5}
-                  className="h-5 w-fit transition-transform group-hover:-translate-y-1"
-                />
+              <div
+                className="group flex cursor-pointer items-center gap-2 text-gray-600"
+                onClick={handleSaveArticle}
+              >
+                <span className="text-xs">
+                  {isSaving ? 'Saving...' : isSaved ? 'Saved' : 'Save'}
+                </span>
+                {isSaved ? (
+                  <Bookmark className="fill-primaryColor text-primaryColor h-5 w-fit transition-transform group-hover:-translate-y-1" />
+                ) : (
+                  <Bookmark className="h-5 w-fit transition-transform group-hover:-translate-y-1" />
+                )}
               </div>
               <ProfileTruthScore
                 score={article.truthScore ? article.truthScore : 0}
@@ -314,7 +428,17 @@ export default function ArticleWrapper({ article }: ArticleLayoutProps) {
         </article>
       </Container>
       <RelatedArticles articles={article.relatedArticles!} />
-      <CommentSection />
+      <CommentSection
+        user={user}
+        articleId={article._id}
+        allComments={allComments}
+        parentComments={parentComments}
+        article={article}
+        claps={claps}
+        handleClap={handleClap}
+        isClapping={isClapping}
+        userClapped={userClapped}
+      />
     </>
   );
 }

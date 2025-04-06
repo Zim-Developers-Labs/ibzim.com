@@ -1,5 +1,7 @@
 import ArticleWrapper from '@/components/article';
+import { getComments } from '@/components/comments/comments-lib';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
+import { validateRequest } from '@/lib/auth/validate-request';
 import { siteConfig } from '@/lib/config';
 import {
   getAllArticleSlugsAndTypesAndIndustriesByBlog,
@@ -79,5 +81,16 @@ export default async function ArticlePage({ params }: Props) {
     return notFound();
   }
 
-  return <ArticleWrapper article={article} />;
+  const { parentComments, allComments } = await getComments(article._id);
+
+  const { user } = await validateRequest();
+
+  return (
+    <ArticleWrapper
+      article={article}
+      user={user}
+      parentComments={parentComments}
+      allComments={allComments}
+    />
+  );
 }
