@@ -33,7 +33,7 @@ export const iblogs = [
   },
   {
     name: 'Ghana',
-    href: 'https://www.ibghan.com',
+    href: 'https://www.ibgan.com',
     countryCode: 'gh',
   },
   {
