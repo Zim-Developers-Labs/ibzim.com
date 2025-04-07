@@ -39,12 +39,12 @@ export default function Banner() {
           />
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
-          <p className="text-sm leading-6 text-gray-900">
-            Get premium with IB points
-          </p>
+          <p className="text-sm leading-6 text-gray-900">IB Whatsapp Channel</p>
           <div
             onClick={() => {
-              window.open(`https://www.ibglobal.org/premium?source=header`);
+              window.open(
+                `https://whatsapp.com/channel/0029VatbTmtEwEk4CAwiP23W`,
+              );
             }}
             className="flex-none cursor-pointer rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
