@@ -155,10 +155,11 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="/premium"
+                    href="https://news.ibzim.com"
+                    target="_blank"
                     className="rounded-md bg-gradient-to-tr from-yellow-500 via-yellow-600 to-yellow-500 px-2 text-white hover:text-white"
                   >
-                    Premium
+                    News
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -167,11 +168,11 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="https://news.ibzim.com"
+                    href="https://www.ibglobal.org/premium"
                     target="_blank"
-                    className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
                   >
-                    News
+                    Premium
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
