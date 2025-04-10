@@ -166,27 +166,13 @@ export default function Header({
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
-                      {tools.map((nav) => (
-                        <li key={nav.name}>
-                          <NavigationMenuLink
-                            href={nav.href}
-                            className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
-                            asChild
-                          >
-                            <span className="flex items-center">
-                              <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
-                              <span className="text-sm text-gray-900">
-                                {nav.name}
-                              </span>
-                            </span>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink
+                    href="https://news.ibzim.com"
+                    target="_blank"
+                    className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                  >
+                    News
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
