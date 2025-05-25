@@ -1,4 +1,4 @@
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 
 export default function HeroImage(props: any) {
   const { alt, image, imageCredits } = props;

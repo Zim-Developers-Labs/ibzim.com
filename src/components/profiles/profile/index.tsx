@@ -1,7 +1,7 @@
 import { WikiBreadCrumb } from '@/components/article/components/breadcrumb';
 import Container from '@/components/container';
 import ProfileTruthScore from '@/components/truth-score';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { ProfileType, SiteConfigType } from '@/types';
 import { BookmarkIcon } from 'lucide-react';
 import InfoBox from '../components/info-box';

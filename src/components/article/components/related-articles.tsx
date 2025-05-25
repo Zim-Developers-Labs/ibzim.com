@@ -1,5 +1,5 @@
 import Container from '@/components/container';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 
 type RelatedArticleType = {
   name: string;

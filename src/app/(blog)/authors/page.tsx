@@ -1,7 +1,7 @@
 import AuthorsLayout from '@/components/authors';
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
-import { getAllArticles, getAllAuthors } from '@/lib/sanity/client';
+import { getAllArticles, getAllAuthors } from '@/sanity/lib/client';
 import { AuthorType, CardArticleType } from '@/types';
 import { Metadata } from 'next';
 

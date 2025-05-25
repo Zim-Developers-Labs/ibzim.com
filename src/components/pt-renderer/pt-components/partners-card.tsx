@@ -1,4 +1,4 @@
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { CircleCheck, ExternalLink, Info } from 'lucide-react';
 
 function Display51({ partner = {} }: any) {

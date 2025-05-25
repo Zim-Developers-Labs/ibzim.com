@@ -6,8 +6,8 @@ import { siteConfig } from '@/lib/config';
 import {
   getAllArticleSlugsAndTypesAndIndustriesByBlog,
   getArticleBySlugAndBlog,
-} from '@/lib/sanity/client';
-import { urlForImage } from '@/lib/sanity/image';
+} from '@/sanity/lib/client';
+import { urlForImage } from '@/sanity/lib/image';
 import { ArticleType } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';

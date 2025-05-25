@@ -108,7 +108,9 @@ export default function Header({
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                  <Link href="/tools">
+                    <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                  </Link>
                   <NavigationMenuContent>
                     <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
                       {tools.map((nav) => (

@@ -4,8 +4,8 @@ import { siteConfig } from '@/lib/config';
 import {
   getAllProfileSlugsAndTypeByBlog,
   getProfileBySlugAndBlog,
-} from '@/lib/sanity/client';
-import { urlForImage } from '@/lib/sanity/image';
+} from '@/sanity/lib/client';
+import { urlForImage } from '@/sanity/lib/image';
 import { ProfileType } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';

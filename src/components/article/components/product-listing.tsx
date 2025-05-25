@@ -1,6 +1,6 @@
 'use client';
 
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import type { ArticleType } from '@/types';
 import { useState } from 'react';
 

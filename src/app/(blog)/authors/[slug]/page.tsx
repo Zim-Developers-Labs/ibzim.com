@@ -5,8 +5,8 @@ import {
   getAllArticles,
   getAllAuthorSlugs,
   getAuthorBySlug,
-} from '@/lib/sanity/client';
-import { urlForImage } from '@/lib/sanity/image';
+} from '@/sanity/lib/client';
+import { urlForImage } from '@/sanity/lib/image';
 import { AuthorType, CardArticleType } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ]);
 
   return prepareArticleMetadata({
-    title: `${author?.name} | IB Global`,
+    title: `${author?.name} | IBZim`,
     description: author?.bio,
     pageUrl: `/authors/${(await params).slug}`,
     ogImage: {

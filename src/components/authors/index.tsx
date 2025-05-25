@@ -4,7 +4,7 @@ import Container from '../container';
 import { ChevronRightIcon } from 'lucide-react';
 import { Linkify } from '@/lib/utils';
 import Image from 'next/image';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 
 export default function AuthorsLayout({
   articles,
@@ -30,7 +30,7 @@ export default function AuthorsLayout({
             Meet the Team
           </h1>
           <p className="mb-6 text-base md:text-lg">
-            IB Global expert team writes authentic articles from guide articles,
+            IBZim expert team writes authentic articles from guide articles,
             podcasts, videos we try our best provide you with as much accurate
             and reliable information as possible.
           </p>

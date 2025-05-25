@@ -1,7 +1,7 @@
 import ProfileListingWrapper from '@/components/profiles';
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
-import { getAllProfilesForListingByBlog } from '@/lib/sanity/client';
+import { getAllProfilesForListingByBlog } from '@/sanity/lib/client';
 import { CardProfileType } from '@/types';
 import { Metadata } from 'next';
 

@@ -6,7 +6,7 @@ import {
   getAllAuthors,
   getAllProfilesForListingByBlog,
   getHome,
-} from '@/lib/sanity/client';
+} from '@/sanity/lib/client';
 import {
   AuthorType,
   CardArticleType,

@@ -1,5 +1,5 @@
 import Container from '@/components/container';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { formatUpdatedAt } from '@/lib/utils';
 import { AuthorType, CardArticleType } from '@/types';
 import { ChevronRightIcon } from 'lucide-react';
@@ -91,7 +91,7 @@ export default function AuthorLayout({
           />
           <div>
             <div className="text-xs">
-              <span>IB Global</span>
+              <span>IBZim</span>
               <ChevronRightIcon className="inline h-3 w-fit" />
               <span>Authors</span>
               <ChevronRightIcon className="hidden h-3 w-fit md:inline" />

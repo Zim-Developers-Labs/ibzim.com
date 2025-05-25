@@ -1,4 +1,4 @@
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 
 export default function imageModule(props: any) {
   const { alt = '', image = {}, imageCredits = '', imageHeight = 675 } = props;

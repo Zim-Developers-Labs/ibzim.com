@@ -1,7 +1,7 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
-import { getSearchData } from '@/lib/sanity/actions';
+import { getSearchData } from '@/sanity/lib/actions';
 import { siteConfig } from '@/lib/config';
 import { Toaster } from '@/components/ui/sonner';
 import Banner from '@/components/banner';
@@ -18,7 +18,8 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'IBZim Blog',
-  description: 'An IB Global iBlog',
+  description:
+    'All about Zimbabwe. Read articles, vote for awards, use tools and enjoy the IBZim events calendar all year round.',
 };
 
 export default async function RootLayout({

@@ -1,4 +1,4 @@
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { Suspense } from 'react';
 
 export default function annotationLink(props: any) {

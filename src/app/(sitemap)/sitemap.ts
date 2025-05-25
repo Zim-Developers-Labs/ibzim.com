@@ -1,11 +1,14 @@
-import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/config";
-import { CardArticleType } from "@/types";
-import { getAllArticlesByBlog, getAllProfileSlugsAndTypeByBlog } from "@/lib/sanity/client";
+import type { MetadataRoute } from 'next';
+import { siteConfig } from '@/lib/config';
+import { CardArticleType } from '@/types';
+import {
+  getAllArticlesByBlog,
+  getAllProfileSlugsAndTypeByBlog,
+} from '@/sanity/lib/client';
 
 export async function generateSitemaps() {
   // This will create three separate sitemaps
-  return [{ id: "misc" }, { id: "articles" }, { id: "profiles" }];
+  return [{ id: 'misc' }, { id: 'articles' }, { id: 'profiles' }];
 }
 
 export default async function sitemap({
@@ -14,11 +17,11 @@ export default async function sitemap({
   id: string;
 }): Promise<MetadataRoute.Sitemap> {
   switch (id) {
-    case "misc":
+    case 'misc':
       return await generateMiscSitemap();
-    case "articles":
+    case 'articles':
       return await generateArticlesSitemap();
-    case "profiles":
+    case 'profiles':
       return await generateProfilesSitemap();
     default:
       return [];
@@ -42,13 +45,13 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
 
 async function generateArticlesSitemap(): Promise<MetadataRoute.Sitemap> {
   const articles: CardArticleType[] = await getAllArticlesByBlog(
-    siteConfig.documentPrefix !== ""
+    siteConfig.documentPrefix !== ''
       ? `${siteConfig.documentPrefix}.article`
-      : "article"
+      : 'article',
   );
 
   return articles
-    .filter(({ slug = "" }) => slug)
+    .filter(({ slug = '' }) => slug)
     .map((article) => ({
       url: `${siteConfig.url.web}/${article.industry.slug}/${article.type}/${article.slug.current}`,
       lastModified: new Date(article._updatedAt),
@@ -64,13 +67,13 @@ type ProfileType = {
 
 async function generateProfilesSitemap(): Promise<MetadataRoute.Sitemap> {
   const profiles: ProfileType[] = await getAllProfileSlugsAndTypeByBlog(
-    siteConfig.documentPrefix !== ""
+    siteConfig.documentPrefix !== ''
       ? `${siteConfig.documentPrefix}.profile`
-      : "profile"
+      : 'profile',
   );
 
   return profiles
-    .filter(({ slug = "" }) => slug)
+    .filter(({ slug = '' }) => slug)
     .map((profile) => ({
       url: `${siteConfig.url.web}/profiles/${profile.type}/${profile.slug}`,
       lastmod: new Date(profile._updatedAt!),

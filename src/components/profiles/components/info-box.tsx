@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TxtRenderer } from '../../pt-renderer';
 import { ProfileType } from '@/types';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { Icons } from '@/components/icons';
 import { ExternalLink } from 'lucide-react';
 

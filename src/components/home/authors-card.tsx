@@ -1,7 +1,7 @@
 'use client';
 
 import { siteConfig } from '@/lib/config';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { Linkify } from '@/lib/utils';
 import { ArticlesForCountType, AuthorType } from '@/types';
 import { ArrowRightIcon, ChevronRightIcon } from 'lucide-react';

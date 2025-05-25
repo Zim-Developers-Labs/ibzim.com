@@ -20,7 +20,7 @@ import extractTextFromBlocks, {
   Linkify,
 } from '@/lib/utils';
 import BreadCrumb from './components/breadcrumb';
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import ProfileTruthScore from '../truth-score';
 import HeroImage from './components/hero-image';
 import ProductListing from './components/product-listing';

@@ -1,4 +1,4 @@
-import { urlForImage } from '@/lib/sanity/image';
+import { urlForImage } from '@/sanity/lib/image';
 import { CardProfileType } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
