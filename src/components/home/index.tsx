@@ -1,16 +1,28 @@
 import { siteConfig } from '@/lib/config';
 import Hero from './hero';
-import type { CardArticleType, CardProfileType, HomeType } from '@/types';
+import type {
+  AuthorType,
+  CardArticleType,
+  CardProfileType,
+  HomeType,
+} from '@/types';
 import ArticlesListing from './listing';
 import ProfilesCard from './profiles-card';
+import AuthorsCard from './authors-card';
 
 export type Props = {
   articles: CardArticleType[];
   profiles: CardProfileType[];
   home: HomeType;
+  authors: AuthorType[];
 };
 
-export default function HomeWrapper({ articles, home, profiles }: Props) {
+export default function HomeWrapper({
+  articles,
+  home,
+  profiles,
+  authors,
+}: Props) {
   const heroArticle = articles.find(
     (article) => article._id === home.mainArticle!._ref,
   );
@@ -31,7 +43,8 @@ export default function HomeWrapper({ articles, home, profiles }: Props) {
   );
 
   const tenRestOfArticles = restOfArticles.slice(0, 10);
-  const remainingRestOfArticles = restOfArticles.slice(10);
+  const tenOtherRestOfArticles = restOfArticles.slice(10, 20);
+  const remainingRestOfArticles = restOfArticles.slice(20);
 
   return (
     <main>
@@ -43,6 +56,11 @@ export default function HomeWrapper({ articles, home, profiles }: Props) {
       />
       <ArticlesListing articles={tenRestOfArticles} title="Latest Articles" />
       <ProfilesCard profiles={profiles} siteConfig={siteConfig} />
+      <ArticlesListing
+        articles={tenOtherRestOfArticles}
+        title="More Articles"
+      />
+      <AuthorsCard authors={authors} articles={articles} />
       <ArticlesListing
         articles={remainingRestOfArticles}
         title="More Articles"
