@@ -51,11 +51,6 @@ export default function UserToggler({ user }: UserTogglerType) {
   const fname = user.fullName ? user.fullName.split(' ')[0] : 'I';
   const lname = user.fullName ? user.fullName.split(' ')[1] : 'B';
 
-  const ibDomain =
-    process.env.NODE_ENV === 'production'
-      ? 'https://www.ibglobal.org'
-      : 'http://localhost:5000';
-
   return (
     <div className="w-fit">
       <Menu>
@@ -85,7 +80,7 @@ export default function UserToggler({ user }: UserTogglerType) {
           <div className="px-2 py-4 text-xs">{user.email}</div>
           <MenuItem>
             <Link
-              href={`${ibDomain}/user/${user.username}`}
+              href={`/user/${user.username}`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <UserIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
@@ -97,7 +92,7 @@ export default function UserToggler({ user }: UserTogglerType) {
           </MenuItem>
           <MenuItem>
             <Link
-              href={`${ibDomain}/user/achievements`}
+              href={`/user/achievements`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <TrophyIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
@@ -109,7 +104,7 @@ export default function UserToggler({ user }: UserTogglerType) {
           </MenuItem>
           <MenuItem>
             <Link
-              href={`${ibDomain}/user/library`}
+              href={`/user/library`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
@@ -121,7 +116,7 @@ export default function UserToggler({ user }: UserTogglerType) {
           </MenuItem>
           <MenuItem>
             <Link
-              href={`${ibDomain}/user/settings/profile-customization`}
+              href={`/user/settings/profile-customization`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <Cog6ToothIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4 text-black" />

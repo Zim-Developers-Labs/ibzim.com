@@ -71,12 +71,7 @@ export default function CommentSection({
                 report Inappropriate comments from the comment menu in
                 accordance to our{' '}
                 <div
-                  onClick={() =>
-                    window.open(
-                      'https://www.ibglobal.org/policies/commenting',
-                      '_blank',
-                    )
-                  }
+                  onClick={() => window.open('/policies/commenting', '_blank')}
                   className="inline cursor-pointer font-medium text-green-700 underline hover:text-green-600"
                 >
                   commenting policy.

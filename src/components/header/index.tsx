@@ -8,7 +8,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '../ui/navigation-menu';
-import ReactCountryFlag from 'react-country-flag';
 import SearchToggler from './search-toggler';
 import { SignToggler } from './sign-toggler';
 import SideBar from './side-bar';
@@ -27,62 +26,14 @@ type NavType = {
   }[];
 };
 
-export const iblogs = [
-  {
-    name: 'Africa',
-    href: 'https://www.iblogafrica.com',
-  },
-  {
-    name: 'Ghana',
-    href: 'https://www.ibgan.com',
-    countryCode: 'gh',
-  },
-  {
-    name: 'Kenya',
-    href: 'https://www.ibken.com',
-    countryCode: 'ke',
-  },
-  {
-    name: 'Nigeria',
-    href: 'https://www.iblogng.com',
-    countryCode: 'ng',
-  },
-  {
-    name: 'South Africa',
-    href: 'https://www.iblogsa.com',
-    countryCode: 'za',
-  },
-  {
-    name: 'United Kingdom',
-    href: 'https://www.ibloguk.com',
-    countryCode: 'gb',
-  },
-  {
-    name: 'Zimbabwe',
-    href: 'https://www.ibzim.com',
-    countryCode: 'zw',
-  },
-];
-
 export const tools = [
   {
     name: 'Ecocash Calculator',
-    href: '#',
+    href: '/tools/ecocash-calculator',
   },
   {
     name: 'School Picker',
-    href: '#',
-  },
-];
-
-export const company = [
-  {
-    name: 'Jobs',
-    href: '#',
-  },
-  {
-    name: 'Press',
-    href: 'https://www.ibglobal.org/press',
+    href: '/tools/school-picker',
   },
 ];
 
@@ -110,44 +61,33 @@ export default function Header({
               <span className="sr-only" aria-hidden="true">
                 IBZim logo
               </span>
-              <Icons.logoSm
-                className="h-10 w-fit md:hidden"
-                primaryColor="#000"
-                secondaryColor="#EAB308"
-              />
+              <Icons.logo className="h-7 w-fit md:hidden" />
             </Link>
           </div>
           <div className="hidden flex-1 lg:flex lg:gap-x-6">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>iBlogs</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
-                      {iblogs.map((nav) => (
-                        <li key={nav.name}>
-                          <NavigationMenuLink
-                            href={nav.href}
-                            className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
-                          >
-                            <span className="flex items-center">
-                              <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
-                              <span className="text-sm text-gray-900">
-                                {nav.name}
-                              </span>
-                            </span>
-                            {nav.countryCode && (
-                              <ReactCountryFlag
-                                className="inline-flex h-5 w-fit"
-                                countryCode={nav.countryCode}
-                                svg
-                              />
-                            )}
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink
+                    href="/calendar"
+                    target="_blank"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                  >
+                    Calendar
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/awards/2025"
+                    target="_blank"
+                    className="rounded-md bg-gradient-to-tr from-yellow-500 via-yellow-600 to-yellow-500 px-2 text-white hover:text-white"
+                  >
+                    2025 Awards
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -157,7 +97,8 @@ export default function Header({
                   <NavigationMenuLink
                     href="https://news.ibzim.com"
                     target="_blank"
-                    className="rounded-md bg-gradient-to-tr from-yellow-500 via-yellow-600 to-yellow-500 px-2 text-white hover:text-white"
+                    rel="nofollow"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
                   >
                     News
                   </NavigationMenuLink>
@@ -167,28 +108,14 @@ export default function Header({
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="https://www.ibglobal.org/premium"
-                    target="_blank"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
-                  >
-                    Premium
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger>Company</NavigationMenuTrigger>
+                  <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
-                      {company.map((nav) => (
+                      {tools.map((nav) => (
                         <li key={nav.name}>
-                          <NavigationMenuLink
+                          <Link
                             href={nav.href}
                             className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
-                            asChild
                           >
                             <span className="flex items-center">
                               <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
@@ -196,7 +123,7 @@ export default function Header({
                                 {nav.name}
                               </span>
                             </span>
-                          </NavigationMenuLink>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -210,11 +137,7 @@ export default function Header({
             className="absolute left-1/2 -m-1.5 -translate-x-1/2 transform p-1.5"
           >
             <span className="sr-only">IBZim Logo</span>
-            <Icons.logoSm
-              className="hidden h-10 w-fit md:block"
-              primaryColor="#000"
-              secondaryColor="#EAB308"
-            />
+            <Icons.logo className="hidden h-8 w-fit md:block" />
           </Link>
           <div className="flex flex-none items-center gap-2 md:gap-4">
             {articles && popularArticles && (

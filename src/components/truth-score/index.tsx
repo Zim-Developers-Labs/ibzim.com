@@ -94,7 +94,7 @@ export default function ProfileTruthScore({
               <span>
                 Providing true and verified information is the core of our{' '}
                 <a
-                  href="https://www.ibglobal.org/policies/terms"
+                  href="/policies/terms"
                   className="inline underline"
                   target="_blank"
                 >

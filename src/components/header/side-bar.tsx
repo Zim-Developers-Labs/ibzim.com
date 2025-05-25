@@ -11,7 +11,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
-import { company, iblogs, tools } from '.';
+import { tools } from '.';
 import ReactCountryFlag from 'react-country-flag';
 import Link from 'next/link';
 
@@ -19,9 +19,7 @@ export default function SideBar() {
   return (
     <Sheet>
       <SheetTrigger>
-        <div
-          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
-        >
+        <div className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5">
           <span className="sr-only">Open main menu</span>
           <Menu aria-hidden="true" className="h-6 w-6" />
         </div>
@@ -31,42 +29,27 @@ export default function SideBar() {
           <SheetTitle className="sr-only">Navigation</SheetTitle>
         </SheetHeader>
         <div className="mt-6 flex flex-col gap-4">
-          <Collapsible asChild className="group/collapsible">
-            <div>
-              <CollapsibleTrigger asChild>
-                <div className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20">
-                  <span>iblogs</span>
-                  <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="ml-4 border-l border-zinc-200 pl-4 dark:border-white/20">
-                {iblogs.map((nav) => (
-                  <Link
-                    href={nav.href}
-                    className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
-                  >
-                    <span className="flex items-center">
-                      <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
-                      <span className="text-sm text-gray-900">{nav.name}</span>
-                    </span>
-                    {/* // ! this is causing the error: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: object. */}
-                    {nav.countryCode && (
-                      <ReactCountryFlag
-                        className="inline-flex h-5 w-fit"
-                        countryCode={nav.countryCode}
-                        svg
-                      />
-                    )}
-                  </Link>
-                ))}
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
           <Link
-            href="https://www.ibglobal.org/premium"
+            href="/calendar"
             className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20"
           >
-            <span>Premium</span>
+            <span>Calendar</span>
+            <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+          </Link>
+          <Link
+            href="/awards/2025"
+            className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20"
+          >
+            <span>2025 Awards</span>
+            <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+          </Link>
+          <Link
+            href="https://news.ibzim.com"
+            target="_blank"
+            rel="nofollow"
+            className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20"
+          >
+            <span>News</span>
             <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </Link>
           <Collapsible asChild className="group/collapsible">
@@ -78,31 +61,9 @@ export default function SideBar() {
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent className="ml-4 border-l border-zinc-200 pl-4 dark:border-white/20">
-                {tools.map((nav) => (
+                {tools.map((nav, i) => (
                   <Link
-                    href={nav.href}
-                    className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
-                  >
-                    <span className="flex items-center">
-                      <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
-                      <span className="text-sm text-gray-900">{nav.name}</span>
-                    </span>
-                  </Link>
-                ))}
-              </CollapsibleContent>
-            </div>
-          </Collapsible>
-          <Collapsible asChild className="group/collapsible">
-            <div>
-              <CollapsibleTrigger asChild>
-                <div className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20">
-                  <span>Company</span>
-                  <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="ml-4 border-l border-zinc-200 pl-4 dark:border-white/20">
-                {company.map((nav) => (
-                  <Link
+                    key={i}
                     href={nav.href}
                     className="group flex w-full flex-row items-center justify-between rounded-lg p-3 hover:bg-gray-50"
                   >

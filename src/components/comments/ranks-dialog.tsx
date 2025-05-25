@@ -74,7 +74,7 @@ export default function RanksDialog({ isOpen, onClose }: RanksDialogProps) {
               </div>
               <div className="px-4 py-4 md:px-6">
                 <Link
-                  href="https://www.ibglobal.org/press/ranking-system"
+                  href="/press/ranking-system"
                   className="block w-full rounded-md border border-gray-200 py-2 text-center text-sm text-gray-600 hover:bg-gray-200"
                 >
                   Details

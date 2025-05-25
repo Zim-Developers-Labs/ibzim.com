@@ -38,11 +38,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/authors/:path*',
-        destination: 'https://www.ibglobal.org/author/:path*',
-        permanent: true,
-      },
-      {
         source: '/media/rankings/most-followed-zimbabweans-on-instagram',
         destination:
           '/media/rankings/top-30-most-followed-zimbabweans-on-instagram',

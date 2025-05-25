@@ -300,7 +300,7 @@ export default function ArticleWrapper({
               />
               <div>
                 <Link
-                  href={`https://www.ibglobal.org/authors/${Linkify(article.author.name)}`}
+                  href={`/authors/${Linkify(article.author.name)}`}
                   className="block text-sm leading-none md:text-base"
                 >
                   By{' '}
