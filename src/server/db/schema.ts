@@ -12,7 +12,7 @@ import {
   jsonb,
   pgEnum,
 } from 'drizzle-orm/pg-core';
-import { DATABASE_PREFIX as prefix } from '@/lib/constant';
+import { DATABASE_PREFIX as prefix } from '@/lib/constants';
 
 export const pgTable = pgTableCreator((name) => `${prefix}_${name}`);
 

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import ReactCountryFlag from 'react-country-flag';
 
 export default function blockTable({
@@ -63,10 +64,10 @@ export default function blockTable({
       if (match) {
         const [, src, width, height] = match;
         return (
-          <img
+          <Image
             src={src || '/placeholder.svg'}
-            width={width}
-            height={height}
+            width={Number(width) ?? 50}
+            height={Number(height) ?? 50}
             alt="Cell image"
           />
         );

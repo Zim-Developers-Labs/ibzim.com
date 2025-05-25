@@ -15,17 +15,6 @@ import Link from 'next/link';
 import Container from '../container';
 import UserToggler from './user-toggler';
 
-type NavType = {
-  name: string;
-  href?: string;
-  links?: {
-    name: string;
-    href: string;
-    rel?: string;
-    countryCode?: string;
-  }[];
-};
-
 export const tools = [
   {
     name: 'Ecocash Calculator',

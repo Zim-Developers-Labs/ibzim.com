@@ -12,7 +12,6 @@ import {
   CollapsibleTrigger,
 } from '../ui/collapsible';
 import { tools } from '.';
-import ReactCountryFlag from 'react-country-flag';
 import Link from 'next/link';
 
 export default function SideBar() {

@@ -125,7 +125,7 @@ export default function Comments({
           ))}
       </ul>
       {/* Load more button, visible only if there are more comments to show */}
-      {visibleCount < updatedComments!?.length && (
+      {visibleCount < updatedComments!.length && (
         <button
           onClick={loadMoreComments}
           className="text-primaryColor mt-4 p-2"

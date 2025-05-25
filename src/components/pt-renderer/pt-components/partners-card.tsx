@@ -1,5 +1,6 @@
 import { urlForImage } from '@/sanity/lib/image';
 import { CircleCheck, ExternalLink, Info } from 'lucide-react';
+import Image from 'next/image';
 
 function Display51({ partner = {} }: any) {
   return (
@@ -8,7 +9,7 @@ function Display51({ partner = {} }: any) {
         {partner.name}
       </div>
       {partner.image && (
-        <img
+        <Image
           src={urlForImage(partner.image)!
             .width(250)
             .height(50)
@@ -40,7 +41,7 @@ function Display11({ partner }: any) {
   return (
     <div className="flex items-center justify-between gap-4">
       {partner.image && (
-        <img
+        <Image
           src={urlForImage(partner.image)!
             .width(100)
             .height(100)

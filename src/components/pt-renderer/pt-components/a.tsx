@@ -1,4 +1,5 @@
 import { urlForImage } from '@/sanity/lib/image';
+import Image from 'next/image';
 import { Suspense } from 'react';
 
 export default function annotationLink(props: any) {
@@ -37,7 +38,7 @@ export function annotationInternalLink(props: any) {
           >
             <span className="block rounded-lg border border-zinc-200 shadow-2xl">
               <span className="block">
-                <img
+                <Image
                   src={urlForImage(
                     internalPage._type == 'article'
                       ? internalPage.seo.image

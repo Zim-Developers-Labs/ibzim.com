@@ -1,7 +1,14 @@
 import { Icons } from '@/components/icons';
 
 export default function annotationReference(props: any) {
-  const { number, linkText, sourceTitle, datePublished, children, url } = props;
+  const {
+    number,
+    //  linkText,
+    //   sourceTitle,
+    //    datePublished,
+    children,
+    url,
+  } = props;
   return (
     <a href={`#reference-${number}`} className="group relative inline">
       <span className="text-primaryColor hover:text-opacity-90 inline-flex text-sm">

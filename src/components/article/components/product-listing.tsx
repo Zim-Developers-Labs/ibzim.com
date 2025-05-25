@@ -2,6 +2,7 @@
 
 import { urlForImage } from '@/sanity/lib/image';
 import type { ArticleType } from '@/types';
+import Image from 'next/image';
 import { useState } from 'react';
 
 type ProductListingProps = {
@@ -41,7 +42,7 @@ export default function ProductListing(props: ProductListingProps) {
             >
               <div className="flex flex-row-reverse items-center gap-4 md:flex-row">
                 {imageUrl && (
-                  <img
+                  <Image
                     src={imageUrl}
                     height={100}
                     width={100}

@@ -36,6 +36,7 @@ import { CommentType } from '@/server/db/schema';
 import { useEffect, useState } from 'react';
 import { getClaps, toggleClap } from './clap';
 import { getSavedArticles, saveArticle } from './save';
+import Image from 'next/image';
 
 export type ArticleLayoutProps = {
   article: ArticleType;
@@ -286,7 +287,7 @@ export default function ArticleWrapper({
         <article role="main">
           <header className="mb-8 flex flex-col">
             <div className="mr-2 mb-6 flex h-fit flex-row items-center">
-              <img
+              <Image
                 className="mr-2 h-10 w-10 rounded-full md:h-12 md:w-12"
                 src={
                   urlForImage(article.author.picture.asset)

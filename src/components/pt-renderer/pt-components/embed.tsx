@@ -1,6 +1,7 @@
 import { urlForImage } from '@/sanity/lib/image';
 import { TxtRenderer } from '..';
 import { Icons } from '@/components/icons';
+import Image from 'next/image';
 
 export default function blockEmbed(props: any) {
   if (props?.items[0]?.displayPicture) {
@@ -20,7 +21,7 @@ function FigureEmbed({ props }: { props: any }) {
   return (
     <div className="md:float-right md:ml-8">
       <figure className="w-full rounded-md border border-zinc-200 bg-zinc-50 p-4 text-sm md:max-w-[250px] md:p-6">
-        <img
+        <Image
           src={urlForImage(figure.asset)
             .height(figure.height)
             .width(figure.width)
@@ -47,7 +48,7 @@ function SocialMediaEmbed({ props }: { props: any }) {
       <blockquote className="w-full rounded-md border border-zinc-200 bg-zinc-50 text-sm md:max-w-[250px]">
         <div className="flex items-center justify-between px-4 pt-4">
           <div className="flex items-center">
-            <img
+            <Image
               src={urlForImage(items[0].displayPicture.asset)
                 .height(30)
                 .width(30)
@@ -72,7 +73,7 @@ function SocialMediaEmbed({ props }: { props: any }) {
           </div>
         </div>
         <figure className="p-4 md:p-6">
-          <img
+          <Image
             src={urlForImage(figure.asset)
               .height(figure.height)
               .width(figure.width)

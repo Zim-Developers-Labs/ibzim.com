@@ -1,4 +1,5 @@
 import { urlForImage } from '@/sanity/lib/image';
+import Image from 'next/image';
 
 export default function imageModule(props: any) {
   const { alt = '', image = {}, imageCredits = '', imageHeight = 675 } = props;
@@ -11,7 +12,7 @@ export default function imageModule(props: any) {
     <div className="mb-4">
       <div className="mb-1 block rounded-xl">
         {imageUrl && (
-          <img
+          <Image
             src={imageUrl}
             alt={`${alt} - IBZIM Blog`}
             className="h-auto w-full rounded-xl"

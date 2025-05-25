@@ -1,5 +1,6 @@
 import Container from '@/components/container';
 import { urlForImage } from '@/sanity/lib/image';
+import Image from 'next/image';
 
 type RelatedArticleType = {
   name: string;
@@ -34,7 +35,7 @@ const ArticleCard = ({ article }: { article: RelatedArticleType }) => {
       className="mb-4 flex flex-row gap-4 sm:flex-col"
     >
       <div className="mb-4 ml-4 h-20 w-32 min-w-32 overflow-hidden rounded-md md:ml-0 md:h-[112px] md:w-[200px] md:max-w-none">
-        <img
+        <Image
           src={urlForImage(article.seo.image).height(112).width(200).url()}
           alt={article.seo.title}
           className="h-full w-full object-cover object-center transition-all group-hover:scale-125 group-hover:rotate-6"

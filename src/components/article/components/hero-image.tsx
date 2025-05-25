@@ -1,4 +1,5 @@
 import { urlForImage } from '@/sanity/lib/image';
+import Image from 'next/image';
 
 export default function HeroImage(props: any) {
   const { alt, image, imageCredits } = props;
@@ -10,7 +11,7 @@ export default function HeroImage(props: any) {
     <div className="my-8 rounded-lg border border-gray-200 p-2 md:p-8">
       <div className="mb-1 block rounded-xl">
         {image && (
-          <img
+          <Image
             src={imageUrl}
             alt={alt}
             className="h-auto w-full rounded-xl shadow-xl"

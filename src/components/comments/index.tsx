@@ -9,7 +9,6 @@ import { User } from 'lucia';
 import { CommentType } from '@/server/db/schema';
 import { CommentWithChildren } from './comments-lib';
 import { useCallback, useState } from 'react';
-import Link from 'next/link';
 
 type CommentSectionProps = {
   user?: User;
@@ -48,7 +47,9 @@ export default function CommentSection({
         <div className="mb-8 flex items-baseline justify-between sm:items-center">
           <h2 className="flex flex-col items-baseline gap-2 text-2xl font-bold sm:flex-row">
             Conversation
-            <span className="box text-base font-normal">(0 Comments)</span>
+            <span className="box text-base font-normal">
+              ({commentCount || 0} Comments)
+            </span>
           </h2>
           <div className="flex items-center gap-2">
             <Icons.usersIcon className="h-4 w-fit fill-green-600 text-green-600" />
