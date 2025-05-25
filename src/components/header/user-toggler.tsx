@@ -7,7 +7,6 @@ import {
   BookmarkIcon,
   Cog6ToothIcon,
   TrophyIcon,
-  UserIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
@@ -80,13 +79,13 @@ export default function UserToggler({ user }: UserTogglerType) {
           <div className="px-2 py-4 text-xs">{user.email}</div>
           <MenuItem>
             <Link
-              href={`/user/${user.username}`}
+              href={`/user/library`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
-              <UserIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              Manage Profile
+              <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+              Library
               <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘E
+                ⌘G
               </kbd>
             </Link>
           </MenuItem>
@@ -104,19 +103,7 @@ export default function UserToggler({ user }: UserTogglerType) {
           </MenuItem>
           <MenuItem>
             <Link
-              href={`/user/library`}
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-            >
-              <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              Library
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘G
-              </kbd>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link
-              href={`/user/settings/profile-customization`}
+              href={`/user/settings/account`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <Cog6ToothIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4 text-black" />

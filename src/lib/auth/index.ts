@@ -3,6 +3,8 @@ import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { env } from '@/env.js';
 import { db } from '@/server/db';
 import { sessions, users, type User as DbUser } from '@/server/db/schema';
+import { Google } from 'arctic';
+import { absoluteUrl } from '../utils';
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
@@ -23,13 +25,14 @@ export const lucia = new Lucia(adapter, {
       fullName: attributes.fullName,
       username: attributes.username,
       country: attributes.country,
+      city: attributes.city,
+      dateOfBirth: attributes.dateOfBirth,
+      phoneNumber: attributes.phoneNumber,
+      phoneNumberVerified: attributes.phoneNumberVerified,
       profileCompleted: attributes.profileCompleted,
-      totalPoints: attributes.totalPoints,
       communicationSettings: attributes.communicationSettings,
       role: attributes.role,
       deletedAt: attributes.deletedAt,
-      tierId: attributes.tierId,
-      currentPeriodEnd: attributes.currentPeriodEnd,
     };
   },
   sessionExpiresIn: new TimeSpan(30, 'd'),
@@ -42,6 +45,12 @@ export const lucia = new Lucia(adapter, {
     },
   },
 });
+
+export const google = new Google(
+  env.GOOGLE_CLIENT_ID,
+  env.GOOGLE_CLIENT_SECRET,
+  absoluteUrl('/sign-in/google/callback'),
+);
 
 declare module 'lucia' {
   interface Register {

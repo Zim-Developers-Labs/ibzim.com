@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from 'lucia';
-import { formatUpdatedAt, Linkify } from '@/lib/utils';
+import { formatUpdatedAt } from '@/lib/utils';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import {
@@ -21,9 +21,6 @@ import {
   updateCommentReaction,
 } from './action';
 import { toast } from 'sonner';
-import { getCurrentRank } from '@/lib/comments/ranks';
-import { RankIconWrapper } from '../icons/rank-icon-wrapper';
-import RanksDialog from './ranks-dialog';
 import { EditingForm, ReplyForm } from './forms';
 import { Icons } from '../icons';
 import HighlightedCommentHandler from './highlighted-comment-handler';
@@ -173,18 +170,6 @@ export default function Comment({
     </span>
   );
 
-  const [isRanksOpen, setRanksIsOpen] = useState(false);
-
-  function openRanks() {
-    setRanksIsOpen(true);
-  }
-
-  function closeRanks() {
-    setRanksIsOpen(false);
-  }
-
-  const currentRank = getCurrentRank(comment.user?.totalPoints || 0)?.name;
-
   return (
     <li className="text-sm text-gray-500">
       <div className="mb-4 flex space-x-4 rounded-lg bg-gray-50 px-4">
@@ -212,16 +197,6 @@ export default function Comment({
                 {comment.user?.username
                   ? comment.user?.username
                   : `user-${comment.user?.id}`}
-                {comment.user && comment.user.totalPoints > 200 && (
-                  <RankIconWrapper
-                    onClick={openRanks}
-                    id={Linkify(currentRank!)}
-                    height={20}
-                    width={20}
-                    className="inline"
-                  />
-                )}
-                <RanksDialog isOpen={isRanksOpen} onClose={closeRanks} />
               </h3>
               <p className="text-xs text-gray-400">
                 <span>{formatUpdatedAt(comment.createdAt.toString())}</span>
