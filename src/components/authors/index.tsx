@@ -35,7 +35,7 @@ export default function AuthorsLayout({
             and reliable information as possible.
           </p>
           <Link
-            href="https://www.ibglobal.org/press/methodology"
+            href="/press/methodology"
             className="hover:border-primaryColor hover:text-primaryColor mb-8 block w-fit rounded-md border px-4 py-2"
           >
             See Methodology

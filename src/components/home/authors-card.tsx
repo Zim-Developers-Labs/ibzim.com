@@ -67,7 +67,7 @@ export default function AuthorsCard({
           then chances are we have written something about it.
         </p>
         <Link
-          href="https://www.ibglobal.org/press/methodology"
+          href="/press/methodology"
           className="block w-fit rounded-md bg-teal-100 px-4 py-2 hover:bg-zinc-900 hover:text-yellow-400"
         >
           Learn More <ArrowRightIcon className="inline h-4 w-4" />
