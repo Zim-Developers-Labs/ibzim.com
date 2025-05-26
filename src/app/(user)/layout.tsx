@@ -12,6 +12,9 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { validateRequest } from '@/lib/auth/validate-request';
 import UserNav from './user-nav';
+import { redirect } from 'next/navigation';
+import { Paths } from '@/lib/constants';
+import { CompleteProfileBanner, VerifyEmailBanner } from './banners';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,6 +36,10 @@ export default async function RootLayout({
 
   const { user } = await validateRequest();
 
+  if (!user) {
+    redirect(Paths.Login);
+  }
+
   return (
     <html
       lang="en"
@@ -47,6 +54,10 @@ export default async function RootLayout({
           popularArticles={popularArticles}
           user={user}
         />
+        {!user.emailVerified && (
+          <VerifyEmailBanner email={user.email} userId={user.id} />
+        )}
+        {!user.profileCompleted && <CompleteProfileBanner />}
         <UserNav />
         {children}
         <Footer siteShortName={siteConfig.shortName} />

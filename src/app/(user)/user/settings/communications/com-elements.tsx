@@ -8,13 +8,9 @@ import { updateUserCommunicationSettings } from '../actions';
 import Link from 'next/link';
 
 interface Preferences {
-  weeklyDeals: boolean;
-  notifications: {
-    newArticles: boolean;
-    achievements: boolean;
-    commentReplies: boolean;
-  };
-  eventsCalendar: boolean;
+  ads: boolean;
+  account: boolean;
+  notifications: boolean;
 }
 
 export interface UserCommunicationSettings {
@@ -85,13 +81,9 @@ export default function ComElements({ user }: { user: User }) {
     email: user.email,
     whatsappNumber: user.phoneNumber,
     preferences: {
-      weeklyDeals: pref.weeklyDeals,
-      eventsCalendar: pref.eventsCalendar,
-      notifications: {
-        commentReplies: pref.notifications.commentReplies,
-        newArticles: pref.notifications.newArticles,
-        achievements: pref.notifications.achievements,
-      },
+      ads: pref.ads,
+      account: pref.account,
+      notifications: pref.notifications,
     },
   });
 
@@ -105,10 +97,6 @@ export default function ComElements({ user }: { user: User }) {
           newSettings = {
             preferences: {
               ...settings.preferences,
-              notifications: {
-                ...settings.preferences.notifications,
-                [subKey]: checked,
-              },
             },
           };
         } else {
@@ -137,7 +125,7 @@ export default function ComElements({ user }: { user: User }) {
           <strong>Email:</strong> {user.email}
         </p>
         <p className="text-sm text-gray-600">
-          <strong>Whatsapp Number:</strong>{' '}
+          <strong>Phone number:</strong>{' '}
           {user.phoneNumber ? (
             user.phoneNumber
           ) : (
@@ -146,59 +134,43 @@ export default function ComElements({ user }: { user: User }) {
         </p>
       </div>
       <div className="mb-6">
-        <h4 className="mb-4 text-xl">Follow our news</h4>
+        <h4 className="mb-4 text-xl">IBZim Premium</h4>
         <div className="rounded-lg bg-gray-100 p-4">
-          <div className="mb-2 flex gap-4">
-            <div>
-              <Toggler
-                checked={settings.preferences.weeklyDeals}
-                onChange={handleToggle('weeklyDeals')}
-              />
-            </div>
-            <p className="text-sm">Receive this week&#39;s top deals</p>
-          </div>
           <div className="flex gap-4">
             <div>
               <Toggler
-                checked={settings.preferences.eventsCalendar}
-                onChange={handleToggle('eventsCalendar')}
+                checked={settings.preferences.ads}
+                onChange={handleToggle('ads')}
               />
             </div>
-            <p className="text-sm">Receive Zim events calender news</p>
+            <p className="text-sm">Popup ads (premium not avialable yet)</p>
           </div>
         </div>
       </div>
       <div className="mb-6">
         <h4 className="mb-4 text-xl">
-          Notification - Whatsapp & Email messages
+          Notifications - Whatsapp & Email messages
         </h4>
         <div className="rounded-lg bg-gray-100 p-4">
           <div className="mb-2 flex gap-4">
             <div>
               <Toggler
-                checked={settings.preferences.notifications.commentReplies}
-                onChange={handleToggle('notifications', 'commentReplies')}
+                checked={settings.preferences.account}
+                onChange={handleToggle('account')}
               />
             </div>
-            <p className="text-sm">When someone replies to my comments</p>
-          </div>
-          <div className="mb-2 flex gap-4">
-            <div>
-              <Toggler
-                checked={settings.preferences.notifications.newArticles}
-                onChange={handleToggle('notifications', 'newArticles')}
-              />
-            </div>
-            <p className="text-sm">When there is a new article</p>
+            <p className="text-sm">Important information about your aacount</p>
           </div>
           <div className="flex gap-4">
             <div>
               <Toggler
-                checked={settings.preferences.notifications.achievements}
-                onChange={handleToggle('notifications', 'achievements')}
+                checked={settings.preferences.notifications}
+                onChange={handleToggle('notifications')}
               />
             </div>
-            <p className="text-sm">When I gain an achievement</p>
+            <p className="text-sm">
+              Notifications about related ibzim activity
+            </p>
           </div>
         </div>
       </div>

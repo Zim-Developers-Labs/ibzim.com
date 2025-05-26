@@ -43,9 +43,9 @@ export const users = pgTable(
     role: varchar('role', { length: 8 }),
     communicationSettings: jsonb('communication_settings').default({
       preferences: {
-        ads: false,
-        account: false,
-        notifications: false,
+        ads: true,
+        account: true,
+        notifications: true,
       },
     }),
     deletedAt: timestamp('deleted_at'),
