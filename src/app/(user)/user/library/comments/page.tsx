@@ -1,8 +1,31 @@
-export default function CommentsLibraryPage() {
-  return (
-    <div className="flex h-full flex-col items-center justify-center">
-      <h1 className="mb-4 text-2xl font-bold">Comments Library</h1>
-      <p className="text-gray-600">No comments found.</p>
-    </div>
-  );
+import { validateRequest } from '@/lib/auth/validate-request';
+import CommentsLayout from './comments-layout';
+import { redirect } from 'next/navigation';
+import { Paths } from '@/lib/constants';
+import { getAllUserComments } from './action';
+import { getArticlesByIds } from '@/sanity/lib/client';
+
+export const metadata = {
+  title: 'My Comments | IBZim',
+  description: 'Manage your comments',
+};
+
+export default async function CommentsPage() {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect(Paths.Home);
+  }
+
+  const { comments } = await getAllUserComments(user.id);
+  const commentedArticlesIdsArray = [
+    ...new Set(comments?.map((comment) => comment.articleId)),
+  ];
+
+  const [articles] = await Promise.all([
+    getArticlesByIds(commentedArticlesIdsArray),
+  ]);
+
+  // @ts-expect-error -- type error
+  return <CommentsLayout articles={articles} comments={comments} />;
 }

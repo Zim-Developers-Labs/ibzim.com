@@ -43,7 +43,7 @@ export default function SecurityFields({ user }: { user: User }) {
       toast.success('Password updated, login required');
       changePasswordState.done = false;
     }
-  }, [changeEmailState, changePasswordState]);
+  }, [changeEmailState, changePasswordState, router]);
 
   return (
     <div className="divide-y">
