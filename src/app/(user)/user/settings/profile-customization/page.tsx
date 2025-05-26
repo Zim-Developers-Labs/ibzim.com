@@ -1,12 +1,19 @@
-export default function ProfileCustomizationPage() {
-  return (
-    <div className="mx-auto my-8 w-full max-w-7xl px-4 sm:px-8 lg:px-12">
-      <h1 className="text-2xl font-bold">Profile Customization</h1>
-      <p className="mt-2 text-gray-600">
-        Customize your profile settings, including profile picture, bio, and
-        display preferences.
-      </p>
-      {/* Add your profile customization components here */}
-    </div>
-  );
+import { validateRequest } from '@/lib/auth/validate-request';
+import { Paths } from '@/lib/constants';
+import { redirect } from 'next/navigation';
+import CustomizationFields from './customization-fields';
+
+export const metadata = {
+  title: 'Customize Profile | Settings',
+  description: 'Customize Profile | Settings',
+};
+
+export default async function ProfileCustomizationPage() {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect(Paths.Login);
+  }
+
+  return <CustomizationFields user={user} />;
 }
