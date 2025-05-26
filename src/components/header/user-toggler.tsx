@@ -5,8 +5,8 @@ import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import {
   ArrowRightStartOnRectangleIcon,
   BookmarkIcon,
+  ChatBubbleBottomCenterTextIcon,
   Cog6ToothIcon,
-  TrophyIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
@@ -79,17 +79,29 @@ export default function UserToggler({ user }: UserTogglerType) {
           <div className="px-2 py-4 text-xs">{user.email}</div>
           <MenuItem>
             <Link
-              href={`/user/library`}
+              href={`/user/library/saved-articles`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              Library
+              Saved Articles
               <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
                 ⌘G
               </kbd>
             </Link>
           </MenuItem>
           <MenuItem>
+            <Link
+              href={`/user/library/comments`}
+              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
+            >
+              <ChatBubbleBottomCenterTextIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+              My Comments
+              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
+                ⌘G
+              </kbd>
+            </Link>
+          </MenuItem>
+          {/* <MenuItem>
             <Link
               href={`/user/achievements`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
@@ -100,10 +112,10 @@ export default function UserToggler({ user }: UserTogglerType) {
                 ⌘F
               </kbd>
             </Link>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem>
             <Link
-              href={`/user/settings/account`}
+              href={`/user/settings/profile-customization`}
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
             >
               <Cog6ToothIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4 text-black" />
