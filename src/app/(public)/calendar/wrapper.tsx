@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { CalendarEvent, daysOfWeek, months, sampleEvents } from './constants';
 import {
   AlertCircle,
+  BriefcaseBusiness,
   Calendar,
   ChevronLeft,
   ChevronRight,
   Code,
   Flag,
+  GraduationCap,
+  Heart,
   MapPin,
+  Music,
+  PersonStanding,
   Plus,
-  Users,
 } from 'lucide-react';
 import {
   Dialog,
@@ -42,6 +46,10 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import DatePicker from './date-picker';
+import { Icons } from '@/components/icons';
+import EventSharePopover from './event-share-dialog';
+import HighlightedEventHandler from './highlighted-event-handler';
 
 export default function CalendarWrapper() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -92,11 +100,19 @@ export default function CalendarWrapper() {
       case 'holiday':
         return <Flag className="hidden h-3 w-3 sm:inline" />;
       case 'business':
-        return <Users className="hidden h-3 w-3 sm:inline" />;
+        return <BriefcaseBusiness className="hidden h-3 w-3 sm:inline" />;
       case 'tech':
         return <Code className="hidden h-3 w-3 sm:inline" />;
       case 'community':
-        return <MapPin className="hidden h-3 w-3 sm:inline" />;
+        return <Heart className="hidden h-3 w-3 sm:inline" />;
+      case 'school':
+        return <GraduationCap className="hidden h-3 w-3 sm:inline" />;
+      case 'music':
+        return <Music className="hidden h-3 w-3 sm:inline" />;
+      case 'personal':
+        return <PersonStanding className="hidden h-3 w-3 sm:inline" />;
+      case 'ibzim':
+        return <Icons.logoSm className="hidden h-3 w-3 sm:inline" />;
       default:
         return <Calendar className="hidden h-3 w-3 sm:inline" />;
     }
@@ -112,6 +128,14 @@ export default function CalendarWrapper() {
         return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'community':
         return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'school':
+        return 'bg-teal-100 text-teal-800 border-teal-200';
+      case 'music':
+        return 'bg-pink-100 text-pink-800 border-pink-200';
+      case 'personal':
+        return 'bg-slate-100 text-slate-800 border-slate-200';
+      case 'ibzim':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
     }
@@ -127,6 +151,14 @@ export default function CalendarWrapper() {
         return 'bg-purple-800 text-purple-800 border-purple-200';
       case 'community':
         return 'bg-blue-800 text-blue-800 border-blue-200';
+      case 'school':
+        return 'bg-teal-800 text-teal-800 border-teal-200';
+      case 'music':
+        return 'bg-pink-800 text-pink-800 border-pink-200';
+      case 'personal':
+        return 'bg-slate-800 text-slate-800 border-slate-200';
+      case 'ibzim':
+        return 'bg-yellow-800 text-yellow-800 border-yellow-200';
       default:
         return 'bg-gray-800 text-gray-800 border-gray-200';
     }
@@ -320,7 +352,7 @@ export default function CalendarWrapper() {
                 Add Event
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="max-h-[100vh] overflow-y-auto sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Submit Event for Review</DialogTitle>
                 <DialogDescription>
@@ -335,12 +367,12 @@ export default function CalendarWrapper() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="event-date">Date</Label>
-                  <Input id="event-date" type="date" />
+                  <DatePicker />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="event-type">Event Type</Label>
                   <Select>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select event type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -553,7 +585,7 @@ export default function CalendarWrapper() {
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
+                <BriefcaseBusiness className="h-4 w-4" />
                 <Badge
                   variant="outline"
                   className="border-green-200 bg-green-100 text-green-800"
@@ -562,12 +594,48 @@ export default function CalendarWrapper() {
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
+                <Heart className="h-4 w-4" />
                 <Badge
                   variant="outline"
                   className="border-blue-200 bg-blue-100 text-blue-800"
                 >
                   Community Event
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <GraduationCap className="h-4 w-4" />
+                <Badge
+                  variant="outline"
+                  className="border-teal-200 bg-teal-100 text-teal-800"
+                >
+                  School Event
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <Music className="h-4 w-4" />
+                <Badge
+                  variant="outline"
+                  className="border-pink-200 bg-pink-100 text-pink-800"
+                >
+                  Music Event
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <PersonStanding className="h-4 w-4" />
+                <Badge
+                  variant="outline"
+                  className="border-slate-200 bg-slate-100 text-slate-800"
+                >
+                  Personal Event
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <Icons.logoSm className="h-4 w-4" />
+                <Badge
+                  variant="outline"
+                  className="border-yellow-200 bg-yellow-100 text-yellow-800"
+                >
+                  IBZim Event
                 </Badge>
               </div>
             </div>
@@ -597,11 +665,11 @@ export default function CalendarWrapper() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               {getUpcomingEvents().map((event) => (
                 <div
                   key={event.id}
-                  className="flex cursor-pointer items-start gap-3 rounded-lg border p-3 hover:bg-gray-50"
+                  className="flex cursor-pointer flex-col items-start gap-3 rounded-lg border p-3 hover:bg-gray-50"
                   onClick={() => handleEventClick(event)}
                 >
                   <div className="flex items-center gap-2">
@@ -614,8 +682,9 @@ export default function CalendarWrapper() {
                     </Badge>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium">{event.title}</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="mb-4 font-medium">{event.title}</h3>
+                    <p className="mb-2 flex items-center gap-1 text-sm text-gray-500">
+                      <Calendar className="h-3 w-3" />
                       {event.date.toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
@@ -627,11 +696,6 @@ export default function CalendarWrapper() {
                       <p className="flex items-center gap-1 text-sm text-gray-500">
                         <MapPin className="h-3 w-3" />
                         {event.location}
-                      </p>
-                    )}
-                    {event.description && (
-                      <p className="mt-1 text-sm text-gray-600">
-                        {event.description}
                       </p>
                     )}
                   </div>
@@ -648,7 +712,10 @@ export default function CalendarWrapper() {
         </Card>
         {/* Day Details Sheet - Opens from LEFT */}
         <Sheet open={isDaySheetOpen} onOpenChange={setIsDaySheetOpen}>
-          <SheetContent side="left" className="w-[400px] sm:w-[540px]">
+          <SheetContent
+            side="left"
+            className="w-full max-w-[400px] sm:w-[540px]"
+          >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
@@ -690,7 +757,7 @@ export default function CalendarWrapper() {
 
                   return (
                     <>
-                      <div className="space-y-3">
+                      <div className="space-y-3 px-6 md:px-8">
                         {dayEvents.map((event) => (
                           <div
                             key={event.id}
@@ -739,9 +806,8 @@ export default function CalendarWrapper() {
                         ))}
                       </div>
 
-                      <div className="border-t pt-4">
+                      <div className="border-t px-6 pt-4 md:px-8">
                         <Button
-                          variant="outline"
                           className="w-full"
                           onClick={() => {
                             setIsDaySheetOpen(false);
@@ -761,7 +827,10 @@ export default function CalendarWrapper() {
 
         {/* Event Details Sheet - Opens from RIGHT */}
         <Sheet open={isEventSheetOpen} onOpenChange={setIsEventSheetOpen}>
-          <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+          <SheetContent
+            side="right"
+            className="w-full max-w-[400px] sm:w-[540px]"
+          >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
                 {selectedEvent && getEventIcon(selectedEvent.type)}
@@ -769,7 +838,7 @@ export default function CalendarWrapper() {
               </SheetTitle>
               <SheetDescription>
                 {selectedEvent && (
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <span className="mt-2 flex flex-wrap gap-2">
                     <Badge
                       variant="outline"
                       className={getEventColor(selectedEvent.type)}
@@ -792,13 +861,13 @@ export default function CalendarWrapper() {
                         selectedEvent.priority.slice(1)}{' '}
                       Priority
                     </Badge>
-                  </div>
+                  </span>
                 )}
               </SheetDescription>
             </SheetHeader>
 
             {selectedEvent && (
-              <div className="mt-6 space-y-6">
+              <div className="mt-6 space-y-6 px-6 md:px-8">
                 <div>
                   <h3 className="mb-2 font-medium text-gray-900">
                     Date & Time
@@ -870,12 +939,7 @@ export default function CalendarWrapper() {
                 </div>
 
                 <div className="space-y-2 border-t pt-4">
-                  <Button
-                    className="w-full"
-                    onClick={() => setIsEventSheetOpen(false)}
-                  >
-                    Close Event Details
-                  </Button>
+                  <EventSharePopover eventId={selectedEvent.id} />
                   {isDaySheetOpen && (
                     <Button
                       variant="outline"
@@ -891,6 +955,9 @@ export default function CalendarWrapper() {
           </SheetContent>
         </Sheet>
       </div>
+      <Suspense fallback={<div>Loading comments...</div>}>
+        <HighlightedEventHandler />
+      </Suspense>
     </div>
   );
 }
