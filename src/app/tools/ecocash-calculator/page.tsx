@@ -153,7 +153,7 @@ export default function EcoCashCalculatorPage() {
           <CardHeader>
             <CardTitle>Calculation Results</CardTitle>
             <CardDescription>
-              Fee breakdown and total amounts in USD
+              Fee breakdown and total amounts of USD
             </CardDescription>
           </CardHeader>
           <CardContent>
