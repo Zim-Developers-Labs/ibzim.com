@@ -46,7 +46,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import DatePicker from './date-picker';
+import DateTimePicker from './date-time-picker';
 import { Icons } from '@/components/icons';
 import EventSharePopover from './event-share-dialog';
 import HighlightedEventHandler from './highlighted-event-handler';
@@ -366,8 +366,8 @@ export default function CalendarWrapper() {
                   <Input id="event-title" placeholder="Enter event title" />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="event-date">Date</Label>
-                  <DatePicker />
+                  <Label htmlFor="event-date">Date & Time</Label>
+                  <DateTimePicker />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="event-type">Event Type</Label>

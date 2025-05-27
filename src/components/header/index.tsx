@@ -70,7 +70,7 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="/awards"
+                    href="/zimbabwe-peoples-choice-awards"
                     className="rounded-md bg-gradient-to-tr from-yellow-500 via-yellow-600 to-yellow-500 px-2 text-white hover:text-white"
                   >
                     2025 Awards
