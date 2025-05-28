@@ -24,6 +24,14 @@ export const tools = [
     name: 'School Picker',
     href: '/tools/school-picker',
   },
+  {
+    name: 'Currency Converter',
+    href: '/tools/currency-converter/usd-zig',
+  },
+  {
+    name: 'ZESA Calculator',
+    href: '/tools/zesa-calculator',
+  },
 ];
 
 type HeaderProps = {

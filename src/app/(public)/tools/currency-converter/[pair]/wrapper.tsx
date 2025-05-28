@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowLeft, Repeat } from 'lucide-react'; // Using Repeat icon
 import Link from 'next/link';
 
-export default function UsdZwlConverterPageWrapper() {
+export default function CurrencyConverterPageWrapper() {
   const [usdAmount, setUsdAmount] = useState<string>('');
   const [zwlAmount, setZwlAmount] = useState<string>(''); // This will now represent one of the conversions, maybe parallel by default
   const [officialRate, setOfficialRate] = useState<number | null>(null);

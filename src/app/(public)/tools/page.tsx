@@ -8,6 +8,9 @@ import {
 } from '@/components/ui/card';
 import { Calculator, Wrench, Settings, School } from 'lucide-react';
 import Container from '@/components/container';
+import { Metadata } from 'next';
+import { preparePageMetadata } from '@/lib/metadata';
+import { siteConfig } from '@/lib/config';
 
 const tools = [
   {
@@ -19,8 +22,8 @@ const tools = [
     category: 'Financial',
   },
   {
-    name: 'USD to ZiG Converter',
-    slug: 'usd-zwl-converter',
+    name: 'Currency Converter',
+    slug: '/currency-converter/usd-zig',
     description:
       'Real-time currency conversion tool for pricing goods/services (USD to ZiG).',
     icon: Calculator,
@@ -117,9 +120,11 @@ export default async function ToolsPage() {
   );
 }
 
-export const metadata = {
-  title: 'Tools & Calculators | IBZim',
-  description:
-    'Discover useful tools and calculators including EcoCash calculator, tool picker, and more to simplify your daily tasks.',
-  keywords: 'tools, calculators, EcoCash, Zimbabwe, utility tools',
-};
+export const generateMetadata = (): Metadata =>
+  preparePageMetadata({
+    title: `Tools & Calculators | IBZim`,
+    description: `Discover useful tools and calculators including EcoCash calculator, tool picker, and more to simplify your daily tasks.`,
+    pageUrl: '/tools',
+    imageUrl: '/banner.webp',
+    siteConfig: siteConfig,
+  });
