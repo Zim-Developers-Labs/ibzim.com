@@ -23,7 +23,7 @@ const tools = [
   },
   {
     name: 'Currency Converter',
-    slug: '/currency-converter/usd-zig',
+    slug: 'currency-converter/usd-zig',
     description:
       'Real-time currency conversion tool for pricing goods/services (USD to ZiG).',
     icon: Calculator,
