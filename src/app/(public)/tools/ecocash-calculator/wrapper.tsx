@@ -68,7 +68,7 @@ function calculateFee(
   return { baseFee, imtTax, totalFee };
 }
 
-export default function EcoCashCalculatorPage() {
+export default function EcoCashCalculatorPageWrapper() {
   const [amount, setAmount] = useState<string>('');
   const [transactionType, setTransactionType] =
     useState<TransactionType>('send');

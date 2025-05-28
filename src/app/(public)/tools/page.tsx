@@ -8,9 +8,6 @@ import {
 } from '@/components/ui/card';
 import { Calculator, Wrench, Settings, School } from 'lucide-react';
 import Container from '@/components/container';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
-import { siteConfig } from '@/lib/config';
 
 const tools = [
   {
@@ -41,12 +38,8 @@ const tools = [
 const categories = [...new Set(tools.map((tool) => tool.category))];
 
 export default async function ToolsPage() {
-  const articles: any[] = [];
-  const popularArticles: any[] = [];
-
   return (
     <>
-      <Header articles={articles} popularArticles={popularArticles} />
       <Container className="py-12">
         <section className="mb-12">
           <h1 className="mb-3 text-4xl font-extrabold tracking-tight">
@@ -108,11 +101,11 @@ export default async function ToolsPage() {
         <section className="bg-muted/50 mt-20 flex flex-col items-center rounded-xl p-8 text-center">
           <h3 className="mb-2 text-2xl font-bold">Need a specific tool?</h3>
           <p className="text-muted-foreground mb-4 max-w-xl">
-            Can&#29;t find what you&#39;'re looking for? Use our Tool Picker to
+            Can&#29;t find what you&#39;re looking for? Use our Tool Picker to
             get personalized recommendations.
           </p>
           <Link
-            href="/tools/tool-picker"
+            href="#"
             className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-6 py-3 font-semibold transition-colors"
           >
             <Wrench className="h-5 w-5" />
@@ -120,7 +113,6 @@ export default async function ToolsPage() {
           </Link>
         </section>
       </Container>
-      <Footer siteShortName={siteConfig.shortName} />
     </>
   );
 }
