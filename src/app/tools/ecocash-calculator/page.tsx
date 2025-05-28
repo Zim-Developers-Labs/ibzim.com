@@ -1,4 +1,4 @@
-'use client';
+
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -233,7 +233,7 @@ export default function EcoCashCalculatorPage() {
 
             <p className="text-sm text-muted-foreground mt-4">
               Please note that fees may change, and you should verify current rates with EcoCash on their official website. This calculator is based on the tariffs published on 
-              <a href="https://www.ecocash.co.zw/usd-tariffs-limits" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">EcoCash's official USD Tariffs page</a> as of [Current Date - Note: You might want to make this dynamic].
+              <a href="https://www.ecocash.co.zw/usd-tariffs-limits" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">EcoCash&apos;s official USD Tariffs page</a> as of [Current Date - Note: You might want to make this dynamic].
             </p>
           </div>
         </CardContent>

@@ -1,10 +1,10 @@
-'use client';
+
 
 import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, School } from 'lucide-react'; // Assuming a School icon exists
+import { ArrowLeft, School } from 'lucide-react'; 
 import Link from 'next/link';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -174,5 +174,3 @@ export default function SchoolPickerPage() {
   );
 }
 
-// Optional: Add metadata
-// export const metadata = { ... }; 

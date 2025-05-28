@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, Wrench, DollarSign, Settings, School } from 'lucide-react';
+import { Calculator, Wrench, Settings, School } from 'lucide-react';
 import Container from '@/components/container';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
@@ -86,7 +86,7 @@ export default async function ToolsPage() {
         <section className="mt-20 bg-muted/50 rounded-xl p-8 flex flex-col items-center text-center">
           <h3 className="text-2xl font-bold mb-2">Need a specific tool?</h3>
           <p className="text-muted-foreground mb-4 max-w-xl">
-            Can\'t find what you\'re looking for? Use our Tool Picker to get personalized recommendations.
+            Can&apos;t find what you&apos;re looking for? Use our Tool Picker to get personalized recommendations.
           </p>
           <Link 
             href="/tools/tool-picker" 
