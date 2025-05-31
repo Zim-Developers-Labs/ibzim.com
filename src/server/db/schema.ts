@@ -350,7 +350,86 @@ export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
   }),
 }));
 
+// Add this enum for event types
+export const eventTypeEnum = pgEnum('event_type', [
+  'holiday',
+  'business',
+  'tech',
+  'community',
+  'school',
+  'music',
+  'religious',
+  'ibzim',
+]);
+
+// Add this enum for event priority
+export const eventPriorityEnum = pgEnum('event_priority', [
+  'high',
+  'medium',
+  'low',
+]);
+
+export const eventRecurrenceEnum = pgEnum('event_recurrence', [
+  'none',
+  'monthly',
+  'yearly',
+]);
+
+export const events = pgTable(
+  'events',
+  {
+    id: varchar('id', { length: 21 }).primaryKey(),
+    approved: boolean('approved').default(false).notNull(),
+    approvalExpiry: timestamp('approval_expiry'),
+    title: varchar('title', { length: 255 }).notNull(),
+    date: timestamp('date').notNull(),
+    startTime: timestamp('start_time').notNull(),
+    endTime: timestamp('end_time').notNull(),
+    type: eventTypeEnum('event_type').notNull(),
+    description: text('description'),
+    location: varchar('location', { length: 255 }),
+    locationLink: varchar('location_link', { length: 255 }),
+    priority: eventPriorityEnum('event_priority').default('low').notNull(),
+    eventOrganizerId: varchar('event_organizer_id', { length: 21 })
+      .notNull()
+      .references(() => users.id),
+    recurrence: eventRecurrenceEnum('event_recurrence')
+      .default('none')
+      .notNull(),
+    entryPrice: integer('entry_price').default(0).notNull(), // Price in cents (e.g., $10.50 = 1050)
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+      () => new Date(),
+    ),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (t) => ({
+    organizerIdx: index('event_organizer_idx').on(t.eventOrganizerId),
+    dateIdx: index('event_date_idx').on(t.date),
+    typeIdx: index('event_type_idx').on(t.type),
+    priorityIdx: index('event_priority_idx').on(t.priority),
+    startTimeIdx: index('event_start_time_idx').on(t.startTime),
+    organizerDateIdx: index('event_organizer_date_idx').on(
+      t.eventOrganizerId,
+      t.date,
+    ),
+  }),
+);
+
+export type Event = typeof events.$inferSelect;
+export type NewEvent = typeof events.$inferInsert;
+
+// Add relations for the events table
+export const eventsRelations = relations(events, ({ one }) => ({
+  organizer: one(users, {
+    fields: [events.eventOrganizerId],
+    references: [users.id],
+  }),
+}));
+
+// Update the userRelations to include events
 export const userRelations = relations(users, ({ many }) => ({
   achievements: many(userAchievements),
   followVerificationRequests: many(followVerificationRequests),
+  organizedEvents: many(events), // Add this line
 }));

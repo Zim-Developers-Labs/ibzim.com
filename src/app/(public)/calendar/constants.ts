@@ -2,7 +2,15 @@ export interface CalendarEvent {
   id: string;
   title: string;
   date: Date;
-  type: 'holiday' | 'business' | 'tech' | 'community';
+  type:
+    | 'holiday'
+    | 'business'
+    | 'tech'
+    | 'community'
+    | 'school'
+    | 'music'
+    | 'religious'
+    | 'ibzim';
   description?: string;
   location?: string;
   isRecurring?: boolean;

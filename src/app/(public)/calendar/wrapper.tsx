@@ -8,6 +8,7 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  Church,
   Code,
   Flag,
   GraduationCap,
@@ -17,17 +18,7 @@ import {
   PersonStanding,
   Plus,
 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -35,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -46,10 +36,10 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import DateTimePicker from './date-time-picker';
 import { Icons } from '@/components/icons';
 import EventSharePopover from './event-share-dialog';
 import HighlightedEventHandler from './highlighted-event-handler';
+import AddEventDialog from './add-event-dialog';
 
 export default function CalendarWrapper() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -67,8 +57,10 @@ export default function CalendarWrapper() {
   } | null>(null);
   const [isDaySheetOpen, setIsDaySheetOpen] = useState(false);
   const [upcomingFilter, setUpcomingFilter] = useState<
-    'week' | 'month' | '3months'
+    'week' | 'month' | '3months' | 'thisYear'
   >('3months');
+  const [upcomingEventTypeFilter, setUpcomingEventTypeFilter] =
+    useState<string>('all');
 
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
@@ -252,12 +244,20 @@ export default function CalendarWrapper() {
       case '3months':
         endDate.setMonth(now.getMonth() + 3);
         break;
+      case 'thisYear':
+        endDate.setMonth(now.getMonth() + 12 - now.getMonth());
+        break;
     }
 
     return sampleEvents
-      .filter((event) => event.date >= now && event.date <= endDate)
-      .sort((a, b) => a.date.getTime() - b.date.getTime())
-      .slice(0, 10); // Limit to 10 events
+      .filter((event) => {
+        const dateMatch = event.date >= now && event.date <= endDate;
+        const typeMatch =
+          upcomingEventTypeFilter === 'all' ||
+          event.type === upcomingEventTypeFilter;
+        return dateMatch && typeMatch;
+      })
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
   };
 
   const renderCalendarDays = () => {
@@ -340,81 +340,15 @@ export default function CalendarWrapper() {
               IBZIM Calendar
             </h1>
             <p className="text-gray-600">
-              Stay updated with holidays, tech events, and business
-              opportunities in Zimbabwe
+              Stay updated with tech, music, religious, school and business
+              events in Zimbabwe.
             </p>
           </div>
 
-          <Dialog open={isAddEventOpen} onOpenChange={setIsAddEventOpen}>
-            <DialogTrigger asChild>
-              <Button className="mt-4 sm:mt-0">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Event
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[100vh] overflow-y-auto sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Submit Event for Review</DialogTitle>
-                <DialogDescription>
-                  Submit your event details for consideration to be added to the
-                  IBZIM calendar.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="event-title">Event Title</Label>
-                  <Input id="event-title" placeholder="Enter event title" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-date">Date & Time</Label>
-                  <DateTimePicker />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-type">Event Type</Label>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select event type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="tech">Tech Event</SelectItem>
-                      <SelectItem value="business">Business Event</SelectItem>
-                      <SelectItem value="community">Community Event</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-location">Location</Label>
-                  <Input id="event-location" placeholder="City or venue" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="event-description">Description</Label>
-                  <Textarea
-                    id="event-description"
-                    placeholder="Brief description of the event"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="contact-email">Contact Email</Label>
-                  <Input
-                    id="contact-email"
-                    type="email"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsAddEventOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button onClick={() => setIsAddEventOpen(false)}>
-                  Submit for Review
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <AddEventDialog
+            isAddEventOpen={isAddEventOpen}
+            setIsAddEventOpen={setIsAddEventOpen}
+          />
         </div>
 
         <Alert variant="destructive" className="mb-4">
@@ -621,12 +555,12 @@ export default function CalendarWrapper() {
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <PersonStanding className="h-4 w-4" />
+                <Church className="h-4 w-4" />
                 <Badge
                   variant="outline"
                   className="border-slate-200 bg-slate-100 text-slate-800"
                 >
-                  Personal Event
+                  Religious Event
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
@@ -647,24 +581,48 @@ export default function CalendarWrapper() {
           <CardHeader>
             <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
               <CardTitle>Upcoming Events</CardTitle>
-              <Select
-                value={upcomingFilter}
-                onValueChange={(value: 'week' | 'month' | '3months') =>
-                  setUpcomingFilter(value)
-                }
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="week">Next Week</SelectItem>
-                  <SelectItem value="month">Next Month</SelectItem>
-                  <SelectItem value="3months">Next 3 Months</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Select
+                  value={upcomingEventTypeFilter}
+                  onValueChange={(value: string) =>
+                    setUpcomingEventTypeFilter(value)
+                  }
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Event Types</SelectItem>
+                    <SelectItem value="holiday">National Holiday</SelectItem>
+                    <SelectItem value="tech">Tech Event</SelectItem>
+                    <SelectItem value="business">Business Event</SelectItem>
+                    <SelectItem value="community">Community Event</SelectItem>
+                    <SelectItem value="school">School Event</SelectItem>
+                    <SelectItem value="music">Music Event</SelectItem>
+                    <SelectItem value="religious">Religious Event</SelectItem>
+                    <SelectItem value="ibzim">IBZim Event</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={upcomingFilter}
+                  onValueChange={(
+                    value: 'week' | 'month' | '3months' | 'thisYear',
+                  ) => setUpcomingFilter(value)}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="week">Next Week</SelectItem>
+                    <SelectItem value="month">Next Month</SelectItem>
+                    <SelectItem value="3months">Next 3 Months</SelectItem>
+                    <SelectItem value="thisYear">This Year</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="w-full">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               {getUpcomingEvents().map((event) => (
                 <div
@@ -701,13 +659,15 @@ export default function CalendarWrapper() {
                   </div>
                 </div>
               ))}
-              {getUpcomingEvents().length === 0 && (
-                <div className="py-8 text-center text-gray-500">
+            </div>
+            {getUpcomingEvents().length === 0 && (
+              <div className="grid place-content-center">
+                <div className="w-fit py-8 text-center text-gray-500">
                   <Calendar className="mx-auto mb-4 h-12 w-12 text-gray-300" />
                   <p>No upcoming events in the selected timeframe.</p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </CardContent>
         </Card>
         {/* Day Details Sheet - Opens from LEFT */}
