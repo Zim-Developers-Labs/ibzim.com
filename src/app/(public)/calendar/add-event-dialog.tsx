@@ -35,18 +35,35 @@ import { DatePicker } from './date-time-picker';
 
 // Demo enum values based on the database schema
 const eventTypes = [
+  { value: 'awards', label: 'Awards' },
+  { value: 'chillout', label: 'Chillout' },
+  { value: 'concert', label: 'Concert' },
   { value: 'conference', label: 'Conference' },
-  { value: 'workshop', label: 'Workshop' },
+  { value: 'exhibition', label: 'Exhibition' },
+  { value: 'festival', label: 'Festival' },
   { value: 'meeting', label: 'Meeting' },
-  { value: 'social', label: 'Social Event' },
+  { value: 'party', label: 'Party' },
+  { value: 'show', label: 'Show' },
+  { value: 'social', label: 'Social' },
   { value: 'training', label: 'Training' },
   { value: 'webinar', label: 'Webinar' },
+  { value: 'workshop', label: 'Workshop' },
 ];
 
-const eventPriorities = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' },
+const eventCategories = [
+  { value: 'business', label: 'Business Event' },
+  { value: 'casual', label: 'Casual Event' },
+  { value: 'community', label: 'Community Event' },
+  { value: 'holiday', label: 'Holiday Event' },
+  { value: 'music', label: 'Music Event' },
+  { value: 'religious', label: 'Religious Event' },
+  { value: 'school', label: 'School Event' },
+  { value: 'tech', label: 'Tech Event' },
+];
+
+const eventLocationTypes = [
+  { value: 'physical', label: 'Physical' },
+  { value: 'virtual', label: 'Virtual' },
 ];
 
 const eventRecurrences = [
@@ -60,10 +77,12 @@ interface EventFormData {
   title: string;
   description: string;
   type: string;
+  category: string;
   date: string;
   startTime: string;
   endTime: string;
   location: string;
+  locationType: string;
   locationLink: string;
   priority: string;
   recurrence: string;
@@ -76,8 +95,10 @@ const initialFormData: EventFormData = {
   type: '',
   date: '',
   startTime: '',
+  category: '',
   endTime: '',
   location: '',
+  locationType: '',
   locationLink: '',
   priority: 'low',
   recurrence: 'none',
@@ -176,25 +197,47 @@ export default function AddEventDialog({
                 onChange={(e) => updateFormData('title', e.target.value)}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="type" className="text-sm">
-                Event Type *
-              </Label>
-              <Select
-                value={formData.type}
-                onValueChange={(value) => updateFormData('type', value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select event type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {eventTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="category" className="text-sm">
+                  Event Category *
+                </Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => updateFormData('category', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select event category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {eventCategories.map((category) => (
+                      <SelectItem key={category.value} value={category.value}>
+                        {category.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="type" className="text-sm">
+                  Event Type *
+                </Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => updateFormData('type', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select event type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {eventTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="description" className="text-sm">
@@ -257,6 +300,29 @@ export default function AddEventDialog({
       case 3:
         return (
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="category" className="text-sm">
+                Location Type *
+              </Label>
+              <Select
+                value={formData.locationType}
+                onValueChange={(value) => updateFormData('locationType', value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select location type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eventLocationTypes.map((locationType) => (
+                    <SelectItem
+                      key={locationType.value}
+                      value={locationType.value}
+                    >
+                      {locationType.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <Input
@@ -385,13 +451,6 @@ export default function AddEventDialog({
               <Separator />
 
               <div className="flex gap-2">
-                <Badge variant="outline">
-                  {
-                    eventPriorities.find((p) => p.value === formData.priority)
-                      ?.label
-                  }{' '}
-                  Priority
-                </Badge>
                 <Badge variant="outline">
                   {
                     eventRecurrences.find(

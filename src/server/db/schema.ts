@@ -352,6 +352,23 @@ export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
 
 // Add this enum for event types
 export const eventTypeEnum = pgEnum('event_type', [
+  'party',
+  'conference',
+  'workshop',
+  'meeting',
+  'social',
+  'training',
+  'webinar',
+  'concert',
+  'festival',
+  'show',
+  'exhibition',
+  'chat',
+  'awards',
+  'chillout',
+]);
+
+export const eventCategoryEnum = pgEnum('event_category', [
   'holiday',
   'business',
   'tech',
@@ -359,7 +376,9 @@ export const eventTypeEnum = pgEnum('event_type', [
   'school',
   'music',
   'religious',
+  'public',
   'ibzim',
+  'casual',
 ]);
 
 // Add this enum for event priority
@@ -367,6 +386,11 @@ export const eventPriorityEnum = pgEnum('event_priority', [
   'high',
   'medium',
   'low',
+]);
+
+export const eventLocationTypeEnum = pgEnum('event_location_type', [
+  'virtual',
+  'physical',
 ]);
 
 export const eventRecurrenceEnum = pgEnum('event_recurrence', [
@@ -383,16 +407,18 @@ export const events = pgTable(
     approvalExpiry: timestamp('approval_expiry'),
     title: varchar('title', { length: 255 }).notNull(),
     date: timestamp('date').notNull(),
-    startTime: timestamp('start_time').notNull(),
-    endTime: timestamp('end_time').notNull(),
-    type: eventTypeEnum('event_type').notNull(),
+    startTime: timestamp('start_time'),
+    endTime: timestamp('end_time'),
+    type: eventTypeEnum('event_type'),
+    category: eventCategoryEnum('event_category').notNull(),
     description: text('description'),
     location: varchar('location', { length: 255 }),
+    locationType: eventTypeEnum('event_location_type'),
     locationLink: varchar('location_link', { length: 255 }),
     priority: eventPriorityEnum('event_priority').default('low').notNull(),
-    eventOrganizerId: varchar('event_organizer_id', { length: 21 })
-      .notNull()
-      .references(() => users.id),
+    eventOrganizerId: varchar('event_organizer_id', { length: 21 }).references(
+      () => users.id,
+    ),
     recurrence: eventRecurrenceEnum('event_recurrence')
       .default('none')
       .notNull(),
@@ -407,8 +433,8 @@ export const events = pgTable(
     organizerIdx: index('event_organizer_idx').on(t.eventOrganizerId),
     dateIdx: index('event_date_idx').on(t.date),
     typeIdx: index('event_type_idx').on(t.type),
+    categoryIdx: index('event_category_idx').on(t.category),
     priorityIdx: index('event_priority_idx').on(t.priority),
-    startTimeIdx: index('event_start_time_idx').on(t.startTime),
     organizerDateIdx: index('event_organizer_date_idx').on(
       t.eventOrganizerId,
       t.date,

@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { CalendarEvent, daysOfWeek, months, sampleEvents } from './constants';
+import { daysOfWeek, months, holidayEvents } from './constants';
 import {
   AlertCircle,
   BriefcaseBusiness,
@@ -40,15 +40,15 @@ import { Icons } from '@/components/icons';
 import EventSharePopover from './event-share-dialog';
 import HighlightedEventHandler from './highlighted-event-handler';
 import AddEventDialog from './add-event-dialog';
+import { Event } from '@/server/db/schema';
 
 export default function CalendarWrapper() {
+  const events = [...holidayEvents];
   const [currentDate, setCurrentDate] = useState(new Date());
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
-    null,
-  );
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isEventSheetOpen, setIsEventSheetOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState<{
     date: number;
@@ -59,7 +59,7 @@ export default function CalendarWrapper() {
   const [upcomingFilter, setUpcomingFilter] = useState<
     'week' | 'month' | '3months' | 'thisYear'
   >('3months');
-  const [upcomingEventTypeFilter, setUpcomingEventTypeFilter] =
+  const [upcomingEventCategoryFilter, setUpcomingEventCategoryFilter] =
     useState<string>('all');
 
   const currentMonth = currentDate.getMonth();
@@ -77,7 +77,7 @@ export default function CalendarWrapper() {
   };
 
   const getEventsForDate = (date: number) => {
-    return sampleEvents.filter((event) => {
+    return events.filter((event) => {
       const eventDate = new Date(event.date);
       return (
         eventDate.getDate() === date &&
@@ -87,8 +87,8 @@ export default function CalendarWrapper() {
     });
   };
 
-  const getEventIcon = (type: string) => {
-    switch (type) {
+  const getEventIcon = (category: string) => {
+    switch (category) {
       case 'holiday':
         return <Flag className="hidden h-3 w-3 sm:inline" />;
       case 'business':
@@ -110,8 +110,8 @@ export default function CalendarWrapper() {
     }
   };
 
-  const getEventColor = (type: string) => {
-    switch (type) {
+  const getEventColor = (category: string) => {
+    switch (category) {
       case 'holiday':
         return 'bg-red-100 text-red-800 border-red-200';
       case 'business':
@@ -133,8 +133,8 @@ export default function CalendarWrapper() {
     }
   };
 
-  const getEventColorForMini = (type: string) => {
-    switch (type) {
+  const getEventColorForMini = (category: string) => {
+    switch (category) {
       case 'holiday':
         return 'bg-red-800 text-red-800 border-red-200';
       case 'business':
@@ -169,7 +169,7 @@ export default function CalendarWrapper() {
     setCurrentDate(new Date());
   };
 
-  const handleEventClick = (event: CalendarEvent) => {
+  const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
     setIsEventSheetOpen(true);
     // Don't close day sheet - allow both to be open
@@ -190,7 +190,7 @@ export default function CalendarWrapper() {
   };
 
   const getEventsForDateObj = (date: Date) => {
-    return sampleEvents.filter((event) => {
+    return events.filter((event) => {
       const eventDate = new Date(event.date);
       return (
         eventDate.getDate() === date.getDate() &&
@@ -215,7 +215,7 @@ export default function CalendarWrapper() {
 
   const getSelectedDayEvents = () => {
     if (!selectedDay) return [];
-    return sampleEvents
+    return events
       .filter((event) => {
         const eventDate = new Date(event.date);
         return (
@@ -249,13 +249,13 @@ export default function CalendarWrapper() {
         break;
     }
 
-    return sampleEvents
+    return events
       .filter((event) => {
         const dateMatch = event.date >= now && event.date <= endDate;
-        const typeMatch =
-          upcomingEventTypeFilter === 'all' ||
-          event.type === upcomingEventTypeFilter;
-        return dateMatch && typeMatch;
+        const categoryMatch =
+          upcomingEventCategoryFilter === 'all' ||
+          event.category === upcomingEventCategoryFilter;
+        return dateMatch && categoryMatch;
       })
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   };
@@ -299,9 +299,9 @@ export default function CalendarWrapper() {
                   handleEventClick(event);
                 }}
               >
-                {getEventIcon(event.type)}
+                {getEventIcon(event.category)}
                 <span
-                  className={`truncate rounded border px-1 py-0.5 text-xs ${getEventColor(event.type)}`}
+                  className={`truncate rounded border px-1 py-0.5 text-xs ${getEventColor(event.category)}`}
                 >
                   {event.title}
                 </span>
@@ -317,7 +317,7 @@ export default function CalendarWrapper() {
                 {events.map((event, i) => (
                   <span
                     key={i}
-                    className={`h-2 w-2 rounded-full ${getEventColorForMini(event.type)}`}
+                    className={`h-2 w-2 rounded-full ${getEventColorForMini(event.category)}`}
                   ></span>
                 ))}
               </div>
@@ -464,11 +464,11 @@ export default function CalendarWrapper() {
                           {events.map((event) => (
                             <div
                               key={event.id}
-                              className={`hidden cursor-pointer rounded border px-2 py-1 text-xs hover:opacity-80 sm:block ${getEventColor(event.type)}`}
+                              className={`hidden cursor-pointer rounded border px-2 py-1 text-xs hover:opacity-80 sm:block ${getEventColor(event.category)}`}
                               onClick={() => handleEventClick(event)}
                             >
                               <div className="flex items-center gap-1">
-                                {getEventIcon(event.type)}
+                                {getEventIcon(event.category)}
                                 <span className="truncate">{event.title}</span>
                               </div>
                             </div>
@@ -479,7 +479,7 @@ export default function CalendarWrapper() {
                             {events.map((event, i) => (
                               <span
                                 key={i}
-                                className={`h-2 w-2 rounded-full ${getEventColorForMini(event.type)}`}
+                                className={`h-2 w-2 rounded-full ${getEventColorForMini(event.category)}`}
                               ></span>
                             ))}
                           </div>
@@ -496,7 +496,7 @@ export default function CalendarWrapper() {
         {/* Legend */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-lg">Event Types</CardTitle>
+            <CardTitle className="text-lg">Event Categories</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -583,17 +583,18 @@ export default function CalendarWrapper() {
               <CardTitle>Upcoming Events</CardTitle>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Select
-                  value={upcomingEventTypeFilter}
+                  value={upcomingEventCategoryFilter}
                   onValueChange={(value: string) =>
-                    setUpcomingEventTypeFilter(value)
+                    setUpcomingEventCategoryFilter(value)
                   }
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Filter by type" />
+                    <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Event Types</SelectItem>
-                    <SelectItem value="holiday">National Holiday</SelectItem>
+                    <SelectItem value="all">All Event Categories</SelectItem>
+                    <SelectItem value="public">Public Holiday</SelectItem>
+                    <SelectItem value="holiday">Holiday Event</SelectItem>
                     <SelectItem value="tech">Tech Event</SelectItem>
                     <SelectItem value="business">Business Event</SelectItem>
                     <SelectItem value="community">Community Event</SelectItem>
@@ -631,12 +632,12 @@ export default function CalendarWrapper() {
                   onClick={() => handleEventClick(event)}
                 >
                   <div className="flex items-center gap-2">
-                    {getEventIcon(event.type)}
+                    {getEventIcon(event.category)}
                     <Badge
                       variant="outline"
-                      className={getEventColor(event.type)}
+                      className={getEventColor(event.category)}
                     >
-                      {event.type}
+                      {event.category}
                     </Badge>
                   </div>
                   <div className="flex-1">
@@ -729,25 +730,31 @@ export default function CalendarWrapper() {
                           >
                             <div className="flex items-start gap-3">
                               <div className="flex flex-wrap items-center gap-2">
-                                {getEventIcon(event.type)}
+                                {getEventIcon(event.category)}
                                 <Badge
                                   variant="outline"
-                                  className={getEventColor(event.type)}
+                                  className={getEventColor(event.category)}
                                 >
-                                  {event.type}
+                                  {event.category == 'public'
+                                    ? 'Public Holiday'
+                                    : event.category}
                                 </Badge>
-                                <Badge
-                                  variant="outline"
-                                  className={
-                                    event.priority === 'high'
-                                      ? 'border-red-200 bg-red-50 text-red-700'
-                                      : event.priority === 'medium'
-                                        ? 'border-yellow-200 bg-yellow-50 text-yellow-700'
-                                        : 'border-gray-200 bg-gray-50 text-gray-700'
-                                  }
-                                >
-                                  {event.priority} priority
-                                </Badge>
+                                {event.category !== 'public' &&
+                                  (event.entryPrice == 0 ? (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      Free
+                                    </Badge>
+                                  ) : (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      Paid
+                                    </Badge>
+                                  ))}
                               </div>
                             </div>
                             <h3 className="mt-2 font-medium">{event.title}</h3>
@@ -793,34 +800,29 @@ export default function CalendarWrapper() {
           >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
-                {selectedEvent && getEventIcon(selectedEvent.type)}
+                {selectedEvent && getEventIcon(selectedEvent.category)}
                 {selectedEvent?.title}
               </SheetTitle>
               <SheetDescription>
                 {selectedEvent && (
                   <span className="mt-2 flex flex-wrap gap-2">
-                    <Badge
-                      variant="outline"
-                      className={getEventColor(selectedEvent.type)}
-                    >
-                      {selectedEvent.type.charAt(0).toUpperCase() +
-                        selectedEvent.type.slice(1)}{' '}
-                      Event
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className={
-                        selectedEvent.priority === 'high'
-                          ? 'border-red-200 bg-red-50 text-red-700'
-                          : selectedEvent.priority === 'medium'
-                            ? 'border-yellow-200 bg-yellow-50 text-yellow-700'
-                            : 'border-gray-200 bg-gray-50 text-gray-700'
-                      }
-                    >
-                      {selectedEvent.priority.charAt(0).toUpperCase() +
-                        selectedEvent.priority.slice(1)}{' '}
-                      Priority
-                    </Badge>
+                    {selectedEvent.category === 'public' ? (
+                      <Badge
+                        variant="outline"
+                        className={getEventColor(selectedEvent.category)}
+                      >
+                        Public Holiday
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="outline"
+                        className={getEventColor(selectedEvent.category)}
+                      >
+                        {selectedEvent.category.charAt(0).toUpperCase() +
+                          selectedEvent.category.slice(1)}{' '}
+                        Event
+                      </Badge>
+                    )}
                   </span>
                 )}
               </SheetDescription>
@@ -863,43 +865,42 @@ export default function CalendarWrapper() {
                   </div>
                 )}
 
-                <div>
-                  <h3 className="mb-2 font-medium text-gray-900">
-                    Event Details
-                  </h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      {getEventIcon(selectedEvent.type)}
-                      <span className="capitalize">
-                        {selectedEvent.type} Event
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant="outline"
-                        className={
-                          selectedEvent.priority === 'high'
-                            ? 'border-red-200 bg-red-50 text-red-700'
-                            : selectedEvent.priority === 'medium'
-                              ? 'border-yellow-200 bg-yellow-50 text-yellow-700'
-                              : 'border-gray-200 bg-gray-50 text-gray-700'
-                        }
-                      >
-                        {selectedEvent.priority.charAt(0).toUpperCase() +
-                          selectedEvent.priority.slice(1)}{' '}
-                        Priority
-                      </Badge>
-                      {selectedEvent.isRecurring && (
-                        <Badge variant="outline" className="text-xs">
-                          Recurring Event
-                        </Badge>
-                      )}
+                {selectedEvent.category !== 'public' && (
+                  <div>
+                    <h3 className="mb-2 font-medium text-gray-900">
+                      Event Details
+                    </h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        {getEventIcon(selectedEvent.category)}
+                        <span className="capitalize">
+                          {selectedEvent.category} Event
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {selectedEvent.entryPrice == 0 ? (
+                          <Badge variant="outline" className="text-xs">
+                            Free
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-xs">
+                            Paid
+                          </Badge>
+                        )}
+                        {selectedEvent.recurrence && (
+                          <Badge variant="outline" className="text-xs">
+                            Recurring Event
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 <div className="space-y-2 border-t pt-4">
-                  <EventSharePopover eventId={selectedEvent.id} />
+                  {selectedEvent.category !== 'public' && (
+                    <EventSharePopover eventId={selectedEvent.id} />
+                  )}
                   {isDaySheetOpen && (
                     <Button
                       variant="outline"
