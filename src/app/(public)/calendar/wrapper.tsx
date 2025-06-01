@@ -80,7 +80,7 @@ export default function CalendarWrapper() {
 
   const getEventsForDate = (date: number) => {
     return events.filter((event) => {
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.startDate);
       return (
         eventDate.getDate() === date &&
         eventDate.getMonth() === currentMonth &&
@@ -193,7 +193,7 @@ export default function CalendarWrapper() {
 
   const getEventsForDateObj = (date: Date) => {
     return events.filter((event) => {
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.startDate);
       return (
         eventDate.getDate() === date.getDate() &&
         eventDate.getMonth() === date.getMonth() &&
@@ -219,7 +219,7 @@ export default function CalendarWrapper() {
     if (!selectedDay) return [];
     return events
       .filter((event) => {
-        const eventDate = new Date(event.date);
+        const eventDate = new Date(event.startDate);
         return (
           eventDate.getDate() === selectedDay.date &&
           eventDate.getMonth() === selectedDay.month &&
@@ -253,13 +253,13 @@ export default function CalendarWrapper() {
 
     return events
       .filter((event) => {
-        const dateMatch = event.date >= now && event.date <= endDate;
+        const dateMatch = event.startDate >= now && event.startDate <= endDate;
         const categoryMatch =
           upcomingEventCategoryFilter === 'all' ||
           event.category === upcomingEventCategoryFilter;
         return dateMatch && categoryMatch;
       })
-      .sort((a, b) => a.date.getTime() - b.date.getTime());
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
   };
 
   const renderCalendarDays = () => {
@@ -672,7 +672,7 @@ export default function CalendarWrapper() {
                     <h3 className="mb-4 font-medium">{event.title}</h3>
                     <p className="mb-2 flex items-center gap-1 text-sm text-gray-500">
                       <Calendar className="h-3 w-3" />
-                      {event.date.toLocaleDateString('en-US', {
+                      {event.startDate.toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
                         month: 'long',
@@ -863,7 +863,7 @@ export default function CalendarWrapper() {
                     Date & Time
                   </h3>
                   <p className="text-gray-600">
-                    {selectedEvent.date.toLocaleDateString('en-US', {
+                    {selectedEvent.startDate.toLocaleDateString('en-US', {
                       weekday: 'long',
                       year: 'numeric',
                       month: 'long',
