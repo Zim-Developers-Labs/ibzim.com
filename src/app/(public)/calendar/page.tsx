@@ -2,6 +2,9 @@ import { siteConfig } from '@/lib/config';
 import CalendarWrapper from './wrapper';
 import { preparePageMetadata } from '@/lib/metadata';
 import { Metadata } from 'next';
+import { getAllEventsByApproval } from './actions';
+import { validateRequest } from '@/lib/auth/validate-request';
+import { getOrganizerProfile } from '@/app/(user)/user/settings/profile-customization/organizer/actions';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -12,6 +15,12 @@ export const generateMetadata = (): Metadata =>
     siteConfig,
   });
 
-export default function CalendarPage() {
-  return <CalendarWrapper />;
+export default async function CalendarPage() {
+  const dbEvents = await getAllEventsByApproval(true);
+  const { user } = await validateRequest();
+  const organizer = user ? await getOrganizerProfile(user.id) : null;
+
+  return (
+    <CalendarWrapper organizer={organizer} user={user} dbEvents={dbEvents} />
+  );
 }

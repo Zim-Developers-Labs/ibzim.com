@@ -40,6 +40,9 @@ export const users = pgTable(
     city: varchar('city', { length: 100 }),
     dateOfBirth: timestamp('date_of_birth'),
     profileCompleted: boolean('profile_completed').default(false),
+    organizerProfileCreated: boolean('organizer_profile_created').default(
+      false,
+    ),
     role: varchar('role', { length: 8 }),
     communicationSettings: jsonb('communication_settings').default({
       preferences: {
@@ -59,6 +62,39 @@ export const users = pgTable(
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+
+export const organizerProfiles = pgTable(
+  'organizer_profiles',
+  {
+    id: varchar('id', { length: 21 }).primaryKey(),
+    userId: varchar('user_id', { length: 21 })
+      .notNull()
+      .references(() => users.id),
+    name: varchar('name', { length: 32 }),
+    email: varchar('email', { length: 255 }).unique(),
+    emailVerified: boolean('email_verified').default(false),
+    whatsappPhoneNumber: varchar('whatsapp_phone_number', { length: 15 }),
+    whatsappPhoneNumberVerified: boolean(
+      'whatsapp_phone_number_verified',
+    ).default(false),
+    callsPhoneNumber: varchar('calls_phone_number', { length: 15 }),
+    callsPhoneNumberVerified: boolean('calls_phone_number_verified').default(
+      false,
+    ),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    profileCompleted: boolean('profile_completed').default(false),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+      () => new Date(),
+    ),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (t) => ({
+    userIdx: index('profile_user_idx').on(t.userId),
+  }),
+);
+
+export type OrganizerProfile = typeof organizerProfiles.$inferSelect;
+export type NewOrganizerProfile = typeof organizerProfiles.$inferInsert;
 
 export const sessions = pgTable(
   'sessions',
@@ -379,6 +415,7 @@ export const eventCategoryEnum = pgEnum('event_category', [
   'public',
   'ibzim',
   'casual',
+  'sports',
 ]);
 
 // Add this enum for event priority
@@ -418,7 +455,7 @@ export const events = pgTable(
     locationLink: varchar('location_link', { length: 255 }),
     priority: eventPriorityEnum('event_priority').default('low').notNull(),
     eventOrganizerId: varchar('event_organizer_id', { length: 21 }).references(
-      () => users.id,
+      () => organizerProfiles.id,
     ),
     recurrence: eventRecurrenceEnum('event_recurrence')
       .default('none')
@@ -448,9 +485,9 @@ export type NewEvent = typeof events.$inferInsert;
 
 // Add relations for the events table
 export const eventsRelations = relations(events, ({ one }) => ({
-  organizer: one(users, {
+  organizer: one(organizerProfiles, {
     fields: [events.eventOrganizerId],
-    references: [users.id],
+    references: [organizerProfiles.id],
   }),
 }));
 

@@ -43,12 +43,10 @@ export default function SideBar() {
             <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </Link>
           <Link
-            href="https://news.ibzim.com"
-            target="_blank"
-            rel="nofollow"
+            href="/chats"
             className="flex items-center gap-2 rounded-md border border-zinc-200 px-2 py-3 text-sm group-data-[state=open]/collapsible:bg-zinc-200 dark:border-white/20 dark:group-data-[state=open]/collapsible:bg-white/20"
           >
-            <span>News</span>
+            <span>Chats</span>
             <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </Link>
           <Collapsible asChild className="group/collapsible">

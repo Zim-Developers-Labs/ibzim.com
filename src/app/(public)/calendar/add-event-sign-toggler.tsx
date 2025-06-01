@@ -1,21 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Icons } from '../icons';
-import Link from 'next/link';
+import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
-type Props = {
-  bgColor?: string;
-  textColor?: string;
-  linkText?: string;
-};
-
-export function SignToggler({ bgColor, linkText, textColor }: Props) {
+export default function AddEventSignToggler({ text }: { text: string }) {
   const [currentUrl, setCurrentUrl] = useState('');
 
   useEffect(() => {
@@ -25,27 +21,18 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
 
   return (
     <Popover>
-      <PopoverTrigger
-        className={`group block h-fit cursor-pointer rounded-md px-4 py-2 text-sm ${
-          bgColor
-            ? `text-[${textColor}] bg-[${bgColor}] hover:bg-[${bgColor}]/85`
-            : 'bg-teal-400 text-zinc-900 hover:bg-teal-500'
-        }`}
-        asChild
-      >
-        <span>
-          <span className="hidden md:inline">
-            {linkText ? linkText : 'Login / Register'}
-          </span>
-          <span className="inline md:hidden">
-            {linkText ? linkText : 'Login'}
-          </span>
-        </span>
+      <PopoverTrigger asChild>
+        <Button className="mt-4 sm:mt-0">
+          <Plus className="mr-2 h-4 w-4" />
+          {text}
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="z-50 mx-2 mt-2 w-full rounded-md border border-zinc-200 bg-white p-4 shadow-lg sm:w-80">
         <div className="mb-4 flex items-center gap-2 border-b border-b-zinc-200 pb-4">
           <Icons.ibLogoSM className="h-6 w-6" />
-          <span className="text-xs">Sign in to IBZim with your IB Account</span>
+          <span className="text-xs">
+            Sign in to IBZim and create an organizer profile.
+          </span>
         </div>
         <div className="flex items-center justify-between gap-2">
           <Link

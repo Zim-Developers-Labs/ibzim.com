@@ -30,6 +30,7 @@ export const lucia = new Lucia(adapter, {
       phoneNumber: attributes.phoneNumber,
       phoneNumberVerified: attributes.phoneNumberVerified,
       profileCompleted: attributes.profileCompleted,
+      organizerProfileCreated: attributes.organizerProfileCreated,
       communicationSettings: attributes.communicationSettings,
       role: attributes.role,
       deletedAt: attributes.deletedAt,

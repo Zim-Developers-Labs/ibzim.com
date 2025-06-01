@@ -14,6 +14,7 @@ import {
   GraduationCap,
   Heart,
   MapPin,
+  Medal,
   Music,
   PersonStanding,
   Plus,
@@ -40,10 +41,19 @@ import { Icons } from '@/components/icons';
 import EventSharePopover from './event-share-dialog';
 import HighlightedEventHandler from './highlighted-event-handler';
 import AddEventDialog from './add-event-dialog';
-import { Event } from '@/server/db/schema';
+import { Event, OrganizerProfile } from '@/server/db/schema';
+import { User } from 'lucia';
 
-export default function CalendarWrapper() {
-  const events = [...holidayEvents];
+export default function CalendarWrapper({
+  organizer,
+  dbEvents,
+  user,
+}: {
+  organizer: OrganizerProfile | null;
+  dbEvents: Event[];
+  user: User | null;
+}) {
+  const events = [...holidayEvents, ...dbEvents];
   const [currentDate, setCurrentDate] = useState(new Date());
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
@@ -99,6 +109,8 @@ export default function CalendarWrapper() {
         return <Code className="hidden h-3 w-3 sm:inline" />;
       case 'community':
         return <Heart className="hidden h-3 w-3 sm:inline" />;
+      case 'sports':
+        return <Medal className="hidden h-3 w-3 sm:inline" />;
       case 'school':
         return <GraduationCap className="hidden h-3 w-3 sm:inline" />;
       case 'music':
@@ -348,6 +360,7 @@ export default function CalendarWrapper() {
           </div>
 
           <AddEventDialog
+            user={user}
             isAddEventOpen={isAddEventOpen}
             setIsAddEventOpen={setIsAddEventOpen}
           />
@@ -530,12 +543,12 @@ export default function CalendarWrapper() {
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Heart className="h-4 w-4" />
+                <Medal className="h-4 w-4" />
                 <Badge
                   variant="outline"
                   className="border-blue-200 bg-blue-100 text-blue-800"
                 >
-                  Community Event
+                  Sports Event
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
@@ -626,6 +639,7 @@ export default function CalendarWrapper() {
                     <SelectItem value="tech">Tech Event</SelectItem>
                     <SelectItem value="business">Business Event</SelectItem>
                     <SelectItem value="community">Community Event</SelectItem>
+                    <SelectItem value="sports">Sports Event</SelectItem>
                     <SelectItem value="school">School Event</SelectItem>
                     <SelectItem value="music">Music Event</SelectItem>
                     <SelectItem value="religious">Religious Event</SelectItem>
@@ -731,15 +745,19 @@ export default function CalendarWrapper() {
                         <p className="mb-4 text-gray-600">
                           Nothing major is scheduled for this day.
                         </p>
-                        <Button
-                          onClick={() => {
-                            setIsDaySheetOpen(false);
-                            setIsAddEventOpen(true);
-                          }}
-                        >
-                          <Plus className="mr-2 h-4 w-4" />
-                          Add Event for This Day
-                        </Button>
+                        {organizer
+                          ? organizer.profileCompleted && (
+                              <Button
+                                onClick={() => {
+                                  setIsDaySheetOpen(false);
+                                  setIsAddEventOpen(true);
+                                }}
+                              >
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Event for This Day
+                              </Button>
+                            )
+                          : null}
                       </div>
                     );
                   }

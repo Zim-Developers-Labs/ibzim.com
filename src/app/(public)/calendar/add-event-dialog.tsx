@@ -32,6 +32,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { DatePicker } from './date-time-picker';
+import { User } from 'lucia';
+import AddEventSignToggler from './add-event-sign-toggler';
 
 // Demo enum values based on the database schema
 const eventTypes = [
@@ -58,6 +60,7 @@ const eventCategories = [
   { value: 'music', label: 'Music Event' },
   { value: 'religious', label: 'Religious Event' },
   { value: 'school', label: 'School Event' },
+  { value: 'sports', label: 'Sports Event' },
   { value: 'tech', label: 'Tech Event' },
 ];
 
@@ -116,9 +119,11 @@ const steps = [
 ];
 
 export default function AddEventDialog({
+  user,
   isAddEventOpen,
   setIsAddEventOpen,
 }: {
+  user: User | null;
   isAddEventOpen: boolean;
   setIsAddEventOpen: (open: boolean) => void;
 }) {
@@ -490,6 +495,22 @@ export default function AddEventDialog({
         return null;
     }
   };
+
+  if (!user) return <AddEventSignToggler text="Add Event" />;
+
+  if (!user.organizerProfileCreated) {
+    return (
+      <Button
+        className="mt-4 bg-teal-400 font-normal text-zinc-900 hover:bg-teal-500 sm:mt-0"
+        onClick={() =>
+          window.open('/user/settings/profile-customization/organizer', '_self')
+        }
+      >
+        <Plus className="mr-2 h-4 w-4" />
+        Add Event
+      </Button>
+    );
+  }
 
   return (
     <Dialog open={isAddEventOpen} onOpenChange={setIsAddEventOpen}>

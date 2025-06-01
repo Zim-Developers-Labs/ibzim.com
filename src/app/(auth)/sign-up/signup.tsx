@@ -51,14 +51,14 @@ export default function SignUpLayout({
   return (
     <>
       <div className="flex min-h-full flex-1 flex-row-reverse md:h-screen">
-        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-48">
+        <div className="flex flex-1 flex-col justify-center px-4 py-8 sm:px-6 lg:flex-none lg:px-20 xl:px-48">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               <Icons.logo className="h-10 w-fit lg:hidden" />
-              <h2 className="mt-8 text-2xl/9 font-bold tracking-tight text-gray-900">
+              <h2 className="mt-4 text-2xl/9 font-bold tracking-tight text-gray-900">
                 Register new account
               </h2>
-              <p className="mt-2 text-sm/6 text-gray-500">
+              <p className="mt-1 text-sm/6 text-gray-500">
                 Already have an account?{' '}
                 <Link
                   href="/sign-in"
@@ -69,7 +69,7 @@ export default function SignUpLayout({
               </p>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-6">
               <div>
                 <form action={formAction} className="space-y-6">
                   <input
@@ -169,7 +169,7 @@ export default function SignUpLayout({
                 </form>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-4">
                 <div className="relative">
                   <div
                     aria-hidden="true"
@@ -178,7 +178,7 @@ export default function SignUpLayout({
                     <div className="w-full border-t border-gray-200" />
                   </div>
                   <div className="relative flex justify-center text-sm/6 font-medium">
-                    <span className="bg-white px-6 text-gray-900">
+                    <span className="bg-white px-6 text-sm text-gray-900">
                       Or continue with
                     </span>
                   </div>
@@ -215,9 +215,6 @@ export default function SignUpLayout({
                     <span className="text-sm/6 font-semibold">Google</span>
                   </Link>
                 </div>
-                <p className="mt-2 text-xs text-gray-600">
-                  Google auth only avialable to previously registered beta users
-                </p>
               </div>
             </div>
           </div>

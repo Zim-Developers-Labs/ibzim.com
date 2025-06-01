@@ -1,6 +1,9 @@
 'use server';
 
+import { Event, events } from '@/server/db/schema';
 import { holidayEvents, ibzimEvents } from './constants';
+import { db } from '@/server/db';
+import { eq } from 'drizzle-orm';
 
 export async function getEventById(eventId: string) {
   try {
@@ -17,4 +20,15 @@ export async function getEventById(eventId: string) {
     console.error('Error fetching event:', error);
     return { error: 'Failed to fetch event' };
   }
+}
+
+export async function getAllEventsByApproval(
+  approval: boolean,
+): Promise<Event[]> {
+  const dbEvents = await db
+    .select()
+    .from(events)
+    .where(eq(events.approved, approval));
+
+  return dbEvents;
 }
