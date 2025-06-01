@@ -128,8 +128,9 @@ export default function HighlightedEventModal({
                           <p className="text-sm font-medium text-gray-900">
                             Date & Time
                           </p>
+                          {/* TODO: conditional display of end date and time if avialable */}
                           <p className="text-sm text-gray-600">
-                            {formatDate(event.date)}
+                            {formatDate(event.startDate)} {event.startTime!}
                           </p>
                         </div>
                       </div>

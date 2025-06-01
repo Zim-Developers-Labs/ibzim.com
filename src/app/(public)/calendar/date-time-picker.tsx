@@ -12,10 +12,20 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { CalendarIcon, Clock } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 
-export default function DateTimePicker() {
-  const [date, setDate] = React.useState<Date>();
+export default function DateTimePicker({
+  updateFormData,
+  dateTime,
+  toUpdate,
+}: {
+  updateFormData: any;
+  dateTime?: any;
+  toUpdate: string;
+}) {
+  const [date, setDate] = React.useState<Date | undefined>(
+    dateTime ? new Date(dateTime) : undefined,
+  );
   const [isOpen, setIsOpen] = React.useState(false);
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -44,6 +54,7 @@ export default function DateTimePicker() {
         );
       }
       setDate(newDate);
+      updateFormData(toUpdate, newDate.toISOString());
     }
   };
 
@@ -145,9 +156,11 @@ export default function DateTimePicker() {
 export function DatePicker({
   updateFormData,
   value,
+  toUpdate,
 }: {
   updateFormData?: any;
   value: any;
+  toUpdate: string;
 }) {
   const [date, setDate] = React.useState<Date>(value);
 
@@ -161,7 +174,7 @@ export function DatePicker({
             !date && 'text-muted-foreground',
           )}
         >
-          <CalendarIcon />
+          <CalendarIcon className="hidden sm:inline" />
           {date ? format(date, 'PPP') : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
@@ -172,133 +185,11 @@ export function DatePicker({
           onSelect={(selectedDate) => {
             setDate(selectedDate!);
             if (updateFormData && selectedDate) {
-              updateFormData('date', selectedDate.toISOString());
+              updateFormData(toUpdate, selectedDate.toISOString());
             }
           }}
           initialFocus
         />
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-export function TimePicker({
-  updateFormData,
-  toUpdate,
-}: {
-  updateFormData?: any;
-  toUpdate: string;
-}) {
-  const [time, setTime] = React.useState<Date>();
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const hours = Array.from({ length: 12 }, (_, i) => i + 1);
-
-  const handleTimeChange = (
-    type: 'hour' | 'minute' | 'ampm',
-    value: string,
-  ) => {
-    const newTime = time ? new Date(time) : new Date();
-
-    if (type === 'hour') {
-      const hour = Number.parseInt(value);
-      const currentHours = newTime.getHours();
-      const isPM = currentHours >= 12;
-      newTime.setHours(
-        isPM ? (hour === 12 ? 12 : hour + 12) : hour === 12 ? 0 : hour,
-      );
-    } else if (type === 'minute') {
-      newTime.setMinutes(Number.parseInt(value));
-    } else if (type === 'ampm') {
-      const currentHours = newTime.getHours();
-      if (value === 'PM' && currentHours < 12) {
-        newTime.setHours(currentHours + 12);
-      } else if (value === 'AM' && currentHours >= 12) {
-        newTime.setHours(currentHours - 12);
-      }
-    }
-    setTime(newTime);
-    updateFormData(toUpdate, newTime.toISOString());
-  };
-
-  return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            'w-full justify-start text-left font-normal',
-            !time && 'text-muted-foreground',
-          )}
-        >
-          <Clock className="mr-2 h-4 w-4" />
-          {time ? format(time, 'hh:mm aa') : <span>Select time</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <div className="flex flex-col divide-y sm:h-[300px] sm:flex-row sm:divide-x sm:divide-y-0">
-          <ScrollArea className="w-64 sm:w-auto">
-            <div className="flex p-2 sm:flex-col">
-              {hours.reverse().map((hour) => (
-                <Button
-                  key={hour}
-                  size="icon"
-                  variant={
-                    time &&
-                    (time.getHours() % 12 === hour % 12 ||
-                      (time.getHours() % 12 === 0 && hour === 12))
-                      ? 'default'
-                      : 'ghost'
-                  }
-                  className="aspect-square shrink-0 sm:w-full"
-                  onClick={() => handleTimeChange('hour', hour.toString())}
-                >
-                  {hour}
-                </Button>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" className="sm:hidden" />
-          </ScrollArea>
-          <ScrollArea className="w-64 sm:w-auto">
-            <div className="flex p-2 sm:flex-col">
-              {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
-                <Button
-                  key={minute}
-                  size="icon"
-                  variant={
-                    time && time.getMinutes() === minute ? 'default' : 'ghost'
-                  }
-                  className="aspect-square shrink-0 sm:w-full"
-                  onClick={() => handleTimeChange('minute', minute.toString())}
-                >
-                  {minute.toString().padStart(2, '0')}
-                </Button>
-              ))}
-            </div>
-            <ScrollBar orientation="horizontal" className="sm:hidden" />
-          </ScrollArea>
-          <ScrollArea className="">
-            <div className="flex p-2 sm:flex-col">
-              {['AM', 'PM'].map((ampm) => (
-                <Button
-                  key={ampm}
-                  size="icon"
-                  variant={
-                    time &&
-                    ((ampm === 'AM' && time.getHours() < 12) ||
-                      (ampm === 'PM' && time.getHours() >= 12))
-                      ? 'default'
-                      : 'ghost'
-                  }
-                  className="aspect-square shrink-0 sm:w-full"
-                  onClick={() => handleTimeChange('ampm', ampm)}
-                >
-                  {ampm}
-                </Button>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
       </PopoverContent>
     </Popover>
   );

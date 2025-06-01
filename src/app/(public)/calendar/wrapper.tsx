@@ -61,6 +61,8 @@ export default function CalendarWrapper() {
   >('3months');
   const [upcomingEventCategoryFilter, setUpcomingEventCategoryFilter] =
     useState<string>('all');
+  const [upcomingEventTypeFilter, setUpcomingEventTypeFilter] =
+    useState<string>('all');
 
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
@@ -351,15 +353,6 @@ export default function CalendarWrapper() {
           />
         </div>
 
-        <Alert variant="destructive" className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Full Disclosure</AlertTitle>
-          <AlertDescription>
-            This feature is still being developed and all the dates are for
-            demonstration.
-          </AlertDescription>
-        </Alert>
-
         {/* Calendar Navigation */}
         <Card className="mb-6">
           <CardHeader>
@@ -493,6 +486,15 @@ export default function CalendarWrapper() {
           </CardContent>
         </Card>
 
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Full Disclosure</AlertTitle>
+          <AlertDescription>
+            Events might be cancelled or rescheduled. Be sure to check the
+            calendar or contact organizers a day or 2 before the event.
+          </AlertDescription>
+        </Alert>
+
         {/* Legend */}
         <Card className="mb-6">
           <CardHeader>
@@ -581,14 +583,40 @@ export default function CalendarWrapper() {
           <CardHeader>
             <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
               <CardTitle>Upcoming Events</CardTitle>
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div className="flex w-full flex-col gap-2 md:w-fit md:flex-row md:items-center">
+                <Select
+                  value={upcomingEventTypeFilter}
+                  onValueChange={(value: string) =>
+                    setUpcomingEventTypeFilter(value)
+                  }
+                >
+                  <SelectTrigger className="w-full md:w-[180px]">
+                    <SelectValue placeholder="Filter by type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Event Types</SelectItem>
+                    <SelectItem value="awards">Awards</SelectItem>
+                    <SelectItem value="chillout">Chillout</SelectItem>
+                    <SelectItem value="concert">Concert</SelectItem>
+                    <SelectItem value="conference">Conference</SelectItem>
+                    <SelectItem value="exhibition">Exhibition</SelectItem>
+                    <SelectItem value="festival">Festival Event</SelectItem>
+                    <SelectItem value="meeting">Meeting</SelectItem>
+                    <SelectItem value="party">Party</SelectItem>
+                    <SelectItem value="show">Show</SelectItem>
+                    <SelectItem value="social">Social</SelectItem>
+                    <SelectItem value="training">Training</SelectItem>
+                    <SelectItem value="webinar">Webinar</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Select
                   value={upcomingEventCategoryFilter}
                   onValueChange={(value: string) =>
                     setUpcomingEventCategoryFilter(value)
                   }
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-full md:w-[190px]">
                     <SelectValue placeholder="Filter by category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -610,7 +638,7 @@ export default function CalendarWrapper() {
                     value: 'week' | 'month' | '3months' | 'thisYear',
                   ) => setUpcomingFilter(value)}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-full md:w-[180px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

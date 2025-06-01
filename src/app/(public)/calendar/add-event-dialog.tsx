@@ -78,8 +78,9 @@ interface EventFormData {
   description: string;
   type: string;
   category: string;
-  date: string;
+  startDate: string;
   startTime: string;
+  endDate: string;
   endTime: string;
   location: string;
   locationType: string;
@@ -93,10 +94,11 @@ const initialFormData: EventFormData = {
   title: '',
   description: '',
   type: '',
-  date: '',
   startTime: '',
-  category: '',
+  startDate: '',
+  endDate: '',
   endTime: '',
+  category: '',
   location: '',
   locationType: '',
   locationLink: '',
@@ -145,13 +147,13 @@ export default function AddEventDialog({
       case 1:
         return formData.title.trim() !== '' && formData.type !== '';
       case 2:
-        return (
-          formData.date !== '' &&
-          formData.startTime !== '' &&
-          formData.endTime !== ''
-        );
+        return formData.startDate !== '' && formData.startTime !== '';
       case 3:
-        return true; // Location is optional
+        return (
+          formData.locationType !== '' &&
+          formData.location !== '' &&
+          formData.locationLink !== ''
+        );
       case 4:
         return true; // Settings have defaults
       case 5:
@@ -246,6 +248,8 @@ export default function AddEventDialog({
               <Textarea
                 id="description"
                 placeholder="Describe your event"
+                maxLength={140}
+                className="block w-full"
                 value={formData.description}
                 onChange={(e) => updateFormData('description', e.target.value)}
                 rows={3}
@@ -257,38 +261,50 @@ export default function AddEventDialog({
       case 2:
         return (
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="date">Event Date *</Label>
-              {/* <Input
-                id="date"
-                type="date"
-                value={formData.date}
-                onChange={(e) => updateFormData('date', e.target.value)}
-              /> */}
-              <DatePicker
-                updateFormData={updateFormData}
-                value={formData.date}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="startTime">Start Time *</Label>
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4">
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="date" className="text-sm">
+                  Start Date *
+                </Label>
+                <DatePicker
+                  updateFormData={updateFormData}
+                  value={formData.startDate}
+                  toUpdate="startDate"
+                />
+              </div>
+              <div className="col-span-1 space-y-2">
+                <Label htmlFor="startTime" className="text-sm">
+                  Start Time *
+                </Label>
                 <Input
                   id="startTime"
                   type="time"
+                  className="text-sm placeholder:text-sm"
                   value={formData.startTime}
                   onChange={(e) => updateFormData('startTime', e.target.value)}
                 />
-                {/* <TimePicker
-                  updateFormData={updateFormData}
-                  toUpdate="startTime"
-                /> */}
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="endTime">End Time *</Label>
+            </div>
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4">
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="date" className="text-sm">
+                  End Date{' '}
+                  <span className="text-xs text-zinc-600">(Optional)</span>
+                </Label>
+                <DatePicker
+                  updateFormData={updateFormData}
+                  value={formData.endDate}
+                  toUpdate="endDate"
+                />
+              </div>
+              <div className="col-span-1 space-y-2">
+                <Label htmlFor="endTime" className="text-sm">
+                  End Time
+                </Label>
                 <Input
                   id="endTime"
                   type="time"
+                  className="text-sm placeholder:text-sm"
                   value={formData.endTime}
                   onChange={(e) => updateFormData('endTime', e.target.value)}
                 />
@@ -407,7 +423,7 @@ export default function AddEventDialog({
           <div className="space-y-4">
             <div className="space-y-3">
               <div>
-                <h4 className="font-medium">Event Details</h4>
+                <h4 className="text-sm font-medium">Event Details</h4>
                 <p className="text-muted-foreground text-sm">
                   {formData.title}
                 </p>
@@ -424,10 +440,10 @@ export default function AddEventDialog({
               <Separator />
 
               <div>
-                <h4 className="font-medium">Schedule</h4>
+                <h4 className="text-sm font-medium">Schedule</h4>
                 <p className="text-muted-foreground text-sm">
-                  {new Date(formData.date).toLocaleDateString()} from{' '}
-                  {formData.startTime} to {formData.endTime}
+                  {formData.startDate} {formData.startTime} to{' '}
+                  {formData.endDate} {formData.endTime}
                 </p>
               </div>
 
@@ -435,7 +451,7 @@ export default function AddEventDialog({
                 <>
                   <Separator />
                   <div>
-                    <h4 className="font-medium">Location</h4>
+                    <h4 className="text-sm font-medium">Location</h4>
                     <p className="text-muted-foreground text-sm">
                       {formData.location}
                     </p>
@@ -458,10 +474,12 @@ export default function AddEventDialog({
                     )?.label
                   }
                 </Badge>
-                {Number.parseInt(formData.entryPrice) > 0 && (
+                {Number.parseInt(formData.entryPrice) > 0 ? (
                   <Badge variant="outline">
                     ${formatPrice(formData.entryPrice)}
                   </Badge>
+                ) : (
+                  <Badge variant="outline">Free</Badge>
                 )}
               </div>
             </div>
@@ -520,7 +538,9 @@ export default function AddEventDialog({
         </div>
 
         {/* Step content */}
-        <div className="min-h-[250px]">{renderStepContent()}</div>
+        <div className="min-h-[250px] w-full max-w-full overflow-x-hidden">
+          {renderStepContent()}
+        </div>
 
         <DialogFooter className="flex justify-between">
           <Button
