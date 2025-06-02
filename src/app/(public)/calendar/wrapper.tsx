@@ -360,6 +360,7 @@ export default function CalendarWrapper({
           </div>
 
           <AddEventDialog
+            organizer={organizer}
             user={user}
             isAddEventOpen={isAddEventOpen}
             setIsAddEventOpen={setIsAddEventOpen}

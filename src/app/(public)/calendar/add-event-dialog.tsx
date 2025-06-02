@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import {
   CalendarDays,
   Clock,
@@ -34,6 +34,10 @@ import { Separator } from '@/components/ui/separator';
 import { DatePicker } from './date-time-picker';
 import { User } from 'lucia';
 import AddEventSignToggler from './add-event-sign-toggler';
+import { submitEvent } from './actions';
+import { toast } from 'sonner';
+import { SubmitButton } from '@/components/ui/submit-button';
+import { OrganizerProfile } from '@/server/db/schema';
 
 // Demo enum values based on the database schema
 const eventTypes = [
@@ -120,16 +124,17 @@ const steps = [
 
 export default function AddEventDialog({
   user,
+  organizer,
   isAddEventOpen,
   setIsAddEventOpen,
 }: {
+  organizer: OrganizerProfile | null;
   user: User | null;
   isAddEventOpen: boolean;
   setIsAddEventOpen: (open: boolean) => void;
 }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<EventFormData>(initialFormData);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateFormData = (field: keyof EventFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -168,20 +173,27 @@ export default function AddEventDialog({
     }
   };
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
+  const [state, formAction] = useActionState(submitEvent, null);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+  useEffect(() => {
+    if (state?.formError) {
+      toast.error(state.formError);
+    }
 
-    console.log('Event submitted for approval:', formData);
+    if (state?.fieldError) {
+      Object.values(state.fieldError).forEach((error) => {
+        toast.error(error);
+      });
+    }
 
-    // Reset form and close dialog
-    setFormData(initialFormData);
-    setCurrentStep(1);
-    setIsSubmitting(false);
-    setIsAddEventOpen(false);
-  };
+    if (state?.done) {
+      toast.success('Event submitted for review');
+      setFormData(initialFormData);
+      setCurrentStep(1);
+      setIsAddEventOpen(false);
+      state.done = false;
+    }
+  }, [state]);
 
   const formatPrice = (cents: string) => {
     const amount = Number.parseInt(cents) || 0;
@@ -498,7 +510,7 @@ export default function AddEventDialog({
 
   if (!user) return <AddEventSignToggler text="Add Event" />;
 
-  if (!user.organizerProfileCreated) {
+  if (!organizer || !organizer.profileCompleted) {
     return (
       <Button
         className="mt-4 bg-teal-400 font-normal text-zinc-900 hover:bg-teal-500 sm:mt-0"
@@ -577,9 +589,68 @@ export default function AddEventDialog({
               Next
             </Button>
           ) : (
-            <Button onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit for Approval'}
-            </Button>
+            <form action={formAction}>
+              <input type="hidden" value={organizer.id} name="organizerId" />
+              <input type="hidden" value={formData.title} name="title" />
+              <input
+                type="hidden"
+                value={formData.description}
+                name="description"
+              />
+              <input type="hidden" value={formData.type} name="type" />
+              <input type="hidden" value={formData.category} name="category" />
+              <input
+                type="hidden"
+                value={formData.startTime}
+                name="startTime"
+              />
+              <input
+                type="hidden"
+                value={
+                  formData.startDate
+                    ? new Date(formData.startDate).toISOString().split('T')[0]
+                    : undefined
+                }
+                name="startDate"
+              />
+              <input
+                type="hidden"
+                value={formData.endTime ? formData.endTime : undefined}
+                name="endTime"
+              />
+              <input
+                type="hidden"
+                value={
+                  formData.endDate
+                    ? new Date(formData.endDate).toISOString().split('T')[0]
+                    : undefined
+                }
+                name="endDate"
+              />
+              <input type="hidden" value={formData.location} name="location" />
+              <input
+                type="hidden"
+                value={formData.locationType}
+                name="locationType"
+              />
+              <input
+                type="hidden"
+                value={formData.locationLink}
+                name="locationLink"
+              />
+              <input type="hidden" value={formData.priority} name="priority" />
+              <input
+                type="hidden"
+                value={formData.recurrence}
+                name="recurrence"
+              />
+              <input
+                type="hidden"
+                value={formData.entryPrice}
+                name="entryPrice"
+              />
+              <SubmitButton>Submit for Approval</SubmitButton>
+            </form>
           )}
         </DialogFooter>
       </DialogContent>
