@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { daysOfWeek, months, holidayEvents } from './constants';
 import {
   AlertCircle,
@@ -57,6 +57,10 @@ export default function CalendarWrapper({
   const [currentDate, setCurrentDate] = useState(new Date());
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
+  const handleSetIsAddEventOpen = useCallback((value: any) => {
+    setIsAddEventOpen(value);
+  }, []);
+
   const [viewMode, setViewMode] = useState<'month' | 'week'>('month');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isEventSheetOpen, setIsEventSheetOpen] = useState(false);
@@ -363,7 +367,7 @@ export default function CalendarWrapper({
             organizer={organizer}
             user={user}
             isAddEventOpen={isAddEventOpen}
-            setIsAddEventOpen={setIsAddEventOpen}
+            setIsAddEventOpen={handleSetIsAddEventOpen}
           />
         </div>
 

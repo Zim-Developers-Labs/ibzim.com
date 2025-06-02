@@ -193,7 +193,7 @@ export default function AddEventDialog({
       setIsAddEventOpen(false);
       state.done = false;
     }
-  }, [state]);
+  }, [state, setIsAddEventOpen]);
 
   const formatPrice = (cents: string) => {
     const amount = Number.parseInt(cents) || 0;
