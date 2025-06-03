@@ -1,19 +1,8 @@
-'use client';
-
-import { useState } from 'react';
-import { X } from 'lucide-react';
 import { Icons } from './icons';
 
 export default function Banner() {
-  const [isVisible, setIsVisible] = useState(true);
-
-  if (!isVisible) return null;
-
   return (
-    <aside
-      className={`top-0 z-30 bg-white ${!process.env.P_ID && 'sticky'}`}
-      role="banner"
-    >
+    <aside className={`sticky top-0 z-30 bg-white`} role="banner">
       <div className="relative isolate flex items-center justify-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 md:gap-x-6">
         <div
           aria-hidden="true"

@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
 import Container from '@/components/container';
 import { Icons } from '@/components/icons';
 
@@ -41,7 +40,7 @@ export default function AwardsPageWrapper() {
           </defs>
         </svg>
         <span className="from-secondaryColor via-primaryColor to-secondaryColor block bg-gradient-to-t bg-clip-text text-center tracking-widest text-transparent">
-          SEASON 4 2025
+          SEASON 4 {selectedYear}
         </span>
         <h1 className="my-4">
           <span className="block text-center text-4xl tracking-wide">
