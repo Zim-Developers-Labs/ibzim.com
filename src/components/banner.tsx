@@ -1,3 +1,5 @@
+'use client';
+
 import { Icons } from './icons';
 
 export default function Banner() {
