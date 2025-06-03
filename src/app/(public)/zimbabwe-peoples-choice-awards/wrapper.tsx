@@ -160,7 +160,7 @@ export default function AwardsPageWrapper() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-2 pt-2">
+                    {/* <div className="flex gap-2 pt-2">
                       {period === 'voting' && (
                         <Button
                           asChild
@@ -238,6 +238,16 @@ export default function AwardsPageWrapper() {
                           </Link>
                         </Button>
                       )}
+                    </div> */}
+                    <div className="pt-2">
+                      <Button
+                        variant="outline"
+                        className="w-full border-gray-300 text-sm text-gray-600 sm:text-base"
+                        disabled
+                      >
+                        <Calendar className="mr-1 h-4 w-4" />
+                        Coming Soon
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>

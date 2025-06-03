@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { Icons } from './icons';
 
 export default function Banner() {
   const [isVisible, setIsVisible] = useState(true);
@@ -13,7 +14,7 @@ export default function Banner() {
       className={`top-0 z-30 bg-white ${!process.env.P_ID && 'sticky'}`}
       role="banner"
     >
-      <div className="relative isolate flex items-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 md:gap-x-6">
+      <div className="relative isolate flex items-center justify-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 md:gap-x-6">
         <div
           aria-hidden="true"
           className="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl"
@@ -39,27 +40,18 @@ export default function Banner() {
           />
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
-          <p className="text-sm leading-6 text-gray-900">IB Whatsapp Channel</p>
+          <p className="text-sm leading-6 text-gray-900">
+            People&#39;s Choice Awards
+          </p>
           <div
             onClick={() => {
-              window.open(
-                `https://whatsapp.com/channel/0029VatbTmtEwEk4CAwiP23W`,
-              );
+              window.open(`https://chat.whatsapp.com/Eu8iaKvnIyeLTXGlvOI77N`);
             }}
-            className="flex-none cursor-pointer rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+            className="flex cursor-pointer items-center gap-2 rounded-sm bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            Subscribe
+            <Icons.ibzimAwardsIcon className="inline h-5 w-fit text-white" />
+            Join <span className="hidden sm:inline">Waitlist</span>
           </div>
-        </div>
-        <div className="flex flex-1 justify-end">
-          <button
-            type="button"
-            className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
-            onClick={() => setIsVisible(false)}
-          >
-            <span className="sr-only">Dismiss</span>
-            <X aria-hidden="true" className="h-5 w-5 text-gray-900" />
-          </button>
         </div>
       </div>
     </aside>
