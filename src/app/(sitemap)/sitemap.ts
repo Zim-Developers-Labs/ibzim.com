@@ -36,6 +36,26 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${siteConfig.url.web}/calendar`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
+      url: `${siteConfig.url.web}/zimbabwe-peoples-choice-awards`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
+      url: `${siteConfig.url.web}/chats`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
+      url: `${siteConfig.url.web}/tools`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
       url: `${siteConfig.url.web}/profiles`,
       lastModified: new Date(),
       priority: 1,
