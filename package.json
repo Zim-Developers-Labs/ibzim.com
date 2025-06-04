@@ -49,6 +49,7 @@
     "date-fns": "^4.1.0",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.41.0",
+    "framer-motion": "^12.16.0",
     "libphonenumber-js": "^1.12.8",
     "lucia": "^3.2.2",
     "lucide-react": "^0.487.0",

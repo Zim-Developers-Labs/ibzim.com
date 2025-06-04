@@ -38,7 +38,7 @@ export default function Banner() {
             onClick={() => {
               window.open(`https://chat.whatsapp.com/Eu8iaKvnIyeLTXGlvOI77N`);
             }}
-            className="flex cursor-pointer items-center gap-2 rounded-sm bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+            className="flex cursor-pointer items-center gap-1 rounded-sm bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
             <Icons.ibzimAwardsIcon className="inline h-5 w-fit text-white" />
             Join <span className="hidden sm:inline">Waitlist</span>
