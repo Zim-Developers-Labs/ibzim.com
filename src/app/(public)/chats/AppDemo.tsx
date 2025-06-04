@@ -11,8 +11,8 @@ interface Message {
   status?: 'sent' | 'delivered' | 'read';
 }
 
-// Initial messages that are shown immediately
-const initialMessages: Message[] = [
+// All messages in the conversation sequence
+const conversationMessages: Message[] = [
   {
     id: 1,
     text: "Hey! How's the new project going?",
@@ -34,28 +34,20 @@ const initialMessages: Message[] = [
     timestamp: '10:32',
     status: 'read',
   },
-];
-
-// Message that triggers typing indicator
-const triggerMessage: Message = {
-  id: 4,
-  text: 'Thanks! Want to see a preview?',
-  sent: false,
-  timestamp: '10:35',
-  status: 'read',
-};
-
-// Response to the trigger message
-const responseMessage: Message = {
-  id: 5,
-  text: 'Send it over',
-  sent: true,
-  timestamp: '10:36',
-  status: 'delivered',
-};
-
-// New messages that come after the typing indicator
-const newMessages: Message[] = [
+  {
+    id: 4,
+    text: 'Thanks! Want to see a preview?',
+    sent: false,
+    timestamp: '10:35',
+    status: 'read',
+  },
+  {
+    id: 5,
+    text: 'Send it over',
+    sent: true,
+    timestamp: '10:36',
+    status: 'delivered',
+  },
   {
     id: 6,
     text: "Here's the mobile app we built",
@@ -78,6 +70,9 @@ const newMessages: Message[] = [
     status: 'sent',
   },
 ];
+
+// Define which messages should show typing indicator before them
+const typingBeforeMessages = [1, 5, 6]; // First message, "Send it over", and "Here's the mobile app"
 
 function TypingIndicator() {
   return (
@@ -133,9 +128,9 @@ function MessageBubble({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
         duration: 0.3,
-        delay: index * 0.08 + Math.random() * 0.1, // More natural staggering
+        delay: index * 0.08 + Math.random() * 0.1,
         type: 'spring',
-        stiffness: 400 + Math.random() * 200, // Varying spring stiffness
+        stiffness: 400 + Math.random() * 200,
         damping: 25 + Math.random() * 10,
       }}
       className={`mb-2 flex ${message.sent ? 'justify-end' : 'justify-start'}`}
@@ -230,105 +225,62 @@ function MessageBubble({
 }
 
 export function AppDemo() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [showTyping, setShowTyping] = useState(false);
-  const [stage, setStage] = useState(0);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [isTypingPhase, setIsTypingPhase] = useState(true);
   const [cycleCount, setCycleCount] = useState(0);
 
-  // Manage the conversation flow
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     const randomDelay = (min: number, max: number) =>
       min + Math.random() * (max - min);
 
-    switch (stage) {
-      case 0: // Show trigger message
-        timer = setTimeout(
-          () => {
-            setMessages((prev) => [...prev, triggerMessage]);
-            setStage(1);
-          },
-          randomDelay(1000, 1500),
-        );
-        break;
+    if (currentMessageIndex >= conversationMessages.length) {
+      // End of conversation - reset after a pause
+      timer = setTimeout(
+        () => {
+          setMessages([]);
+          setCurrentMessageIndex(0);
+          setIsTypingPhase(true);
+          setCycleCount((prev) => prev + 1);
+        },
+        randomDelay(8000, 12000),
+      );
+    } else {
+      const currentMessage = conversationMessages[currentMessageIndex];
+      const shouldShowTyping = typingBeforeMessages.includes(currentMessage.id);
 
-      case 1: // Show typing indicator after trigger message
+      if (isTypingPhase && shouldShowTyping) {
+        // Show typing indicator
         timer = setTimeout(
           () => {
             setShowTyping(true);
-            setStage(2);
+            setIsTypingPhase(false);
           },
-          randomDelay(800, 1200),
+          currentMessageIndex === 0
+            ? randomDelay(500, 1000)
+            : randomDelay(800, 1500),
         );
-        break;
-
-      case 2: // Hide typing and show response
+      } else {
+        // Show message
         timer = setTimeout(
           () => {
-            setShowTyping(false);
-            setMessages((prev) => [...prev, responseMessage]);
-            setStage(3);
+            if (showTyping) {
+              setShowTyping(false);
+            }
+            setMessages((prev) => [...prev, currentMessage]);
+            setCurrentMessageIndex((prev) => prev + 1);
+            setIsTypingPhase(true);
           },
-          randomDelay(1800, 2500),
+          showTyping ? randomDelay(1800, 2800) : randomDelay(1000, 2000),
         );
-        break;
-
-      case 3: // Show typing again for the next message
-        timer = setTimeout(
-          () => {
-            setShowTyping(true);
-            setStage(4);
-          },
-          randomDelay(1500, 2000),
-        );
-        break;
-
-      case 4: // Show first new message
-        timer = setTimeout(
-          () => {
-            setShowTyping(false);
-            setMessages((prev) => [...prev, newMessages[0]]);
-            setStage(5);
-          },
-          randomDelay(1800, 2500),
-        );
-        break;
-
-      case 5: // Show second new message
-        timer = setTimeout(
-          () => {
-            setMessages((prev) => [...prev, newMessages[1]]);
-            setStage(6);
-          },
-          randomDelay(1000, 1500),
-        );
-        break;
-
-      case 6: // Show third new message
-        timer = setTimeout(
-          () => {
-            setMessages((prev) => [...prev, newMessages[2]]);
-            setStage(7);
-          },
-          randomDelay(800, 1200),
-        );
-        break;
-
-      case 7: // Reset after a longer pause
-        timer = setTimeout(
-          () => {
-            setMessages(initialMessages);
-            setStage(0);
-            setCycleCount((prev) => prev + 1);
-          },
-          randomDelay(8000, 12000),
-        );
-        break;
+      }
     }
 
     return () => clearTimeout(timer);
-  }, [stage, cycleCount]);
+  }, [currentMessageIndex, isTypingPhase, showTyping, cycleCount]);
 
   return (
     <AppScreen>
