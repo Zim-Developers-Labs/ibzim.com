@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppScreen } from './AppScreen';
+import { logoFont } from '@/lib/fonts';
 
 interface Message {
   id: number;
@@ -15,56 +16,56 @@ interface Message {
 const conversationMessages: Message[] = [
   {
     id: 1,
-    text: "Hey! How's the new project going?",
+    text: 'Hey guys, what are we talking about today',
     sent: false,
     timestamp: '10:30',
     status: 'read',
   },
   {
     id: 2,
-    text: 'Going great! Just finished the UI components',
+    text: 'Lets discuss about the tech industry in Zimbabwe',
     sent: true,
     timestamp: '10:32',
     status: 'read',
   },
   {
     id: 3,
-    text: 'The design looks amazing 🎨',
+    text: 'I think our country has a lot of potential 🤔',
     sent: true,
     timestamp: '10:32',
     status: 'read',
   },
   {
     id: 4,
-    text: 'Thanks! Want to see a preview?',
+    text: 'Ohh yh especially with the current generation',
     sent: false,
     timestamp: '10:35',
     status: 'read',
   },
   {
     id: 5,
-    text: 'Send it over',
+    text: 'I have a question though',
     sent: true,
     timestamp: '10:36',
     status: 'delivered',
   },
   {
     id: 6,
-    text: "Here's the mobile app we built",
+    text: 'yes shoot',
     sent: false,
     timestamp: '10:38',
     status: 'sent',
   },
   {
     id: 7,
-    text: 'Wow, this looks professional! 🚀',
+    text: 'How best can we ensure the growth of our tech industry',
     sent: true,
     timestamp: '10:40',
     status: 'sent',
   },
   {
     id: 8,
-    text: 'Love the animations and interactions',
+    text: 'Food for thought indeed',
     sent: true,
     timestamp: '10:40',
     status: 'sent',
@@ -139,7 +140,7 @@ function MessageBubble({
         <div
           className={`rounded-2xl px-3 py-2 text-sm leading-relaxed ${
             message.sent
-              ? 'rounded-br-md bg-green-500 text-white'
+              ? 'rounded-br-md bg-teal-500 text-white'
               : 'rounded-bl-md bg-gray-200 text-gray-800'
           }`}
         >
@@ -285,13 +286,16 @@ export function AppDemo() {
   return (
     <AppScreen>
       {/* Chat Header */}
-      <div className="flex items-center gap-3 bg-green-600 px-4 py-3 text-white">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300">
-          <span className="text-sm font-medium text-gray-600">JS</span>
+      <div className="flex items-center gap-3 bg-teal-600 px-4 py-3 text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900">
+          <span className={`${logoFont.className}`}>
+            <span>I</span>
+            <span className="text-primaryColor">B</span>
+          </span>
         </div>
         <div className="flex-1">
-          <div className="text-sm font-medium">John Smith</div>
-          <div className="text-xs text-green-100">online</div>
+          <div className="text-sm font-medium">IBZim Community</div>
+          <div className="text-xs text-teal-100">100+ members</div>
         </div>
         <div className="flex gap-4">
           <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -350,7 +354,7 @@ export function AppDemo() {
             clipRule="evenodd"
           />
         </svg>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500">
           <svg
             className="h-4 w-4 text-white"
             fill="currentColor"
