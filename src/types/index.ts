@@ -1,4 +1,4 @@
-import { Image, Slug } from "sanity";
+import { Image, Slug } from 'sanity';
 
 export type CardArticleType = {
   _id: string;
@@ -49,7 +49,7 @@ export type PolicyType = {
   _updatedAt: string;
   name: string;
   slug: {
-    _type: "slug";
+    _type: 'slug';
     current: string;
   };
   title: string;
@@ -146,7 +146,7 @@ export type ArticleType = {
   tblContentsType: string;
   name: string;
   slug: {
-    _type: "slug";
+    _type: 'slug';
     current: string;
   };
   title: string;
@@ -196,7 +196,7 @@ export type ArticleType = {
   relatedArticles?: {
     name: string;
     slug: {
-      _type: "slug";
+      _type: 'slug';
       current: string;
     };
     seo: {
@@ -257,7 +257,8 @@ export type ProfileType = {
   }[];
   yearFounded: number;
   entityType: string;
-  birthDate: string;
+  birthDate?: string;
+  isBirthDateApproximate?: boolean;
   additionalInfo?: {
     tableHeading: string;
     tableData: any;

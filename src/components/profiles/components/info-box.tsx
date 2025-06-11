@@ -63,8 +63,7 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
               <th className="pr-2 pb-2 text-left align-top">Born</th>
               <td className="pb-2 text-left align-top">
                 {formatDate(new Date(profile.birthDate), 'MMMM d, yyyy')}
-                <br />
-                (Age{' '}
+                <br />({profile.isBirthDateApproximate && 'Estimated'} Age{' '}
                 {Math.floor(
                   (new Date().getTime() -
                     new Date(profile.birthDate).getTime()) /
