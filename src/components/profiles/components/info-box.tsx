@@ -119,7 +119,7 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
                     ) : socialLink.name === 'Facebook' ? (
                       <Icons.facebookF className="h-5 text-white" />
                     ) : socialLink.name === 'Instagram' ? (
-                      <Icons.facebookF className="h-5 text-white" />
+                      <Icons.instagram className="h-5 text-white" />
                     ) : socialLink.name === 'YouTube' ? (
                       <Icons.youtube className="h-5 text-white" />
                     ) : (
