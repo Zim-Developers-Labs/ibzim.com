@@ -67,6 +67,7 @@ const TxtComponents = () => {
   return {
     normal: (props: any) => props.children,
     annotationLink,
+    annotationInternalLink,
     annotationChange,
     ul: (props: any) => <ul>{props.children}</ul>,
     ol: (props: any) => <ol>{props.children}</ol>,
