@@ -6,7 +6,6 @@ import {
 import { urlForImage } from '@/sanity/lib/image';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 
 export default function annotationLink(props: any) {
   const { url = '', dofollow, children } = props;
