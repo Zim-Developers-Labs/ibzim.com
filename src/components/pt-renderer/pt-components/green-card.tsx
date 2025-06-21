@@ -1,4 +1,3 @@
-import { ShieldCheck } from 'lucide-react';
 import PtRenderer from '..';
 import { Icons } from '@/components/icons';
 
