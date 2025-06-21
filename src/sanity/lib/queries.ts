@@ -1,4 +1,4 @@
-import { defineQuery, groq } from "next-sanity";
+import { defineQuery, groq } from 'next-sanity';
 
 export const queryHomePageData =
   defineQuery(/* groq */ `*[_type == $documentType && _id == $documentId][0]{
@@ -204,7 +204,26 @@ const profileFields = groq`
   legalName,
   birthDate,
   yearFounded,
-  additionalInfo,
+  additionalInfo[] {
+    ...,
+    tableData[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "annotationInternalLink" => {
+          "internalPage": internalPage -> { 
+            seo,
+            picture,
+            _type,
+            slug,
+            "industry": industry->{"slug": slug.current},
+            type,
+            name,
+           },
+        },
+      }
+    }
+  },
   socialLinks,
   relatedProfiles,
   "relatedProfiles": *[_type == $profileDocumentType && references(^._id)] {
