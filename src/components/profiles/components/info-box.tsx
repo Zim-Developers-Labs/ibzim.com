@@ -73,6 +73,15 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
               </td>
             </tr>
           )}
+          {profile.birthYear && (
+            <tr className="grid grid-cols-[40%_60%]">
+              <th className="pr-2 pb-2 text-left align-top">Birth Year</th>
+              <td className="pb-2 text-left align-top">
+                {profile.birthYear} (Age{' '}
+                {new Date().getFullYear() - profile.birthYear} Years)
+              </td>
+            </tr>
+          )}
           {profile.additionalInfo?.map((info, index) => (
             <tr key={index} className="grid grid-cols-[40%_60%]">
               <th className="pr-2 pb-2 text-left align-top">

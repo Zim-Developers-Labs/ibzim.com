@@ -259,6 +259,8 @@ export type ProfileType = {
   entityType: string;
   birthDate?: string;
   isBirthDateApproximate?: boolean;
+  birthYear?: number;
+  useBirthYearOnly?: boolean;
   additionalInfo?: {
     tableHeading: string;
     tableData: any;

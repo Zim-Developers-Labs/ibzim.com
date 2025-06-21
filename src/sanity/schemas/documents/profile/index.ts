@@ -139,7 +139,8 @@ export const ProfileFields = [
     title: 'Birth Date',
     group: INPUT_GROUP.EDITORIAL,
     type: 'date',
-    hidden: ({ parent }) => parent.entityType !== 'person',
+    hidden: ({ parent }) =>
+      parent.entityType !== 'person' || parent.useBirthYearOnly,
   }),
   defineField({
     name: 'isBirthDateApproximate',
@@ -150,6 +151,23 @@ export const ProfileFields = [
     hidden: ({ parent }) => parent.entityType !== 'person',
     type: 'boolean',
     initialValue: false,
+  }),
+  defineField({
+    name: 'useBirthYearOnly',
+    group: INPUT_GROUP.EDITORIAL,
+    description:
+      'Dont know the exact date? Use birth year only if known and confirmed.',
+    title: 'Use Birth Year Only',
+    hidden: ({ parent }) => parent.entityType !== 'person',
+    type: 'boolean',
+    initialValue: false,
+  }),
+  defineField({
+    name: 'birthYear',
+    title: 'Birth Year',
+    group: INPUT_GROUP.EDITORIAL,
+    type: 'number',
+    hidden: ({ parent }) => !parent.useBirthYearOnly,
   }),
   defineField({
     name: 'seo',

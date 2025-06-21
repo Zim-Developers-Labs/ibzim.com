@@ -203,6 +203,9 @@ const profileFields = groq`
   subHeadings,
   legalName,
   birthDate,
+  birthYear,
+  useBirthYearOnly,
+  isBirthDateApproximate,
   yearFounded,
   additionalInfo[] {
     ...,
