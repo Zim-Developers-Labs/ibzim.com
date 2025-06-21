@@ -5,9 +5,10 @@ import {
   CalendarDays,
   Clock,
   MapPin,
-  Settings,
   CheckCircle,
   Plus,
+  BadgeDollarSign,
+  Trash2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,6 +39,7 @@ import { submitEvent } from './actions';
 import { toast } from 'sonner';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { OrganizerProfile } from '@/server/db/schema';
+import { Icons } from '@/components/icons';
 
 // Demo enum values based on the database schema
 const eventTypes = [
@@ -94,7 +96,7 @@ interface EventFormData {
   locationLink: string;
   priority: string;
   recurrence: string;
-  entryPrice: string;
+  pricingTiers: string;
 }
 
 const initialFormData: EventFormData = {
@@ -111,14 +113,14 @@ const initialFormData: EventFormData = {
   locationLink: '',
   priority: 'low',
   recurrence: 'none',
-  entryPrice: '0',
+  pricingTiers: '',
 };
 
 const steps = [
   { id: 1, title: 'Basic Info', icon: CalendarDays },
   { id: 2, title: 'Date & Time', icon: Clock },
   { id: 3, title: 'Location', icon: MapPin },
-  { id: 4, title: 'Settings', icon: Settings },
+  { id: 4, title: 'Settings', icon: BadgeDollarSign },
   { id: 5, title: 'Review', icon: CheckCircle },
 ];
 
@@ -155,17 +157,30 @@ export default function AddEventDialog({
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.title.trim() !== '' && formData.type !== '';
+        return (
+          formData.title.trim() !== '' &&
+          formData.type !== '' &&
+          formData.category !== '' &&
+          formData.description.trim() !== ''
+        );
       case 2:
         return formData.startDate !== '' && formData.startTime !== '';
       case 3:
-        return (
-          formData.locationType !== '' &&
-          formData.location !== '' &&
-          formData.locationLink !== ''
-        );
+        return formData.locationType !== '' && formData.location !== '';
       case 4:
-        return true; // Settings have defaults
+        // Pricing validation: first tier can be empty, but additional tiers must have name and price
+        return pricingTiers.every((tier, index) => {
+          if (index === 0) {
+            // First tier can have both empty name and 0 or empty price but not have 1 filled and other empty
+            return (
+              (tier.name.trim() === '' && tier.price.trim() === '0') ||
+              (tier.name.trim() === '' && tier.price.trim() === '') ||
+              (tier.name.trim() !== '' && Number(tier.price.trim()) >= 100)
+            );
+          }
+          // Additional tiers must have both name and price
+          return tier.name.trim() !== '' && Number(tier.price.trim()) > 99;
+        });
       case 5:
         return true; // Review step
       default:
@@ -195,9 +210,36 @@ export default function AddEventDialog({
     }
   }, [state, setIsAddEventOpen]);
 
-  const formatPrice = (cents: string) => {
-    const amount = Number.parseInt(cents) || 0;
-    return (amount / 100).toFixed(2);
+  const [pricingTiers, setPricingTiers] = useState([{ name: '', price: '0' }]);
+
+  const addPricingTier = () => {
+    setPricingTiers((prev) => [...prev, { name: '', price: '0' }]);
+    updateFormData(
+      'pricingTiers',
+      JSON.stringify([...pricingTiers, { name: '', price: '0' }]),
+    );
+  };
+
+  const updatePricingTier = (
+    index: number,
+    field: 'name' | 'price',
+    value: string,
+  ) => {
+    setPricingTiers((prev) =>
+      prev.map((tier, i) => (i === index ? { ...tier, [field]: value } : tier)),
+    );
+    const updatedTiers = pricingTiers.map((tier, i) =>
+      i === index ? { ...tier, [field]: value } : tier,
+    );
+    updateFormData('pricingTiers', JSON.stringify(updatedTiers));
+  };
+
+  const removePricingTier = (index: number) => {
+    if (pricingTiers.length > 1) {
+      setPricingTiers((prev) => prev.filter((_, i) => i !== index));
+      const updatedTiers = pricingTiers.filter((_, i) => i !== index);
+      updateFormData('pricingTiers', JSON.stringify(updatedTiers));
+    }
   };
 
   const renderStepContent = () => {
@@ -260,7 +302,7 @@ export default function AddEventDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="description" className="text-sm">
-                Description
+                Description *
               </Label>
               <Textarea
                 id="description"
@@ -357,7 +399,7 @@ export default function AddEventDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="location">Location</Label>
+              <Label htmlFor="location">Location *</Label>
               <Input
                 id="location"
                 placeholder="Enter event location"
@@ -401,7 +443,7 @@ export default function AddEventDialog({
                 </SelectContent>
               </Select>
             </div> */}
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="recurrence">Recurrence</Label>
               <Select
                 value={formData.recurrence}
@@ -418,18 +460,80 @@ export default function AddEventDialog({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="entryPrice">Entry Price (in cents)</Label>
-              <Input
-                id="entryPrice"
-                type="number"
-                placeholder="0"
-                value={formData.entryPrice}
-                onChange={(e) => updateFormData('entryPrice', e.target.value)}
-              />
+            </div> */}
+            {/* Pricing Tiers Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-lg font-medium">Pricing Tiers</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addPricingTier}
+                  className="h-9"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Tier
+                </Button>
+              </div>
+
+              {pricingTiers.map((tier, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-end gap-3 rounded-lg border bg-white p-4 md:flex-row"
+                >
+                  <div className="flex-1 space-y-2">
+                    <Label
+                      htmlFor={`pricing-name-${index}`}
+                      className="text-sm"
+                    >
+                      Pricing Name
+                    </Label>
+                    <Input
+                      id={`pricing-name-${index}`}
+                      placeholder="e.g., Standard, VIP, Early Bird"
+                      value={tier.name}
+                      onChange={(e) =>
+                        updatePricingTier(index, 'name', e.target.value)
+                      }
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <Label
+                      htmlFor={`pricing-price-${index}`}
+                      className="text-sm"
+                    >
+                      Price (in cents)
+                    </Label>
+                    <Input
+                      id={`pricing-price-${index}`}
+                      type="number"
+                      placeholder="0"
+                      value={tier.price}
+                      onChange={(e) =>
+                        updatePricingTier(index, 'price', e.target.value)
+                      }
+                      className="w-full"
+                    />
+                  </div>
+                  {pricingTiers.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removePricingTier(index)}
+                      className="h-10 px-3 text-red-600 hover:bg-red-50 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+
               <p className="text-muted-foreground text-sm">
-                Enter price in cents (e.g., 1050 for $10.50)
+                💡 Enter prices in cents (e.g., 1050 for $10.50). Set to 0 for
+                free tiers.
               </p>
             </div>
           </div>
@@ -491,10 +595,8 @@ export default function AddEventDialog({
                     )?.label
                   }
                 </Badge>
-                {Number.parseInt(formData.entryPrice) > 0 ? (
-                  <Badge variant="outline">
-                    ${formatPrice(formData.entryPrice)}
-                  </Badge>
+                {formData.pricingTiers ? (
+                  <Badge variant="outline">Paid</Badge>
                 ) : (
                   <Badge variant="outline">Free</Badge>
                 )}
@@ -513,7 +615,7 @@ export default function AddEventDialog({
   if (!organizer || !organizer.profileCompleted) {
     return (
       <Button
-        className="mt-4 bg-teal-400 font-normal text-zinc-900 hover:bg-teal-500 sm:mt-0"
+        className="bg-teal-400 font-normal text-zinc-900 hover:bg-teal-500"
         onClick={() =>
           window.open('/user/settings/profile-customization/organizer', '_self')
         }
@@ -527,12 +629,12 @@ export default function AddEventDialog({
   return (
     <Dialog open={isAddEventOpen} onOpenChange={setIsAddEventOpen}>
       <DialogTrigger asChild>
-        <Button className="mt-4 sm:mt-0">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           Add Event
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh]sm:max-h-[80vh] w-full overflow-y-auto sm:max-w-[600px]">
+      <DialogContent className="w-full sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Create New Event</DialogTitle>
           <DialogDescription>
@@ -571,87 +673,112 @@ export default function AddEventDialog({
         </div>
 
         {/* Step content */}
-        <div className="min-h-[250px] w-full max-w-full overflow-x-hidden">
+        <div className="max-h-[50vh] min-h-[250px] w-full max-w-full overflow-x-hidden overflow-y-auto pr-2 sm:max-h-[60vh]">
           {renderStepContent()}
         </div>
 
-        <DialogFooter className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={prevStep}
-            disabled={currentStep === 1}
+        <DialogFooter className="flex w-full justify-between sm:justify-between">
+          <div
+            className="text-primaryColor mx-auto mt-4 flex cursor-pointer items-center gap-2 text-sm sm:mx-0 sm:mt-0"
+            onClick={() => window.open('https://wa.me/+263717238876', '_blank')}
           >
-            Previous
-          </Button>
-
-          {currentStep < steps.length ? (
-            <Button onClick={nextStep} disabled={!isStepValid()}>
-              Next
+            <Icons.whatsapp className="h-5 w-fit" />
+            <span>Need help?</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              onClick={prevStep}
+              className="w-full flex-1/2 sm:w-auto"
+              disabled={currentStep === 1}
+            >
+              Previous
             </Button>
-          ) : (
-            <form action={formAction}>
-              <input type="hidden" value={organizer.id} name="organizerId" />
-              <input type="hidden" value={formData.title} name="title" />
-              <input
-                type="hidden"
-                value={formData.description}
-                name="description"
-              />
-              <input type="hidden" value={formData.type} name="type" />
-              <input type="hidden" value={formData.category} name="category" />
-              <input
-                type="hidden"
-                value={formData.startTime}
-                name="startTime"
-              />
-              <input
-                type="hidden"
-                value={
-                  formData.startDate
-                    ? new Date(formData.startDate).toISOString().split('T')[0]
-                    : undefined
-                }
-                name="startDate"
-              />
-              <input
-                type="hidden"
-                value={formData.endTime ? formData.endTime : undefined}
-                name="endTime"
-              />
-              <input
-                type="hidden"
-                value={
-                  formData.endDate
-                    ? new Date(formData.endDate).toISOString().split('T')[0]
-                    : undefined
-                }
-                name="endDate"
-              />
-              <input type="hidden" value={formData.location} name="location" />
-              <input
-                type="hidden"
-                value={formData.locationType}
-                name="locationType"
-              />
-              <input
-                type="hidden"
-                value={formData.locationLink}
-                name="locationLink"
-              />
-              <input type="hidden" value={formData.priority} name="priority" />
-              <input
-                type="hidden"
-                value={formData.recurrence}
-                name="recurrence"
-              />
-              <input
-                type="hidden"
-                value={formData.entryPrice}
-                name="entryPrice"
-              />
-              <SubmitButton>Submit for Approval</SubmitButton>
-            </form>
-          )}
+            {currentStep < steps.length ? (
+              <Button
+                onClick={nextStep}
+                disabled={!isStepValid()}
+                className="w-full flex-1/2 sm:w-auto"
+              >
+                Next
+              </Button>
+            ) : (
+              <form action={formAction}>
+                <input type="hidden" value={organizer.id} name="organizerId" />
+                <input type="hidden" value={formData.title} name="title" />
+                <input
+                  type="hidden"
+                  value={formData.description}
+                  name="description"
+                />
+                <input type="hidden" value={formData.type} name="type" />
+                <input
+                  type="hidden"
+                  value={formData.category}
+                  name="category"
+                />
+                <input
+                  type="hidden"
+                  value={formData.startTime}
+                  name="startTime"
+                />
+                <input
+                  type="hidden"
+                  value={
+                    formData.startDate
+                      ? new Date(formData.startDate).toISOString().split('T')[0]
+                      : undefined
+                  }
+                  name="startDate"
+                />
+                <input
+                  type="hidden"
+                  value={formData.endTime != '' ? formData.endTime : undefined}
+                  name="endTime"
+                />
+                <input
+                  type="hidden"
+                  value={
+                    formData.endDate != ''
+                      ? new Date(formData.endDate).toISOString().split('T')[0]
+                      : undefined
+                  }
+                  name="endDate"
+                />
+                <input
+                  type="hidden"
+                  value={formData.location}
+                  name="location"
+                />
+                <input
+                  type="hidden"
+                  value={formData.locationType}
+                  name="locationType"
+                />
+                <input
+                  type="hidden"
+                  value={formData.locationLink}
+                  name="locationLink"
+                />
+                <input
+                  type="hidden"
+                  value={formData.priority}
+                  name="priority"
+                />
+                <input
+                  type="hidden"
+                  value={formData.recurrence}
+                  name="recurrence"
+                />
+                <input
+                  type="hidden"
+                  value={formData.pricingTiers}
+                  name="pricingTiers"
+                />
+                <SubmitButton>Submit for Approval</SubmitButton>
+              </form>
+            )}
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

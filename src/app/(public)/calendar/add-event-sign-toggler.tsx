@@ -22,7 +22,7 @@ export default function AddEventSignToggler({ text }: { text: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="mt-4 sm:mt-0">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           {text}
         </Button>

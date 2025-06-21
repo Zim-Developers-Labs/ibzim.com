@@ -7,6 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const formatPrice = (cents: string) => {
+  const amount = Number.parseInt(cents) || 0;
+  return (amount / 100).toFixed(2);
+};
+
 export function Linkify(titleText: string) {
   const linkified =
     titleText?.toLowerCase &&

@@ -363,12 +363,24 @@ export default function CalendarWrapper({
             </p>
           </div>
 
-          <AddEventDialog
-            organizer={organizer}
-            user={user}
-            isAddEventOpen={isAddEventOpen}
-            setIsAddEventOpen={handleSetIsAddEventOpen}
-          />
+          <div className="mt-6 mb-4 flex items-center gap-2 sm:mt-0">
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() =>
+                window.open('https://wa.me/+263717238876', '_blank')
+              }
+            >
+              <Icons.whatsapp className="mr-1 h-5 w-5" />
+              Contact Us
+            </Button>
+            <AddEventDialog
+              organizer={organizer}
+              user={user}
+              isAddEventOpen={isAddEventOpen}
+              setIsAddEventOpen={handleSetIsAddEventOpen}
+            />
+          </div>
         </div>
 
         {/* Calendar Navigation */}
@@ -791,19 +803,19 @@ export default function CalendarWrapper({
                                     : event.category}
                                 </Badge>
                                 {event.category !== 'public' &&
-                                  (event.entryPrice == 0 ? (
+                                  (event.pricingTiers ? (
                                     <Badge
                                       variant="outline"
                                       className="text-xs"
                                     >
-                                      Free
+                                      Paid
                                     </Badge>
                                   ) : (
                                     <Badge
                                       variant="outline"
                                       className="text-xs"
                                     >
-                                      Paid
+                                      Free
                                     </Badge>
                                   ))}
                               </div>
@@ -929,13 +941,13 @@ export default function CalendarWrapper({
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        {selectedEvent.entryPrice == 0 ? (
+                        {selectedEvent.pricingTiers ? (
                           <Badge variant="outline" className="text-xs">
-                            Free
+                            Paid
                           </Badge>
                         ) : (
                           <Badge variant="outline" className="text-xs">
-                            Paid
+                            Free
                           </Badge>
                         )}
                         {selectedEvent.recurrence && (

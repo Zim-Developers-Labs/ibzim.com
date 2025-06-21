@@ -65,7 +65,7 @@ export async function submitEvent(
         description: err.fieldErrors.description?.[0],
         endDate: err.fieldErrors.endDate?.[0],
         endTime: err.fieldErrors.endTime?.[0],
-        entryPrice: err.fieldErrors.entryPrice?.[0],
+        pricingTiers: err.fieldErrors.pricingTiers?.[0],
         location: err.fieldErrors.location?.[0],
         locationLink: err.fieldErrors.locationLink?.[0],
         locationType: err.fieldErrors.locationType?.[0],
@@ -90,7 +90,7 @@ export async function submitEvent(
     startTime,
     title,
     type,
-    entryPrice,
+    pricingTiers,
     locationLink,
   } = parsed.data;
 
@@ -105,14 +105,14 @@ export async function submitEvent(
     category,
     startTime,
     startDate: new Date(startDate),
-    endDate: new Date(endDate),
+    endDate: endDate ? new Date(endDate) : null,
     endTime,
     location,
     locationType,
     locationLink,
     priority,
     recurrence,
-    entryPrice: Number(entryPrice),
+    pricingTiers,
   });
 
   return {

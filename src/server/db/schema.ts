@@ -460,7 +460,7 @@ export const events = pgTable(
     recurrence: eventRecurrenceEnum('event_recurrence')
       .default('none')
       .notNull(),
-    entryPrice: integer('entry_price').default(0).notNull(), // Price in cents (e.g., $10.50 = 1050)
+    pricingTiers: varchar('pricing_tiers'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
       () => new Date(),

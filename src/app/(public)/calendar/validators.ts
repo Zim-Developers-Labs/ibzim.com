@@ -68,15 +68,8 @@ export const submitEventSchema = z
       .string()
       .min(1, 'Start date is required')
       .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
-    endTime: z
-      .string()
-      .regex(
-        /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-        'Invalid time format (HH:MM)',
-      ),
-    endDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+    endTime: z.string().optional(),
+    endDate: z.string().optional(),
     category: EventCategoryEnum.refine(
       (val) => validEventCategories.includes(val),
       {
@@ -100,14 +93,15 @@ export const submitEventSchema = z
       .or(z.literal('')),
     priority: PriorityEnum.default('low'),
     recurrence: RecurrenceEnum.default('none'),
-    entryPrice: z
-      .string()
-      .regex(/^\d+(\.\d{1,2})?$/, 'Invalid price format')
-      .optional()
-      .or(z.literal('')),
+    pricingTiers: z.string().optional(),
   })
   .refine(
     (data) => {
+      // Only validate if both endDate and endTime are provided
+      if (!data.endDate || !data.endTime) {
+        return true; // Skip validation if end date/time is not provided
+      }
+
       // Validate that start date/time is before end date/time
       const startDateTime = new Date(`${data.startDate}T${data.startTime}`);
       const endDateTime = new Date(`${data.endDate}T${data.endTime}`);
