@@ -564,7 +564,8 @@ export default function AddEventDialog({
                 <h4 className="text-sm font-medium">Schedule</h4>
                 <p className="text-muted-foreground text-sm">
                   {formData.startDate} {formData.startTime} to{' '}
-                  {formData.endDate} {formData.endTime}
+                  {formData.endDate} {formData.endTime}{' '}
+                  {!formData.endDate && 'same day'}
                 </p>
               </div>
 

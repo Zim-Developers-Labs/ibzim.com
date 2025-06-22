@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { SquareTerminal } from 'lucide-react';
+import { CalendarDays, SquareTerminal } from 'lucide-react';
 
 import {
   Sidebar,
@@ -40,6 +40,22 @@ const data = {
         },
       ],
     },
+    {
+      title: 'Calendar',
+      url: '/admin/calendar/internal',
+      icon: CalendarDays,
+      isActive: true,
+      items: [
+        {
+          title: 'Applications',
+          url: '/admin/calendar/applications',
+        },
+        {
+          title: 'Internal',
+          url: '/admin/calendar/internal',
+        },
+      ],
+    },
   ],
 };
 
@@ -51,18 +67,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/admin/dashboard">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <span className={`${logoFont.className}`}>
-                    <span>I</span>
-                    <span className="text-primaryColor">B</span>
-                  </span>
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">IB Global</span>
-                  <span className="truncate text-xs tracking-wide">
-                    Quality over Quantity
-                  </span>
-                </div>
+                <span className={`${logoFont.className} text-4xl`}>
+                  <span>IB</span>
+                  <span className="text-primaryColor">ZIM</span>
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

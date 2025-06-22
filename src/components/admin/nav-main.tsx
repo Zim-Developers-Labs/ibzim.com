@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  CalendarDays,
-  ChevronRight,
-  LayoutDashboard,
-  type LucideIcon,
-} from 'lucide-react';
+import { ChevronRight, LayoutDashboard, type LucideIcon } from 'lucide-react';
 
 import {
   Collapsible,
@@ -89,7 +84,7 @@ export function NavMain({
           </Collapsible>
         ))}
       </SidebarMenu>
-      <SidebarMenu>
+      {/* <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
             <Link href="/admin/calendar">
@@ -98,7 +93,7 @@ export function NavMain({
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
-      </SidebarMenu>
+      </SidebarMenu> */}
     </SidebarGroup>
   );
 }

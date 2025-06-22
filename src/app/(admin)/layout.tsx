@@ -1,5 +1,5 @@
-import { Inter } from "next/font/google";
-import "../globals.css";
+import { Inter } from 'next/font/google';
+import '../globals.css';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,23 +7,36 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/breadcrumb';
+import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/admin/app-sidebar";
-import SlugSpan from "@/components/admin/slug-span";
+} from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/admin/app-sidebar';
+import SlugSpan from '@/components/admin/slug-span';
+import { validateRequest } from '@/lib/auth/validate-request';
+import { redirect } from 'next/navigation';
+import { Paths } from '@/lib/constants';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = await validateRequest();
+
+  if (!user) {
+    redirect(Paths.Login);
+  }
+
+  if (user.role !== 'admin') {
+    redirect(Paths.Home);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-full antialiased`}>
