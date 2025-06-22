@@ -19,6 +19,7 @@ import SlugSpan from '@/components/admin/slug-span';
 import { validateRequest } from '@/lib/auth/validate-request';
 import { redirect } from 'next/navigation';
 import { Paths } from '@/lib/constants';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -67,6 +68,7 @@ export default async function RootLayout({
             </div>
           </SidebarInset>
         </SidebarProvider>
+        <Toaster />
       </body>
     </html>
   );

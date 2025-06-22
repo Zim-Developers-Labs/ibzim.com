@@ -27,6 +27,8 @@ import { EventPriorityBadge } from './components/event-priority-badge';
 import { CalendarIcon, Clock, Globe, MapPin, User } from 'lucide-react';
 import { EventActions } from './components/event-actions';
 import { Event, OrganizerProfile } from '@/server/db/schema';
+import { updateApplicationStatus } from './actions';
+import { toast } from 'sonner';
 
 export default function CalendarApplicationsWrapper({
   allEvents,
@@ -129,14 +131,22 @@ export default function CalendarApplicationsWrapper({
     sortOrder,
   ]);
 
-  const handleApprove = (eventId: string) => {
-    setEvents((prev) =>
-      prev.map((event) =>
-        event.id === eventId
-          ? { ...event, approved: true, approvalExpiry: null }
-          : event,
-      ),
-    );
+  const handleApprove = async (eventId: string) => {
+    const result: any = await updateApplicationStatus(eventId, 'approved');
+    if (result.success) {
+      setEvents((prev) =>
+        prev.map((event) =>
+          event.id === eventId
+            ? { ...event, approved: true, approvalExpiry: null }
+            : event,
+        ),
+      );
+      toast.success('Event approved successfully');
+    }
+
+    if (result.error) {
+      toast.error(`Failed to approve event: ${result.error}`);
+    }
   };
 
   const handleReject = (eventId: string) => {

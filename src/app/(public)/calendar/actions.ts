@@ -1,6 +1,6 @@
 'use server';
 
-import { Event, events } from '@/server/db/schema';
+import { Event, events, organizerProfiles } from '@/server/db/schema';
 import { holidayEvents, ibzimEvents } from './constants';
 import { db } from '@/server/db';
 import { eq } from 'drizzle-orm';
@@ -34,6 +34,16 @@ export async function getEventById(eventId: string) {
     console.error('Error fetching event:', error);
     return { error: 'Failed to fetch event' };
   }
+}
+
+export async function getOrganizerById(id: string) {
+  const organizer = await db
+    .select()
+    .from(organizerProfiles)
+    .where(eq(organizerProfiles.id, id))
+    .limit(1);
+
+  return organizer.length > 0 ? organizer[0] : null;
 }
 
 export async function getAllEventsByApproval(

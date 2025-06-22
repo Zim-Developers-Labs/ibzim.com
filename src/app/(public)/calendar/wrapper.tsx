@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useCallback, useState } from 'react';
-import { daysOfWeek, months, holidayEvents } from './constants';
+import { daysOfWeek, months, holidayEvents, ibzimEvents } from './constants';
 import {
   AlertCircle,
   BriefcaseBusiness,
@@ -16,8 +16,9 @@ import {
   MapPin,
   Medal,
   Music,
-  PersonStanding,
+  Phone,
   Plus,
+  Smile,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -43,6 +44,8 @@ import HighlightedEventHandler from './highlighted-event-handler';
 import AddEventDialog from './add-event-dialog';
 import { Event, OrganizerProfile } from '@/server/db/schema';
 import { User } from 'lucia';
+import { formatPrice } from '@/lib/utils';
+import { getOrganizerById } from './actions';
 
 export default function CalendarWrapper({
   organizer,
@@ -53,7 +56,7 @@ export default function CalendarWrapper({
   dbEvents: Event[];
   user: User | null;
 }) {
-  const events = [...holidayEvents, ...dbEvents];
+  const events = [...holidayEvents, ...dbEvents, ...ibzimEvents];
   const [currentDate, setCurrentDate] = useState(new Date());
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
@@ -103,7 +106,7 @@ export default function CalendarWrapper({
     });
   };
 
-  const getEventIcon = (category: string) => {
+  const getEventIcon = (category: Event['category']) => {
     switch (category) {
       case 'holiday':
         return <Flag className="hidden h-3 w-3 sm:inline" />;
@@ -119,16 +122,16 @@ export default function CalendarWrapper({
         return <GraduationCap className="hidden h-3 w-3 sm:inline" />;
       case 'music':
         return <Music className="hidden h-3 w-3 sm:inline" />;
-      case 'personal':
-        return <PersonStanding className="hidden h-3 w-3 sm:inline" />;
       case 'ibzim':
         return <Icons.logoSm className="hidden h-3 w-3 sm:inline" />;
+      case 'casual':
+        return <Smile className="hidden h-3 w-3 sm:inline" />;
       default:
         return <Calendar className="hidden h-3 w-3 sm:inline" />;
     }
   };
 
-  const getEventColor = (category: string) => {
+  const getCategoryColor = (category: Event['category']) => {
     switch (category) {
       case 'holiday':
         return 'bg-red-100 text-red-800 border-red-200';
@@ -142,8 +145,8 @@ export default function CalendarWrapper({
         return 'bg-teal-100 text-teal-800 border-teal-200';
       case 'music':
         return 'bg-pink-100 text-pink-800 border-pink-200';
-      case 'personal':
-        return 'bg-slate-100 text-slate-800 border-slate-200';
+      case 'casual':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'ibzim':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       default:
@@ -151,7 +154,7 @@ export default function CalendarWrapper({
     }
   };
 
-  const getEventColorForMini = (category: string) => {
+  const getCategoryColorForMini = (category: Event['category']) => {
     switch (category) {
       case 'holiday':
         return 'bg-red-800 text-red-800 border-red-200';
@@ -165,8 +168,8 @@ export default function CalendarWrapper({
         return 'bg-teal-800 text-teal-800 border-teal-200';
       case 'music':
         return 'bg-pink-800 text-pink-800 border-pink-200';
-      case 'personal':
-        return 'bg-slate-800 text-slate-800 border-slate-200';
+      case 'casual':
+        return 'bg-orange-800 text-orange-800 border-orange-200';
       case 'ibzim':
         return 'bg-yellow-800 text-yellow-800 border-yellow-200';
       default:
@@ -319,7 +322,7 @@ export default function CalendarWrapper({
               >
                 {getEventIcon(event.category)}
                 <span
-                  className={`truncate rounded border px-1 py-0.5 text-xs ${getEventColor(event.category)}`}
+                  className={`truncate rounded border px-1 py-0.5 text-xs ${getCategoryColor(event.category)}`}
                 >
                   {event.title}
                 </span>
@@ -335,7 +338,7 @@ export default function CalendarWrapper({
                 {events.map((event, i) => (
                   <span
                     key={i}
-                    className={`h-2 w-2 rounded-full ${getEventColorForMini(event.category)}`}
+                    className={`h-2 w-2 rounded-full ${getCategoryColorForMini(event.category)}`}
                   ></span>
                 ))}
               </div>
@@ -346,6 +349,28 @@ export default function CalendarWrapper({
     }
 
     return days;
+  };
+
+  const [selectedEventOrganizer, setSelectedEventOrganizer] =
+    useState<OrganizerProfile | null>(null);
+  const [isLoadingOrganizer, setIsLoadingOrganizer] = useState(false);
+
+  const fetchOrganizerDetails = async (organizerId: string) => {
+    if (!organizerId) return;
+
+    setIsLoadingOrganizer(true);
+    try {
+      // Import the server action at the top of your file
+      // import { getOrganizerById } from './actions';
+
+      const organizer = await getOrganizerById(organizerId);
+      setSelectedEventOrganizer(organizer);
+    } catch (error) {
+      console.error('Error fetching organizer details:', error);
+      setSelectedEventOrganizer(null);
+    } finally {
+      setIsLoadingOrganizer(false);
+    }
   };
 
   return (
@@ -487,7 +512,7 @@ export default function CalendarWrapper({
                           {events.map((event) => (
                             <div
                               key={event.id}
-                              className={`hidden cursor-pointer rounded border px-2 py-1 text-xs hover:opacity-80 sm:block ${getEventColor(event.category)}`}
+                              className={`hidden cursor-pointer rounded border px-2 py-1 text-xs hover:opacity-80 sm:block ${getCategoryColor(event.category)}`}
                               onClick={() => handleEventClick(event)}
                             >
                               <div className="flex items-center gap-1">
@@ -502,7 +527,7 @@ export default function CalendarWrapper({
                             {events.map((event, i) => (
                               <span
                                 key={i}
-                                className={`h-2 w-2 rounded-full ${getEventColorForMini(event.category)}`}
+                                className={`h-2 w-2 rounded-full ${getCategoryColorForMini(event.category)}`}
                               ></span>
                             ))}
                           </div>
@@ -694,7 +719,7 @@ export default function CalendarWrapper({
                     {getEventIcon(event.category)}
                     <Badge
                       variant="outline"
-                      className={getEventColor(event.category)}
+                      className={getCategoryColor(event.category)}
                     >
                       {event.category}
                     </Badge>
@@ -796,7 +821,7 @@ export default function CalendarWrapper({
                                 {getEventIcon(event.category)}
                                 <Badge
                                   variant="outline"
-                                  className={getEventColor(event.category)}
+                                  className={getCategoryColor(event.category)}
                                 >
                                   {event.category == 'public'
                                     ? 'Public Holiday'
@@ -859,7 +884,7 @@ export default function CalendarWrapper({
         <Sheet open={isEventSheetOpen} onOpenChange={setIsEventSheetOpen}>
           <SheetContent
             side="right"
-            className="w-full max-w-[400px] sm:w-[540px]"
+            className="w-full max-w-[400px] text-sm sm:w-[540px]"
           >
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
@@ -872,18 +897,27 @@ export default function CalendarWrapper({
                     {selectedEvent.category === 'public' ? (
                       <Badge
                         variant="outline"
-                        className={getEventColor(selectedEvent.category)}
+                        className={getCategoryColor(selectedEvent.category)}
                       >
                         Public Holiday
                       </Badge>
                     ) : (
                       <Badge
                         variant="outline"
-                        className={getEventColor(selectedEvent.category)}
+                        className={getCategoryColor(selectedEvent.category)}
                       >
                         {selectedEvent.category.charAt(0).toUpperCase() +
                           selectedEvent.category.slice(1)}{' '}
                         Event
+                      </Badge>
+                    )}
+                    {selectedEvent.type && (
+                      <Badge
+                        variant="outline"
+                        className="border border-zinc-900 bg-zinc-700 text-xs text-white"
+                      >
+                        {selectedEvent.type.charAt(0).toUpperCase() +
+                          selectedEvent.type.slice(1)}
                       </Badge>
                     )}
                   </span>
@@ -892,7 +926,7 @@ export default function CalendarWrapper({
             </SheetHeader>
 
             {selectedEvent && (
-              <div className="mt-6 space-y-6 px-6 md:px-8">
+              <div className="mt-2 space-y-6 px-6 md:px-8">
                 <div>
                   <h3 className="mb-2 font-medium text-gray-900">
                     Date & Time
@@ -928,23 +962,74 @@ export default function CalendarWrapper({
                   </div>
                 )}
 
+                {/* Add Contact details here from organizerProfile which is to be fetched using selectedEvent.organizerId from the database using an action in actions.ts diplay whatsapp number and calls number with icons too  */}
+
+                {selectedEvent.eventOrganizerId && (
+                  <div className="rounded-md border border-zinc-200 bg-zinc-100 p-2 sm:p-4">
+                    <h3 className="mb-2 font-medium text-gray-900">
+                      Organizer Contact
+                    </h3>
+                    {isLoadingOrganizer ? (
+                      <div>Loading...</div>
+                    ) : selectedEventOrganizer ? (
+                      <div className="space-y-2">
+                        {selectedEventOrganizer.whatsappPhoneNumber && (
+                          <p className="flex items-center gap-1 text-gray-600">
+                            <Icons.whatsapp className="h-4 w-4" />
+                            <a
+                              href={`https://wa.me/${selectedEventOrganizer.whatsappPhoneNumber}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {selectedEventOrganizer.whatsappPhoneNumber}
+                            </a>
+                          </p>
+                        )}
+                        {selectedEventOrganizer.callsPhoneNumber && (
+                          <p className="flex items-center gap-1 text-gray-600">
+                            <Phone className="h-4 w-4" />
+                            <a
+                              href={`tel:${selectedEventOrganizer.callsPhoneNumber}`}
+                            >
+                              {selectedEventOrganizer.callsPhoneNumber}
+                            </a>
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <Button
+                        className="bg-teal-400 text-zinc-900 hover:bg-teal-500"
+                        onClick={() =>
+                          fetchOrganizerDetails(selectedEvent.eventOrganizerId!)
+                        }
+                        disabled={isLoadingOrganizer}
+                      >
+                        View Contact Details
+                      </Button>
+                    )}
+                  </div>
+                )}
+
                 {selectedEvent.category !== 'public' && (
                   <div>
-                    <h3 className="mb-2 font-medium text-gray-900">
-                      Event Details
-                    </h3>
+                    <h3 className="mb-2 font-medium text-gray-900">Pricing</h3>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        {getEventIcon(selectedEvent.category)}
-                        <span className="capitalize">
-                          {selectedEvent.category} Event
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
                         {selectedEvent.pricingTiers ? (
-                          <Badge variant="outline" className="text-xs">
-                            Paid
-                          </Badge>
+                          JSON.parse(selectedEvent.pricingTiers).map(
+                            (
+                              tier: { name: string; price: string },
+                              index: number,
+                            ) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {tier.name} - ${formatPrice(tier.price)}
+                              </Badge>
+                            ),
+                          )
                         ) : (
                           <Badge variant="outline" className="text-xs">
                             Free
