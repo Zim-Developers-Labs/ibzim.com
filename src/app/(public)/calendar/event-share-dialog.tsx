@@ -74,7 +74,7 @@ export default function EventSharePopover({ eventId }: EventSharePopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="w-full">Share Event</Button>
+        <Button className="w-full flex-1">Share Event</Button>
       </PopoverTrigger>
       <PopoverContent className="w-full px-6 py-0">
         <div className="w-full divide-y divide-gray-200 text-sm">

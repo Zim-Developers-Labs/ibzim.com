@@ -23,6 +23,8 @@ export const ibzimEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
 ];
 
@@ -49,6 +51,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '002',
@@ -72,6 +76,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '003',
@@ -96,6 +102,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '004',
@@ -119,6 +127,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '005',
@@ -142,6 +152,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '006',
@@ -166,6 +178,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '007',
@@ -189,6 +203,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '008',
@@ -213,6 +229,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '009',
@@ -237,6 +255,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '010',
@@ -260,6 +280,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '011',
@@ -284,6 +306,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '012',
@@ -307,6 +331,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
   {
     id: '013',
@@ -331,6 +357,8 @@ export const holidayEvents: Event[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    pricingDetails: null,
+    ticketsLink: null,
   },
 ];
 

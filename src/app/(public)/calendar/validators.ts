@@ -91,6 +91,15 @@ export const submitEventSchema = z
       .url('Invalid URL format')
       .optional()
       .or(z.literal('')),
+    ticketsLink: z
+      .string()
+      .url('Invalid URL format')
+      .optional()
+      .or(z.literal('')),
+    pricingDetails: z
+      .string()
+      .max(300, 'Pricing details must be less than 300 characters')
+      .optional(),
     priority: PriorityEnum.default('low'),
     recurrence: RecurrenceEnum.default('none'),
     pricingTiers: z.string().optional(),

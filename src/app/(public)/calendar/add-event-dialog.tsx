@@ -97,6 +97,8 @@ interface EventFormData {
   priority: string;
   recurrence: string;
   pricingTiers: string;
+  pricingDetails: string;
+  ticketsLink: string;
 }
 
 const initialFormData: EventFormData = {
@@ -114,6 +116,8 @@ const initialFormData: EventFormData = {
   priority: 'low',
   recurrence: 'none',
   pricingTiers: '',
+  pricingDetails: '',
+  ticketsLink: '',
 };
 
 const steps = [
@@ -461,6 +465,7 @@ export default function AddEventDialog({
                 </SelectContent>
               </Select>
             </div> */}
+
             {/* Pricing Tiers Section */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -535,6 +540,35 @@ export default function AddEventDialog({
                 💡 Enter prices in cents (e.g., 1050 for $10.50). Set to 0 for
                 free tiers.
               </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="ticketsLink" className="text-sm">
+                Tickets Link (optional)
+              </Label>
+              <Input
+                id="ticketsLink"
+                placeholder="https://example.com/tickets"
+                value={formData.ticketsLink}
+                onChange={(e) => updateFormData('ticketsLink', e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="pricingDetails" className="text-sm">
+                Additional Payment Details (optional)
+              </Label>
+              <Textarea
+                id="pricingDetails"
+                placeholder="Alternative ticket locations, deadlines etc."
+                maxLength={140}
+                className="block w-full"
+                value={formData.pricingDetails}
+                onChange={(e) =>
+                  updateFormData('pricingDetails', e.target.value)
+                }
+                rows={2}
+              />
             </div>
           </div>
         );
@@ -775,6 +809,16 @@ export default function AddEventDialog({
                   type="hidden"
                   value={formData.pricingTiers}
                   name="pricingTiers"
+                />
+                <input
+                  type="hidden"
+                  value={formData.pricingDetails}
+                  name="pricingDetails"
+                />
+                <input
+                  type="hidden"
+                  value={formData.ticketsLink}
+                  name="ticketsLink"
                 />
                 <SubmitButton>Submit for Approval</SubmitButton>
               </form>

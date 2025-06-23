@@ -19,6 +19,7 @@ import {
   Phone,
   Plus,
   Smile,
+  Ticket,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,6 +35,7 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
@@ -927,140 +929,168 @@ export default function CalendarWrapper({
             </SheetHeader>
 
             {selectedEvent && (
-              <div className="mt-2 space-y-6 px-6 md:px-8">
-                <div>
-                  <h3 className="mb-2 font-medium text-gray-900">
-                    Date & Time
-                  </h3>
-                  <p className="text-gray-600">
-                    {selectedEvent.startDate.toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </p>
-                </div>
-
-                {selectedEvent.location && (
-                  <div>
-                    <h3 className="mb-2 font-medium text-gray-900">Location</h3>
-                    <p className="flex items-center gap-1 text-gray-600">
-                      <MapPin className="h-4 w-4" />
-                      {selectedEvent.location}
-                    </p>
-                  </div>
-                )}
-
-                {selectedEvent.description && (
+              <div className="mt-2 px-6 md:px-8">
+                <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-2 pb-2 md:space-y-6">
                   <div>
                     <h3 className="mb-2 font-medium text-gray-900">
-                      Description
+                      Date & Time
                     </h3>
-                    <p className="leading-relaxed text-gray-600">
-                      {selectedEvent.description}
+                    <p className="text-gray-600">
+                      {selectedEvent.startDate.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
                     </p>
                   </div>
-                )}
 
-                {/* Add Contact details here from organizerProfile which is to be fetched using selectedEvent.organizerId from the database using an action in actions.ts diplay whatsapp number and calls number with icons too  */}
-
-                {selectedEvent.eventOrganizerId && (
-                  <div className="rounded-md border border-zinc-200 bg-zinc-100 p-2 sm:p-4">
-                    <div className="mb-2 flex items-center justify-between">
-                      <h3 className="font-medium text-gray-900">
-                        Organizer Contact
+                  {selectedEvent.location && (
+                    <div>
+                      <h3 className="mb-2 font-medium text-gray-900">
+                        Location
                       </h3>
-                      <div className="rounded-md bg-zinc-900 px-3 py-2 text-xs">
-                        <Link
-                          href={`https://wa.me/+263717238876?text="I/We are filing a claim on the eventId: ${selectedEvent.id}"`}
-                          target="_blank"
-                          className="bg-gradient-to-br from-teal-300 via-teal-500 to-teal-400 bg-clip-text font-medium text-transparent hover:underline"
+                      <p className="flex items-center gap-1 text-gray-600">
+                        <MapPin className="h-4 w-4" />
+                        {selectedEvent.location}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedEvent.description && (
+                    <div>
+                      <h3 className="mb-2 font-medium text-gray-900">
+                        Description
+                      </h3>
+                      <p className="leading-relaxed text-gray-600">
+                        {selectedEvent.description}
+                      </p>
+                    </div>
+                  )}
+
+                  {selectedEvent.eventOrganizerId && (
+                    <div className="rounded-md border border-zinc-200 bg-zinc-100 p-2 sm:p-4">
+                      <div className="mb-2 flex items-center justify-between">
+                        <h3 className="font-medium text-gray-900">
+                          Organizer Contact
+                        </h3>
+                        <div className="rounded-md bg-zinc-900 px-3 py-2 text-xs">
+                          <Link
+                            href={`https://wa.me/+263717238876?text="I/We are filing a claim on the eventId: ${selectedEvent.id}"`}
+                            target="_blank"
+                            className="bg-gradient-to-br from-teal-300 via-teal-500 to-teal-400 bg-clip-text font-medium text-transparent hover:underline"
+                          >
+                            Claim Event
+                          </Link>
+                        </div>
+                      </div>
+                      {isLoadingOrganizer ? (
+                        <div>Loading...</div>
+                      ) : selectedEventOrganizer ? (
+                        <div className="space-y-2">
+                          {selectedEventOrganizer.whatsappPhoneNumber && (
+                            <p className="flex items-center gap-1 text-gray-600">
+                              <Icons.whatsapp className="h-4 w-4" />
+                              <Link
+                                href={`https://wa.me/${selectedEventOrganizer.whatsappPhoneNumber}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {selectedEventOrganizer.whatsappPhoneNumber}
+                              </Link>
+                            </p>
+                          )}
+                          {selectedEventOrganizer.callsPhoneNumber && (
+                            <p className="flex items-center gap-1 text-gray-600">
+                              <Phone className="h-4 w-4" />
+                              <a
+                                href={`tel:${selectedEventOrganizer.callsPhoneNumber}`}
+                              >
+                                {selectedEventOrganizer.callsPhoneNumber}
+                              </a>
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <Button
+                          className="w-full bg-teal-400 text-zinc-900 hover:bg-teal-500"
+                          onClick={() =>
+                            fetchOrganizerDetails(
+                              selectedEvent.eventOrganizerId!,
+                            )
+                          }
+                          disabled={isLoadingOrganizer}
                         >
-                          Claim Event
-                        </Link>
+                          View Contact Details
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {selectedEvent.category !== 'public' && (
+                    <div>
+                      <h3 className="mb-2 font-medium text-gray-900">
+                        Pricing
+                      </h3>
+                      <div className="space-y-2">
+                        {selectedEvent.pricingDetails !== '' && (
+                          <p className="mb-2 text-zinc-700">
+                            {selectedEvent.pricingDetails}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-2">
+                          {selectedEvent.pricingTiers ? (
+                            JSON.parse(selectedEvent.pricingTiers).map(
+                              (
+                                tier: { name: string; price: string },
+                                index: number,
+                              ) => (
+                                <Badge
+                                  key={index}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
+                                  {tier.name} - ${formatPrice(tier.price)}
+                                </Badge>
+                              ),
+                            )
+                          ) : (
+                            <Badge variant="outline" className="text-xs">
+                              Free
+                            </Badge>
+                          )}
+                          {selectedEvent.recurrence && (
+                            <Badge variant="outline" className="text-xs">
+                              Recurring Event
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    {isLoadingOrganizer ? (
-                      <div>Loading...</div>
-                    ) : selectedEventOrganizer ? (
-                      <div className="space-y-2">
-                        {selectedEventOrganizer.whatsappPhoneNumber && (
-                          <p className="flex items-center gap-1 text-gray-600">
-                            <Icons.whatsapp className="h-4 w-4" />
-                            <Link
-                              href={`https://wa.me/${selectedEventOrganizer.whatsappPhoneNumber}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {selectedEventOrganizer.whatsappPhoneNumber}
-                            </Link>
-                          </p>
-                        )}
-                        {selectedEventOrganizer.callsPhoneNumber && (
-                          <p className="flex items-center gap-1 text-gray-600">
-                            <Phone className="h-4 w-4" />
-                            <a
-                              href={`tel:${selectedEventOrganizer.callsPhoneNumber}`}
-                            >
-                              {selectedEventOrganizer.callsPhoneNumber}
-                            </a>
-                          </p>
-                        )}
-                      </div>
-                    ) : (
+                  )}
+                </div>
+              </div>
+            )}
+
+            <SheetFooter>
+              {selectedEvent && (
+                <div className="space-y-2 border-t py-4">
+                  <div className="flex items-center justify-between gap-2">
+                    {selectedEvent.ticketsLink && (
                       <Button
-                        className="w-full bg-teal-400 text-zinc-900 hover:bg-teal-500"
+                        className="w-full flex-1 bg-teal-400 text-zinc-900 hover:bg-teal-500"
                         onClick={() =>
-                          fetchOrganizerDetails(selectedEvent.eventOrganizerId!)
+                          window.open(`${selectedEvent.ticketsLink}`, '_blank')
                         }
-                        disabled={isLoadingOrganizer}
                       >
-                        View Contact Details
+                        <Ticket className="mr-2 h-4 w-4" />
+                        Buy Tickets
                       </Button>
                     )}
+                    {selectedEvent.category !== 'public' && (
+                      <EventSharePopover eventId={selectedEvent.id} />
+                    )}
                   </div>
-                )}
-
-                {selectedEvent.category !== 'public' && (
-                  <div>
-                    <h3 className="mb-2 font-medium text-gray-900">Pricing</h3>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        {selectedEvent.pricingTiers ? (
-                          JSON.parse(selectedEvent.pricingTiers).map(
-                            (
-                              tier: { name: string; price: string },
-                              index: number,
-                            ) => (
-                              <Badge
-                                key={index}
-                                variant="outline"
-                                className="text-xs"
-                              >
-                                {tier.name} - ${formatPrice(tier.price)}
-                              </Badge>
-                            ),
-                          )
-                        ) : (
-                          <Badge variant="outline" className="text-xs">
-                            Free
-                          </Badge>
-                        )}
-                        {selectedEvent.recurrence && (
-                          <Badge variant="outline" className="text-xs">
-                            Recurring Event
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2 border-t pt-4">
-                  {selectedEvent.category !== 'public' && (
-                    <EventSharePopover eventId={selectedEvent.id} />
-                  )}
                   {isDaySheetOpen && (
                     <Button
                       variant="outline"
@@ -1071,8 +1101,8 @@ export default function CalendarWrapper({
                     </Button>
                   )}
                 </div>
-              </div>
-            )}
+              )}
+            </SheetFooter>
           </SheetContent>
         </Sheet>
       </div>

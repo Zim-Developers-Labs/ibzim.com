@@ -82,6 +82,11 @@ export async function submitEvent(
         priority: err.fieldErrors.priority?.[0],
         recurrence: err.fieldErrors.recurrence?.[0],
         startDate: err.fieldErrors.startDate?.[0],
+        startTime: err.fieldErrors.startTime?.[0],
+        title: err.fieldErrors.title?.[0],
+        type: err.fieldErrors.type?.[0],
+        pricingDetails: err.fieldErrors.pricingDetails?.[0],
+        ticketsLink: err.fieldErrors.ticketsLink?.[0],
       },
     };
   }
@@ -102,6 +107,8 @@ export async function submitEvent(
     type,
     pricingTiers,
     locationLink,
+    ticketsLink,
+    pricingDetails,
   } = parsed.data;
 
   const eventId = generateId(21);
@@ -110,6 +117,8 @@ export async function submitEvent(
     id: eventId,
     eventOrganizerId: organizerId,
     title,
+    ticketsLink,
+    pricingDetails,
     description,
     type,
     category,
