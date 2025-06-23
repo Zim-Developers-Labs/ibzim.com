@@ -21,6 +21,10 @@ export const tools = [
     href: '/tools/ecocash-calculator',
   },
   {
+    name: 'Distance Calculator',
+    href: '/tools/distance-calculator',
+  },
+  {
     name: 'School Picker',
     href: '/tools/school-picker',
   },
