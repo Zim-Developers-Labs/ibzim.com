@@ -3,6 +3,7 @@ export type EventStatus = 'pending' | 'approved' | 'rejected' | 'expired';
 export type EventType =
   | 'party'
   | 'conference'
+  | 'competition'
   | 'workshop'
   | 'meeting'
   | 'social'

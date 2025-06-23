@@ -45,6 +45,7 @@ import { Icons } from '@/components/icons';
 const eventTypes = [
   { value: 'awards', label: 'Awards' },
   { value: 'chillout', label: 'Chillout' },
+  { value: 'competition', label: 'Competition' },
   { value: 'concert', label: 'Concert' },
   { value: 'conference', label: 'Conference' },
   { value: 'exhibition', label: 'Exhibition' },

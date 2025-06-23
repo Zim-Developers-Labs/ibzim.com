@@ -4,6 +4,7 @@ import { z } from 'zod';
 const validEventTypes = [
   'party',
   'conference',
+  'competition',
   'workshop',
   'meeting',
   'social',

@@ -390,6 +390,7 @@ export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
 export const eventTypeEnum = pgEnum('event_type', [
   'party',
   'conference',
+  'competition',
   'workshop',
   'meeting',
   'social',

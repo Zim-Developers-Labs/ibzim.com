@@ -655,6 +655,7 @@ export default function CalendarWrapper({
                     <SelectItem value="all">All Event Types</SelectItem>
                     <SelectItem value="awards">Awards</SelectItem>
                     <SelectItem value="chillout">Chillout</SelectItem>
+                    <SelectItem value="competition">Competition</SelectItem>
                     <SelectItem value="concert">Concert</SelectItem>
                     <SelectItem value="conference">Conference</SelectItem>
                     <SelectItem value="exhibition">Exhibition</SelectItem>
