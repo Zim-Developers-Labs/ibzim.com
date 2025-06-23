@@ -46,6 +46,7 @@ import { Event, OrganizerProfile } from '@/server/db/schema';
 import { User } from 'lucia';
 import { formatPrice } from '@/lib/utils';
 import { getOrganizerById } from './actions';
+import Link from 'next/link';
 
 export default function CalendarWrapper({
   organizer,
@@ -966,9 +967,20 @@ export default function CalendarWrapper({
 
                 {selectedEvent.eventOrganizerId && (
                   <div className="rounded-md border border-zinc-200 bg-zinc-100 p-2 sm:p-4">
-                    <h3 className="mb-2 font-medium text-gray-900">
-                      Organizer Contact
-                    </h3>
+                    <div className="mb-2 flex items-center justify-between">
+                      <h3 className="font-medium text-gray-900">
+                        Organizer Contact
+                      </h3>
+                      <div className="rounded-md bg-zinc-900 px-3 py-2 text-xs">
+                        <Link
+                          href={`https://wa.me/+263717238876?text="I/We are filing a claim on the eventId: ${selectedEvent.id}"`}
+                          target="_blank"
+                          className="bg-gradient-to-br from-teal-300 via-teal-500 to-teal-400 bg-clip-text font-medium text-transparent hover:underline"
+                        >
+                          Claim Event
+                        </Link>
+                      </div>
+                    </div>
                     {isLoadingOrganizer ? (
                       <div>Loading...</div>
                     ) : selectedEventOrganizer ? (
@@ -976,13 +988,13 @@ export default function CalendarWrapper({
                         {selectedEventOrganizer.whatsappPhoneNumber && (
                           <p className="flex items-center gap-1 text-gray-600">
                             <Icons.whatsapp className="h-4 w-4" />
-                            <a
+                            <Link
                               href={`https://wa.me/${selectedEventOrganizer.whatsappPhoneNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
                               {selectedEventOrganizer.whatsappPhoneNumber}
-                            </a>
+                            </Link>
                           </p>
                         )}
                         {selectedEventOrganizer.callsPhoneNumber && (
@@ -998,7 +1010,7 @@ export default function CalendarWrapper({
                       </div>
                     ) : (
                       <Button
-                        className="bg-teal-400 text-zinc-900 hover:bg-teal-500"
+                        className="w-full bg-teal-400 text-zinc-900 hover:bg-teal-500"
                         onClick={() =>
                           fetchOrganizerDetails(selectedEvent.eventOrganizerId!)
                         }
