@@ -6,8 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Calculator, Wrench, Settings, School } from 'lucide-react';
-import Container from '@/components/container';
+import { Calculator, Settings, School, MapPin, Zap } from 'lucide-react';
 import { Metadata } from 'next';
 import { preparePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/lib/config';
@@ -36,6 +35,22 @@ const tools = [
     icon: School,
     category: 'Utility',
   },
+  {
+    name: 'Distance Calculator',
+    slug: 'distance-calculator',
+    description:
+      'Calculate distances, fuel costs, and travel times between locations in Zimbabwe.',
+    icon: MapPin,
+    category: 'Utility',
+  },
+  {
+    name: 'ZESA Electricity Calculator',
+    slug: 'zesa-electricity-calculator',
+    description:
+      'Calculate ZESA electricity costs based on units consumed and tariffs.',
+    icon: Zap,
+    category: 'Utility',
+  },
 ];
 
 const categories = [...new Set(tools.map((tool) => tool.category))];
@@ -43,79 +58,62 @@ const categories = [...new Set(tools.map((tool) => tool.category))];
 export default async function ToolsPage() {
   return (
     <>
-      <Container className="py-12">
-        <section className="mb-12">
-          <h1 className="mb-3 text-4xl font-extrabold tracking-tight">
-            Tools & Calculators
-          </h1>
-          <p className="text-muted-foreground max-w-2xl text-lg">
-            Discover our collection of useful tools and calculators designed to
-            make your life easier.
-          </p>
-        </section>
+      <section className="mb-12">
+        <h1 className="mb-3 text-4xl font-extrabold tracking-tight">
+          Tools & Calculators
+        </h1>
+        <p className="text-muted-foreground max-w-2xl text-lg">
+          Discover our collection of useful tools and calculators designed to
+          make your life easier.
+        </p>
+      </section>
 
-        {categories.map((category) => (
-          <section key={category} className="mb-16">
-            <h2
-              className="mb-6 flex items-center gap-2 text-2xl font-bold tracking-tight"
-              style={{ color: '#eab308' }}
-            >
-              <Settings className="h-6 w-6" />
-              {category} Tools
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {tools
-                .filter((tool) => tool.category === category)
-                .map((tool) => {
-                  const IconComponent = tool.icon;
-                  return (
-                    <Link
-                      key={tool.slug}
-                      href={`/tools/${tool.slug}`}
-                      className="group"
-                    >
-                      <Card className="group h-full cursor-pointer transition-shadow hover:shadow-lg">
-                        <CardHeader>
-                          <div className="flex items-center gap-3">
-                            <div className="bg-primary/10 rounded-lg p-2">
-                              <IconComponent
-                                className="text-primary h-6 w-6"
-                                style={{ color: '#eab308' }}
-                              />
-                            </div>
-                            <CardTitle className="text-xl group-hover:underline">
-                              {tool.name}
-                            </CardTitle>
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <CardDescription className="text-base">
-                            {tool.description}
-                          </CardDescription>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  );
-                })}
-            </div>
-          </section>
-        ))}
-
-        <section className="bg-muted/50 mt-20 flex flex-col items-center rounded-xl p-8 text-center">
-          <h3 className="mb-2 text-2xl font-bold">Need a specific tool?</h3>
-          <p className="text-muted-foreground mb-4 max-w-xl">
-            Can&#29;t find what you&#39;re looking for? Use our Tool Picker to
-            get personalized recommendations.
-          </p>
-          <Link
-            href="#"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-6 py-3 font-semibold transition-colors"
+      {categories.map((category) => (
+        <section key={category} className="mb-12">
+          <h2
+            className="mb-6 flex items-center gap-2 text-2xl font-bold tracking-tight"
+            style={{ color: '#eab308' }}
           >
-            <Wrench className="h-5 w-5" />
-            Find My Tool
-          </Link>
+            <Settings className="h-6 w-6" />
+            {category} Tools
+          </h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {tools
+              .filter((tool) => tool.category === category)
+              .map((tool) => {
+                const IconComponent = tool.icon;
+                return (
+                  <Link
+                    key={tool.slug}
+                    href={`/tools/${tool.slug}`}
+                    className="group"
+                  >
+                    <Card className="group h-full cursor-pointer shadow-none hover:bg-zinc-100">
+                      <CardHeader>
+                        <div className="flex items-center gap-3">
+                          <div className="rounded-lg bg-zinc-100 p-2">
+                            <IconComponent
+                              className="text-primaryColor h-6 w-6"
+                              strokeWidth={1}
+                            />
+                          </div>
+                          <CardTitle className="text-xl group-hover:underline">
+                            {tool.name}
+                          </CardTitle>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <CardDescription className="text-base">
+                          {tool.description}
+                        </CardDescription>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
+          </div>
         </section>
-      </Container>
+      ))}
     </>
   );
 }

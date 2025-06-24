@@ -7,7 +7,7 @@ export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: `ZESA Calculator`,
     description: `Calculate your electricity bills and tariffs.`,
-    pageUrl: '/tools/zesa-calculator',
+    pageUrl: '/tools/zesa-electricity-calculator',
     imageUrl: '/banner.webp',
     siteConfig: siteConfig,
   });

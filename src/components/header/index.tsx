@@ -34,7 +34,7 @@ export const tools = [
   },
   {
     name: 'ZESA Calculator',
-    href: '/tools/zesa-calculator',
+    href: '/tools/zesa-electricity-calculator',
   },
 ];
 

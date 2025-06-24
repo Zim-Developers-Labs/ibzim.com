@@ -29,6 +29,7 @@ import { EventActions } from './components/event-actions';
 import { Event, OrganizerProfile } from '@/server/db/schema';
 import { updateApplicationStatus } from './actions';
 import { toast } from 'sonner';
+import { formatPrice } from '@/lib/utils';
 
 export default function CalendarApplicationsWrapper({
   allEvents,
@@ -283,12 +284,23 @@ export default function CalendarApplicationsWrapper({
                           {event.description}
                         </div>
                       )}
-                      {event.pricingTiers && (
-                        <div className="text-muted-foreground text-xs">
-                          <span className="font-medium">Pricing: </span>
-                          {event.pricingTiers}
-                        </div>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {event.pricingTiers &&
+                          JSON.parse(event.pricingTiers).map(
+                            (
+                              tier: { name: string; price: string },
+                              index: number,
+                            ) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {tier.name} - ${formatPrice(tier.price)}
+                              </Badge>
+                            ),
+                          )}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>

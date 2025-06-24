@@ -40,15 +40,8 @@ import {
   Clock,
   AlertTriangle,
   Zap,
-  ThumbsUp,
-  Verified,
-  Plus,
-  ChevronLeft,
-  ChevronRight,
-  Loader2,
 } from 'lucide-react';
-import { faqData, type FAQQuestion, type Answer } from './demo-data';
-
+import ToolFAQs from '../faq';
 interface City {
   name: string;
   lat: number;
@@ -115,21 +108,6 @@ export default function DistanceCalculatorWrapper() {
   const [reportReason, setReportReason] = useState<string>('');
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isHybridCar, setIsHybridCar] = useState<boolean>(false);
-
-  // FAQ state
-  const [faqQuestions, setFaqQuestions] = useState<FAQQuestion[]>(faqData);
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
-    null,
-  );
-  const [newAnswer, setNewAnswer] = useState<string>('');
-  const [authorName, setAuthorName] = useState<string>('');
-  const [isAddAnswerDialogOpen, setIsAddAnswerDialogOpen] = useState(false);
-  const [visibleAnswers, setVisibleAnswers] = useState<{
-    [key: string]: number;
-  }>({});
-  const [loadingMoreAnswers, setLoadingMoreAnswers] = useState<{
-    [key: string]: boolean;
-  }>({});
 
   // Pre-calculated distance matrix for better performance
   const [distanceMatrix, setDistanceMatrix] = useState<{
@@ -260,52 +238,6 @@ Please review this calculation for accuracy.`;
     // Reset and close dialog
     setReportReason('');
     setIsReportDialogOpen(false);
-  };
-
-  const handleAddAnswer = () => {
-    if (!selectedQuestionId || !newAnswer.trim() || !authorName.trim()) {
-      return;
-    }
-
-    const newAnswerObj: Answer = {
-      id: `answer-${Date.now()}`,
-      content: newAnswer.trim(),
-      author: authorName.trim(),
-      isVerified: false,
-      timestamp: new Date(),
-      likes: 0,
-    };
-
-    setFaqQuestions((prev) =>
-      prev.map((question) =>
-        question.id === selectedQuestionId
-          ? { ...question, answers: [...question.answers, newAnswerObj] }
-          : question,
-      ),
-    );
-
-    // Reset form
-    setNewAnswer('');
-    setAuthorName('');
-    setIsAddAnswerDialogOpen(false);
-    setSelectedQuestionId(null);
-  };
-
-  const handleLikeAnswer = (questionId: string, answerId: string) => {
-    setFaqQuestions((prev) =>
-      prev.map((question) =>
-        question.id === questionId
-          ? {
-              ...question,
-              answers: question.answers.map((answer) =>
-                answer.id === answerId
-                  ? { ...answer, likes: answer.likes + 1 }
-                  : answer,
-              ),
-            }
-          : question,
-      ),
-    );
   };
 
   const canCalculate = fromCity && toCity && fromCity !== toCity;
@@ -447,262 +379,10 @@ Please review this calculation for accuracy.`;
     );
   };
 
-  const handleShowMoreAnswers = async (questionId: string) => {
-    // Store current scroll position
-    const scrollContainer = document.querySelector(
-      `[data-question-id="${questionId}"] .overflow-x-auto`,
-    );
-    const currentScrollLeft = scrollContainer?.scrollLeft || 0;
-
-    setLoadingMoreAnswers((prev) => ({ ...prev, [questionId]: true }));
-
-    // Simulate loading delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    setVisibleAnswers((prev) => ({
-      ...prev,
-      [questionId]: (prev[questionId] || 3) + 5,
-    }));
-
-    setLoadingMoreAnswers((prev) => ({ ...prev, [questionId]: false }));
-
-    // Restore scroll position after state update
-    setTimeout(() => {
-      if (scrollContainer) {
-        scrollContainer.scrollLeft = currentScrollLeft;
-      }
-    }, 0);
-  };
-
-  const getVisibleAnswerCount = (questionId: string) => {
-    return visibleAnswers[questionId] || 3;
-  };
-
-  const FAQSection = () => {
-    return (
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-lg">Frequently Asked Questions</CardTitle>
-          <CardDescription>
-            Get answers to common travel and fuel-related questions from our
-            community
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {faqQuestions.map((question) => {
-            const visibleCount = getVisibleAnswerCount(question.id);
-            const visibleAnswers = question.answers.slice(0, visibleCount);
-            const hasMoreAnswers = question.answers.length > visibleCount;
-
-            return (
-              <div key={question.id} className="space-y-4">
-                <div className="flex items-start justify-between">
-                  <h3 className="pr-4 text-base leading-relaxed font-semibold">
-                    {question.question}
-                  </h3>
-                  <Dialog
-                    open={
-                      isAddAnswerDialogOpen &&
-                      selectedQuestionId === question.id
-                    }
-                    onOpenChange={(open) => {
-                      setIsAddAnswerDialogOpen(open);
-                      if (open) {
-                        setSelectedQuestionId(question.id);
-                      } else {
-                        setSelectedQuestionId(null);
-                        setNewAnswer('');
-                        setAuthorName('');
-                      }
-                    }}
-                  >
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="shrink-0">
-                        <Plus className="mr-1 h-3 w-3" />
-                        Add Answer
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                      <DialogHeader>
-                        <DialogTitle>Add Your Answer</DialogTitle>
-                        <DialogDescription>
-                          Share your knowledge about: {question.question}
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="author-name">Your Name</Label>
-                          <Input
-                            id="author-name"
-                            placeholder="e.g., John Doe"
-                            value={authorName}
-                            onChange={(e) => setAuthorName(e.target.value)}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="new-answer">Your Answer</Label>
-                          <Textarea
-                            id="new-answer"
-                            placeholder="Share your experience, tips, or knowledge..."
-                            value={newAnswer}
-                            onChange={(e) => setNewAnswer(e.target.value)}
-                            className="min-h-[120px]"
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter className="flex-col gap-2 sm:flex-row">
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            setIsAddAnswerDialogOpen(false);
-                            setSelectedQuestionId(null);
-                            setNewAnswer('');
-                            setAuthorName('');
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={handleAddAnswer}
-                          disabled={!newAnswer.trim() || !authorName.trim()}
-                        >
-                          Submit Answer
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-
-                {/* Answers - Horizontal Scroll */}
-                <div className="relative" data-question-id={question.id}>
-                  <div
-                    className="flex gap-4 overflow-x-auto scroll-smooth pb-4"
-                    style={{ scrollbarWidth: 'thin' }}
-                  >
-                    {visibleAnswers.map((answer, index) => (
-                      <Card
-                        key={answer.id}
-                        className={`w-80 flex-shrink-0 ${
-                          answer.isVerified
-                            ? 'border-green-200 bg-green-50'
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <CardContent className="p-4">
-                          <div className="space-y-3">
-                            {/* Author and Verification */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium">
-                                  {answer.author}
-                                </span>
-                                {answer.isVerified && (
-                                  <div className="flex items-center gap-1">
-                                    <Verified className="h-4 w-4 text-green-600" />
-                                    <span className="text-xs text-green-600">
-                                      Verified
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              <span className="text-xs text-gray-500">
-                                {answer.timestamp.toLocaleDateString()}
-                              </span>
-                            </div>
-
-                            {/* Answer Content */}
-                            <p className="text-sm leading-relaxed text-gray-700">
-                              {answer.content}
-                            </p>
-
-                            {/* Like Button */}
-                            <div className="flex items-center justify-between border-t pt-2">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                  handleLikeAnswer(question.id, answer.id)
-                                }
-                                className="h-8 px-2"
-                              >
-                                <ThumbsUp className="mr-1 h-3 w-3" />
-                                <span className="text-xs">{answer.likes}</span>
-                              </Button>
-                              {index === 0 && answer.isVerified && (
-                                <span className="text-xs font-medium text-green-600">
-                                  Official Answer
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-
-                    {/* Show More Button Card */}
-                    {hasMoreAnswers && (
-                      <Card className="w-80 flex-shrink-0 border-dashed border-gray-300 bg-gray-50">
-                        <CardContent className="flex h-full min-h-[200px] items-center justify-center p-4">
-                          <div className="space-y-3 text-center">
-                            <div className="text-sm text-gray-600">
-                              {question.answers.length - visibleCount} more
-                              answer
-                              {question.answers.length - visibleCount !== 1
-                                ? 's'
-                                : ''}
-                            </div>
-                            <Button
-                              variant="outline"
-                              onClick={() => handleShowMoreAnswers(question.id)}
-                              disabled={loadingMoreAnswers[question.id]}
-                              className="w-full"
-                            >
-                              {loadingMoreAnswers[question.id] ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Loading...
-                                </>
-                              ) : (
-                                'Show More'
-                              )}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )}
-                  </div>
-
-                  {/* Scroll Indicators */}
-                  {visibleAnswers.length > 1 && (
-                    <div className="pointer-events-none absolute top-1/2 right-0 left-0 flex -translate-y-1/2 justify-between">
-                      <div className="pointer-events-auto rounded-full bg-white/80 p-1 shadow-sm">
-                        <ChevronLeft className="h-4 w-4 text-gray-400" />
-                      </div>
-                      <div className="pointer-events-auto rounded-full bg-white/80 p-1 shadow-sm">
-                        <ChevronRight className="h-4 w-4 text-gray-400" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Answer Count */}
-                <div className="text-center text-xs text-gray-500">
-                  Showing {visibleCount} of {question.answers.length} answer
-                  {question.answers.length !== 1 ? 's' : ''} • Scroll
-                  horizontally to see more
-                </div>
-              </div>
-            );
-          })}
-        </CardContent>
-      </Card>
-    );
-  };
-
   return (
     <div className="mx-auto w-full">
-      <Card className="shadow-none">
-        <CardHeader className="text-center">
+      <Card className="border-none shadow-none">
+        <CardHeader className="px-0 text-center">
           <div className="mb-2 flex items-center justify-center gap-2">
             <MapPin className="h-6 w-6 text-green-600" />
             <CardTitle className="text-2xl">
@@ -713,7 +393,7 @@ Please review this calculation for accuracy.`;
             Calculate distances between major cities in Zimbabwe
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-0">
           {/* City Selection Row */}
           <div className="flex flex-col space-y-4 lg:flex-row lg:items-end lg:gap-4 lg:space-y-0">
             {/* From City */}
@@ -1129,11 +809,9 @@ Please review this calculation for accuracy.`;
 
           {/* Distance Table */}
           <DistanceTable />
-
-          {/* FAQ Section */}
-          <FAQSection />
         </CardContent>
       </Card>
+      <ToolFAQs tool="distance-calculator" user={null} />
     </div>
   );
 }

@@ -50,7 +50,7 @@ export const submitEventSchema = z
     title: z
       .string()
       .min(1, 'Title is required')
-      .max(200, 'Title must be less than 200 characters'),
+      .max(255, 'Title must be less than 255 characters'),
     description: z
       .string()
       .min(1, 'Description is required')
@@ -80,7 +80,7 @@ export const submitEventSchema = z
     location: z
       .string()
       .min(1, 'Location is required')
-      .max(300, 'Location must be less than 300 characters'),
+      .max(255, 'Location must be less than 255 characters'),
     locationType: LocationTypeEnum.refine(
       (val) => validLocationTypes.includes(val),
       {
@@ -90,11 +90,19 @@ export const submitEventSchema = z
     locationLink: z
       .string()
       .url('Invalid URL format')
+      .max(
+        300,
+        'Max length for location link is 300 characters, use bitly or similar to shorten links.',
+      )
       .optional()
       .or(z.literal('')),
     ticketsLink: z
       .string()
       .url('Invalid URL format')
+      .max(
+        300,
+        'Max length for tickets link is 300 characters, use bitly or similar to shorten links.',
+      )
       .optional()
       .or(z.literal('')),
     pricingDetails: z

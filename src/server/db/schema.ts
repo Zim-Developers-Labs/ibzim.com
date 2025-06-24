@@ -233,21 +233,6 @@ export const commentReports = pgTable(
 export type CommentReport = typeof commentReports.$inferSelect;
 export type NewCommentReport = typeof commentReports.$inferInsert;
 
-export const commentReportRelations = relations(commentReports, ({ one }) => ({
-  comment: one(comments, {
-    fields: [commentReports.commentId],
-    references: [comments.commentId],
-  }),
-  reporter: one(users, {
-    fields: [commentReports.reporterId],
-    references: [users.id],
-  }),
-  reviewer: one(users, {
-    fields: [commentReports.reviewedBy],
-    references: [users.id],
-  }),
-}));
-
 export const articleClaps = pgTable(
   'article_claps',
   {
@@ -320,16 +305,6 @@ export const userAchievements = pgTable(
 export type UserAchievement = typeof userAchievements.$inferSelect;
 export type NewUserAchievement = typeof userAchievements.$inferInsert;
 
-export const userAchievementsRelations = relations(
-  userAchievements,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [userAchievements.userId],
-      references: [users.id],
-    }),
-  }),
-);
-
 export const requestStatusEnum = pgEnum('request_status', [
   'pending',
   'verified',
@@ -364,27 +339,6 @@ export type FollowVerificationRequest =
   typeof followVerificationRequests.$inferSelect;
 export type NewFollowVerificationRequest =
   typeof followVerificationRequests.$inferInsert;
-
-export const followVerificationRequestsRelations = relations(
-  followVerificationRequests,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [followVerificationRequests.userId],
-      references: [users.id],
-    }),
-    userAchievement: one(userAchievements, {
-      fields: [followVerificationRequests.userAchievementId],
-      references: [userAchievements.id],
-    }),
-  }),
-);
-
-export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
-  user: one(users, {
-    fields: [savedArticles.userId],
-    references: [users.id],
-  }),
-}));
 
 // Add this enum for event types
 export const eventTypeEnum = pgEnum('event_type', [
@@ -444,7 +398,7 @@ export const events = pgTable(
     approved: boolean('approved').default(false).notNull(),
     approvalExpiry: timestamp('approval_expiry'),
     title: varchar('title', { length: 255 }).notNull(),
-    ticketsLink: varchar('tickets_link', { length: 255 }),
+    ticketsLink: varchar('tickets_link', { length: 300 }),
     startTime: varchar('start_time', { length: 10 }),
     startDate: timestamp('start_date').notNull(),
     endTime: varchar('end_time', { length: 10 }),
@@ -455,7 +409,7 @@ export const events = pgTable(
     pricingDetails: text('pricing_details'),
     location: varchar('location', { length: 255 }),
     locationType: eventLocationTypeEnum('event_location_type'),
-    locationLink: varchar('location_link', { length: 255 }),
+    locationLink: varchar('location_link', { length: 300 }),
     priority: eventPriorityEnum('event_priority').default('low').notNull(),
     eventOrganizerId: varchar('event_organizer_id', { length: 21 }).references(
       () => organizerProfiles.id,
@@ -486,6 +440,76 @@ export const events = pgTable(
 export type Event = typeof events.$inferSelect;
 export type NewEvent = typeof events.$inferInsert;
 
+export const answers = pgTable(
+  'answers',
+  {
+    id: varchar('id', { length: 21 }).primaryKey(),
+    questionId: varchar('question_id', { length: 21 }).notNull(),
+    userId: varchar('user_id', { length: 21 }).notNull(),
+    content: text('content').notNull(),
+    isVerified: boolean('is_verified').default(false).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+      () => new Date(),
+    ),
+  },
+  (t) => ({
+    questionIdx: index('answer_question_idx').on(t.questionId),
+    userIdx: index('answer_user_idx').on(t.userId),
+    questionUserIdx: index('answer_question_user_idx').on(
+      t.questionId,
+      t.userId,
+    ),
+  }),
+);
+
+export type Answer = typeof answers.$inferSelect;
+export type NewAnswer = typeof answers.$inferInsert;
+
+export const answerLikes = pgTable(
+  'answer_likes',
+  {
+    answerId: varchar('answer_id').notNull(),
+    userId: varchar('user_id').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+
+  (table) => ({
+    answerUserLikeIdx: index('answer_user_like_idx').on(
+      table.answerId,
+      table.userId,
+      table.createdAt,
+    ),
+    pk: primaryKey({ columns: [table.answerId, table.userId] }),
+  }),
+);
+
+export type AnswerLike = typeof answerLikes.$inferSelect;
+export type NewAnswerLike = typeof answerLikes.$inferInsert;
+
+// ----------------------- Add All Relationships Here------------------------------------- //
+
+export const followVerificationRequestsRelations = relations(
+  followVerificationRequests,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [followVerificationRequests.userId],
+      references: [users.id],
+    }),
+    userAchievement: one(userAchievements, {
+      fields: [followVerificationRequests.userAchievementId],
+      references: [userAchievements.id],
+    }),
+  }),
+);
+
+export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
+  user: one(users, {
+    fields: [savedArticles.userId],
+    references: [users.id],
+  }),
+}));
+
 // Add relations for the events table
 export const eventsRelations = relations(events, ({ one }) => ({
   organizer: one(organizerProfiles, {
@@ -500,3 +524,47 @@ export const userRelations = relations(users, ({ many }) => ({
   followVerificationRequests: many(followVerificationRequests),
   organizedEvents: many(events), // Add this line
 }));
+
+export const commentReportRelations = relations(commentReports, ({ one }) => ({
+  comment: one(comments, {
+    fields: [commentReports.commentId],
+    references: [comments.commentId],
+  }),
+  reporter: one(users, {
+    fields: [commentReports.reporterId],
+    references: [users.id],
+  }),
+  reviewer: one(users, {
+    fields: [commentReports.reviewedBy],
+    references: [users.id],
+  }),
+}));
+
+export const userAchievementsRelations = relations(
+  userAchievements,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userAchievements.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const organizerProfilesRelations = relations(
+  organizerProfiles,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [organizerProfiles.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const answersRelations = relations(answers, ({ one }) => ({
+  user: one(users, {
+    fields: [answers.userId],
+    references: [users.id],
+  }),
+}));
+
+// ----------------------- End of Relationships------------------------------------- //
