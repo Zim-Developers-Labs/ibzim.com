@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ibZimAnswers, Question, questions } from './data';
 import { Answer } from '@/server/db/schema';
 import { User } from 'lucia';
@@ -32,6 +32,9 @@ import {
 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { getAnswerLikes, toggleAnswerLike } from './actions';
+import { toast } from 'sonner';
+import { Icons } from '@/components/icons';
 
 export default function ToolFAQs({
   tool,
@@ -138,61 +141,84 @@ export default function ToolFAQs({
                   <h3 className="pr-4 text-base leading-relaxed font-semibold">
                     {question.question}
                   </h3>
-                  <Dialog
-                    open={
-                      isAddAnswerDialogOpen &&
-                      selectedQuestionId === question.id
-                    }
-                    onOpenChange={(open) => {
-                      setIsAddAnswerDialogOpen(open);
-                      if (open) {
-                        setSelectedQuestionId(question.id);
-                      } else {
-                        setSelectedQuestionId(null);
-                        setNewAnswer('');
+                  {user ? (
+                    <Dialog
+                      open={
+                        isAddAnswerDialogOpen &&
+                        selectedQuestionId === question.id
                       }
-                    }}
-                  >
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="shrink-0">
-                        <Plus className="mr-1 h-3 w-3" />
-                        Add Answer
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                      <DialogHeader>
-                        <DialogTitle>Add Your Answer</DialogTitle>
-                        <DialogDescription>
-                          Share your knowledge about: {question.question}
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="new-answer">Your Answer</Label>
-                          <Textarea
-                            id="new-answer"
-                            placeholder="Share your experience, tips, or knowledge..."
-                            value={newAnswer}
-                            onChange={(e) => setNewAnswer(e.target.value)}
-                            className="min-h-[120px]"
-                          />
-                        </div>
-                      </div>
-                      <DialogFooter className="flex-col gap-2 sm:flex-row">
+                      onOpenChange={(open) => {
+                        setIsAddAnswerDialogOpen(open);
+                        if (open) {
+                          setSelectedQuestionId(question.id);
+                        } else {
+                          setSelectedQuestionId(null);
+                          setNewAnswer('');
+                        }
+                      }}
+                    >
+                      <DialogTrigger asChild>
                         <Button
                           variant="outline"
-                          onClick={() => {
-                            setIsAddAnswerDialogOpen(false);
-                            setSelectedQuestionId(null);
-                            setNewAnswer('');
-                          }}
+                          size="sm"
+                          className="shrink-0"
                         >
-                          Cancel
+                          <Plus className="mr-1 h-3 w-3" />
+                          Add Answer
                         </Button>
-                        <Button onClick={handleAddAnswer}>Submit Answer</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Add Your Answer</DialogTitle>
+                          <DialogDescription>
+                            Share your knowledge about: {question.question}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="new-answer">Your Answer</Label>
+                            <Textarea
+                              id="new-answer"
+                              placeholder="Share your experience, tips, or knowledge..."
+                              value={newAnswer}
+                              onChange={(e) => setNewAnswer(e.target.value)}
+                              className="min-h-[120px]"
+                            />
+                          </div>
+                        </div>
+                        <DialogFooter className="flex-col gap-2 sm:flex-row">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setIsAddAnswerDialogOpen(false);
+                              setSelectedQuestionId(null);
+                              setNewAnswer('');
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button onClick={handleAddAnswer}>
+                            Submit Answer
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="group shrink-0"
+                      onClick={() => (window.location.href = '/sign-up')}
+                    >
+                      <Plus className="mr-1 h-3 w-3" />
+                      <span className="inline group-hover:hidden">
+                        Add Answer
+                      </span>
+                      <span className="hidden group-hover:inline">
+                        Login/Signup
+                      </span>
+                    </Button>
+                  )}
                 </div>
 
                 {/* Answers - Horizontal Scroll */}
@@ -202,60 +228,12 @@ export default function ToolFAQs({
                     style={{ scrollbarWidth: 'thin' }}
                   >
                     {visibleAnswers.map((answer, index) => (
-                      <Card
+                      <FaqAnswer
                         key={answer.id}
-                        className={`w-80 flex-shrink-0 ${
-                          answer.isVerified
-                            ? 'border-green-200 bg-green-50'
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <CardContent className="p-4">
-                          <div className="space-y-3">
-                            {/* Author and Verification */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium">
-                                  {answer.userId}
-                                </span>
-                                {answer.isVerified && (
-                                  <div className="flex items-center gap-1">
-                                    <Verified className="h-4 w-4 text-green-600" />
-                                    <span className="text-xs text-green-600">
-                                      Verified
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              <span className="text-xs text-gray-500">
-                                {answer.updatedAt?.toLocaleDateString()}
-                              </span>
-                            </div>
-
-                            {/* Answer Content */}
-                            <p className="text-sm leading-relaxed text-gray-700">
-                              {answer.content}
-                            </p>
-
-                            {/* Like Button */}
-                            <div className="flex items-center justify-between border-t pt-2">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 px-2"
-                              >
-                                <ThumbsUp className="mr-1 h-3 w-3" />
-                                <span className="text-xs">0</span>
-                              </Button>
-                              {index === 0 && answer.isVerified && (
-                                <span className="text-xs font-medium text-green-600">
-                                  Official Answer
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                        index={index}
+                        answer={answer}
+                        user={user}
+                      />
                     ))}
 
                     {/* Show More Button Card */}
@@ -316,5 +294,103 @@ export default function ToolFAQs({
         </CardContent>
       </Card>
     </section>
+  );
+}
+
+function FaqAnswer({ index, answer, user }: any) {
+  const [likesCount, setLikesCount] = useState(0);
+  const [userLiked, setUserLiked] = useState(0);
+  const [isLiking, setIsLiking] = useState(false);
+
+  useEffect(() => {
+    getAnswerLikes(answer.id, user?.id).then((result: any) => {
+      if (result.success) {
+        setLikesCount(result.likes);
+        setUserLiked(result.userLiked);
+      }
+    });
+  }, [answer.id, user?.id]);
+
+  const handleLike = async () => {
+    if (isLiking) return;
+    setIsLiking(true);
+    const result: any = await toggleAnswerLike(answer.id, user!.id);
+
+    if (result.success) {
+      setLikesCount(result.likes);
+      setUserLiked(result.userLiked);
+    }
+    setIsLiking(false);
+  };
+
+  return (
+    <Card
+      key={answer.id}
+      className={`w-80 flex-shrink-0 ${
+        answer.isVerified ? 'border-green-200 bg-green-50' : 'border-gray-200'
+      }`}
+    >
+      <CardContent className="p-4">
+        <div className="space-y-3">
+          {/* Author and Verification */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">{answer.userId}</span>
+              {answer.isVerified && (
+                <div className="flex items-center gap-1">
+                  <Verified className="h-4 w-4 text-green-600" />
+                  <span className="text-xs text-green-600">Verified</span>
+                </div>
+              )}
+            </div>
+            <span className="text-xs text-gray-500">
+              {answer.updatedAt?.toLocaleDateString()}
+            </span>
+          </div>
+
+          {/* Answer Content */}
+          <p className="text-sm leading-relaxed text-gray-700">
+            {answer.content}
+          </p>
+
+          {/* Like Button */}
+          <div className="flex items-center justify-between border-t pt-2">
+            {user ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={isLiking}
+                onClick={handleLike}
+                className={`h-8 px-2 ${!isLiking ? 'cursor-pointer hover:-translate-y-1' : 'cursor-not-allowed'}`}
+              >
+                {userLiked ? (
+                  <Icons.handThumbUpSolid className="text-primaryColor mr-1 h-3 w-3" />
+                ) : (
+                  <ThumbsUp className="mr-1 h-3 w-3" />
+                )}
+                <span className="text-xs">{likesCount}</span>
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  toast.error('Login/Signup first to like answer');
+                }}
+                className="h-8 px-2"
+              >
+                <ThumbsUp className="mr-1 h-3 w-3" />
+                <span className="text-xs">{likesCount}</span>
+              </Button>
+            )}
+            {index === 0 && answer.isVerified && (
+              <span className="text-xs font-medium text-green-600">
+                Official Answer
+              </span>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

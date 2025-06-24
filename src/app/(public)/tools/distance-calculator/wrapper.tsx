@@ -42,6 +42,7 @@ import {
   Zap,
 } from 'lucide-react';
 import ToolFAQs from '../faq';
+import { User } from 'lucia';
 interface City {
   name: string;
   lat: number;
@@ -91,7 +92,11 @@ const calculateDistance = (
   return R * c;
 };
 
-export default function DistanceCalculatorWrapper() {
+export default function DistanceCalculatorWrapper({
+  user,
+}: {
+  user: User | null;
+}) {
   const [fromCity, setFromCity] = useState<string>('');
   const [toCity, setToCity] = useState<string>('');
   const [distance, setDistance] = useState<number | null>(null);
@@ -811,7 +816,7 @@ Please review this calculation for accuracy.`;
           <DistanceTable />
         </CardContent>
       </Card>
-      <ToolFAQs tool="distance-calculator" user={null} />
+      <ToolFAQs tool="distance-calculator" user={user} />
     </div>
   );
 }

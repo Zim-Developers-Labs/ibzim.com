@@ -1,5 +1,8 @@
+import { validateRequest } from '@/lib/auth/validate-request';
 import DistanceCalculatorWrapper from './wrapper';
 
-export default function DistanceCalculatorPage() {
-  return <DistanceCalculatorWrapper />;
+export default async function DistanceCalculatorPage() {
+  const { user } = await validateRequest();
+
+  return <DistanceCalculatorWrapper user={user} />;
 }
