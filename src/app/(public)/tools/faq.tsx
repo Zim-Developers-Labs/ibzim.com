@@ -56,7 +56,6 @@ export default function ToolFAQs({
   const toolQuestions = questions.filter((q) => q.tool === tool);
 
   // FAQ state
-  const [faqQuestions, setFaqQuestions] = useState<Question[]>(toolQuestions);
   const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
     null,
   );
@@ -203,7 +202,7 @@ export default function ToolFAQs({
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {faqQuestions.map((question) => {
+          {toolQuestions.map((question) => {
             const visibleCount = getVisibleAnswerCount(question.id);
             const questionAnswers = allToolAnswers.filter(
               (answer) => answer.questionId === question.id,
