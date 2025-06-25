@@ -445,8 +445,9 @@ export const answers = pgTable(
   {
     id: varchar('id', { length: 21 }).primaryKey(),
     questionId: varchar('question_id', { length: 21 }).notNull(),
-    userId: varchar('user_id', { length: 21 }).notNull(),
+    userName: varchar('user_name', { length: 50 }).notNull(),
     content: text('content').notNull(),
+    tool: varchar('tool', { length: 50 }).notNull(),
     isVerified: boolean('is_verified').default(false).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
@@ -455,11 +456,7 @@ export const answers = pgTable(
   },
   (t) => ({
     questionIdx: index('answer_question_idx').on(t.questionId),
-    userIdx: index('answer_user_idx').on(t.userId),
-    questionUserIdx: index('answer_question_user_idx').on(
-      t.questionId,
-      t.userId,
-    ),
+    questionUserIdx: index('answer_question_user_idx').on(t.questionId),
   }),
 );
 
@@ -562,8 +559,8 @@ export const organizerProfilesRelations = relations(
 
 export const answersRelations = relations(answers, ({ one }) => ({
   user: one(users, {
-    fields: [answers.userId],
-    references: [users.id],
+    fields: [answers.userName],
+    references: [users.fullName],
   }),
 }));
 

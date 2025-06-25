@@ -2,8 +2,11 @@
 
 import { demoAnswerLikes } from '@/data/demo';
 import { db } from '@/server/db';
-import { answerLikes } from '@/server/db/schema';
+import { Answer, answerLikes, answers } from '@/server/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
+import { AnswerInput, answerSchema } from './validators';
+import { filterBadWords } from '@/lib/utils';
+import { generateId } from 'lucia';
 
 export async function getAnswerLikes(answerId: string, userId?: string) {
   try {
@@ -81,5 +84,73 @@ export async function toggleAnswerLike(answerId: string, userId: string) {
   } catch (error) {
     console.error('Error updating likes:', error);
     return { success: false, error: 'Failed to update likes' };
+  }
+}
+
+interface AnswerActionResponse<T> {
+  fieldError?: Partial<Record<keyof T, string | undefined>>;
+  formError?: string;
+  succcesMessage?: string;
+  done?: boolean;
+  answer?: Answer;
+}
+
+export async function addAnswer(
+  _: any,
+  formData: FormData,
+): Promise<AnswerActionResponse<AnswerInput>> {
+  const obj = Object.fromEntries(formData);
+
+  const parsed = answerSchema.safeParse(obj);
+
+  if (!parsed.success) {
+    const fieldError: Partial<Record<keyof AnswerInput, string>> = {};
+    parsed.error.errors.forEach((error) => {
+      fieldError[error.path[0] as keyof AnswerInput] = error.message;
+    });
+    return { fieldError };
+  }
+
+  const { userName, answerText, questionId, tool } = parsed.data;
+
+  const filteredAnswerText = filterBadWords(answerText);
+  const answerId = generateId(21);
+
+  await db.insert(answers).values({
+    id: answerId,
+    questionId,
+    userName,
+    content: filteredAnswerText,
+    isVerified: false,
+    tool,
+  });
+
+  return {
+    done: true,
+    succcesMessage: 'Answer added successfully',
+    answer: {
+      id: answerId,
+      tool,
+      questionId,
+      userName,
+      content: filteredAnswerText,
+      isVerified: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  };
+}
+
+export async function getAllToolAnswers(tool: string): Promise<Answer[]> {
+  try {
+    const dbAnswers = await db
+      .select()
+      .from(answers)
+      .where(eq(answers.tool, tool));
+
+    return dbAnswers;
+  } catch (error) {
+    console.error('Error fetching answers:', error);
+    return [];
   }
 }

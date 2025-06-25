@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { ibZimAnswers, Question, questions } from './data';
 import { Answer } from '@/server/db/schema';
 import { User } from 'lucia';
@@ -32,16 +32,19 @@ import {
 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { getAnswerLikes, toggleAnswerLike } from './actions';
+import { addAnswer, getAnswerLikes, toggleAnswerLike } from './actions';
 import { toast } from 'sonner';
 import { Icons } from '@/components/icons';
+import { SubmitButton } from '@/components/ui/submit-button';
 
 export default function ToolFAQs({
   tool,
   user,
+  dbAnswers,
 }: {
   tool: string;
   user: User | null;
+  dbAnswers: Answer[] | null;
 }) {
   const toolQuestions = questions.filter((q) => q.tool === tool);
 
@@ -59,44 +62,11 @@ export default function ToolFAQs({
     [key: string]: boolean;
   }>({});
 
-  const allToolAnswers: Answer[] = [...ibZimAnswers, ...demoAnswers];
-
-  const handleAddAnswer = () => {
-    if (!selectedQuestionId || !newAnswer.trim()) {
-      return;
-    }
-
-    const newAnswerObj: Answer = {
-      id: `answer-${Date.now()}`,
-      content: newAnswer.trim(),
-      isVerified: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      userId: user!.id,
-      questionId: selectedQuestionId,
-    };
-
-    setFaqQuestions((prev) =>
-      prev.map((question) =>
-        question.id === selectedQuestionId
-          ? {
-              ...question,
-              answers: [
-                ...allToolAnswers.filter(
-                  (answer) => answer.questionId === question.id,
-                ),
-                newAnswerObj,
-              ],
-            }
-          : question,
-      ),
-    );
-
-    // Reset form
-    setNewAnswer('');
-    setIsAddAnswerDialogOpen(false);
-    setSelectedQuestionId(null);
-  };
+  const allToolAnswers: Answer[] = [
+    ...ibZimAnswers,
+    ...demoAnswers,
+    ...dbAnswers!,
+  ];
 
   const handleShowMoreAnswers = async (questionId: string) => {
     setLoadingMoreAnswers((prev) => ({ ...prev, [questionId]: true }));
@@ -116,6 +86,22 @@ export default function ToolFAQs({
     return visibleAnswers[questionId] || 3;
   };
 
+  // Add answer
+
+  const [state, formAction] = useActionState(addAnswer, null);
+
+  useEffect(() => {
+    if (state?.formError) {
+      toast.error(state.formError);
+    }
+
+    if (state?.fieldError) {
+      Object.values(state.fieldError).forEach((error) => {
+        toast.error(error);
+      });
+    }
+  }, [state]);
+
   return (
     <section>
       <Card className="mt-6">
@@ -134,6 +120,30 @@ export default function ToolFAQs({
             );
             const visibleAnswers = questionAnswers.slice(0, visibleCount);
             const hasMoreAnswers = questionAnswers.length > visibleCount;
+
+            if (state?.done) {
+              setNewAnswer('');
+              state.done = false;
+
+              const newAnswerObj: Answer = state.answer!;
+
+              setFaqQuestions((prev) =>
+                prev.map((question) =>
+                  question.id === selectedQuestionId
+                    ? {
+                        ...question,
+                        answers: [...questionAnswers, newAnswerObj],
+                      }
+                    : question,
+                ),
+              );
+
+              setNewAnswer('');
+              setIsAddAnswerDialogOpen(false);
+              setSelectedQuestionId(null);
+              // setComments([state.comment, ...updatedComments]);
+              // onCommentAdded();
+            }
 
             return (
               <div key={question.id} className="space-y-4">
@@ -197,9 +207,28 @@ export default function ToolFAQs({
                           >
                             Cancel
                           </Button>
-                          <Button onClick={handleAddAnswer}>
-                            Submit Answer
-                          </Button>
+                          <form action={formAction}>
+                            <input
+                              type="hidden"
+                              name="questionId"
+                              value={question.id}
+                            />
+                            <input
+                              type="hidden"
+                              name="userName"
+                              value={user.fullName}
+                            />
+                            <input type="hidden" name="tool" value={tool} />
+                            <input
+                              type="hidden"
+                              name="answerText"
+                              value={newAnswer.trim()}
+                            />
+
+                            <SubmitButton type="submit">
+                              Submit Answer
+                            </SubmitButton>
+                          </form>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
@@ -335,7 +364,7 @@ function FaqAnswer({ index, answer, user }: any) {
           {/* Author and Verification */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">{answer.userId}</span>
+              <span className="text-sm font-medium">{answer.userName}</span>
               {answer.isVerified && (
                 <div className="flex items-center gap-1">
                   <Verified className="h-4 w-4 text-green-600" />

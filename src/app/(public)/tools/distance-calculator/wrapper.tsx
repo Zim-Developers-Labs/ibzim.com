@@ -43,6 +43,7 @@ import {
 } from 'lucide-react';
 import ToolFAQs from '../faq';
 import { User } from 'lucia';
+import { Answer } from '@/server/db/schema';
 interface City {
   name: string;
   lat: number;
@@ -93,9 +94,11 @@ const calculateDistance = (
 };
 
 export default function DistanceCalculatorWrapper({
+  dbAnswers,
   user,
 }: {
   user: User | null;
+  dbAnswers: Answer[] | null;
 }) {
   const [fromCity, setFromCity] = useState<string>('');
   const [toCity, setToCity] = useState<string>('');
@@ -428,7 +431,7 @@ Please review this calculation for accuracy.`;
             {/* Swap Button */}
             <div className="flex justify-center lg:pb-2">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={handleSwapCities}
                 disabled={!fromCity && !toCity}
@@ -816,7 +819,7 @@ Please review this calculation for accuracy.`;
           <DistanceTable />
         </CardContent>
       </Card>
-      <ToolFAQs tool="distance-calculator" user={user} />
+      <ToolFAQs tool="distance-calculator" user={user} dbAnswers={dbAnswers} />
     </div>
   );
 }
