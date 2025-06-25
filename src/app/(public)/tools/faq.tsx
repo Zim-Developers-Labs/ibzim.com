@@ -1,9 +1,9 @@
 'use client';
 
 import { useActionState, useEffect, useState } from 'react';
-import { ibZimAnswers, Question, questions } from './data';
-import { Answer } from '@/server/db/schema';
-import { User } from 'lucia';
+import { ibZimAnswers, type Question, questions } from './data';
+import type { Answer } from '@/server/db/schema';
+import type { User } from 'lucia';
 import { demoAnswers } from '@/data/demo';
 import {
   Card,
@@ -69,10 +69,15 @@ export default function ToolFAQs({
     [key: string]: boolean;
   }>({});
 
+  // New state to track newly added answers
+  const [newlyAddedAnswers, setNewlyAddedAnswers] = useState<Answer[]>([]);
+
+  // Combine all answers including newly added ones
   const allToolAnswers: Answer[] = [
     ...ibZimAnswers,
     ...demoAnswers,
     ...dbAnswers!,
+    ...newlyAddedAnswers,
   ];
 
   const handleShowMoreAnswers = async (questionId: string) => {
@@ -94,7 +99,6 @@ export default function ToolFAQs({
   };
 
   // Add answer
-
   const [state, formAction] = useActionState(addAnswer, null);
 
   useEffect(() => {
@@ -107,6 +111,25 @@ export default function ToolFAQs({
         toast.error(error);
       });
     }
+
+    // Handle successful answer submission
+    if (state?.done && state?.answer) {
+      const newAnswerObj: Answer = state.answer;
+
+      // Add the new answer to our newly added answers state
+      setNewlyAddedAnswers((prev) => [newAnswerObj, ...prev]);
+
+      // Reset form state
+      setNewAnswer('');
+      setIsAddAnswerDialogOpen(false);
+      setSelectedQuestionId(null);
+
+      // Reset the state to prevent duplicate additions
+      state.done = false;
+
+      // Show success message
+      toast.success('Your answer has been added successfully!');
+    }
   }, [state]);
 
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'most-liked'>(
@@ -116,24 +139,39 @@ export default function ToolFAQs({
   const sortAnswers = (
     answers: Answer[],
     sortType: 'newest' | 'oldest' | 'most-liked',
+    newlyAddedIds: string[],
   ) => {
-    const sorted = [...answers];
-    switch (sortType) {
-      case 'newest':
-        return sorted.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-      case 'oldest':
-        return sorted.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        );
-      case 'most-liked':
-        return sorted.sort((a, b) => b.likesCount - a.likesCount);
-      default:
-        return sorted;
-    }
+    // Separate newly added answers from existing answers
+    const newlyAdded = answers.filter((answer) =>
+      newlyAddedIds.includes(answer.id),
+    );
+    const existing = answers.filter(
+      (answer) => !newlyAddedIds.includes(answer.id),
+    );
+
+    // Sort each group separately
+    const sortGroup = (group: Answer[]) => {
+      const sorted = [...group];
+      switch (sortType) {
+        case 'newest':
+          return sorted.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
+        case 'oldest':
+          return sorted.sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          );
+        case 'most-liked':
+          return sorted.sort((a, b) => b.likesCount - a.likesCount);
+        default:
+          return sorted;
+      }
+    };
+
+    // Return newly added answers first, then existing answers
+    return [...sortGroup(newlyAdded), ...sortGroup(existing)];
   };
 
   return (
@@ -170,33 +208,17 @@ export default function ToolFAQs({
             const questionAnswers = allToolAnswers.filter(
               (answer) => answer.questionId === question.id,
             );
-            const sortedAnswers = sortAnswers(questionAnswers, sortBy);
-            const visibleAnswers = sortedAnswers.slice(0, visibleCount);
+            const newlyAddedIds = newlyAddedAnswers.map((answer) => answer.id);
+            const sortedAnswers = sortAnswers(
+              questionAnswers,
+              sortBy,
+              newlyAddedIds,
+            );
+            const visibleAnswersForQuestion = sortedAnswers.slice(
+              0,
+              visibleCount,
+            );
             const hasMoreAnswers = questionAnswers.length > visibleCount;
-
-            if (state?.done) {
-              setNewAnswer('');
-              state.done = false;
-
-              const newAnswerObj: Answer = state.answer!;
-
-              setFaqQuestions((prev) =>
-                prev.map((question) =>
-                  question.id === selectedQuestionId
-                    ? {
-                        ...question,
-                        answers: [...questionAnswers, newAnswerObj],
-                      }
-                    : question,
-                ),
-              );
-
-              setNewAnswer('');
-              setIsAddAnswerDialogOpen(false);
-              setSelectedQuestionId(null);
-              // setComments([state.comment, ...updatedComments]);
-              // onCommentAdded();
-            }
 
             return (
               <div key={question.id} className="space-y-4">
@@ -305,12 +327,15 @@ export default function ToolFAQs({
                     className="flex gap-4 overflow-x-auto scroll-smooth pb-4"
                     style={{ scrollbarWidth: 'thin' }}
                   >
-                    {visibleAnswers.map((answer, index) => (
+                    {visibleAnswersForQuestion.map((answer, index) => (
                       <FaqAnswer
                         key={answer.id}
                         index={index}
                         answer={answer}
                         user={user}
+                        isNewlyAdded={newlyAddedAnswers.some(
+                          (newAnswer) => newAnswer.id === answer.id,
+                        )}
                       />
                     ))}
 
@@ -348,7 +373,7 @@ export default function ToolFAQs({
                   </div>
 
                   {/* Scroll Indicators */}
-                  {visibleAnswers.length > 1 && (
+                  {visibleAnswersForQuestion.length > 1 && (
                     <div className="pointer-events-none absolute top-1/2 right-0 left-0 flex -translate-y-1/2 justify-between">
                       <div className="pointer-events-auto rounded-full bg-white/80 p-1 shadow-sm">
                         <ChevronLeft className="h-4 w-4 text-gray-400" />
@@ -375,7 +400,17 @@ export default function ToolFAQs({
   );
 }
 
-function FaqAnswer({ index, answer, user }: any) {
+function FaqAnswer({
+  index,
+  answer,
+  user,
+  isNewlyAdded,
+}: {
+  index: number;
+  answer: Answer;
+  user: User | null;
+  isNewlyAdded?: boolean;
+}) {
   const [likesCount, setLikesCount] = useState(0);
   const [userLiked, setUserLiked] = useState(0);
   const [isLiking, setIsLiking] = useState(false);
@@ -405,7 +440,11 @@ function FaqAnswer({ index, answer, user }: any) {
     <Card
       key={answer.id}
       className={`w-80 flex-shrink-0 ${
-        answer.isVerified ? 'border-green-200 bg-green-50' : 'border-gray-200'
+        answer.isVerified
+          ? 'border-green-200 bg-green-50'
+          : isNewlyAdded
+            ? 'border-blue-200 bg-blue-50 ring-2 ring-blue-200'
+            : 'border-gray-200'
       }`}
     >
       <CardContent className="p-4">
@@ -418,6 +457,13 @@ function FaqAnswer({ index, answer, user }: any) {
                 <div className="flex items-center gap-1">
                   <Verified className="h-4 w-4 text-green-600" />
                   <span className="text-xs text-green-600">Verified</span>
+                </div>
+              )}
+              {isNewlyAdded && (
+                <div className="flex items-center gap-1">
+                  <span className="rounded-full bg-blue-100 px-2 py-1 text-xs text-blue-700">
+                    New
+                  </span>
                 </div>
               )}
             </div>

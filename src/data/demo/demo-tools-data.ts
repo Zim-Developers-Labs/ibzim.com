@@ -100,7 +100,7 @@ export const demoAnswers: Answer[] = [
     questionId: 'fuel-stations',
     userName: 'Tino Mutasa',
     content:
-      "I've found that Zuva stations often have slightly lower prices, especially on weekends. Plus they sometimes have promotions that can save you a few cents per liter.",
+      "I've found that Budget petroleum stations often have slightly lower prices, especially on weekends. Plus they sometimes have promotions that can save you a few cents per liter.",
     isVerified: false,
     likesCount: 0,
     createdAt: new Date('2025-06-02T10:30:00Z'),
@@ -111,8 +111,7 @@ export const demoAnswers: Answer[] = [
     tool: 'distance-calculator',
     questionId: 'fuel-stations',
     userName: 'Tafadzwa Moyo',
-    content:
-      "Don't forget to check if your bank offers fuel discounts! Some banks have partnerships with specific fuel stations that can give you 2-5% cashback.",
+    content: "Don't forget to check if you have fuel coupons.",
     isVerified: false,
     likesCount: 0,
     createdAt: new Date('2025-06-05T14:15:00Z'),
@@ -124,7 +123,7 @@ export const demoAnswers: Answer[] = [
     questionId: 'fuel-stations',
     userName: 'Chipo Nyathi',
     content:
-      "Engen stations in rural areas tend to be cheaper than in Harare or Bulawayo. If you're traveling long distances, consider filling up outside major cities.",
+      "ZUVA stations in remote areas tend to be cheaper than in Harare or Bulawayo. If you're traveling long distances, consider filling up outside major cities.",
     isVerified: false,
     likesCount: 0,
     createdAt: new Date('2025-06-08T09:45:00Z'),
@@ -159,7 +158,7 @@ export const demoAnswers: Answer[] = [
     tool: 'distance-calculator',
     questionId: 'diesel-vs-petrol',
     content:
-      'Consider the resale value too. Diesel vehicles tend to hold their value better in Zimbabwe, especially pickup trucks and SUVs.',
+      'Consider the resale value too. Diesel vehicles tend to hold their value better, especially pickup trucks and SUVs.',
     userName: 'Chipo Nyathi',
     isVerified: false,
     likesCount: 0,
