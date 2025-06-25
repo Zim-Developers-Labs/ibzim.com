@@ -36,6 +36,13 @@ import { addAnswer, getAnswerLikes, toggleAnswerLike } from './actions';
 import { toast } from 'sonner';
 import { Icons } from '@/components/icons';
 import { SubmitButton } from '@/components/ui/submit-button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function ToolFAQs({
   tool,
@@ -102,15 +109,60 @@ export default function ToolFAQs({
     }
   }, [state]);
 
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'most-liked'>(
+    'most-liked',
+  );
+
+  const sortAnswers = (
+    answers: Answer[],
+    sortType: 'newest' | 'oldest' | 'most-liked',
+  ) => {
+    const sorted = [...answers];
+    switch (sortType) {
+      case 'newest':
+        return sorted.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+      case 'oldest':
+        return sorted.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        );
+      case 'most-liked':
+        return sorted.sort((a, b) => b.likesCount - a.likesCount);
+      default:
+        return sorted;
+    }
+  };
+
   return (
     <section>
       <Card className="mt-6">
         <CardHeader>
           <CardTitle className="text-lg">Frequently Asked Questions</CardTitle>
-          <CardDescription>
+          <CardDescription className="mb-4">
             Get answers to common travel and fuel-related questions from our
             community
           </CardDescription>
+          <div className="flex items-center gap-2">
+            <Label className="text-sm font-medium">Sort by:</Label>
+            <Select
+              value={sortBy}
+              onValueChange={(value: 'newest' | 'oldest' | 'most-liked') =>
+                setSortBy(value)
+              }
+            >
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest</SelectItem>
+                <SelectItem value="oldest">Oldest</SelectItem>
+                <SelectItem value="most-liked">Most Liked</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent className="space-y-6">
           {faqQuestions.map((question) => {
@@ -118,7 +170,8 @@ export default function ToolFAQs({
             const questionAnswers = allToolAnswers.filter(
               (answer) => answer.questionId === question.id,
             );
-            const visibleAnswers = questionAnswers.slice(0, visibleCount);
+            const sortedAnswers = sortAnswers(questionAnswers, sortBy);
+            const visibleAnswers = sortedAnswers.slice(0, visibleCount);
             const hasMoreAnswers = questionAnswers.length > visibleCount;
 
             if (state?.done) {
@@ -147,107 +200,103 @@ export default function ToolFAQs({
 
             return (
               <div key={question.id} className="space-y-4">
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col items-start justify-between md:flex-row">
                   <h3 className="pr-4 text-base leading-relaxed font-semibold">
                     {question.question}
                   </h3>
-                  {user ? (
-                    <Dialog
-                      open={
-                        isAddAnswerDialogOpen &&
-                        selectedQuestionId === question.id
-                      }
-                      onOpenChange={(open) => {
-                        setIsAddAnswerDialogOpen(open);
-                        if (open) {
-                          setSelectedQuestionId(question.id);
-                        } else {
-                          setSelectedQuestionId(null);
-                          setNewAnswer('');
+                  <div className="my-4 flex items-center gap-2 md:my-0">
+                    {user ? (
+                      <Dialog
+                        open={
+                          isAddAnswerDialogOpen &&
+                          selectedQuestionId === question.id
                         }
-                      }}
-                    >
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="shrink-0"
-                        >
-                          <Plus className="mr-1 h-3 w-3" />
-                          Add Answer
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                          <DialogTitle>Add Your Answer</DialogTitle>
-                          <DialogDescription>
-                            Share your knowledge about: {question.question}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="new-answer">Your Answer</Label>
-                            <Textarea
-                              id="new-answer"
-                              placeholder="Share your experience, tips, or knowledge..."
-                              value={newAnswer}
-                              onChange={(e) => setNewAnswer(e.target.value)}
-                              className="min-h-[120px]"
-                            />
-                          </div>
-                        </div>
-                        <DialogFooter className="flex-col gap-2 sm:flex-row">
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              setIsAddAnswerDialogOpen(false);
-                              setSelectedQuestionId(null);
-                              setNewAnswer('');
-                            }}
-                          >
-                            Cancel
+                        onOpenChange={(open) => {
+                          setIsAddAnswerDialogOpen(open);
+                          if (open) {
+                            setSelectedQuestionId(question.id);
+                          } else {
+                            setSelectedQuestionId(null);
+                            setNewAnswer('');
+                          }
+                        }}
+                      >
+                        <DialogTrigger asChild>
+                          <Button className="shrink-0 bg-zinc-900">
+                            <Plus className="mr-1 h-3 w-3" />
+                            Add Answer
                           </Button>
-                          <form action={formAction}>
-                            <input
-                              type="hidden"
-                              name="questionId"
-                              value={question.id}
-                            />
-                            <input
-                              type="hidden"
-                              name="userName"
-                              value={user.fullName}
-                            />
-                            <input type="hidden" name="tool" value={tool} />
-                            <input
-                              type="hidden"
-                              name="answerText"
-                              value={newAnswer.trim()}
-                            />
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Add Your Answer</DialogTitle>
+                            <DialogDescription>
+                              Share your knowledge about: {question.question}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="new-answer">Your Answer</Label>
+                              <Textarea
+                                id="new-answer"
+                                placeholder="Share your experience, tips, or knowledge..."
+                                value={newAnswer}
+                                onChange={(e) => setNewAnswer(e.target.value)}
+                                className="min-h-[120px]"
+                              />
+                            </div>
+                          </div>
+                          <DialogFooter className="flex-col gap-2 sm:flex-row">
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                setIsAddAnswerDialogOpen(false);
+                                setSelectedQuestionId(null);
+                                setNewAnswer('');
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                            <form action={formAction}>
+                              <input
+                                type="hidden"
+                                name="questionId"
+                                value={question.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="userName"
+                                value={user.fullName}
+                              />
+                              <input type="hidden" name="tool" value={tool} />
+                              <input
+                                type="hidden"
+                                name="answerText"
+                                value={newAnswer.trim()}
+                              />
 
-                            <SubmitButton type="submit">
-                              Submit Answer
-                            </SubmitButton>
-                          </form>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="group shrink-0"
-                      onClick={() => (window.location.href = '/sign-up')}
-                    >
-                      <Plus className="mr-1 h-3 w-3" />
-                      <span className="inline group-hover:hidden">
-                        Add Answer
-                      </span>
-                      <span className="hidden group-hover:inline">
-                        Login/Signup
-                      </span>
-                    </Button>
-                  )}
+                              <SubmitButton type="submit">
+                                Submit Answer
+                              </SubmitButton>
+                            </form>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button
+                        className="group bg-primaryColor shrink-0 text-white"
+                        onClick={() => (window.location.href = '/sign-up')}
+                      >
+                        <Plus className="mr-1 h-3 w-3" />
+                        <span className="inline group-hover:hidden">
+                          Add Answer
+                        </span>
+                        <span className="hidden group-hover:inline">
+                          Login/Signup
+                        </span>
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Answers - Horizontal Scroll */}

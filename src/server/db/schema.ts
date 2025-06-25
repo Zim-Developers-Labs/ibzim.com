@@ -447,6 +447,7 @@ export const answers = pgTable(
     questionId: varchar('question_id', { length: 21 }).notNull(),
     userName: varchar('user_name', { length: 50 }).notNull(),
     content: text('content').notNull(),
+    likesCount: integer('likes_count').default(0).notNull(),
     tool: varchar('tool', { length: 50 }).notNull(),
     isVerified: boolean('is_verified').default(false).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),

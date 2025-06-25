@@ -78,7 +78,21 @@ export async function toggleAnswerLike(answerId: string, userId: string) {
       (like) => like.answerId === answerId,
     );
 
-    const likes = Number(count) + demoLikes.length;
+    let likes;
+
+    if (answerId.includes('ibzim') || answerId.includes('demo')) {
+      likes = Number(count) + demoLikes.length;
+      // For demo answers, we don't need to update the likes in the database
+      return { success: true, likes, userLiked: !existingLike };
+    }
+
+    likes = Number(count);
+
+    // For real answers, we need to update the likes in the database
+    await db
+      .update(answers)
+      .set({ likesCount: likes })
+      .where(eq(answers.id, answerId));
 
     return { success: true, likes, userLiked: !existingLike };
   } catch (error) {
@@ -130,6 +144,7 @@ export async function addAnswer(
     succcesMessage: 'Answer added successfully',
     answer: {
       id: answerId,
+      likesCount: 0,
       tool,
       questionId,
       userName,
