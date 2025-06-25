@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useEffect, useState } from 'react';
-import { ibZimAnswers, type Question, questions } from './data';
+import { ibZimAnswers, questions } from './data';
 import type { Answer } from '@/server/db/schema';
 import type { User } from 'lucia';
 import { demoAnswers } from '@/data/demo';
