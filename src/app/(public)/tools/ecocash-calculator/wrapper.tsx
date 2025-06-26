@@ -18,18 +18,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Calculator, ArrowLeft, DollarSign } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
+import {
+  Calculator,
+  ArrowLeft,
+  DollarSign,
+  Settings,
+  Info,
+  Edit3,
+} from 'lucide-react';
 import Link from 'next/link';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { User } from 'lucia';
+import { Answer } from '@/server/db/schema';
+import ToolFAQs from '../faq';
 
-type TransactionType = 'send' | 'withdraw';
+type TransactionType =
+  | 'send'
+  | 'withdraw'
+  | 'send_to_account'
+  | 'direct_payments'
+  | 'mastercard';
+type Currency = 'USD' | 'ZWL';
 
 interface FeeStructure {
   min: number;
   max: number;
   feePercentage: number;
+  fixedFee?: number;
 }
 
-const feeStructures: Record<TransactionType, FeeStructure[]> = {
+interface EditableFees {
+  send: FeeStructure[];
+  withdraw: FeeStructure[];
+  send_to_account: FeeStructure[];
+  direct_payments: FeeStructure[];
+  mastercard: FeeStructure[];
+  imtTaxRate: number;
+  exchangeRate: number;
+}
+
+const defaultFeeStructures: EditableFees = {
   send: [
     { min: 1.0, max: 4.99, feePercentage: 1.3 },
     { min: 5.0, max: 500, feePercentage: 1.3 },
@@ -38,83 +68,191 @@ const feeStructures: Record<TransactionType, FeeStructure[]> = {
     { min: 1.0, max: 4.99, feePercentage: 1.7 },
     { min: 5.0, max: 500, feePercentage: 1.7 },
   ],
+  send_to_account: [{ min: 1.0, max: 500, feePercentage: 2.0 }],
+  direct_payments: [{ min: 1.0, max: 500, feePercentage: 1.5, fixedFee: 0.5 }],
+  mastercard: [{ min: 1.0, max: 500, feePercentage: 3.5 }],
+  imtTaxRate: 0.02,
+  exchangeRate: 27.5, // USD to ZWL rate
 };
-
-const imtTaxRate = 0.02;
 
 function calculateFee(
   amount: number,
   transactionType: TransactionType,
-): { baseFee: number; imtTax: number; totalFee: number } {
+  currency: Currency,
+  feeStructures: EditableFees,
+): { baseFee: number; imtTax: number; totalFee: number; fixedFee: number } {
+  // Convert to USD for calculation if needed
+  const usdAmount =
+    currency === 'ZWL' ? amount / feeStructures.exchangeRate : amount;
+
   const structure = feeStructures[transactionType];
   const tier = structure.find(
-    (tier) => amount >= tier.min && amount <= tier.max,
+    (tier) => usdAmount >= tier.min && usdAmount <= tier.max,
   );
 
   let baseFee = 0;
+  let fixedFee = 0;
   let imtTax = 0;
   let totalFee = 0;
 
   if (tier) {
-    baseFee = (amount * tier.feePercentage) / 100;
+    baseFee = (usdAmount * tier.feePercentage) / 100;
+    fixedFee = tier.fixedFee || 0;
 
-    if (transactionType === 'send' && amount >= 5.0) {
-      imtTax = amount * imtTaxRate;
+    // IMT Tax applies to send transactions >= $5 and send_to_account
+    if (
+      (transactionType === 'send' || transactionType === 'send_to_account') &&
+      usdAmount >= 5.0
+    ) {
+      imtTax = usdAmount * feeStructures.imtTaxRate;
     }
 
-    totalFee = baseFee + imtTax;
+    totalFee = baseFee + fixedFee + imtTax;
   }
 
-  return { baseFee, imtTax, totalFee };
+  // Convert back to original currency
+  if (currency === 'ZWL') {
+    baseFee *= feeStructures.exchangeRate;
+    fixedFee *= feeStructures.exchangeRate;
+    imtTax *= feeStructures.exchangeRate;
+    totalFee *= feeStructures.exchangeRate;
+  }
+
+  return { baseFee, imtTax, totalFee, fixedFee };
 }
 
-export default function EcoCashCalculatorPageWrapper() {
+function calculateReceiverAmount(
+  receiverAmount: number,
+  transactionType: TransactionType,
+  currency: Currency,
+  feeStructures: EditableFees,
+): {
+  senderAmount: number;
+  senderFee: number;
+  receiverWithdrawalFee: number;
+  totalSenderPays: number;
+} {
+  // Calculate what receiver will pay to withdraw
+  const receiverWithdrawalFee = calculateFee(
+    receiverAmount,
+    'withdraw',
+    currency,
+    feeStructures,
+  ).totalFee;
+
+  // The amount sender needs to send (before sender fees)
+  const senderAmount = receiverAmount + receiverWithdrawalFee;
+
+  // Calculate sender's fees
+  const senderFee = calculateFee(
+    senderAmount,
+    transactionType,
+    currency,
+    feeStructures,
+  ).totalFee;
+
+  // Total amount sender pays
+  const totalSenderPays = senderAmount + senderFee;
+
+  return { senderAmount, senderFee, receiverWithdrawalFee, totalSenderPays };
+}
+
+export default function EcoCashCalculatorPageWrapper({
+  dbAnswers,
+  user,
+}: {
+  user: User | null;
+  dbAnswers: Answer[] | null;
+}) {
   const [amount, setAmount] = useState<string>('');
   const [transactionType, setTransactionType] =
     useState<TransactionType>('send');
-  const [result, setResult] = useState<{
-    amount: number;
-    baseFee: number;
-    imtTax: number;
-    totalFee: number;
-    totalToSend?: number;
-    amountReceived?: number;
-  } | null>(null);
+  const [currency, setCurrency] = useState<Currency>('USD');
+  const [calculationMode, setCalculationMode] = useState<'sender' | 'receiver'>(
+    'sender',
+  );
+  const [feeStructures, setFeeStructures] =
+    useState<EditableFees>(defaultFeeStructures);
+  const [result, setResult] = useState<any>(null);
 
   const handleCalculate = () => {
-    const numAmount = parseFloat(amount);
+    const numAmount = Number.parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
       setResult(null);
       return;
     }
 
-    const { baseFee, imtTax, totalFee } = calculateFee(
-      numAmount,
-      transactionType,
-    );
+    if (
+      calculationMode === 'receiver' &&
+      (transactionType === 'send' || transactionType === 'send_to_account')
+    ) {
+      // Calculate based on receiver amount
+      const receiverCalc = calculateReceiverAmount(
+        numAmount,
+        transactionType,
+        currency,
+        feeStructures,
+      );
+      setResult({
+        mode: 'receiver',
+        receiverAmount: numAmount,
+        ...receiverCalc,
+        currency,
+        transactionType,
+      });
+    } else {
+      // Calculate based on sender amount
+      const { baseFee, imtTax, totalFee, fixedFee } = calculateFee(
+        numAmount,
+        transactionType,
+        currency,
+        feeStructures,
+      );
 
-    let totalToSend: number | undefined;
-    let amountReceived: number | undefined;
+      let totalToSend: number | undefined;
+      let amountReceived: number | undefined;
 
-    if (transactionType === 'send') {
-      totalToSend = numAmount + totalFee;
-    } else if (transactionType === 'withdraw') {
-      amountReceived = numAmount - totalFee;
+      if (transactionType === 'send' || transactionType === 'send_to_account') {
+        totalToSend = numAmount + totalFee;
+      } else if (transactionType === 'withdraw') {
+        amountReceived = numAmount - totalFee;
+      } else {
+        totalToSend = numAmount + totalFee;
+      }
+
+      setResult({
+        mode: 'sender',
+        amount: numAmount,
+        baseFee,
+        imtTax,
+        totalFee,
+        fixedFee,
+        totalToSend,
+        amountReceived,
+        currency,
+        transactionType,
+      });
     }
+  };
 
-    setResult({
-      amount: numAmount,
-      baseFee,
-      imtTax,
-      totalFee,
-      totalToSend,
-      amountReceived,
-    });
+  const updateFeeStructure = (type: keyof EditableFees, value: any) => {
+    setFeeStructures((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
   };
 
   const transactionTypeLabels: Record<TransactionType, string> = {
     send: 'Send Money',
     withdraw: 'Cash Withdrawal',
+    send_to_account: 'Send to Bank Account',
+    direct_payments: 'Direct Payments (DSTV/ZESA)',
+    mastercard: 'Mastercard Transaction',
+  };
+
+  const currencySymbols: any = {
+    USD: '$',
+    ZWL: 'ZWL$',
   };
 
   return (
@@ -133,194 +271,518 @@ export default function EcoCashCalculatorPageWrapper() {
             <Calculator className="text-primary h-8 w-8" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold">EcoCash USD Calculator</h1>
+            <h1 className="text-3xl font-bold">Advanced EcoCash Calculator</h1>
             <p className="text-muted-foreground">
-              Calculate EcoCash USD transaction fees and charges
+              Calculate EcoCash transaction fees with advanced options
             </p>
           </div>
         </div>
+
+        <Alert className="mb-6">
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Disclaimer:</strong> Fee rates are editable and may not
+            reflect current EcoCash tariffs. Always verify with official EcoCash
+            sources. Default rates are based on published tariffs as of recent
+            data.
+          </AlertDescription>
+        </Alert>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Transaction Details</CardTitle>
-            <CardDescription>
-              Enter your transaction amount and type to calculate fees (USD)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="amount">Amount (USD)</Label>
-              <Input
-                id="amount"
-                type="number"
-                placeholder="Enter amount in USD"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                min="0.01"
-                step="0.01"
-              />
-            </div>
+      <Tabs defaultValue="calculator" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="calculator">Calculator</TabsTrigger>
+          <TabsTrigger value="settings">Fee Settings</TabsTrigger>
+        </TabsList>
 
-            <div className="space-y-2">
-              <Label htmlFor="transaction-type">Transaction Type</Label>
-              <Select
-                value={transactionType}
-                onValueChange={(value: TransactionType) =>
-                  setTransactionType(value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select transaction type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(transactionTypeLabels).map(([key, label]) => (
-                    <SelectItem key={key} value={key}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button onClick={handleCalculate} className="w-full">
-              <Calculator className="mr-2 h-4 w-4" />
-              Calculate Fee
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Calculation Results</CardTitle>
-            <CardDescription>
-              Fee breakdown and total amounts of USD
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {result ? (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="bg-muted/50 rounded-lg p-4">
-                    <div className="text-muted-foreground text-sm">
-                      Transaction Amount
-                    </div>
-                    <div className="text-2xl font-bold">
-                      USD {result.amount.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
-                    <div className="text-muted-foreground text-sm">
-                      Base Fee
-                    </div>
-                    <div className="text-xl font-bold text-red-600">
-                      USD {result.baseFee.toFixed(2)}
-                    </div>
-                  </div>
-                  {result.imtTax > 0 && (
-                    <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
-                      <div className="text-muted-foreground text-sm">
-                        IMT Tax (2%)
-                      </div>
-                      <div className="text-xl font-bold text-red-600">
-                        USD {result.imtTax.toFixed(2)}
-                      </div>
-                    </div>
-                  )}
-                  <div
-                    className={`rounded-lg border p-4 ${result.totalFee > 0 ? 'border-red-200 bg-red-100/50' : 'border-green-200 bg-green-100/50'}`}
-                  >
-                    <div className="text-muted-foreground text-sm">
-                      Total Fee
-                    </div>
-                    <div
-                      className={`text-2xl font-bold ${result.totalFee > 0 ? 'text-red-600' : 'text-green-600'}`}
+        <TabsContent value="calculator" className="space-y-6">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <Card className="bg-teal-200">
+              <CardHeader>
+                <CardTitle>Transaction Details</CardTitle>
+                <CardDescription className="text-zinc-600">
+                  Configure your transaction parameters
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="currency">Currency</Label>
+                    <Select
+                      value={currency}
+                      onValueChange={(value: Currency) => setCurrency(value)}
                     >
-                      USD {result.totalFee.toFixed(2)}
+                      <SelectTrigger className="border-zinc-600">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="USD">USD ($)</SelectItem>
+                        <SelectItem value="ZWL">ZWL (ZWL$)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="transaction-type">Transaction Type</Label>
+                    <Select
+                      value={transactionType}
+                      onValueChange={(value: TransactionType) =>
+                        setTransactionType(value)
+                      }
+                    >
+                      <SelectTrigger className="border-zinc-600">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(transactionTypeLabels).map(
+                          ([key, label]) => (
+                            <SelectItem key={key} value={key}>
+                              {label}
+                            </SelectItem>
+                          ),
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {(transactionType === 'send' ||
+                  transactionType === 'send_to_account') && (
+                  <div className="space-y-3">
+                    <Label>Calculation Mode</Label>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="calculation-mode"
+                          checked={calculationMode === 'receiver'}
+                          onCheckedChange={(checked) =>
+                            setCalculationMode(checked ? 'receiver' : 'sender')
+                          }
+                        />
+                        <Label htmlFor="calculation-mode" className="text-sm">
+                          {calculationMode === 'receiver'
+                            ? 'Amount receiver gets'
+                            : 'Amount sender pays'}
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="amount">
+                    {calculationMode === 'receiver' &&
+                    (transactionType === 'send' ||
+                      transactionType === 'send_to_account')
+                      ? `Amount receiver should get (${currencySymbols[currency]})`
+                      : `Transaction Amount (${currencySymbols[currency]})`}
+                  </Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder={`Enter amount in ${currency}`}
+                    value={amount}
+                    className="border-zinc-600 placeholder:text-zinc-400"
+                    onChange={(e) => setAmount(e.target.value)}
+                    min="0.01"
+                    step="0.01"
+                  />
+                </div>
+
+                <Button onClick={handleCalculate} className="w-full">
+                  <Calculator className="mr-2 h-4 w-4" />
+                  Calculate Fees
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Calculation Results</CardTitle>
+                <CardDescription>
+                  Detailed fee breakdown and amounts
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {result ? (
+                  <div className="space-y-4">
+                    {result.mode === 'receiver' ? (
+                      // Receiver mode results
+                      <div className="space-y-4">
+                        <div className="rounded-lg bg-blue-50 p-4">
+                          <div className="text-muted-foreground text-sm">
+                            Receiver Gets
+                          </div>
+                          <div className="text-2xl font-bold text-blue-600">
+                            {currencySymbols[result.currency]}{' '}
+                            {result.receiverAmount.toFixed(2)}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                          <div className="bg-muted/50 rounded-lg p-3">
+                            <div className="text-muted-foreground text-xs">
+                              Amount to Send
+                            </div>
+                            <div className="text-lg font-semibold">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.senderAmount.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="rounded-lg bg-red-50 p-3">
+                            <div className="text-muted-foreground text-xs">
+                              Sender&#39;s Fee
+                            </div>
+                            <div className="text-lg font-semibold text-red-600">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.senderFee.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="rounded-lg bg-orange-50 p-3">
+                            <div className="text-muted-foreground text-xs">
+                              Receiver Withdrawal Fee
+                            </div>
+                            <div className="text-lg font-semibold text-orange-600">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.receiverWithdrawalFee.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="bg-primary/5 rounded-lg p-3">
+                            <div className="text-muted-foreground text-xs">
+                              Total Sender Pays
+                            </div>
+                            <div className="text-primary text-lg font-bold">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.totalSenderPays.toFixed(2)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      // Sender mode results
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div className="bg-muted/50 rounded-lg p-4">
+                            <div className="text-muted-foreground text-sm">
+                              Transaction Amount
+                            </div>
+                            <div className="text-2xl font-bold">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.amount.toFixed(2)}
+                            </div>
+                          </div>
+                          <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
+                            <div className="text-muted-foreground text-sm">
+                              Base Fee
+                            </div>
+                            <div className="text-xl font-bold text-red-600">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.baseFee.toFixed(2)}
+                            </div>
+                          </div>
+                          {result.fixedFee > 0 && (
+                            <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
+                              <div className="text-muted-foreground text-sm">
+                                Fixed Fee
+                              </div>
+                              <div className="text-xl font-bold text-red-600">
+                                {currencySymbols[result.currency]}{' '}
+                                {result.fixedFee.toFixed(2)}
+                              </div>
+                            </div>
+                          )}
+                          {result.imtTax > 0 && (
+                            <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
+                              <div className="text-muted-foreground text-sm">
+                                IMT Tax (2%)
+                              </div>
+                              <div className="text-xl font-bold text-red-600">
+                                {currencySymbols[result.currency]}{' '}
+                                {result.imtTax.toFixed(2)}
+                              </div>
+                            </div>
+                          )}
+                          <div className="rounded-lg border border-red-200 bg-red-100/50 p-4">
+                            <div className="text-muted-foreground text-sm">
+                              Total Fee
+                            </div>
+                            <div className="text-2xl font-bold text-red-600">
+                              {currencySymbols[result.currency]}{' '}
+                              {result.totalFee.toFixed(2)}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="border-t pt-4">
+                          {result.totalToSend !== undefined ? (
+                            <div className="bg-primary/5 rounded-lg p-4">
+                              <div className="text-muted-foreground text-sm">
+                                Total Amount to Pay
+                              </div>
+                              <div className="text-primary text-3xl font-bold">
+                                {currencySymbols[result.currency]}{' '}
+                                {result.totalToSend.toFixed(2)}
+                              </div>
+                            </div>
+                          ) : result.amountReceived !== undefined ? (
+                            <div className="rounded-lg bg-green-50 p-4">
+                              <div className="text-muted-foreground text-sm">
+                                Net Amount Received
+                              </div>
+                              <div className="text-3xl font-bold text-green-600">
+                                {currencySymbols[result.currency]}{' '}
+                                {result.amountReceived.toFixed(2)}
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-muted-foreground py-8 text-center">
+                    <DollarSign className="mx-auto mb-4 h-12 w-12 opacity-50" />
+                    <p>Enter transaction details to calculate fees</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                Editable Fee Structures
+              </CardTitle>
+              <CardDescription>
+                Customize fee rates and charges. Changes are temporary and reset
+                on page reload.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Alert>
+                <Edit3 className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Important:</strong> These rates are editable for
+                  testing purposes. Default values are based on EcoCash
+                  published tariffs but may not be current. Always verify with
+                  official sources before making financial decisions.
+                </AlertDescription>
+              </Alert>
+
+              <div className="grid gap-6">
+                <div className="space-y-3">
+                  <Label className="text-base font-semibold">
+                    Exchange Rate & Tax
+                  </Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="exchange-rate">USD to ZWL Rate</Label>
+                      <Input
+                        id="exchange-rate"
+                        type="number"
+                        value={feeStructures.exchangeRate}
+                        onChange={(e) =>
+                          updateFeeStructure(
+                            'exchangeRate',
+                            Number.parseFloat(e.target.value) || 0,
+                          )
+                        }
+                        step="0.1"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="imt-tax">IMT Tax Rate (%)</Label>
+                      <Input
+                        id="imt-tax"
+                        type="number"
+                        value={feeStructures.imtTaxRate * 100}
+                        onChange={(e) =>
+                          updateFeeStructure(
+                            'imtTaxRate',
+                            (Number.parseFloat(e.target.value) || 0) / 100,
+                          )
+                        }
+                        step="0.1"
+                      />
                     </div>
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  {transactionType === 'send' ? (
-                    <div className="bg-primary/5 rounded-lg p-4">
-                      <div className="text-muted-foreground text-sm">
-                        Total Amount to Pay (Amount + Fee)
-                      </div>
-                      <div className="text-primary text-3xl font-bold">
-                        USD {result.totalToSend?.toFixed(2) || 'N/A'}
-                      </div>
-                    </div>
-                  ) : transactionType === 'withdraw' ? (
-                    <div className="rounded-lg bg-green-50 p-4">
-                      <div className="text-muted-foreground text-sm">
-                        Net Amount Received (Amount - Fee)
-                      </div>
-                      <div className="text-3xl font-bold text-green-600">
-                        USD {result.amountReceived?.toFixed(2) || 'N/A'}
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
+                {Object.entries(transactionTypeLabels).map(([key, label]) => (
+                  <div key={key} className="space-y-3">
+                    <Label className="text-base font-semibold">{label}</Label>
+                    {feeStructures[key as TransactionType].map(
+                      (tier, index) => (
+                        <div
+                          key={index}
+                          className="grid grid-cols-4 gap-3 rounded-lg border p-3"
+                        >
+                          <div className="space-y-1">
+                            <Label className="text-xs">Min ($)</Label>
+                            <Input
+                              type="number"
+                              value={tier.min}
+                              onChange={(e) => {
+                                const newStructure = [
+                                  ...feeStructures[key as TransactionType],
+                                ];
+                                newStructure[index] = {
+                                  ...tier,
+                                  min: Number.parseFloat(e.target.value) || 0,
+                                };
+                                updateFeeStructure(
+                                  key as TransactionType,
+                                  newStructure,
+                                );
+                              }}
+                              step="0.01"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Max ($)</Label>
+                            <Input
+                              type="number"
+                              value={tier.max}
+                              onChange={(e) => {
+                                const newStructure = [
+                                  ...feeStructures[key as TransactionType],
+                                ];
+                                newStructure[index] = {
+                                  ...tier,
+                                  max: Number.parseFloat(e.target.value) || 0,
+                                };
+                                updateFeeStructure(
+                                  key as TransactionType,
+                                  newStructure,
+                                );
+                              }}
+                              step="0.01"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Fee (%)</Label>
+                            <Input
+                              type="number"
+                              value={tier.feePercentage}
+                              onChange={(e) => {
+                                const newStructure = [
+                                  ...feeStructures[key as TransactionType],
+                                ];
+                                newStructure[index] = {
+                                  ...tier,
+                                  feePercentage:
+                                    Number.parseFloat(e.target.value) || 0,
+                                };
+                                updateFeeStructure(
+                                  key as TransactionType,
+                                  newStructure,
+                                );
+                              }}
+                              step="0.1"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-xs">Fixed Fee ($)</Label>
+                            <Input
+                              type="number"
+                              value={tier.fixedFee || 0}
+                              onChange={(e) => {
+                                const newStructure = [
+                                  ...feeStructures[key as TransactionType],
+                                ];
+                                newStructure[index] = {
+                                  ...tier,
+                                  fixedFee:
+                                    Number.parseFloat(e.target.value) || 0,
+                                };
+                                updateFeeStructure(
+                                  key as TransactionType,
+                                  newStructure,
+                                );
+                              }}
+                              step="0.01"
+                            />
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                ))}
+
+                <Button
+                  variant="outline"
+                  onClick={() => setFeeStructures(defaultFeeStructures)}
+                  className="w-full"
+                >
+                  Reset to Default Values
+                </Button>
               </div>
-            ) : (
-              <div className="text-muted-foreground py-8 text-center">
-                <DollarSign className="mx-auto mb-4 h-12 w-12 opacity-50" />
-                <p>
-                  Enter an amount and select transaction type to calculate fees
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>Fee Information</CardTitle>
+          <CardTitle>Transaction Types Information</CardTitle>
           <CardDescription>
-            Understanding EcoCash USD transaction fees (Registered Customer)
+            Understanding different EcoCash transaction types and their fees
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="prose max-w-none">
-            <p className="text-muted-foreground mb-4 text-sm">
-              EcoCash USD transaction fees for Registered Customers are
-              calculated based on transaction type and amount band:
-            </p>
+          <div className="prose max-w-none space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <h4 className="font-semibold">Send Money</h4>
+                <p className="text-muted-foreground text-sm">
+                  Person-to-person transfers within EcoCash network. IMT tax
+                  applies to amounts ≥ $5.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold">Cash Withdrawal</h4>
+                <p className="text-muted-foreground text-sm">
+                  Withdrawing cash from EcoCash agents. No IMT tax applies.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold">Send to Bank Account</h4>
+                <p className="text-muted-foreground text-sm">
+                  Direct transfers to bank accounts. Higher fees and IMT tax
+                  applies.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold">Direct Payments</h4>
+                <p className="text-muted-foreground text-sm">
+                  Bill payments (DSTV, ZESA, etc.). Usually includes fixed fees
+                  plus percentage.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold">Mastercard</h4>
+                <p className="text-muted-foreground text-sm">
+                  International card transactions. Higher fees due to forex and
+                  processing costs.
+                </p>
+              </div>
+            </div>
 
-            <h4 className="mb-2 font-semibold">Send Money</h4>
-            <ul className="text-muted-foreground mb-4 list-inside list-disc text-sm">
-              <li>$1.00 - $4.99: 1.30% fee</li>
-              <li>$5.00 - $500: 1.30% base fee + 2% IMT Tax</li>
-              <li>Cash In transactions are FREE.</li>
-            </ul>
-
-            <h4 className="mt-4 mb-2 font-semibold">Cash Withdrawal</h4>
-            <ul className="text-muted-foreground mb-4 list-inside list-disc text-sm">
-              <li>$1.00 - $4.99: 1.70% fee</li>
-              <li>$5.00 - $500: 1.70% fee</li>
-              <li>IMT Tax does NOT apply to Cash Out transactions.</li>
-            </ul>
-
-            <p className="text-muted-foreground mt-4 text-sm">
-              Please note that fees may change, and you should verify current
-              rates with EcoCash on their official website. This calculator is
-              based on the tariffs published on
-              <a
-                href="https://www.ecocash.co.zw/usd-tariffs-limits"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                EcoCash&#39;s official USD Tariffs page
-              </a>{' '}
-              as of [Current Date - Note: You might want to make this dynamic].
-            </p>
+            <Alert className="mt-4">
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Receiver Amount Calculator:</strong> When sending money,
+                you can calculate how much to send so the receiver gets a
+                specific amount after their withdrawal fees are deducted.
+              </AlertDescription>
+            </Alert>
           </div>
         </CardContent>
       </Card>
+      <ToolFAQs tool="ecocash-calculator" user={user} dbAnswers={dbAnswers} />
     </div>
   );
 }

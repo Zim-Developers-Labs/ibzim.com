@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { renderText } from './text-renderer';
 
 export default function ToolFAQs({
   tool,
@@ -266,6 +267,10 @@ export default function ToolFAQs({
                                 className="min-h-[120px]"
                               />
                             </div>
+                            <p className="text-xs text-zinc-500">
+                              Answers not relevant to the question might be
+                              deleted
+                            </p>
                           </div>
                           <DialogFooter className="flex-col gap-2 sm:flex-row">
                             <Button
@@ -473,7 +478,9 @@ function FaqAnswer({
 
           {/* Answer Content */}
           <p className="text-sm leading-relaxed text-gray-700">
-            {answer.content}
+            {answer.id.includes('ibzim-answer')
+              ? renderText(answer.content)
+              : answer.content}
           </p>
 
           {/* Like Button */}

@@ -2,6 +2,8 @@ import { preparePageMetadata } from '@/lib/metadata';
 import EcoCashCalculatorPageWrapper from './wrapper';
 import { Metadata } from 'next';
 import { siteConfig } from '@/lib/config';
+import { validateRequest } from '@/lib/auth/validate-request';
+import { getAllToolAnswers } from '../actions';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -12,6 +14,8 @@ export const generateMetadata = (): Metadata =>
     siteConfig: siteConfig,
   });
 
-export default function EcoCashCalculatorPage() {
-  return <EcoCashCalculatorPageWrapper />;
+export default async function EcoCashCalculatorPage() {
+  const { user } = await validateRequest();
+  const dbAnswers = await getAllToolAnswers('ecocash-calculator');
+  return <EcoCashCalculatorPageWrapper user={user} dbAnswers={dbAnswers} />;
 }

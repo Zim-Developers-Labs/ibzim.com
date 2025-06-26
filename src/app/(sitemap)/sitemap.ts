@@ -56,6 +56,16 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${siteConfig.url.web}/tools/ecocash-calculator`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
+      url: `${siteConfig.url.web}/tools/distance-calculator`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
       url: `${siteConfig.url.web}/profiles`,
       lastModified: new Date(),
       priority: 1,

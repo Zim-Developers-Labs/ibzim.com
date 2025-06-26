@@ -23,6 +23,21 @@ export const questions: Question[] = [
       'How to reduce fuel cost with any type of car (hybrid, petrol, diesel)?',
     tool: 'distance-calculator',
   },
+  {
+    id: 'ecocash-charges',
+    question: 'What are the current Ecocash USD & ZiG Charges?',
+    tool: 'ecocash-calculator',
+  },
+  {
+    id: 'ecocash-shortcodes',
+    question: 'What are the shortcodes for ecocash transactions?',
+    tool: 'ecocash-calculator',
+  },
+  {
+    id: 'avoiding-charges',
+    question: 'How to avoid Ecocash charges',
+    tool: 'ecocash-calculator',
+  },
 ];
 
 export const ibZimAnswers: Answer[] = [
@@ -61,5 +76,41 @@ export const ibZimAnswers: Answer[] = [
     createdAt: new Date('2025-06-02T09:45:00Z'),
     questionId: 'reduce-fuel-cost',
     updatedAt: new Date('2025-06-02T09:45:00Z'),
+  },
+  {
+    id: 'ibzim-answer-4',
+    content:
+      'Ecocash charges and Tariffs are - Balance inquiry: $0.15 - Request Bank Balance: $0.10 - Request Bank Statement $0.15 - Cash in: Free  The charges for USD and ZiG transactions vary depending on the type of transaction (sending, receiving, cash-out, bill payments) and the amount involved. For USD, cash-out charges typically range between 5%–10%.',
+    userName: 'IBZim',
+    tool: 'ecocash-calculator',
+    isVerified: true,
+    likesCount: 100,
+    createdAt: new Date('2025-06-26T10:00:00Z'),
+    questionId: 'ecocash-charges',
+    updatedAt: new Date('2025-06-26T10:00:00Z'),
+  },
+  {
+    id: 'ibzim-answer-5',
+    content:
+      'Ecocash shortcodes are USSD codes used to access various services. The main menu is available via *151# (Universal) or *153# (USD). To send money: *151*1*1#, to cash out: *151*1*2#, to pay merchant: *151*2*1#, and to buy airtime: *151*2*2#. You can typically do this for any ecocash dial flow.',
+    userName: 'IBZim',
+    tool: 'ecocash-calculator',
+    isVerified: true,
+    likesCount: 100,
+    createdAt: new Date('2025-06-26T10:05:00Z'),
+    questionId: 'ecocash-shortcodes',
+    updatedAt: new Date('2025-06-26T10:05:00Z'),
+  },
+  {
+    id: 'ibzim-answer-6',
+    content:
+      'To reduce or avoid Ecocash charges, consider using merchant payments instead of person-to-person transfers, as they are usually free. Also, receiving money via merchant accounts or bank-to-wallet transfers can have lower fees. Where possible, transact in ZiG instead of USD to benefit from lower tariff bands. However, charges are part of the mobile money infrastructure and can’t be fully avoided unless using alternative platforms for zero-fee transactions like ZIPIT Smart or direct bank apps.',
+    userName: 'IBZim',
+    tool: 'ecocash-calculator',
+    isVerified: true,
+    likesCount: 100,
+    createdAt: new Date('2025-06-26T10:10:00Z'),
+    questionId: 'avoiding-charges',
+    updatedAt: new Date('2025-06-26T10:10:00Z'),
   },
 ];

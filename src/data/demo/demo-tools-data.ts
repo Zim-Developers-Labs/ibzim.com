@@ -91,6 +91,83 @@ export const demoAnswerLikes: AnswerLike[] = [
     userId: `demo-user-${i + 42}`,
     createdAt: new Date('2023-10-02T00:00:00Z'),
   })),
+
+  // demo-answer-13: 19 likes
+  ...Array.from({ length: 19 }, (_, i) => ({
+    answerId: 'demo-answer-13',
+    userId: `demo-user-${i + 42}`,
+    createdAt: new Date('2023-10-02T00:00:00Z'),
+  })),
+
+  // demo-answer-14: 22 likes
+  ...Array.from({ length: 22 }, (_, i) => ({
+    answerId: 'demo-answer-14',
+    userId: `demo-user-${i + 110}`,
+    createdAt: new Date('2025-06-20T00:00:00Z'),
+  })),
+
+  // demo-answer-15: 18 likes
+  ...Array.from({ length: 18 }, (_, i) => ({
+    answerId: 'demo-answer-15',
+    userId: `demo-user-${i + 132}`,
+    createdAt: new Date('2025-06-22T00:00:00Z'),
+  })),
+
+  // demo-answer-16: 25 likes
+  ...Array.from({ length: 25 }, (_, i) => ({
+    answerId: 'demo-answer-16',
+    userId: `demo-user-${i + 150}`,
+    createdAt: new Date('2025-06-24T00:00:00Z'),
+  })),
+
+  // demo-answer-17: 16 likes
+  ...Array.from({ length: 16 }, (_, i) => ({
+    answerId: 'demo-answer-17',
+    userId: `demo-user-${i + 175}`,
+    createdAt: new Date('2025-06-21T00:00:00Z'),
+  })),
+
+  // demo-answer-18: 12 likes
+  ...Array.from({ length: 12 }, (_, i) => ({
+    answerId: 'demo-answer-18',
+    userId: `demo-user-${i + 191}`,
+    createdAt: new Date('2025-06-23T00:00:00Z'),
+  })),
+
+  // demo-answer-19: 20 likes
+  ...Array.from({ length: 20 }, (_, i) => ({
+    answerId: 'demo-answer-19',
+    userId: `demo-user-${i + 203}`,
+    createdAt: new Date('2025-06-25T00:00:00Z'),
+  })),
+
+  // demo-answer-20: 14 likes
+  ...Array.from({ length: 14 }, (_, i) => ({
+    answerId: 'demo-answer-20',
+    userId: `demo-user-${i + 223}`,
+    createdAt: new Date('2025-06-19T00:00:00Z'),
+  })),
+
+  // demo-answer-21: 19 likes
+  ...Array.from({ length: 19 }, (_, i) => ({
+    answerId: 'demo-answer-21',
+    userId: `demo-user-${i + 237}`,
+    createdAt: new Date('2025-06-21T00:00:00Z'),
+  })),
+
+  // demo-answer-22: 23 likes
+  ...Array.from({ length: 23 }, (_, i) => ({
+    answerId: 'demo-answer-22',
+    userId: `demo-user-${i + 256}`,
+    createdAt: new Date('2025-06-23T00:00:00Z'),
+  })),
+
+  // demo-answer-23: 17 likes
+  ...Array.from({ length: 17 }, (_, i) => ({
+    answerId: 'demo-answer-23',
+    userId: `demo-user-${i + 279}`,
+    createdAt: new Date('2025-06-25T00:00:00Z'),
+  })),
 ];
 
 export const demoAnswers: Answer[] = [
@@ -212,5 +289,125 @@ export const demoAnswers: Answer[] = [
     likesCount: 0,
     createdAt: new Date('2025-06-25T17:45:00Z'),
     updatedAt: new Date('2025-06-25T17:45:00Z'),
+  },
+  {
+    id: 'demo-answer-14',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-charges',
+    userName: 'Tendai Mukamuri',
+    content:
+      'The charges change frequently, but last time I checked, sending $10 USD costs around $0.50-$1.00 depending on the recipient type. ZiG transactions are generally cheaper. Always check *151# for current rates before transacting.',
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-20T09:15:00Z'),
+    updatedAt: new Date('2025-06-20T09:15:00Z'),
+  },
+  {
+    id: 'demo-answer-15',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-charges',
+    userName: 'Grace Sibanda',
+    content:
+      "Pro tip: Merchant payments are usually free or very cheap compared to person-to-person transfers. If you're paying for goods/services, ask if they have a merchant account.",
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-22T14:30:00Z'),
+    updatedAt: new Date('2025-06-22T14:30:00Z'),
+  },
+  {
+    id: 'demo-answer-16',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-charges',
+    userName: 'Blessing Chivasa',
+    content:
+      "Cash-out charges are the killer! Sometimes it's 8-10% for USD. I try to use my EcoCash card at POS machines instead - much cheaper than agent cash-out.",
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-24T11:45:00Z'),
+    updatedAt: new Date('2025-06-24T11:45:00Z'),
+  },
+  {
+    id: 'demo-answer-17',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-shortcodes',
+    userName: 'Farai Mutindi',
+    content:
+      'I use *151# daily! For quick balance check, just dial *151*6*1#. To buy airtime for yourself, *151*2*2*1# is faster than going through the full menu.',
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-21T16:20:00Z'),
+    updatedAt: new Date('2025-06-21T16:20:00Z'),
+  },
+  {
+    id: 'demo-answer-18',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-shortcodes',
+    userName: 'Chipo Nyathi',
+    content:
+      "Don't forget *153# for USD transactions! I always get confused between the two. Also, *151*0# gives you help if you're stuck in the menu.",
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-23T10:10:00Z'),
+    updatedAt: new Date('2025-06-23T10:10:00Z'),
+  },
+  {
+    id: 'demo-answer-19',
+    tool: 'ecocash-calculator',
+    questionId: 'ecocash-shortcodes',
+    userName: 'Tafadzwa Moyo',
+    content:
+      'Save time by memorizing the send money shortcut: *151*1*1*[phone number]*[amount]*[PIN]#. Just be careful with the amount - double check before hitting send!',
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-25T13:55:00Z'),
+    updatedAt: new Date('2025-06-25T13:55:00Z'),
+  },
+  {
+    id: 'demo-answer-20',
+    tool: 'ecocash-calculator',
+    questionId: 'avoiding-charges',
+    userName: 'Rutendo Mashiri',
+    content:
+      "I switched to using ZIPIT for bank-to-bank transfers when possible. It's free and instant between most local banks. Only use EcoCash when I really need mobile money features.",
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-19T08:30:00Z'),
+    updatedAt: new Date('2025-06-19T08:30:00Z'),
+  },
+  {
+    id: 'demo-answer-21',
+    tool: 'ecocash-calculator',
+    questionId: 'avoiding-charges',
+    userName: 'Simba Chirwa',
+    content:
+      'Group your transactions! Instead of sending $5 three times (paying charges each time), send $15 once. Also, receiving money is usually free, so coordinate with family/friends.',
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-21T15:40:00Z'),
+    updatedAt: new Date('2025-06-21T15:40:00Z'),
+  },
+  {
+    id: 'demo-answer-22',
+    tool: 'ecocash-calculator',
+    questionId: 'avoiding-charges',
+    userName: 'Vimbai Dube',
+    content:
+      "Use your EcoCash debit card more! Swipe at shops instead of cash-out then pay cash. Most supermarkets and fuel stations accept it, and there's no transaction fee.",
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-23T12:25:00Z'),
+    updatedAt: new Date('2025-06-23T12:25:00Z'),
+  },
+  {
+    id: 'demo-answer-23',
+    tool: 'ecocash-calculator',
+    questionId: 'avoiding-charges',
+    userName: 'Kuda Mlambo',
+    content:
+      'For regular payments like rent or school fees, ask if they accept direct bank transfers or have corporate EcoCash accounts. The rates are often better than individual transfers.',
+    isVerified: false,
+    likesCount: 0,
+    createdAt: new Date('2025-06-25T09:15:00Z'),
+    updatedAt: new Date('2025-06-25T09:15:00Z'),
   },
 ];
