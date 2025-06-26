@@ -381,7 +381,7 @@ export default function EcoCashCalculatorPageWrapper({
                     type="number"
                     placeholder={`Enter amount in ${currency}`}
                     value={amount}
-                    className="border-zinc-600 placeholder:text-zinc-400"
+                    className="border-zinc-600 placeholder:text-zinc-700"
                     onChange={(e) => setAmount(e.target.value)}
                     min="0.01"
                     step="0.01"

@@ -22,6 +22,27 @@ export const demoAnswerLikes: AnswerLike[] = [
     createdAt: new Date('2023-10-01T00:00:00Z'),
   })),
 
+  // ibzim-answer-4: 26 likes
+  ...Array.from({ length: 24 }, (_, i) => ({
+    answerId: 'ibzim-answer-4',
+    userId: `demo-user-${i + 1}`,
+    createdAt: new Date('2023-10-01T00:00:00Z'),
+  })),
+
+  // ibzim-answer-5: 38 likes
+  ...Array.from({ length: 28 }, (_, i) => ({
+    answerId: 'ibzim-answer-5',
+    userId: `demo-user-${i + 1}`,
+    createdAt: new Date('2023-10-01T00:00:00Z'),
+  })),
+
+  // ibzim-answer-6: 18 likes
+  ...Array.from({ length: 17 }, (_, i) => ({
+    answerId: 'ibzim-answer-6',
+    userId: `demo-user-${i + 1}`,
+    createdAt: new Date('2023-10-01T00:00:00Z'),
+  })),
+
   // demo-answer-1: 15 likes
   ...Array.from({ length: 15 }, (_, i) => ({
     answerId: 'demo-answer-1',

@@ -477,11 +477,13 @@ function FaqAnswer({
           </div>
 
           {/* Answer Content */}
-          <p className="text-sm leading-relaxed text-gray-700">
-            {answer.id.includes('ibzim-answer')
-              ? renderText(answer.content)
-              : answer.content}
-          </p>
+          <div className="text-sm leading-relaxed text-gray-700">
+            {answer.id.includes('ibzim-answer') ? (
+              renderText(answer.content)
+            ) : (
+              <p>{answer.content}</p>
+            )}
+          </div>
 
           {/* Like Button */}
           <div className="flex items-center justify-between border-t pt-2">
