@@ -18,6 +18,7 @@ export function Linkify(titleText: string) {
     titleText
       .toLowerCase()
       .replace(/[^\x00-\x7F]/g, '')
+      .replace(/'/g, '-')
       .replace(/\s+/g, '-')
       .replace(/[?!.]/g, '');
 
@@ -135,4 +136,17 @@ export function convertToSlug(
     lower: true,
     remove: /[^a-zA-Z0-9 ]/g,
   });
+}
+
+export function textify(
+  slug?: string,
+  { fallback }: { fallback?: string } = { fallback: 'Top Level' },
+) {
+  if (!slug) return fallback;
+
+  // Replace dashes with spaces and capitalize each word
+  return slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }

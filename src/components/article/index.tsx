@@ -17,7 +17,7 @@ import {
 import { toast } from 'sonner';
 import extractTextFromBlocks, {
   calculateReadingTime,
-  Linkify,
+  convertToSlug,
 } from '@/lib/utils';
 import BreadCrumb from './components/breadcrumb';
 import { urlForImage } from '@/sanity/lib/image';
@@ -301,7 +301,7 @@ export default function ArticleWrapper({
               />
               <div>
                 <Link
-                  href={`/authors/${Linkify(article.author.name)}`}
+                  href={`/authors/${convertToSlug(article.author.name)}`}
                   className="block text-sm leading-none md:text-base"
                 >
                   By{' '}

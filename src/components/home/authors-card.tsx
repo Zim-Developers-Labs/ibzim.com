@@ -1,8 +1,8 @@
 'use client';
 
 import { siteConfig } from '@/lib/config';
+import { convertToSlug } from '@/lib/utils';
 import { urlForImage } from '@/sanity/lib/image';
-import { Linkify } from '@/lib/utils';
 import { ArticlesForCountType, AuthorType } from '@/types';
 import { ArrowRightIcon, ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
@@ -100,7 +100,7 @@ export default function AuthorsCard({
         </div>
         <div>
           <Link
-            href={`/authors/${Linkify(selectedAuthor.name)}`}
+            href={`/authors/${convertToSlug(selectedAuthor.name)}`}
             className="mb-4 block text-xl font-semibold text-teal-400"
           >
             {selectedAuthor.name}

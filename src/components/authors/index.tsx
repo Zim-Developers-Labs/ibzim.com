@@ -2,9 +2,9 @@ import { AuthorType, CardArticleType } from '@/types';
 import Link from 'next/link';
 import Container from '../container';
 import { ChevronRightIcon } from 'lucide-react';
-import { Linkify } from '@/lib/utils';
 import Image from 'next/image';
 import { urlForImage } from '@/sanity/lib/image';
+import { convertToSlug } from '@/lib/utils';
 
 export default function AuthorsLayout({
   articles,
@@ -47,7 +47,7 @@ export default function AuthorsLayout({
           <div className="flex flex-col gap-8 md:flex-row md:justify-between">
             {sortedAuthors.slice(0, 3).map((author, i) => (
               <Link
-                href={`/authors/${Linkify(author.name)}`}
+                href={`/authors/${convertToSlug(author.name)}`}
                 key={i}
                 className="flex items-start gap-4 hover:text-teal-600"
               >
@@ -79,7 +79,7 @@ export default function AuthorsLayout({
           <div className="flex flex-col gap-8 md:flex-row">
             {sortedAuthors.slice(3).map((author, i) => (
               <Link
-                href={`/authors/${Linkify(author.name)}`}
+                href={`/authors/${convertToSlug(author.name)}`}
                 key={i}
                 className="flex items-start gap-4 hover:text-teal-600"
               >

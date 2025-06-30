@@ -26,7 +26,7 @@ export const tools = [
   },
   {
     name: 'School Picker',
-    href: '/tools/school-picker',
+    href: '/tools/school-picker/a-level',
   },
   {
     name: 'Currency Converter',

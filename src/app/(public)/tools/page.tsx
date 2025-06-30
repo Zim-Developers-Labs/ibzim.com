@@ -6,7 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Calculator, Settings, School, MapPin, Zap } from 'lucide-react';
+import {
+  Calculator,
+  Settings,
+  School,
+  MapPin,
+  Zap,
+  ChevronRight,
+} from 'lucide-react';
 import { Metadata } from 'next';
 import { preparePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/lib/config';
@@ -30,7 +37,7 @@ const tools = [
   },
   {
     name: 'School Picker',
-    slug: 'school-picker',
+    slug: 'school-picker/a-level',
     description: 'Find schools based on location, type, and other criteria.',
     icon: School,
     category: 'Utility',
@@ -82,6 +89,65 @@ export default async function ToolsPage() {
               .filter((tool) => tool.category === category)
               .map((tool) => {
                 const IconComponent = tool.icon;
+                if (tool.name === 'School Picker') {
+                  return (
+                    <div key={tool.slug} className="group">
+                      <Card className="group h-full cursor-pointer shadow-none hover:bg-zinc-100">
+                        <CardHeader>
+                          <div className="flex items-center gap-3">
+                            <div className="rounded-lg bg-zinc-100 p-2">
+                              <IconComponent
+                                className="text-primaryColor h-6 w-6"
+                                strokeWidth={1}
+                              />
+                            </div>
+                            <CardTitle>
+                              <h3 className="text-xl group-hover:underline">
+                                {tool.name}
+                              </h3>
+                            </CardTitle>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <CardDescription className="text-base">
+                            {tool.description}
+                          </CardDescription>
+                          <div className="mt-4 grid grid-cols-2 gap-2">
+                            <Link
+                              href="/tools/school-picker/primary-education"
+                              className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                            >
+                              Primary
+                              <ChevronRight className="ml-1 inline-block h-4 w-4" />
+                            </Link>
+                            <Link
+                              href="/tools/school-picker/o-level-education"
+                              className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                            >
+                              O&nbsp;Level
+                              <ChevronRight className="ml-1 inline-block h-4 w-4" />
+                            </Link>
+                            <Link
+                              href="/tools/school-picker/a-level-education"
+                              className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                            >
+                              A&nbsp;Level
+                              <ChevronRight className="ml-1 inline-block h-4 w-4" />
+                            </Link>
+
+                            <Link
+                              href="/tools/school-picker/tetiary-education"
+                              className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                            >
+                              Tetiary
+                              <ChevronRight className="ml-1 inline-block h-4 w-4" />
+                            </Link>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  );
+                }
                 return (
                   <Link
                     key={tool.slug}
@@ -97,8 +163,10 @@ export default async function ToolsPage() {
                               strokeWidth={1}
                             />
                           </div>
-                          <CardTitle className="text-xl group-hover:underline">
-                            {tool.name}
+                          <CardTitle>
+                            <h3 className="text-xl group-hover:underline">
+                              {tool.name}
+                            </h3>
                           </CardTitle>
                         </div>
                       </CardHeader>
@@ -121,7 +189,7 @@ export default async function ToolsPage() {
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: `Tools & Calculators | IBZim`,
-    description: `Discover useful tools and calculators including EcoCash calculator, tool picker, and more to simplify your daily tasks.`,
+    description: `Discover useful tools and calculators including distance, ecocash calculator, school picker, government structure and more.`,
     pageUrl: '/tools',
     imageUrl: '/banner.webp',
     siteConfig: siteConfig,
