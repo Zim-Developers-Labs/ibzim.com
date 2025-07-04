@@ -29,6 +29,12 @@ const getConfig = () => {
         },
         {
           source:
+            '/education/info/2025-school-opening-and-closing-dates-calender-in-zimbabwe',
+          destination: '/education/info/zimbabwe-school-calendar-2025',
+          permanent: true,
+        },
+        {
+          source:
             '/telecom/guides/how-to-get-econet-or-netone-business-shortcode',
           destination:
             '/telecom/guides/how-to-register-econet-or-netone-business-shortcode',
