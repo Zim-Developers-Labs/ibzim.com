@@ -14,7 +14,7 @@ export default function imageModule(props: any) {
         {imageUrl && (
           <Image
             src={imageUrl}
-            alt={`${alt} - IBZIM Blog`}
+            alt={alt}
             className="h-auto w-full rounded-xl"
             loading="lazy"
             title={alt}

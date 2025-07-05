@@ -9,7 +9,7 @@ import { Icons } from '@/components/icons';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
-    title: 'Finish Creating Account | IBZim',
+    title: 'Finish Creating Account',
     description: 'Complete your IBZim profile.',
     pageUrl: '/onboarding',
     imageUrl: '/banner.webp',

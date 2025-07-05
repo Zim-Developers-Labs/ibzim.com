@@ -299,10 +299,7 @@ export default function ArticleLayout({
             </div>
           </header>
           <p className="mb-8">{article.intro}</p>
-          <HeroImage
-            alt={`${article.name} | IBZim`}
-            image={article.seo.image}
-          />
+          <HeroImage alt={article.name} image={article.seo.image} />
           {article?.subHeadings && <TblContents article={article} />}
           <PtRenderer body={article.body} />
         </article>

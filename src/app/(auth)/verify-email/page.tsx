@@ -8,7 +8,7 @@ import { siteConfig } from '@/lib/config';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
-    title: 'Verify Email | IBZim',
+    title: 'Verify Email',
     description: 'Enter the code sent to your email address.',
     pageUrl: '/verify-email',
     imageUrl: '/banner.webp',

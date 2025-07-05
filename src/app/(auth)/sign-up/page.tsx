@@ -8,7 +8,7 @@ import { siteConfig } from '@/lib/config';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
-    title: 'Create Account | IBZim',
+    title: 'Create Account',
     description: 'Signup IBZim new account.',
     pageUrl: '/sign-up',
     imageUrl: '/banner.webp',
