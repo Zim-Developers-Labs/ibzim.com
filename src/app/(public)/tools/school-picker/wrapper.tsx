@@ -485,7 +485,8 @@ export default function SchoolPicker({
 
                     <div className="flex gap-2 pt-2">
                       <Link
-                        href={`/profiles/school/${Linkify(school.name)}`}
+                        // href={`/profiles/school/${Linkify(school.name)}`}
+                        href="#"
                         className="bg-primary hover:bg-primary/90 block w-full flex-1 rounded-md py-1 text-center text-white transition-colors"
                       >
                         View Details
