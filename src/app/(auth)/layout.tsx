@@ -4,7 +4,6 @@ import { Metadata } from 'next';
 import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +27,7 @@ export default async function RootLayout({
         <Toaster />
         {children}
         <Analytics />
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={process.env.GA_SECRET!} />
       </body>
     </html>

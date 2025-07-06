@@ -9,7 +9,6 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { validateRequest } from '@/lib/auth/validate-request';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -49,7 +48,7 @@ export default async function RootLayout({
         {children}
         <Footer siteShortName={siteConfig.shortName} />
         <Analytics />
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={process.env.GA_SECRET!} />
       </body>
     </html>
