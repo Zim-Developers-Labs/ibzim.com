@@ -1,3 +1,4 @@
+import GoogleAdUnit from '@/components/ad-unit';
 import Container from '@/components/container';
 import SearchToggler from '@/components/header/search-toggler';
 import SideBar from '@/components/header/side-bar';
@@ -149,6 +150,9 @@ export default function BlogHeader({
             {user && <UserToggler user={user} />}
           </div>
         </div>
+        <aside className="mt-4">
+          <GoogleAdUnit adSlot="6332518135" />
+        </aside>
       </Container>
     </header>
   );
