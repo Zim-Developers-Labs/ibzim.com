@@ -58,46 +58,10 @@ export default function ProfileArticleWrapper({
           <p className="mx-auto mb-6 max-w-xl px-0 text-center text-sm md:px-4 md:text-base">
             {profile.intro}
           </p>
-          <div className="relative z-10 mb-8 flex items-center justify-between border border-t border-r-0 border-b border-l-0 border-zinc-200 px-2 py-3">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Link
-                // href={`/profiles/${profile.entityType}/${profile.slug.current}/discussions`}
-                href="#"
-                className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
-                title="Talk about this profile"
-              >
-                Talk
-                <ChevronRightIcon className="ml-1 hidden h-3 w-3 sm:inline" />
-              </Link>
-              {profile.entityType === 'school' && (
-                <Link
-                  // href={`/profiles/${profile.entityType}/${profile.slug.current}/reviews`}
-                  href="#"
-                  className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
-                  title="Review this profile"
-                >
-                  Reviews
-                  <ChevronRightIcon className="ml-1 hidden h-3 w-3 sm:inline" />
-                </Link>
-              )}
-            </div>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <div className="flex items-center gap-2">
-                <ProfileTruthScore
-                  score={profile.truthScore ? profile.truthScore : 0}
-                  type="profile"
-                />
-              </div>
-              <div className="group flex cursor-pointer items-center gap-2 text-zinc-600">
-                <span className="text-xs">Save</span>
-                <BookmarkIcon className="h-5 w-fit transition-transform group-hover:-translate-y-1" />
-              </div>
-            </div>
-          </div>
         </Container>
       </div>
-
       <div className="relative min-h-screen">
+        <ActionBar profile={profile} />
         <Container className="mt-6 flex flex-col gap-8 pb-4 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_300px]">
           <div className="h-fit md:mt-4">
             <div className="mb-6 md:float-left md:mb-0 md:pr-8 md:pb-4">
@@ -105,23 +69,9 @@ export default function ProfileArticleWrapper({
             </div>
             {profile && <PPtRenderer body={profile.body} />}
           </div>
-          <aside className="h-full">
-            <div className="h-full w-full md:grid md:grid-rows-[1fr_1fr_1fr]">
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6137077018" />
-                </div>
-              </div>
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6332518135" />
-                </div>
-              </div>
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6894242028" />
-                </div>
-              </div>
+          <aside className="relative w-full">
+            <div className="top-[10vh] p-1 md:sticky md:p-2">
+              <GoogleAdUnit adSlot="6137077018" />
             </div>
           </aside>
         </Container>
@@ -133,5 +83,48 @@ export default function ProfileArticleWrapper({
         </Container>
       </div>
     </>
+  );
+}
+
+function ActionBar({ profile }: { profile: ProfileType }) {
+  return (
+    <div className="sticky top-0 z-50 mb-8 flex items-center justify-between border border-t border-r-0 border-b border-l-0 border-zinc-200 bg-white px-2 py-4">
+      <Container className="g flex w-full items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link
+            // href={`/profiles/${profile.entityType}/${profile.slug.current}/discussions`}
+            href="#"
+            className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
+            title="Talk about this profile"
+          >
+            Talk
+            <ChevronRightIcon className="ml-1 hidden h-3 w-3 sm:inline" />
+          </Link>
+          {profile.entityType === 'school' && (
+            <Link
+              // href={`/profiles/${profile.entityType}/${profile.slug.current}/reviews`}
+              href="#"
+              className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
+              title="Review this profile"
+            >
+              Reviews
+              <ChevronRightIcon className="ml-1 hidden h-3 w-3 sm:inline" />
+            </Link>
+          )}
+        </div>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="group flex cursor-pointer items-center gap-2 text-zinc-600">
+            <span className="text-xs">Save</span>
+            <BookmarkIcon className="h-5 w-fit transition-transform group-hover:-translate-y-1" />
+          </div>
+          <div className="flex items-center gap-2">
+            <ProfileTruthScore
+              score={profile.truthScore ? profile.truthScore : 0}
+              type="profile"
+            />
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 }

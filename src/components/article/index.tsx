@@ -457,23 +457,9 @@ export default function ArticleWrapper({
             )}
             {article && <PtRenderer body={article.body} />}
           </div>
-          <aside className="h-full">
-            <div className="h-full w-full md:grid md:grid-rows-[1fr_1fr_1fr]">
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6137077018" />
-                </div>
-              </div>
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6332518135" />
-                </div>
-              </div>
-              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
-                <div className="top-[10vh] p-1 md:sticky md:p-2">
-                  <GoogleAdUnit adSlot="6894242028" />
-                </div>
-              </div>
+          <aside className="relative w-full">
+            <div className="top-[10vh] p-1 md:sticky md:p-2">
+              <GoogleAdUnit adSlot="6137077018" />
             </div>
           </aside>
         </Container>

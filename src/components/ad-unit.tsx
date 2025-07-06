@@ -14,7 +14,11 @@ const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
   }, []);
 
   if (process.env.NODE_ENV !== 'production') {
-    return null;
+    return (
+      <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-md md:p-4">
+        Ad Slot: {adSlot}
+      </div>
+    );
   }
 
   return (
