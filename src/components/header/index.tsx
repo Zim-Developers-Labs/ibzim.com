@@ -94,10 +94,11 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="/chats"
+                    href="https://news.ibzim.com"
+                    target="_blank"
                     className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
                   >
-                    Chats
+                    News
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
