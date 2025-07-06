@@ -150,9 +150,6 @@ export default function BlogHeader({
             {user && <UserToggler user={user} />}
           </div>
         </div>
-        <aside className="mt-4">
-          <GoogleAdUnit adSlot="6332518135" />
-        </aside>
       </Container>
     </header>
   );

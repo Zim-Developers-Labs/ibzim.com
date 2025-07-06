@@ -291,6 +291,11 @@ export default function ArticleWrapper({
           popularArticles={popularArticles}
           user={user}
         />
+        <aside className="bg-white py-4">
+          <Container>
+            <GoogleAdUnit adSlot="6332518135" />
+          </Container>
+        </aside>
         <BreadCrumb
           name={article.name}
           industry={article.industry.slug}

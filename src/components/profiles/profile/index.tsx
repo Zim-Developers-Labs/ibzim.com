@@ -50,6 +50,11 @@ export default function ProfileArticleWrapper({
           popularArticles={popularArticles}
           user={user}
         />
+        <aside className="bg-white py-4">
+          <Container>
+            <GoogleAdUnit adSlot="6332518135" />
+          </Container>
+        </aside>
         <WikiBreadCrumb name={profile.name} type={profile.entityType} />
         <Container className="max-w-screen-md pt-10 md:pt-20">
           <h1 className="mx-auto mb-4 px-0 text-center text-3xl md:px-4 md:text-4xl">

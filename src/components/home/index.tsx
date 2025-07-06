@@ -12,6 +12,8 @@ import ProfilesCard from './profiles-card';
 import AuthorsCard from './authors-card';
 import BlogHeader from '@/app/(blog)/blog-header';
 import { User } from 'lucia';
+import GoogleAdUnit from '../ad-unit';
+import Container from '../container';
 
 export type Props = {
   articles: CardArticleType[];
@@ -62,6 +64,11 @@ export default function HomeWrapper({
         popularArticles={popularArticles}
         user={user}
       />
+      <aside className="bg-white py-4">
+        <Container>
+          <GoogleAdUnit adSlot="6332518135" />
+        </Container>
+      </aside>
       <Hero
         siteConfig={siteConfig}
         heroArticle={heroArticle!}
