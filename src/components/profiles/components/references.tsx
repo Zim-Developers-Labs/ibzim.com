@@ -69,6 +69,10 @@ export default function References({
     combinedReferences.values(),
   ).sort((a, b) => a.number - b.number);
 
+  if (references.length === 0) {
+    return null; // No references to display
+  }
+
   return (
     <section className="rounded-md border border-zinc-200 bg-zinc-50 p-4">
       <h2 className="-mt-20 mb-5 w-full border-b border-zinc-200 pt-28 pb-4 text-2xl md:text-3xl">
