@@ -1,6 +1,8 @@
 import HomeWrapper from '@/components/home';
+import { validateRequest } from '@/lib/auth/validate-request';
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
+import { getSearchData } from '@/sanity/lib/actions';
 import {
   getAllArticlesByBlog,
   getAllAuthors,
@@ -59,8 +61,18 @@ export default async function HomePage() {
     getAllAuthors(),
   ]);
 
+    const { user } = await validateRequest();
+  
+    const { allArticles, popularArticles } = await getSearchData(
+      siteConfig.popularArticleIds,
+      siteConfig.documentPrefix,
+    );
+
   return (
     <HomeWrapper
+      user={user}
+      allArticles={allArticles}
+      popularArticles={popularArticles}
       authors={authors}
       profiles={profiles}
       articles={articles}

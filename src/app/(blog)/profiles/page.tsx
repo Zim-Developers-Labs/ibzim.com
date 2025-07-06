@@ -1,6 +1,8 @@
 import ProfileListingWrapper from '@/components/profiles';
+import { validateRequest } from '@/lib/auth/validate-request';
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
+import { getSearchData } from '@/sanity/lib/actions';
 import { getAllProfilesForListingByBlog } from '@/sanity/lib/client';
 import { CardProfileType } from '@/types';
 import { Metadata } from 'next';
@@ -23,5 +25,19 @@ export default async function ProfilesPage() {
     ),
   ]);
 
-  return <ProfileListingWrapper profiles={profiles} />;
+  const { user } = await validateRequest();
+
+  const { allArticles, popularArticles } = await getSearchData(
+    siteConfig.popularArticleIds,
+    siteConfig.documentPrefix,
+  );
+
+  return (
+    <ProfileListingWrapper
+      user={user}
+      allArticles={allArticles}
+      popularArticles={popularArticles}
+      profiles={profiles}
+    />
+  );
 }

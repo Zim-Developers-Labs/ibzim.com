@@ -5,16 +5,22 @@ import type {
   CardArticleType,
   CardProfileType,
   HomeType,
+  SearchDocumentType,
 } from '@/types';
 import ArticlesListing from './listing';
 import ProfilesCard from './profiles-card';
 import AuthorsCard from './authors-card';
+import BlogHeader from '@/app/(blog)/blog-header';
+import { User } from 'lucia';
 
 export type Props = {
   articles: CardArticleType[];
   profiles: CardProfileType[];
   home: HomeType;
   authors: AuthorType[];
+  allArticles?: SearchDocumentType[];
+  popularArticles?: SearchDocumentType[];
+  user: User | null;
 };
 
 export default function HomeWrapper({
@@ -22,6 +28,9 @@ export default function HomeWrapper({
   home,
   profiles,
   authors,
+  user,
+  allArticles,
+  popularArticles,
 }: Props) {
   const heroArticle = articles.find(
     (article) => article._id === home.mainArticle!._ref,
@@ -48,6 +57,11 @@ export default function HomeWrapper({
 
   return (
     <main>
+      <BlogHeader
+        articles={allArticles}
+        popularArticles={popularArticles}
+        user={user}
+      />
       <Hero
         siteConfig={siteConfig}
         heroArticle={heroArticle!}
