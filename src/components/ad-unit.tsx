@@ -1,4 +1,6 @@
-import Script from 'next/script';
+'use client';
+
+import { useEffect } from 'react';
 
 type Props = {
   adSlot: string;
@@ -9,28 +11,21 @@ const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
     return null;
   }
 
+  useEffect(() => {
+    if (window) {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
+  }, []);
+
   return (
-    <>
-      <Script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5335750983677223`}
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
-      {/* Ad unity */}
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        // @ts-expect-error -- due to unknown properties in TypeScript
-        dataAdClient={`ca-pub-5335750983677223`}
-        dataAdSlot={adSlot}
-        dataAdFormat="auto"
-        dataFullWidthResponsive="true"
-      />
-      <Script id="adsbygoogle" strategy="afterInteractive">
-        {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-      </Script>
-    </>
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block' }}
+      data-ad-client={`ca-pub-5335750983677223`}
+      data-ad-slot={adSlot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
   );
 };
 

@@ -1,17 +1,14 @@
 import Script from 'next/script';
 
-type Props = {
-  pId: string;
-};
-
-const GoogleAdsense: React.FC<Props> = ({ pId }) => {
+const GoogleAdsense: React.FC = () => {
   if (process.env.NODE_ENV !== 'production') {
     return null;
   }
+
   return (
     <Script
       async
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${pId}`}
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5335750983677223`}
       crossOrigin="anonymous"
       strategy="afterInteractive"
     />
