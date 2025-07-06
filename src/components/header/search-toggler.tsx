@@ -19,21 +19,24 @@ export default function SearchToggler({
   popularArticles?: any[];
 }) {
   const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
 
   const handleRequestContent = async () => {
     if (query.length < 5) {
       toast.error('Add more details to your query');
       return;
     }
-
     const phoneNumber = '263717238876';
     const message = encodeURIComponent(`Hi I would like content on: ${query}`);
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${message}`;
-
     window.open(whatsappLink, '_blank');
   };
 
-  const popularSearches = ['schools', 'starlink', 'whatsapp', 'money'];
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
+
+  const popularSearches = ['schools', 'starlink', 'rich'];
 
   const filteredArticles: any =
     query === ''
@@ -50,7 +53,7 @@ export default function SearchToggler({
         });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="flex cursor-pointer items-center gap-2 rounded-md border border-zinc-200 p-1 md:px-4 md:py-2">
         <Search className="size-5 text-zinc-600" />
         <div className="hidden pr-2 text-xs text-zinc-700 md:block">
@@ -69,7 +72,6 @@ export default function SearchToggler({
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-
         <div className="max-h-80 scroll-py-2 space-y-4 overflow-y-auto">
           <div>
             <h3 className="text-muted-foreground text-sm">Popular Searches</h3>
@@ -85,7 +87,6 @@ export default function SearchToggler({
               ))}
             </div>
           </div>
-
           <div className="space-y-2 text-sm text-gray-700">
             {query !== '' &&
               filteredArticles.length > 0 &&
@@ -94,11 +95,11 @@ export default function SearchToggler({
                   article._type == 'article'
                     ? `/${article.industry.slug}/${article.type}/${article.slug.current}`
                     : `/profiles/${article.entityType}/${article.slug.current}`;
-
                 return (
                   <Link
                     href={url}
                     key={i}
+                    onClick={handleLinkClick}
                     className="group flex cursor-default items-center rounded-md px-3 py-2 select-none hover:bg-yellow-600 hover:text-white hover:outline-none"
                   >
                     <ChevronRightIcon
@@ -115,7 +116,6 @@ export default function SearchToggler({
                 );
               })}
           </div>
-
           {query == '' && (
             <>
               <h2 className="sr-only">Popular Articles</h2>
@@ -124,6 +124,7 @@ export default function SearchToggler({
                   <Link
                     href={`/${article.industry.slug}/${article.type}/${article.slug.current}`}
                     key={index}
+                    onClick={handleLinkClick}
                     className="group flex cursor-default items-center rounded-md px-3 py-2 select-none hover:bg-yellow-600 hover:text-white hover:outline-none"
                   >
                     <ChevronRightIcon
@@ -141,7 +142,6 @@ export default function SearchToggler({
               </div>
             </>
           )}
-
           {query !== '' && filteredArticles?.length === 0 && (
             <div className="px-6 py-14 text-center sm:px-14">
               <Search className="mx-auto h-12 w-12 text-gray-400" />
