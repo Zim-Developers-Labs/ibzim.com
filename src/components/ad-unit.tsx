@@ -9,13 +9,11 @@ const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
     return null;
   }
 
-  const pId = process.env.P_ID;
-
   return (
     <>
       <Script
         async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${pId}`}
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5335750983677223`}
         crossOrigin="anonymous"
         strategy="afterInteractive"
       />
@@ -24,7 +22,7 @@ const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
         className="adsbygoogle"
         style={{ display: 'block' }}
         // @ts-expect-error -- due to unknown properties in TypeScript
-        dataAdClient={`ca-pub-${pId}`}
+        dataAdClient={`ca-pub-5335750983677223`}
         dataAdSlot={adSlot}
         dataAdFormat="auto"
         dataFullWidthResponsive="true"
