@@ -46,7 +46,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { schools } from './data';
 import Container from '@/components/container';
 import Link from 'next/link';
-import { Linkify, textify } from '@/lib/utils';
+import { textify } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
