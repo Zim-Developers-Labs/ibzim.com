@@ -85,7 +85,7 @@ async function generateArticlesSitemap(): Promise<MetadataRoute.Sitemap> {
     .map((article) => ({
       url: `${siteConfig.url.web}/${article.industry.slug}/${article.type}/${article.slug.current}`,
       lastModified: new Date(article._updatedAt),
-      priority: 0.8,
+      priority: 0.9,
     }));
 }
 
@@ -107,6 +107,6 @@ async function generateProfilesSitemap(): Promise<MetadataRoute.Sitemap> {
     .map((profile) => ({
       url: `${siteConfig.url.web}/profiles/${profile.type}/${profile.slug}`,
       lastmod: new Date(profile._updatedAt!),
-      priority: 0.8,
+      priority: 0.9,
     }));
 }
