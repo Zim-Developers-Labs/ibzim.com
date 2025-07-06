@@ -37,7 +37,7 @@ const tools = [
   },
   {
     name: 'School Picker',
-    slug: 'school-picker/a-level',
+    slug: 'school-picker/a-level-education',
     description: 'Find schools based on location, type, and other criteria.',
     icon: School,
     category: 'Utility',

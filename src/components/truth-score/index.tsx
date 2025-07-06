@@ -2,6 +2,7 @@ import './styles.css';
 import { Lock, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { DialogTitle } from '@radix-ui/react-dialog';
+import { Icons } from '../icons';
 
 export default function ProfileTruthScore({
   score,
@@ -25,14 +26,15 @@ export default function ProfileTruthScore({
               className={` ${getScoreClass()} ${type === 'profile' ? 'flex items-center gap-2' : 'flex flex-row-reverse items-center gap-2'}`}
             >
               {score < 75 && (
-                <ShieldAlert strokeWidth={1.5} className="size-5" />
+                <Icons.shieldExclamationSolid
+                  strokeWidth={1.5}
+                  className="size-5"
+                />
               )}
               {score > 74 && (
-                <ShieldCheck strokeWidth={1.5} className="size-5" />
+                <Icons.shieldCheckSolid strokeWidth={1.5} className="size-5" />
               )}
-              <span className="rounded-xs bg-zinc-100 p-1 text-xs">
-                truth score
-              </span>
+              <span className="text-xs">Truth Score</span>
             </div>
           </div>
         </DialogTrigger>

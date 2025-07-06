@@ -1,6 +1,6 @@
 'use client';
 
-import type { ArticleType } from '@/types';
+import type { ArticleType, SearchDocumentType } from '@/types';
 import { siteConfig } from '@/lib/config';
 import {
   Popover,
@@ -37,12 +37,17 @@ import { useEffect, useState } from 'react';
 import { getClaps, toggleClap } from './clap';
 import { getSavedArticles, saveArticle } from './save';
 import Image from 'next/image';
+import BlogHeader from '@/app/(blog)/blog-header';
+import ActionsBar from '@/app/(blog)/actions-bar';
+import GoogleAdUnit from '../ad-unit';
 
 export type ArticleLayoutProps = {
   article: ArticleType;
   user: any;
   parentComments?: CommentWithChildren[];
   allComments?: CommentType[];
+  allArticles?: SearchDocumentType[];
+  popularArticles?: SearchDocumentType[];
 };
 
 function TimeUpdated({ article }: { article: { _updatedAt: string } }) {
@@ -187,6 +192,8 @@ export default function ArticleWrapper({
   user,
   allComments,
   parentComments,
+  allArticles,
+  popularArticles,
 }: ArticleLayoutProps) {
   const [claps, setClaps] = useState(0);
   const [userClapped, setUserClapped] = useState(false);
@@ -278,13 +285,18 @@ export default function ArticleWrapper({
           }),
         }}
       />
-      <BreadCrumb
-        name={article.name}
-        industry={article.industry.slug}
-        type={article.type}
-      />
-      <Container className="max-w-screen-md py-10 md:py-20">
-        <article role="main">
+      <div className="bg-primaryColor/10 relative pb-8 md:pb-10">
+        <BlogHeader
+          articles={allArticles}
+          popularArticles={popularArticles}
+          user={user}
+        />
+        <BreadCrumb
+          name={article.name}
+          industry={article.industry.slug}
+          type={article.type}
+        />
+        <Container className="max-w-screen-md pt-10 md:pt-20">
           <header className="mb-8 flex flex-col">
             <div className="mr-2 mb-6 flex h-fit flex-row items-center">
               <Image
@@ -416,18 +428,56 @@ export default function ArticleWrapper({
             alt={`${article.name} | ${siteConfig.shortName}`}
             image={article.seo.image}
           />
-          {article?.products && <ProductListing articleProducts={article} />}
-          {article?.tblContentsType && (
-            <div className="md:mt-24">
-              {article.tblContentsType == 'auto' ||
-              article.tblContentsType == 'manual' ? (
-                <ArticleTblContents article={article} />
-              ) : null}
+        </Container>
+      </div>
+      <div className="relative">
+        <ActionsBar
+          user={user}
+          ProfileTruthScore={ProfileTruthScore}
+          handleClap={handleClap}
+          allComments={allComments}
+          handleSaveArticle={handleSaveArticle}
+          isSaving={isSaving}
+          isSaved={isSaved}
+          article={article}
+          claps={claps}
+          isClapping={isClapping}
+          userClapped={userClapped}
+        />
+        <Container className="mt-6 flex flex-col gap-8 pb-10 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_300px] md:pb-20">
+          <div className="h-fit">
+            {article?.products && <ProductListing articleProducts={article} />}
+            {article?.tblContentsType && (
+              <div>
+                {article.tblContentsType == 'auto' ||
+                article.tblContentsType == 'manual' ? (
+                  <ArticleTblContents article={article} />
+                ) : null}
+              </div>
+            )}
+            {article && <PtRenderer body={article.body} />}
+          </div>
+          <aside className="h-full">
+            <div className="h-full w-full md:grid md:grid-rows-[1fr_1fr_1fr]">
+              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
+                <div className="top-[10vh] p-1 md:sticky md:p-2">
+                  <GoogleAdUnit adSlot="6137077018" />
+                </div>
+              </div>
+              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
+                <div className="top-[10vh] p-1 md:sticky md:p-2">
+                  <GoogleAdUnit adSlot="6332518135" />
+                </div>
+              </div>
+              <div className="relative pb-20 md:h-full md:min-h-[100vh]">
+                <div className="top-[10vh] p-1 md:sticky md:p-2">
+                  <GoogleAdUnit adSlot="6894242028" />
+                </div>
+              </div>
             </div>
-          )}
-          {article && <PtRenderer body={article.body} />}
-        </article>
-      </Container>
+          </aside>
+        </Container>
+      </div>
       <RelatedArticles articles={article.relatedArticles!} />
       <CommentSection
         user={user}

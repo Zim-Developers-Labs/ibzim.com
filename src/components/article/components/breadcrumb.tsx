@@ -11,7 +11,7 @@ export default function BreadCrumb({
   name: string;
 }) {
   return (
-    <div className="w-full border-b border-b-gray-200">
+    <div className="bg-primaryColor/10 w-full border-b border-b-gray-200">
       <Container className="line-clamp-1 max-w-screen-xl text-[.8rem] leading-8">
         <Link href="/" className="hover:text-primaryColor">
           Home &nbsp;

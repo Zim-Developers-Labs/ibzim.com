@@ -3,6 +3,7 @@ import { getComments } from '@/components/comments/comments-lib';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
 import { validateRequest } from '@/lib/auth/validate-request';
 import { siteConfig } from '@/lib/config';
+import { getSearchData } from '@/sanity/lib/actions';
 import {
   getAllArticleSlugsAndTypesAndIndustriesByBlog,
   getArticleBySlugAndBlog,
@@ -85,12 +86,19 @@ export default async function ArticlePage({ params }: Props) {
 
   const { user } = await validateRequest();
 
+  const { allArticles, popularArticles } = await getSearchData(
+    siteConfig.popularArticleIds,
+    siteConfig.documentPrefix,
+  );
+
   return (
     <ArticleWrapper
       article={article}
       user={user}
       parentComments={parentComments}
       allComments={allComments}
+      allArticles={allArticles}
+      popularArticles={popularArticles}
     />
   );
 }

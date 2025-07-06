@@ -1,6 +1,8 @@
 import ProfileArticleWrapper from '@/components/profiles/profile';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
+import { validateRequest } from '@/lib/auth/validate-request';
 import { siteConfig } from '@/lib/config';
+import { getSearchData } from '@/sanity/lib/actions';
 import {
   getAllProfileSlugsAndTypeByBlog,
   getProfileBySlugAndBlog,
@@ -68,5 +70,20 @@ export default async function ProfilePage({ params }: Props) {
     return notFound();
   }
 
-  return <ProfileArticleWrapper profile={profile} siteConfig={siteConfig} />;
+  const { user } = await validateRequest();
+
+  const { allArticles, popularArticles } = await getSearchData(
+    siteConfig.popularArticleIds,
+    siteConfig.documentPrefix,
+  );
+
+  return (
+    <ProfileArticleWrapper
+      user={user}
+      allArticles={allArticles}
+      popularArticles={popularArticles}
+      profile={profile}
+      siteConfig={siteConfig}
+    />
+  );
 }

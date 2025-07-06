@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { from, to, readable } = formatCurrencyPair(pair);
 
   return prepareArticleMetadata({
-    title: `${readable} Converter | IBZim`,
+    title: `${readable} Converter`,
     description: `Convert ${from} amounts to ${to} with the latest exchange rates using our Currency Converter. Get real-time conversion rates and accurate calculations.`,
     pageUrl: `/currency-converter/${pair}`,
     ogImage: {
