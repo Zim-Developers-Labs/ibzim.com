@@ -1,3 +1,4 @@
+import Container from '@/components/container';
 import SearchToggler from '@/components/header/search-toggler';
 import SideBar from '@/components/header/side-bar';
 import { SignToggler } from '@/components/header/sign-toggler';
