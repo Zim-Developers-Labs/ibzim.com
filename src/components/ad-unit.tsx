@@ -7,15 +7,15 @@ type Props = {
 };
 
 const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return null;
-  }
-
   useEffect(() => {
     if (window) {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
   }, []);
+
+  if (process.env.NODE_ENV !== 'production') {
+    return null;
+  }
 
   return (
     <ins
