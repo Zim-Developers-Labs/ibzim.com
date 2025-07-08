@@ -112,6 +112,61 @@ export const ARTICLE_INDUSTRIES = [
   },
 ];
 
+export const NEWS_INDUSTRIES = [
+  {
+    title: 'Arts & Entertainment',
+    value: 'media',
+  },
+  {
+    title: 'Beauty and Fitness',
+    value: 'lifestyle',
+  },
+  {
+    title: 'Business & Industrial',
+    value: 'business',
+  },
+  {
+    title: 'Computers & Electronics',
+    value: 'tech',
+  },
+  {
+    title: 'Finance',
+    value: 'finance',
+  },
+  {
+    title: 'Hobbies & Leisure',
+    value: 'leisure',
+  },
+  {
+    title: 'Home & Garden',
+    value: 'home',
+  },
+  {
+    title: 'Internet & Telecom',
+    value: 'telecom',
+  },
+  {
+    title: 'Jobs & Careers',
+    value: 'jobs',
+  },
+  {
+    title: 'People & Society',
+    value: 'people',
+  },
+  {
+    title: 'Politics',
+    value: 'politics',
+  },
+  {
+    title: 'Travel & Transportation',
+    value: 'travel',
+  },
+  {
+    title: 'Sports',
+    value: 'sports',
+  },
+];
+
 export const ARTICLE_TYPES = [
   {
     title: 'How To Guide',

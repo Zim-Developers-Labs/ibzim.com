@@ -1,5 +1,6 @@
 import { MyCustomStringInput } from '@/sanity/components/customStringInput';
 import { MyCustomTextArea } from '@/sanity/components/customTextInput';
+import { NEWS_INDUSTRIES } from '@/sanity/constants';
 import { defineField, defineType } from 'sanity';
 
 /**
@@ -13,9 +14,11 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
+      name: 'name',
       type: 'string',
+      description:
+        'This is the target keyword, Google it and if there is no potential to outrank the top 3 change the keyword. It should be something with search volume.',
+      title: 'Name',
     }),
     defineField({
       name: 'slug',
@@ -23,8 +26,48 @@ export default defineType({
       type: 'slug',
       validation: (Rule) => Rule.required(),
       options: {
-        source: 'title',
-        maxLength: 96,
+        source: 'name',
+        maxLength: 50,
+      },
+    }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      description:
+        'H1 title to be shown within the article (do not duplicate name or seo title here)',
+      type: 'string',
+    }),
+    defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'author' }],
+    }),
+    defineField({
+      name: 'industry',
+      type: 'string',
+      title: 'Industry',
+      options: {
+        layout: 'dropdown',
+        list: NEWS_INDUSTRIES,
+      },
+    }),
+    defineField({
+      name: 'type',
+      type: 'string',
+      title: 'Type',
+      options: {
+        layout: 'dropdown',
+        list: [
+          {
+            title: 'Gossip',
+            value: 'gossip',
+          },
+          {
+            title: 'Verified',
+            value: 'verified',
+          },
+        ],
       },
     }),
     defineField({
@@ -64,7 +107,30 @@ export default defineType({
                 'SEO Description should be 140 to 160 characters long (use character counter site)',
               ),
         },
+        {
+          name: 'image',
+          type: 'image',
+          description:
+            'SEO Image must have a 1200px width and 675px height. Use originally created images with 0 to minimal text on it. Edit images first if found from external sources like Unsplash',
+          title: 'Image',
+        },
       ],
+    }),
+    defineField({
+      name: 'intro',
+      title: 'Intro',
+      validation: (rule) =>
+        rule
+          .required()
+          .min(160)
+          .max(300)
+          .error(
+            'Intro must be at 160 to 300 characters long (use character counter site)',
+          ),
+      description:
+        'Avoid using AI on introductions. Use personalized words like I, we, you and add a little humor.',
+      type: 'text',
+      rows: 3,
     }),
     defineField({
       name: 'excerpt',
@@ -91,14 +157,27 @@ export default defineType({
     defineField({
       name: 'body',
       title: 'Body',
-      type: 'blockContent',
+      type: 'body',
+    }),
+    defineField({
+      name: 'relatedArticles',
+      title: 'Related Articles',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'zw.news' }],
+        },
+      ],
+      description:
+        'These articles will be displayed at the hero so make sure they are related to the topic of this article',
     }),
   ],
   preview: {
     select: {
-      title: 'title',
+      title: 'name',
       author: 'author.name',
-      media: 'mainImage',
+      media: 'seo.image',
     },
     prepare(selection) {
       const { author } = selection;
