@@ -130,6 +130,10 @@ export const NEWS_INDUSTRIES = [
     value: 'tech',
   },
   {
+    title: 'Education',
+    value: 'education',
+  },
+  {
     title: 'Finance',
     value: 'finance',
   },
