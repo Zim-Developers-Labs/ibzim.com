@@ -1,4 +1,5 @@
 import Container from '@/components/container';
+import { Notifications } from '@/components/header/notifications';
 import SearchToggler from '@/components/header/search-toggler';
 import SideBar from '@/components/header/side-bar';
 import { SignToggler } from '@/components/header/sign-toggler';
@@ -146,6 +147,7 @@ export default function BlogHeader({
                 popularArticles={popularArticles}
               />
             )}
+            <Notifications />
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
           </div>

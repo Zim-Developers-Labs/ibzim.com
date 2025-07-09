@@ -1,6 +1,7 @@
 'use client';
 
-import { Icons } from './icons';
+import { ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Banner() {
   return (
@@ -32,17 +33,15 @@ export default function Banner() {
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
           <p className="text-sm leading-6 text-gray-900">
-            People&#39;s Choice Awards
+            Get easy access to IBZIM
           </p>
-          <div
-            onClick={() => {
-              window.open(`https://chat.whatsapp.com/Eu8iaKvnIyeLTXGlvOI77N`);
-            }}
+          <Link
+            href="/install-app"
             className="flex cursor-pointer items-center gap-1 rounded-sm bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            <Icons.ibzimAwardsIcon className="inline h-5 w-fit text-white" />
-            Join <span className="hidden sm:inline">Waitlist</span>
-          </div>
+            Install App
+            <ChevronRightIcon className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </aside>

@@ -25,7 +25,6 @@ export default function ProfileTruthScore({
             <div
               className={` ${getScoreClass()} ${type === 'profile' ? 'flex items-center gap-2' : 'flex flex-row-reverse items-center gap-2'}`}
             >
-              <span className="text-xs">Truth Score</span>
               {score < 75 && (
                 <Icons.shieldExclamationSolid
                   strokeWidth={1.5}
@@ -35,6 +34,7 @@ export default function ProfileTruthScore({
               {score > 74 && (
                 <Icons.shieldCheckSolid strokeWidth={1.5} className="size-5" />
               )}
+              <span className="text-xs">Truth Score</span>
             </div>
           </div>
         </DialogTrigger>
