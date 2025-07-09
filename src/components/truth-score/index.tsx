@@ -6,7 +6,6 @@ import { Icons } from '../icons';
 
 export default function ProfileTruthScore({
   score,
-  type,
 }: {
   score: number;
   type?: 'article' | 'profile';
@@ -22,9 +21,7 @@ export default function ProfileTruthScore({
       <Dialog>
         <DialogTrigger>
           <div className="cursor-pointer">
-            <div
-              className={` ${getScoreClass()} ${type === 'profile' ? 'flex items-center gap-2' : 'flex flex-row-reverse items-center gap-2'}`}
-            >
+            <div className={` ${getScoreClass()} flex items-center gap-2`}>
               <span className="text-xs">Truth Score</span>
               {score < 75 && (
                 <Icons.shieldExclamationSolid
