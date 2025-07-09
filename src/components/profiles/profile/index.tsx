@@ -67,7 +67,7 @@ export default function ProfileArticleWrapper({
       </div>
       <div className="relative min-h-screen">
         <ActionBar profile={profile} />
-        <Container className="mt-6 flex flex-col gap-8 pb-4 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_300px]">
+        <Container className="mt-6 flex flex-col gap-8 pb-4 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_350px]">
           <div className="h-fit md:mt-4">
             <div className="mb-6 md:float-left md:mb-0 md:pr-8 md:pb-4">
               <InfoBox profile={profile} />

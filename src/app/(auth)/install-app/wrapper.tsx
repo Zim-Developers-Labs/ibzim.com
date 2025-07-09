@@ -168,14 +168,15 @@ export default function InstallPageWrapper() {
                   2
                 </span>
                 <span>
-                  Look for "Install IBZIM..." or "Add to Home screen" option
+                  Look for &quot;Install IBZIM...&quot; or &quot;Add to Home
+                  screen&quot; option
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold">
                   3
                 </span>
-                <span>Click "Install" in the popup dialog</span>
+                <span>Click &quot;Install&quot; in the popup dialog</span>
               </li>
             </ol>
           </div>
@@ -427,7 +428,7 @@ export default function InstallPageWrapper() {
                           2
                         </span>
                         <span>
-                          Scroll down and tap "Add to Home Screen"{' '}
+                          Scroll down and tap &quot;Add to Home Screen&quot;{' '}
                           <svg
                             className="mx-1 inline h-4 w-4"
                             fill="none"
@@ -447,7 +448,7 @@ export default function InstallPageWrapper() {
                         <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-200 text-xs font-bold">
                           3
                         </span>
-                        <span>Tap "Add" to install the app</span>
+                        <span>Tap &quot;Add&quot; to install the app</span>
                       </li>
                     </ol>
                   </div>

@@ -76,15 +76,10 @@ export function Notifications() {
           <span className="sr-only">Open notifications</span>
         </Button>
       </SheetTrigger>
-      <SheetContent className="flex w-[400px] flex-col sm:w-[540px]">
+      <SheetContent className="flex w-full max-w-[350px] flex-col sm:w-[540px]">
         <SheetHeader className="flex-shrink-0">
           <div className="flex items-center justify-between">
             <SheetTitle>My Notifications</SheetTitle>
-            <SheetClose asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <X className="h-4 w-4" />
-              </Button>
-            </SheetClose>
           </div>
           <SheetDescription>
             Notifications sent to this inbox can be viewed for up to 30 days.
@@ -98,7 +93,7 @@ export function Notifications() {
             <TabsTrigger value="unread" className="relative">
               Unread
               {unreadNotifications.length > 0 && (
-                <span className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
+                <span className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-yellow-500 text-xs text-white">
                   {unreadNotifications.length}
                 </span>
               )}
@@ -125,7 +120,7 @@ export function Notifications() {
                         <Button
                           variant="link"
                           size="sm"
-                          className="h-auto p-0 text-xs text-blue-600 hover:text-blue-800"
+                          className="h-auto p-0 text-xs text-yellow-600 hover:text-yellow-800"
                           onClick={() => markAsRead(notification.id)}
                         >
                           ✓ Mark as read

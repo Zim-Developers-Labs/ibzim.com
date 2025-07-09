@@ -449,7 +449,7 @@ export default function ArticleWrapper({
           isClapping={isClapping}
           userClapped={userClapped}
         />
-        <Container className="mt-6 flex flex-col gap-8 pb-10 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_300px] md:pb-20">
+        <Container className="mt-6 flex flex-col gap-8 pb-10 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_350px] md:pb-20">
           <div className="h-fit">
             {article?.products && <ProductListing articleProducts={article} />}
             {article?.tblContentsType && (

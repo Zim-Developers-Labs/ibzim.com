@@ -10,6 +10,7 @@ import {
 } from '../ui/dialog';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { Button } from '../ui/button';
 
 export default function SearchToggler({
   articles,
@@ -54,11 +55,13 @@ export default function SearchToggler({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex cursor-pointer items-center gap-2 rounded-md border border-zinc-200 p-1 md:px-4 md:py-2">
-        <Search className="size-5 text-zinc-600" />
-        <div className="hidden pr-2 text-xs text-zinc-700 md:block">
-          Search/Request Articles
-        </div>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="relative bg-transparent">
+          <Search className="size-5 text-zinc-600" />
+          <div className="hidden pr-2 text-xs text-zinc-700 md:block">
+            Search/Request Articles
+          </div>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogTitle className="sr-only">Search Articles</DialogTitle>
