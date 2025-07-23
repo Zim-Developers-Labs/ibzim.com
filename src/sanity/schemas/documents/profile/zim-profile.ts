@@ -14,8 +14,8 @@ export default defineType({
     ...ProfileFields,
     defineField({
       name: 'relatedProfiles',
-      // description:
-      //   "This is important for seo (internal linking) to avoid orphaned pages. Besides placing the page in a very specifically related series of articles set where you want to place links to this this article",
+      description:
+        'This is important for seo (internal linking) to avoid orphaned pages. Besides placing the page in a very specifically related series of articles set where you want to place links to this this article',
       title: 'Related Profiles',
       type: 'array',
       group: INPUT_GROUP.SEO,

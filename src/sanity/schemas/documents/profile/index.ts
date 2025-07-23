@@ -9,8 +9,8 @@ export const ProfileFields = [
   defineField({
     name: 'name',
     title: 'Name',
-    // description:
-    //   "This is the target keyword, Google it and if there is no potential to outrank the top 3 change the keyword. It should be something with search volume. Targeting plain entity name keyword is usually a bad idea so try doing keyword research for keyword e.g we cant rank for Tino Mazorodze because he already has his own website which google will see most appropriate. instead consider saying Tino Mazorodze Biography / Overview / About (unless he already has an about page). This is very crucial so seek help if you don't know how to do keyword research.",
+    description:
+      "This is the target keyword, Google it and if there is no potential to outrank the top 3 change the keyword. It should be something with search volume. Targeting plain entity name keyword is usually a bad idea so try doing keyword research for keyword e.g we cant rank for Tino Mazorodze because he already has his own website which google will see most appropriate. instead consider saying Tino Mazorodze Biography / Overview / About (unless he already has an about page). This is very crucial so seek help if you don't know how to do keyword research.",
     type: 'string',
     validation: (rule: { required: () => any }) => rule.required(),
     group: INPUT_GROUP.CONFIG,
@@ -18,8 +18,8 @@ export const ProfileFields = [
   defineField({
     name: 'slug',
     type: 'slug',
-    // description:
-    //   'generate from name but make sure to keep it short and something that a real person would search for. this is the exact target keyword we aim to rank for.',
+    description:
+      'generate from name but make sure to keep it short and something that a real person would search for. this is the exact target keyword we aim to rank for.',
     title: 'Slug',
     options: {
       source: 'name',
@@ -30,8 +30,8 @@ export const ProfileFields = [
   defineField({
     name: 'legalName',
     title: 'Legal Name',
-    // description:
-    //   'Simply Search `[Entity Name] legal name` on google and write it here',
+    description:
+      'Simply Search `[Entity Name] legal name` on google and write it here',
     type: 'string',
     group: INPUT_GROUP.EDITORIAL,
   }),
@@ -59,8 +59,8 @@ export const ProfileFields = [
     title: 'Picture',
     group: INPUT_GROUP.EDITORIAL,
     type: 'image',
-    // description:
-    //   "SEO Image must have a 1:1 ratio: 500px by 500px is recommended or 16:9: 1200px by 675px. If not a logo be sure to edit it to avoid duplication of already indexed images on google. Google search the entity > go to images > click on tools > change size to large > select and download the most suitable image > if just a logo take it to figma and place it in a 500x500px frame with and export / if a potrait of an entity remove the background using photoshop and put it in a frame with a fitting background or the default in figma. If you don't understand seek help this is crucial is it may lead to copyright issues.",
+    description:
+      "SEO Image must have a 1:1 ratio: 500px by 500px is recommended or 16:9: 1200px by 675px. If not a logo be sure to edit it to avoid duplication of already indexed images on google. Google search the entity > go to images > click on tools > change size to large > select and download the most suitable image > if just a logo take it to figma and place it in a 500x500px frame with and export / if a potrait of an entity remove the background using photoshop and put it in a frame with a fitting background or the default in figma. If you don't understand seek help this is crucial is it may lead to copyright issues.",
     fields: [
       {
         name: 'ratio',
@@ -78,8 +78,8 @@ export const ProfileFields = [
       },
       {
         name: 'source',
-        // description:
-        //   'Optional: only mention source if not acquired from entity profile like Instagram or entity website.',
+        description:
+          'Optional: only mention source if not acquired from entity profile like Instagram or entity website.',
         title: 'Source',
         type: 'object',
         fields: [
@@ -99,8 +99,8 @@ export const ProfileFields = [
         name: 'alt',
         type: 'string',
         title: 'Image Caption',
-        // description:
-        //   'Describe the Image e.g [entity name] Logo/Potrait/Building.',
+        description:
+          'Describe the Image e.g [entity name] Logo/Potrait/Building.',
       },
     ],
     options: { hotspot: true },
@@ -110,15 +110,15 @@ export const ProfileFields = [
     name: 'title',
     title: 'Title',
     group: INPUT_GROUP.EDITORIAL,
-    // description:
-    //   'Profile Title here. Can also include other aliases e.g Tino Mazorodze (AKA TechTinoe) Biography. This will be the H1 also make it include the target keyword.',
+    description:
+      'Profile Title here. Can also include other aliases e.g Tino Mazorodze (AKA TechTinoe) Biography. This will be the H1 also make it include the target keyword.',
     type: 'string',
   }),
   defineField({
     name: 'subTitle',
     group: INPUT_GROUP.EDITORIAL,
-    // description:
-    //   'a very short describing title e.g Zimbabwean Musician or Financial Services Company',
+    description:
+      'a very short describing title e.g Zimbabwean Musician or Financial Services Company',
     title: 'Sub Title',
     type: 'string',
     validation: (Rule) =>
@@ -145,8 +145,8 @@ export const ProfileFields = [
   defineField({
     name: 'isBirthDateApproximate',
     group: INPUT_GROUP.EDITORIAL,
-    // description:
-    //   'Check this if the birth date is not exact, e.g. if it is an estimated date.',
+    description:
+      'Check this if the birth date is not exact, e.g. if it is an estimated date.',
     title: 'Is Birth Date Approximate?',
     hidden: ({ parent }) => parent.entityType !== 'person',
     type: 'boolean',
@@ -155,8 +155,8 @@ export const ProfileFields = [
   defineField({
     name: 'useBirthYearOnly',
     group: INPUT_GROUP.EDITORIAL,
-    // description:
-    //   'Dont know the exact date? Use birth year only if known and confirmed.',
+    description:
+      'Dont know the exact date? Use birth year only if known and confirmed.',
     title: 'Use Birth Year Only',
     hidden: ({ parent }) => parent.entityType !== 'person',
     type: 'boolean',
@@ -178,8 +178,8 @@ export const ProfileFields = [
       {
         name: 'title',
         title: 'Title',
-        // description:
-        //   'This should match the anticipated user search query. SEO title for profiles can be limited to Profile Name',
+        description:
+          'This should match the anticipated user search query. SEO title for profiles can be limited to Profile Name',
         type: 'string',
         components: {
           input: MyCustomStringInput,
@@ -196,8 +196,8 @@ export const ProfileFields = [
         components: {
           input: MyCustomTextArea,
         },
-        // description:
-        //   'Start with answering the question what is [entity]. Basically say [entity] is [what you said on subtitle here] and maybe state where entity is based if length permits. Next write what is to be found in the profile article e.g in this article are details on [entity] history, products and services/career etc.',
+        description:
+          'Start with answering the question what is [entity]. Basically say [entity] is [what you said on subtitle here] and maybe state where entity is based if length permits. Next write what is to be found in the profile article e.g in this article are details on [entity] history, products and services/career etc.',
         rows: 3,
         validation: (Rule) =>
           Rule.min(140)
@@ -212,8 +212,8 @@ export const ProfileFields = [
     name: 'additionalInfo',
     group: INPUT_GROUP.CONTRACTORS,
     title: 'Additional Table Information',
-    // description:
-    //   'Check other exisiting similar profiles if you are not sure what to add this section',
+    description:
+      'Check other exisiting similar profiles if you are not sure what to add this section',
     type: 'array',
     of: [
       {
@@ -279,8 +279,8 @@ export const ProfileFields = [
     name: 'intro',
     title: 'Introduction',
     group: INPUT_GROUP.EDITORIAL,
-    // description:
-    //   'write a precise description of {entity name} which answers the question What is {entity name} without sounding like you are promoting the {entity type e.g company, person}. you can use this command in an AI tool.',
+    description:
+      'write a precise description of {entity name} which answers the question What is {entity name} without sounding like you are promoting the {entity type e.g company, person}. you can use this command in an AI tool.',
     type: 'text',
     components: {
       input: MyCustomTextArea,
@@ -316,8 +316,8 @@ export const ProfileFields = [
     title: 'Sub Headings',
     group: INPUT_GROUP.EDITORIAL,
     hidden: ({ parent }) => parent.tblContentsType != 'manual',
-    // description:
-    //   '(for very long articles only) Write your h2 and h3 sub headings exactly as they appear in the article body',
+    description:
+      '(for very long articles only) Write your h2 and h3 sub headings exactly as they appear in the article body',
     type: 'array',
     of: [
       {
@@ -346,8 +346,8 @@ export const ProfileFields = [
   }),
   defineField({
     name: 'body',
-    // description:
-    //   'Come up with an outline (outline should include titles which have search traffic) and always the entity history is the first title. Come up with these through keyword research) and ask AI to write a bio from that outline without sounding like it is promoting the entity. This is very crucial be sure to edit out statements which sound promotional. Paragraphs should not be too long to improve readablity. NB: Only do this in profile articles and remember to order titles correctly starting from h2.',
+    description:
+      'Come up with an outline (outline should include titles which have search traffic) and always the entity history is the first title. Come up with these through keyword research) and ask AI to write a bio from that outline without sounding like it is promoting the entity. This is very crucial be sure to edit out statements which sound promotional. Paragraphs should not be too long to improve readablity. NB: Only do this in profile articles and remember to order titles correctly starting from h2.',
     group: INPUT_GROUP.CONTRACTORS,
     title: 'Body',
     type: 'body',
@@ -355,8 +355,8 @@ export const ProfileFields = [
   defineField({
     name: 'hasCanonical',
     group: INPUT_GROUP.CONFIG,
-    // description:
-    //   'Only use when this aticle is blocking the ranking of another article',
+    description:
+      'Only use when this aticle is blocking the ranking of another article',
     title: 'Originated from another article?',
     type: 'boolean',
     initialValue: false,
