@@ -65,9 +65,12 @@ export function Notifications() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="relative bg-transparent">
+        <Button
+          variant="outline"
+          className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+        >
           {unreadNotifications.length > 0 && (
-            <span className="absolute -top-1 -right-1 inline-flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+            <span className="absolute -top-1 -right-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
               {unreadNotifications.length}
             </span>
           )}
