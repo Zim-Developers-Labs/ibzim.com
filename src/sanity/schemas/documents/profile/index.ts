@@ -9,8 +9,7 @@ export const ProfileFields = [
   defineField({
     name: 'name',
     title: 'Name',
-    description:
-      "This is the target keyword, Google it and if there is no potential to outrank the top 3 change the keyword. It should be something with search volume. Targeting plain entity name keyword is usually a bad idea so try doing keyword research for keyword e.g we cant rank for Tino Mazorodze because he already has his own website which google will see most appropriate. instead consider saying Tino Mazorodze Biography / Overview / About (unless he already has an about page). This is very crucial so seek help if you don't know how to do keyword research.",
+    description: 'Write the full name of the entity (school, company, person).',
     type: 'string',
     validation: (rule: { required: () => any }) => rule.required(),
     group: INPUT_GROUP.CONFIG,
@@ -18,8 +17,7 @@ export const ProfileFields = [
   defineField({
     name: 'slug',
     type: 'slug',
-    description:
-      'generate from name but make sure to keep it short and something that a real person would search for. this is the exact target keyword we aim to rank for.',
+    description: "Don't type in this field just click the generate button.",
     title: 'Slug',
     options: {
       source: 'name',
@@ -31,7 +29,7 @@ export const ProfileFields = [
     name: 'legalName',
     title: 'Legal Name',
     description:
-      'Simply Search `[Entity Name] legal name` on google and write it here',
+      'Write the actual full legal name of the entity (school, company, person).',
     type: 'string',
     group: INPUT_GROUP.EDITORIAL,
   }),
@@ -111,14 +109,14 @@ export const ProfileFields = [
     title: 'Title',
     group: INPUT_GROUP.EDITORIAL,
     description:
-      'Profile Title here. Can also include other aliases e.g Tino Mazorodze (AKA TechTinoe) Biography. This will be the H1 also make it include the target keyword.',
+      'Write the name of the entity as it is commonly known. This is not the same as the legal name. Use the format `Entity Name Biography` e.g. `Winky D Biography` or `Harare Primary Biography`.',
     type: 'string',
   }),
   defineField({
     name: 'subTitle',
     group: INPUT_GROUP.EDITORIAL,
     description:
-      'a very short describing title e.g Zimbabwean Musician or Financial Services Company',
+      'A very short describing title e.g Zimbabwean Musician or Financial Services Company or Boarding Primary School',
     title: 'Sub Title',
     type: 'string',
     validation: (Rule) =>
@@ -130,6 +128,7 @@ export const ProfileFields = [
     name: 'yearFounded',
     title: 'Year Founded',
     group: INPUT_GROUP.EDITORIAL,
+    description: 'Optional leave empty if not known',
     type: 'number',
     hidden: ({ parent }) =>
       parent.entityType == 'person' || parent.entityType == 'day',
@@ -138,6 +137,7 @@ export const ProfileFields = [
     name: 'birthDate',
     title: 'Birth Date',
     group: INPUT_GROUP.EDITORIAL,
+    description: 'Optional leave empty if not known',
     type: 'date',
     hidden: ({ parent }) =>
       parent.entityType !== 'person' || parent.useBirthYearOnly,
@@ -179,7 +179,7 @@ export const ProfileFields = [
         name: 'title',
         title: 'Title',
         description:
-          'This should match the anticipated user search query. SEO title for profiles can be limited to Profile Name',
+          'The name of the entity as it is commonly known. Use the format `About Entity Name` e.g. `About Winky D` or `About Harare Primary School`',
         type: 'string',
         components: {
           input: MyCustomStringInput,
@@ -197,7 +197,7 @@ export const ProfileFields = [
           input: MyCustomTextArea,
         },
         description:
-          'Start with answering the question what is [entity]. Basically say [entity] is [what you said on subtitle here] and maybe state where entity is based if length permits. Next write what is to be found in the profile article e.g in this article are details on [entity] history, products and services/career etc.',
+          'Start with answering the question what is [entity]. Basically say [entity] is [what you said on subtitle here] and maybe state where entity is based if length permits. Next write what is to be found in the profile article e.g in this profile are details on [entity] history, products and services/career etc.',
         rows: 3,
         validation: (Rule) =>
           Rule.min(140)
@@ -213,7 +213,7 @@ export const ProfileFields = [
     group: INPUT_GROUP.CONTRACTORS,
     title: 'Additional Table Information',
     description:
-      'Check other exisiting similar profiles if you are not sure what to add this section',
+      'Check the Google Keep Notes file for guidelines. Generally for schools have location, type, headmaster then people have wife/husband, education, children then for companies have headquarters, type, CEO and so on. Information such as name, age or year founded should not be repeated here as they are already in the profile fields. This is for additional information which is not covered by the profile fields.',
     type: 'array',
     of: [
       {
@@ -312,42 +312,9 @@ export const ProfileFields = [
     initialValue: 'disabled',
   }),
   defineField({
-    name: 'subHeadings',
-    title: 'Sub Headings',
-    group: INPUT_GROUP.EDITORIAL,
-    hidden: ({ parent }) => parent.tblContentsType != 'manual',
-    description:
-      '(for very long articles only) Write your h2 and h3 sub headings exactly as they appear in the article body',
-    type: 'array',
-    of: [
-      {
-        type: 'object',
-        fields: [
-          {
-            name: 'title',
-            title: 'Title',
-            type: 'string',
-          },
-          {
-            name: 'type',
-            title: 'Type',
-            type: 'string',
-            options: {
-              list: [
-                { title: 'h2', value: 'h2' },
-                { title: 'h3', value: 'h3' },
-                { title: 'h4', value: 'h4' },
-              ],
-            },
-          },
-        ],
-      },
-    ],
-  }),
-  defineField({
     name: 'body',
     description:
-      'Come up with an outline (outline should include titles which have search traffic) and always the entity history is the first title. Come up with these through keyword research) and ask AI to write a bio from that outline without sounding like it is promoting the entity. This is very crucial be sure to edit out statements which sound promotional. Paragraphs should not be too long to improve readablity. NB: Only do this in profile articles and remember to order titles correctly starting from h2.',
+      'Come up with an outline (outline should include titles which have search traffic) and always the entity history/background is the first title. Come up with these through keyword research) and ask AI to write a bio from that outline without sounding like it is promoting the entity. This is very crucial be sure to edit out statements which sound promotional. Paragraphs should not be too long to improve readablity. NB: Only do this in profile articles and remember to order titles correctly starting from h2.',
     group: INPUT_GROUP.CONTRACTORS,
     title: 'Body',
     type: 'body',
