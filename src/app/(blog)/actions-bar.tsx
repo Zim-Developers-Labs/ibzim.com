@@ -31,9 +31,9 @@ export default function ActionsBar({
   ProfileTruthScore: any;
 }) {
   return (
-    <div className="sticky top-0 z-50 mb-8 flex justify-between border border-t border-r-0 border-b border-l-0 border-gray-200 bg-white px-2 py-4">
+    <div className="sticky top-0 z-50 mb-8 flex justify-between border border-t border-r-0 border-b border-l-0 border-zinc-700 bg-zinc-900 px-2 py-4">
       <Container className="flex items-center justify-between gap-4">
-        <div className="flex items-center text-gray-600 sm:gap-2">
+        <div className="flex items-center text-white sm:gap-2">
           {user ? (
             <button
               onClick={handleClap}
@@ -73,7 +73,7 @@ export default function ActionsBar({
         </div>
         <div className="flex items-center gap-2">
           <div
-            className="group flex cursor-pointer items-center gap-2 text-gray-600"
+            className="group flex cursor-pointer items-center gap-2 text-white"
             onClick={handleSaveArticle}
           >
             <span className="text-xs">

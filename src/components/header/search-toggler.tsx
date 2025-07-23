@@ -56,9 +56,9 @@ export default function SearchToggler({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="relative bg-transparent">
-          <Search className="size-5 text-zinc-600" />
-          <div className="hidden pr-2 text-xs text-zinc-700 md:block">
+        <Button variant="outline" className="relative bg-transparent border-zinc-600 hover:bg-zinc-800">
+          <Search className="size-5 text-zinc-300" />
+          <div className="hidden pr-2 text-xs text-zinc-300 md:block">
             Search/Request Articles
           </div>
         </Button>

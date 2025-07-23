@@ -53,7 +53,7 @@ export default function BlogHeader({
   return (
     <header
       role="navigation"
-      className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white text-zinc-900"
+      className="sticky top-0 z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
     >
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
@@ -72,7 +72,7 @@ export default function BlogHeader({
                 <NavigationMenuItem>
                   <NavigationMenuLink
                     href="/calendar"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800"
                   >
                     Calendar
                   </NavigationMenuLink>
@@ -97,7 +97,7 @@ export default function BlogHeader({
                   <NavigationMenuLink
                     href="https://news.ibzim.com"
                     target="_blank"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800"
                   >
                     News
                   </NavigationMenuLink>
@@ -108,7 +108,7 @@ export default function BlogHeader({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link href="/tools">
-                    <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                    <NavigationMenuTrigger className="text-white hover:bg-zinc-800">Tools</NavigationMenuTrigger>
                   </Link>
                   <NavigationMenuContent>
                     <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
