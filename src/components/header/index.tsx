@@ -8,7 +8,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '../ui/navigation-menu';
-import SearchToggler from './search-toggler';
 import { SignToggler } from './sign-toggler';
 import SideBar from './side-bar';
 import Link from 'next/link';
@@ -40,15 +39,9 @@ export const tools = [
 
 type HeaderProps = {
   user?: any;
-  articles?: any[];
-  popularArticles?: any[];
 };
 
-export default function Header({
-  articles,
-  popularArticles,
-  user,
-}: HeaderProps) {
+export default function Header({ user }: HeaderProps) {
   return (
     <header
       role="navigation"
@@ -140,12 +133,6 @@ export default function Header({
             <Icons.logo className="hidden h-8 w-fit md:block" />
           </Link>
           <div className="flex flex-none items-center gap-2 md:gap-4">
-            {articles && popularArticles && (
-              <SearchToggler
-                articles={articles}
-                popularArticles={popularArticles}
-              />
-            )}
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
           </div>

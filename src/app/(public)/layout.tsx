@@ -24,11 +24,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { allArticles, popularArticles } = await getSearchData(
-    siteConfig.popularArticleIds,
-    siteConfig.documentPrefix,
-  );
-
   const { user } = await validateRequest();
 
   return (
@@ -40,11 +35,7 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <Banner />
-        <Header
-          articles={allArticles}
-          popularArticles={popularArticles}
-          user={user}
-        />
+        <Header user={user} />
         {children}
         <Footer siteShortName={siteConfig.shortName} />
         <Analytics />
