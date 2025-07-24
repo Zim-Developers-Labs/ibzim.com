@@ -1,7 +1,6 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
-import { getSearchData } from '@/sanity/lib/actions';
 import { siteConfig } from '@/lib/config';
 import { Toaster } from '@/components/ui/sonner';
 import Banner from '@/components/banner';
