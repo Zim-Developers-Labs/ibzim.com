@@ -107,9 +107,9 @@ export const ProfileFields = [
   defineField({
     name: 'title',
     title: 'Title',
-    group: INPUT_GROUP.EDITORIAL,
+    group: INPUT_GROUP.CONTRACTORS,
     description:
-      'Write the name of the entity as it is commonly known. This is not the same as the legal name. Use the format `Entity Name Biography` e.g. `Winky D Biography` or `Harare Primary Biography`.',
+      'Write the name of the entity as it is commonly known. Use the format `Entity Name Biography` e.g. `Winky D Biography` or `Harare Primary School Biography`.',
     type: 'string',
   }),
   defineField({
