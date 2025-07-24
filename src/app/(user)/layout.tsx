@@ -1,7 +1,6 @@
 import '../globals.css';
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
-import { getSearchData } from '@/sanity/lib/actions';
 import { siteConfig } from '@/lib/config';
 import { Toaster } from '@/components/ui/sonner';
 import Banner from '@/components/banner';
@@ -28,11 +27,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { allArticles, popularArticles } = await getSearchData(
-    siteConfig.popularArticleIds,
-    siteConfig.documentPrefix,
-  );
-
   const { user } = await validateRequest();
 
   if (!user) {
@@ -48,11 +42,7 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <Banner />
-        <Header
-          articles={allArticles}
-          popularArticles={popularArticles}
-          user={user}
-        />
+        <Header user={user} />
         {!user.emailVerified && (
           <VerifyEmailBanner email={user.email} userId={user.id} />
         )}
