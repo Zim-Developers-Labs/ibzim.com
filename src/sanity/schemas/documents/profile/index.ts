@@ -12,7 +12,7 @@ export const ProfileFields = [
     description: 'Write the full name of the entity (school, company, person).',
     type: 'string',
     validation: (rule: { required: () => any }) => rule.required(),
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.CONTRACTORS,
   }),
   defineField({
     name: 'slug',
@@ -23,7 +23,7 @@ export const ProfileFields = [
       source: 'name',
       maxLength: 50,
     },
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.CONTRACTORS,
   }),
   defineField({
     name: 'legalName',
@@ -127,7 +127,7 @@ export const ProfileFields = [
   defineField({
     name: 'yearFounded',
     title: 'Year Founded',
-    group: INPUT_GROUP.EDITORIAL,
+    group: INPUT_GROUP.CONTRACTORS,
     description: 'Optional leave empty if not known',
     type: 'number',
     hidden: ({ parent }) =>
