@@ -44,7 +44,6 @@ export const INPUT_GROUP = {
   CONFIG: 'config',
   SEO: 'seo',
   EDITORIAL: 'editorial',
-  CONTRACTORS: 'contractors',
 };
 
 export const INPUT_GROUPS: FieldGroupDefinition[] = [
@@ -52,6 +51,7 @@ export const INPUT_GROUPS: FieldGroupDefinition[] = [
     name: INPUT_GROUP.CONFIG,
     title: 'Config',
     icon: CogIcon,
+    // default: true,
   },
   {
     name: INPUT_GROUP.SEO,
@@ -62,12 +62,6 @@ export const INPUT_GROUPS: FieldGroupDefinition[] = [
     name: INPUT_GROUP.EDITORIAL,
     title: 'Editorial',
     icon: ComposeIcon,
-  },
-  {
-    name: INPUT_GROUP.CONTRACTORS,
-    title: 'Contractors',
-    icon: CaseIcon,
-    default: true,
   },
 ];
 

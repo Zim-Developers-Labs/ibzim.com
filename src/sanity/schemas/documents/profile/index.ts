@@ -12,7 +12,7 @@ export const ProfileFields = [
     description: 'Write the full name of the entity (school, company, person).',
     type: 'string',
     validation: (rule: { required: () => any }) => rule.required(),
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.CONFIG,
   }),
   defineField({
     name: 'slug',
@@ -23,7 +23,7 @@ export const ProfileFields = [
       source: 'name',
       maxLength: 50,
     },
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.CONFIG,
   }),
   defineField({
     name: 'legalName',
@@ -107,7 +107,7 @@ export const ProfileFields = [
   defineField({
     name: 'title',
     title: 'Title',
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.EDITORIAL,
     description:
       'Write the name of the entity as it is commonly known. Use the format `Entity Name Biography` e.g. `Winky D Biography` or `Harare Primary School Biography`.',
     type: 'string',
@@ -127,7 +127,7 @@ export const ProfileFields = [
   defineField({
     name: 'yearFounded',
     title: 'Year Founded',
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.EDITORIAL,
     description: 'Optional leave empty if not known',
     type: 'number',
     hidden: ({ parent }) =>
@@ -210,7 +210,7 @@ export const ProfileFields = [
   }),
   defineField({
     name: 'additionalInfo',
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.EDITORIAL,
     title: 'Additional Table Information',
     description:
       'Check the Google Keep Notes file for guidelines. Generally for schools have location, type, headmaster then people have wife/husband, education, children then for companies have headquarters, type, CEO and so on. Information such as name, age or year founded should not be repeated here as they are already in the profile fields. This is for additional information which is not covered by the profile fields.',
@@ -315,7 +315,7 @@ export const ProfileFields = [
     name: 'body',
     description:
       'Come up with an outline (outline should include titles which have search traffic) and always the entity history/background is the first title. Come up with these through keyword research) and ask AI to write a bio from that outline without sounding like it is promoting the entity. This is very crucial be sure to edit out statements which sound promotional. Paragraphs should not be too long to improve readablity. NB: Only do this in profile articles and remember to order titles correctly starting from h2.',
-    group: INPUT_GROUP.CONTRACTORS,
+    group: INPUT_GROUP.EDITORIAL,
     title: 'Body',
     type: 'body',
   }),
