@@ -1,7 +1,7 @@
 // Document types which:
 // - cannot be created in the 'new document' menu
 
-import { CaseIcon, CogIcon, ComposeIcon, SearchIcon } from '@sanity/icons';
+import { CogIcon, ComposeIcon, SearchIcon } from '@sanity/icons';
 import { FieldGroupDefinition } from 'sanity';
 
 // - cannot be duplicated, unpublished or deleted
