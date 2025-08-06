@@ -12,7 +12,7 @@ export const ProfileFields = [
     description: 'Write the full name of the entity (school, company, person).',
     type: 'string',
     validation: (rule: { required: () => any }) => rule.required(),
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
   }),
   defineField({
     name: 'slug',
@@ -23,7 +23,7 @@ export const ProfileFields = [
       source: 'name',
       maxLength: 50,
     },
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
   }),
   defineField({
     name: 'legalName',
@@ -50,7 +50,7 @@ export const ProfileFields = [
       ],
     },
     initialValue: 'person',
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
   }),
   defineField({
     name: 'picture',
@@ -298,7 +298,7 @@ export const ProfileFields = [
   defineField({
     name: 'tblContentsType',
     title: 'Table of Contents Type',
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
     type: 'string',
     options: {
       direction: 'horizontal',
@@ -321,7 +321,7 @@ export const ProfileFields = [
   }),
   defineField({
     name: 'hasCanonical',
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
     description:
       'Only use when this aticle is blocking the ranking of another article',
     title: 'Originated from another article?',
@@ -330,18 +330,316 @@ export const ProfileFields = [
   }),
   defineField({
     name: 'canonical',
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
     title: 'Canonical URL',
     hidden: ({ parent }) => !parent.hasCanonical,
     type: 'url',
   }),
   defineField({
     name: 'truthScore',
-    group: INPUT_GROUP.CONFIG,
+    group: INPUT_GROUP.EDITORIAL,
     title: 'Truth Score Percentage',
     description: 'Do not edit this field',
     type: 'number',
     validation: (rule) => rule.min(0).max(100),
     initialValue: 10,
+  }),
+  // Config items for school listing
+
+  defineField({
+    name: 'schoolLevel',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) => parent.entityType !== 'school',
+    title: 'School Level',
+    options: {
+      layout: 'dropdown',
+      list: [
+        {
+          title: 'Pre-School',
+          value: 'pre-school',
+        },
+        {
+          title: 'Primary School',
+          value: 'primary-school',
+        },
+        {
+          title: 'High School',
+          value: 'high-school',
+        },
+        {
+          title: 'Tetiary Institution',
+          value: 'tetiary-institution',
+        },
+      ],
+    },
+  }),
+
+  defineField({
+    name: 'oLevelSchoolType',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) =>
+      parent.entityType !== 'school' || parent.schoolType !== 'high-school',
+    title: 'O Level School Type',
+    options: {
+      layout: 'dropdown',
+      list: ['Boys Boarding', 'Girls Boarding', 'Mixed Boarding', 'Day School'],
+    },
+  }),
+
+  defineField({
+    name: 'aLevelSchoolType',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) =>
+      parent.entityType !== 'school' || parent.schoolType !== 'high-school',
+    title: 'A Level School Type',
+    options: {
+      layout: 'dropdown',
+      list: ['Boys Boarding', 'Girls Boarding', 'Mixed Boarding', 'Day School'],
+    },
+  }),
+
+  defineField({
+    name: 'primarySchoolType',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) =>
+      parent.entityType !== 'school' || parent.schoolType !== 'primary-school',
+    title: 'Primary School Type',
+    options: {
+      layout: 'dropdown',
+      list: ['Boys Boarding', 'Girls Boarding', 'Mixed Boarding', 'Day School'],
+    },
+  }),
+
+  defineField({
+    name: 'location',
+    group: INPUT_GROUP.CONFIG,
+    description:
+      'Precise City Name / Town Name / Village Name where the school is located. Do not use Province or District Names here.',
+    title: 'Location',
+    type: 'string',
+    validation: (Rule) =>
+      Rule.max(20).warning(
+        'Longer Locations may disorient structure of the page',
+      ),
+  }),
+
+  defineField({
+    name: 'province',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    title: 'Province',
+    options: {
+      layout: 'dropdown',
+      list: [
+        'Harare',
+        'Bulawayo',
+        'Manicaland',
+        'Mashonaland East',
+        'Mashonaland West',
+        'Masvingo',
+        'Midlands',
+        'Matabeleland North',
+        'Matabeleland South',
+        'Mashonaland Central',
+      ],
+    },
+  }),
+
+  defineField({
+    name: 'churchAffiliation',
+    type: 'string',
+    group: INPUT_GROUP.CONFIG,
+    title: 'Church Affiliation',
+    options: {
+      layout: 'dropdown',
+      list: [
+        'Anglican',
+        'Catholic',
+        'Dutch',
+        'Methodist',
+        'Pentecostal',
+        'Presbyterian',
+        'Seventh-day',
+      ],
+    },
+  }),
+
+  defineField({
+    name: 'fees',
+    type: 'number',
+    group: INPUT_GROUP.CONFIG,
+    title: 'School Fees',
+    validation: (Rule) => Rule.min(0).warning('Fees must be positive'),
+  }),
+
+  defineField({
+    name: 'primarySchoolPassRates',
+    type: 'array',
+    group: INPUT_GROUP.CONFIG,
+    title: 'Primary School Pass Rates',
+    hidden: ({ parent }) => parent.schoolLevel !== 'primary-school',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'year',
+            title: 'Year',
+            type: 'number',
+            validation: (Rule) => Rule.min(2000).max(new Date().getFullYear()),
+          },
+          {
+            name: 'passRate',
+            title: 'Pass Rate',
+            type: 'number',
+            validation: (Rule) => Rule.min(0).max(100),
+          },
+        ],
+        preview: {
+          select: {
+            year: 'year',
+            passRate: 'passRate',
+          },
+          prepare({ year, passRate }) {
+            return {
+              title: `Year: ${year}, Pass Rate: ${passRate}%`,
+            };
+          },
+        },
+      },
+    ],
+  }),
+
+  defineField({
+    name: 'oLevelSchoolPassRates',
+    type: 'array',
+    group: INPUT_GROUP.CONFIG,
+    title: 'O Level School Pass Rates',
+    hidden: ({ parent }) => parent.schoolLevel !== 'high-school',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'year',
+            title: 'Year',
+            type: 'number',
+            validation: (Rule) => Rule.min(2000).max(new Date().getFullYear()),
+          },
+          {
+            name: 'passRate',
+            title: 'Pass Rate',
+            type: 'number',
+            validation: (Rule) => Rule.min(0).max(100),
+          },
+        ],
+        preview: {
+          select: {
+            year: 'year',
+            passRate: 'passRate',
+          },
+          prepare({ year, passRate }) {
+            return {
+              title: `Year: ${year}, Pass Rate: ${passRate}%`,
+            };
+          },
+        },
+      },
+    ],
+  }),
+
+  defineField({
+    name: 'aLevelSchoolPassRates',
+    type: 'array',
+    group: INPUT_GROUP.CONFIG,
+    title: 'A Level School Pass Rates',
+    hidden: ({ parent }) => parent.schoolLevel !== 'high-school',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'year',
+            title: 'Year',
+            type: 'number',
+            validation: (Rule) => Rule.min(2000).max(new Date().getFullYear()),
+          },
+          {
+            name: 'passRate',
+            title: 'Pass Rate',
+            type: 'number',
+            validation: (Rule) => Rule.min(0).max(100),
+          },
+        ],
+        preview: {
+          select: {
+            year: 'year',
+            passRate: 'passRate',
+          },
+          prepare({ year, passRate }) {
+            return {
+              title: `Year: ${year}, Pass Rate: ${passRate}%`,
+            };
+          },
+        },
+      },
+    ],
+  }),
+
+  defineField({
+    name: 'contacts',
+    type: 'array',
+    group: INPUT_GROUP.CONFIG,
+    title: 'Contacts',
+    description:
+      'Contacts of the entity. Use the format: { name: "Contact Name", phone: "+263123456789", role: "Role of Contact" }',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'name',
+            title: 'Contact Name',
+            type: 'string',
+          },
+          {
+            name: 'phone',
+            title: 'Phone Number',
+            type: 'string',
+            validation: (Rule) =>
+              Rule.regex(
+                /^\+263\d{9}$/,
+                'Phone number must be in the format +263XXXXXXXXX',
+              ),
+          },
+          {
+            name: 'role',
+            title: 'Role',
+            type: 'string',
+            options: {
+              list: ['Landline Number', 'Cell Number', 'WhatsApp Number'],
+            },
+          },
+        ],
+        preview: {
+          select: {
+            name: 'name',
+            phone: 'phone',
+            role: 'role',
+          },
+          prepare({ name, phone, role }) {
+            return {
+              title: `${name} (${role})`,
+              subtitle: phone,
+              media: DatabaseIcon,
+            };
+          },
+        },
+      },
+    ],
   }),
 ];
