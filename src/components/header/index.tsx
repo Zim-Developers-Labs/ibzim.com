@@ -1,5 +1,10 @@
-import { ChevronRightIcon } from 'lucide-react';
-import { Icons } from '../icons';
+import Container from '@/components/container';
+import { Notifications } from '@/components/header/notifications';
+import SearchToggler from '@/components/header/search-toggler';
+import SideBar from '@/components/header/side-bar';
+import { SignToggler } from '@/components/header/sign-toggler';
+import UserToggler from '@/components/header/user-toggler';
+import { Icons } from '@/components/icons';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -7,12 +12,9 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '../ui/navigation-menu';
-import { SignToggler } from './sign-toggler';
-import SideBar from './side-bar';
+} from '@/components/ui/navigation-menu';
+import { ChevronRightIcon } from 'lucide-react';
 import Link from 'next/link';
-import Container from '../container';
-import UserToggler from './user-toggler';
 
 export const tools = [
   {
@@ -39,15 +41,21 @@ export const tools = [
 
 type HeaderProps = {
   user?: any;
+  articles?: any[];
+  popularArticles?: any[];
 };
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({
+  articles,
+  popularArticles,
+  user,
+}: HeaderProps) {
   return (
     <header
       role="navigation"
-      className="relative w-full border-b border-zinc-200 bg-white text-zinc-900"
+      className="sticky top-0 z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
     >
-      <Container className="py-4">
+      <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex gap-x-4 lg:hidden">
             <SideBar />
@@ -64,7 +72,7 @@ export default function Header({ user }: HeaderProps) {
                 <NavigationMenuItem>
                   <NavigationMenuLink
                     href="/calendar"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
                   >
                     Calendar
                   </NavigationMenuLink>
@@ -89,7 +97,7 @@ export default function Header({ user }: HeaderProps) {
                   <NavigationMenuLink
                     href="https://news.ibzim.com"
                     target="_blank"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
+                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
                   >
                     News
                   </NavigationMenuLink>
@@ -100,7 +108,9 @@ export default function Header({ user }: HeaderProps) {
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link href="/tools">
-                    <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
+                    <NavigationMenuTrigger className="bg-transparent text-white">
+                      Tools
+                    </NavigationMenuTrigger>
                   </Link>
                   <NavigationMenuContent>
                     <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
@@ -133,6 +143,13 @@ export default function Header({ user }: HeaderProps) {
             <Icons.logo className="hidden h-8 w-fit md:block" />
           </Link>
           <div className="flex flex-none items-center gap-2 md:gap-4">
+            {articles && popularArticles && (
+              <SearchToggler
+                articles={articles}
+                popularArticles={popularArticles}
+              />
+            )}
+            <Notifications />
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
           </div>

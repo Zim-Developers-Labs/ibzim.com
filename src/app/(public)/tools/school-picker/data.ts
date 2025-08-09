@@ -52,7 +52,7 @@ export const schools = [
   {
     id: 4,
     name: 'University of Zimbabwe',
-    level: 'tetiary-education',
+    level: 'tertiary-education',
     type: 'Public',
     province: 'Harare',
     location: 'Harare',

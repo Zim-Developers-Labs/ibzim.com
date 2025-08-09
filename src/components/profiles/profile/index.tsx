@@ -9,8 +9,8 @@ import { PPtRenderer } from '@/components/pt-renderer';
 import References from '../components/references';
 import Link from 'next/link';
 import { User } from 'lucia';
-import BlogHeader from '@/app/(blog)/blog-header';
 import GoogleAdUnit from '@/components/ad-unit';
+import Header from '@/components/header';
 
 export default function ProfileArticleWrapper({
   profile,
@@ -45,7 +45,7 @@ export default function ProfileArticleWrapper({
         }}
       />
       <div className="bg-primaryColor/10 relative pb-8 md:pb-10">
-        <BlogHeader
+        <Header
           articles={allArticles}
           popularArticles={popularArticles}
           user={user}

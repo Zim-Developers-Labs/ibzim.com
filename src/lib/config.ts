@@ -1,7 +1,7 @@
 import { SiteConfigType } from '@/types';
 
 export const siteConfig = {
-  name: 'IBZim Blog',
+  name: 'IBZim',
   isNew: false,
   shortName: 'IBZIM',
   vercelProjectName: 'ibzim',

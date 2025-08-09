@@ -37,9 +37,9 @@ import { useEffect, useState } from 'react';
 import { getClaps, toggleClap } from './clap';
 import { getSavedArticles, saveArticle } from './save';
 import Image from 'next/image';
-import BlogHeader from '@/app/(blog)/blog-header';
 import ActionsBar from '@/app/(blog)/actions-bar';
 import GoogleAdUnit from '../ad-unit';
+import Header from '../header';
 
 export type ArticleLayoutProps = {
   article: ArticleType;
@@ -286,7 +286,7 @@ export default function ArticleWrapper({
         }}
       />
       <div className="bg-primaryColor/10 relative pb-8 md:pb-10">
-        <BlogHeader
+        <Header
           articles={allArticles}
           popularArticles={popularArticles}
           user={user}

@@ -13,6 +13,7 @@ import UserNav from './user-nav';
 import { redirect } from 'next/navigation';
 import { Paths } from '@/lib/constants';
 import { CompleteProfileBanner, VerifyEmailBanner } from './banners';
+import { getSearchData } from '@/sanity/lib/actions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,6 +34,11 @@ export default async function RootLayout({
     redirect(Paths.Login);
   }
 
+  const { allArticles, popularArticles } = await getSearchData(
+    siteConfig.popularArticleIds,
+    siteConfig.documentPrefix,
+  );
+
   return (
     <html
       lang="en"
@@ -42,7 +48,11 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <Banner />
-        <Header user={user} />
+        <Header
+          articles={allArticles}
+          popularArticles={popularArticles}
+          user={user}
+        />
         {!user.emailVerified && (
           <VerifyEmailBanner email={user.email} userId={user.id} />
         )}

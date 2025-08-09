@@ -1,6 +1,6 @@
-import { createClient } from "next-sanity";
+import { createClient } from 'next-sanity';
 
-import { apiVersion, dataset, projectId } from "./api";
+import { apiVersion, dataset, projectId } from './api';
 import {
   ArticlesForCountType,
   ArticleType,
@@ -13,8 +13,9 @@ import {
   PolicyType,
   PressArticleType,
   ProfileType,
+  SchoolPickerProfilesType,
   SearchDocumentType,
-} from "@/types";
+} from '@/types';
 import {
   allArticlesByBlogQuery,
   allArticlesQuery,
@@ -24,6 +25,7 @@ import {
   allPoliciesQuery,
   allProfilesForListingByBlog,
   allProfilesTruthScoresQuery,
+  allSchoolsByLevelQuery,
   articleBySlugAndBlogQuery,
   articlesByIdsQuery,
   articlesForCountQuery,
@@ -40,18 +42,18 @@ import {
   pressArticlesQuery,
   profileBySlugAndBlogQuery,
   profileSlugsAndTypeByBlogQuery,
-} from "./queries";
+} from './queries';
 
 export const client = createClient({
   apiVersion,
   dataset,
   projectId,
-  perspective: "published",
-  useCdn: process.env.NODE_ENV === "production",
+  perspective: 'published',
+  useCdn: process.env.NODE_ENV === 'production',
 });
 
 export async function getArticlesByIds(
-  articleIds: string[]
+  articleIds: string[],
 ): Promise<CardArticleType[]> {
   if (client) {
     return (await client.fetch(articlesByIdsQuery, { articleIds })) || {};
@@ -60,7 +62,7 @@ export async function getArticlesByIds(
 }
 
 export async function getPolicyBySlug(
-  slug: string
+  slug: string,
 ): Promise<PolicyType | null> {
   if (client) {
     const policy = await client.fetch(policyBySlugQuery, { slug });
@@ -70,7 +72,7 @@ export async function getPolicyBySlug(
 }
 
 export async function getPressArticleBySlug(
-  slug: string
+  slug: string,
 ): Promise<PressArticleType | null> {
   if (client) {
     const article = await client.fetch(pressArticleBySlugQuery, {
@@ -111,7 +113,7 @@ export async function getAllPolicies(): Promise<CardPolicyType[]> {
 
 export async function getAllArticlesForSearchByBlog(
   articleDocumentType: string,
-  profileDocumentType: string
+  profileDocumentType: string,
 ): Promise<SearchDocumentType[]> {
   if (client) {
     return (
@@ -125,7 +127,7 @@ export async function getAllArticlesForSearchByBlog(
 }
 
 export async function getAllArticlesByBlog(
-  articleDocumentType: string
+  articleDocumentType: string,
 ): Promise<CardArticleType[]> {
   if (client) {
     return (
@@ -169,7 +171,7 @@ export async function getAllProfilesTruthScores(): Promise<
 }
 
 export async function getAllProfilesForListingByBlog(
-  profileDocumentType: string
+  profileDocumentType: string,
 ): Promise<CardProfileType[]> {
   if (client) {
     return (
@@ -203,7 +205,7 @@ export async function getAllAuthorSlugs(): Promise<{ slug: string }[]> {
 }
 
 export async function getAllProfileSlugsAndTypeByBlog(
-  profileDocumentType: string
+  profileDocumentType: string,
 ): Promise<{ slug: string; type: string; _updatedAt?: string }[]> {
   if (client) {
     return (
@@ -216,7 +218,7 @@ export async function getAllProfileSlugsAndTypeByBlog(
 }
 
 export async function getAllArticleSlugsAndTypesAndIndustriesByBlog(
-  articleDocumentType: string
+  articleDocumentType: string,
 ): Promise<
   {
     slug: string;
@@ -243,7 +245,7 @@ export async function getArticlesForCount(): Promise<ArticlesForCountType[]> {
 
 export async function getArticleBySlugAndBlog(
   slug: string,
-  articleDocumentType: string
+  articleDocumentType: string,
 ): Promise<ArticleType[]> {
   if (client) {
     return (
@@ -258,7 +260,7 @@ export async function getArticleBySlugAndBlog(
 
 export async function getProfileBySlugAndBlog(
   slug: string,
-  profileDocumentType: string
+  profileDocumentType: string,
 ): Promise<ProfileType | null> {
   if (client) {
     return (
@@ -272,7 +274,7 @@ export async function getProfileBySlugAndBlog(
 }
 
 export async function getAuthorBySlug(
-  slug: string
+  slug: string,
 ): Promise<AuthorType | null> {
   if (client) {
     const author = await client.fetch(authorBySlugQuery, { slug });
@@ -284,7 +286,7 @@ export async function getAuthorBySlug(
 export async function getArticleSlugsByIndustryAndTypeAndBlog(
   industryRef: string,
   type: string,
-  articleDocumentType: string
+  articleDocumentType: string,
 ): Promise<ArticleType[]> {
   if (client) {
     return (
@@ -294,6 +296,15 @@ export async function getArticleSlugsByIndustryAndTypeAndBlog(
         articleDocumentType,
       })) || {}
     );
+  }
+  return [];
+}
+
+export async function getAllSchoolsByLevel(
+  level: string,
+): Promise<SchoolPickerProfilesType[]> {
+  if (client) {
+    return (await client.fetch(allSchoolsByLevelQuery, { level })) || [];
   }
   return [];
 }

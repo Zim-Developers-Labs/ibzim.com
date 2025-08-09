@@ -1,10 +1,10 @@
 import { CardProfileType, SearchDocumentType } from '@/types';
 import WikiHero from './components/hero';
 import WikiListing from './components/listing';
-import BlogHeader from '@/app/(blog)/blog-header';
 import { User } from 'lucia';
 import Container from '../container';
 import GoogleAdUnit from '../ad-unit';
+import Header from '../header';
 
 export default function ProfileListingWrapper({
   profiles,
@@ -19,7 +19,7 @@ export default function ProfileListingWrapper({
 }) {
   return (
     <main>
-      <BlogHeader
+      <Header
         articles={allArticles}
         popularArticles={popularArticles}
         user={user}

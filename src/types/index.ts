@@ -329,3 +329,42 @@ export type ArticlesForCountType = {
     name: string;
   };
 };
+
+export type SchoolPickerProfilesType = {
+  _id: string;
+  name: string;
+  slug: Slug;
+  level: string;
+  location: string;
+  province: string;
+  feesHistory: {
+    notes: string;
+    amount: number;
+  }[];
+  oLevelSchoolType?: string;
+  aLevelSchoolType?: string;
+  primarySchoolType?: string;
+  employmentRatesHistory?: {
+    year: number;
+    employmentRate: number;
+  }[];
+  primarySchoolPassRates?: {
+    year: number;
+    passRate: number;
+  }[];
+  oLevelSchoolPassRates?: {
+    year: number;
+    passRate: number;
+  }[];
+  aLevelSchoolPassRates?: {
+    year: number;
+    passRate: number;
+  }[];
+  church?: string;
+
+  contacts?: {
+    name: string;
+    phone: string;
+    role: string;
+  }[];
+};

@@ -10,10 +10,10 @@ import type {
 import ArticlesListing from './listing';
 import ProfilesCard from './profiles-card';
 import AuthorsCard from './authors-card';
-import BlogHeader from '@/app/(blog)/blog-header';
 import { User } from 'lucia';
 import GoogleAdUnit from '../ad-unit';
 import Container from '../container';
+import Header from '../header';
 
 export type Props = {
   articles: CardArticleType[];
@@ -59,7 +59,7 @@ export default function HomeWrapper({
 
   return (
     <main>
-      <BlogHeader
+      <Header
         articles={allArticles}
         popularArticles={popularArticles}
         user={user}

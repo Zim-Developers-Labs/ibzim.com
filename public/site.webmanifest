@@ -1,7 +1,7 @@
 {
-  "name": "IBZim Blog",
+  "name": "IBZim",
   "short_name": "IBZim",
-  "description": "All about Zimbabwe Blog.",
+  "description": "An information hub empowering Zimbabweans with raw and authentic knowledge. Signup and complete your profile to join the community.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

@@ -344,10 +344,11 @@ export const ProfileFields = [
     validation: (rule) => rule.min(0).max(100),
     initialValue: 10,
   }),
+
   // Config items for school listing
 
   defineField({
-    name: 'schoolLevel',
+    name: 'level',
     type: 'string',
     group: INPUT_GROUP.CONFIG,
     hidden: ({ parent }) => parent.entityType !== 'school',
@@ -368,8 +369,8 @@ export const ProfileFields = [
           value: 'high-school',
         },
         {
-          title: 'Tetiary Institution',
-          value: 'tetiary-institution',
+          title: 'Tertiary Institution',
+          value: 'tertiary-institution',
         },
       ],
     },
@@ -469,11 +470,66 @@ export const ProfileFields = [
   }),
 
   defineField({
-    name: 'fees',
-    type: 'number',
+    name: 'feesHistory',
+    type: 'array',
     group: INPUT_GROUP.CONFIG,
-    title: 'School Fees',
-    validation: (Rule) => Rule.min(0).warning('Fees must be positive'),
+    title: 'Fees History',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'amount',
+            type: 'number',
+            title: 'School Fees Amount',
+            validation: (Rule) => Rule.min(0).warning('Fees must be positive'),
+          },
+          {
+            name: 'notes',
+            type: 'string',
+            title: 'School Fees Notes',
+          },
+        ],
+      },
+    ],
+  }),
+
+  defineField({
+    name: 'employmentRatesHistory',
+    type: 'array',
+    group: INPUT_GROUP.CONFIG,
+    title: 'Tertiary Insitution Employment Rates',
+    hidden: ({ parent }) => parent.level !== 'primary-school',
+    of: [
+      {
+        type: 'object',
+        fields: [
+          {
+            name: 'year',
+            title: 'Year',
+            type: 'number',
+            validation: (Rule) => Rule.min(2000).max(new Date().getFullYear()),
+          },
+          {
+            name: 'employmentRate',
+            title: 'Employment Rate',
+            type: 'number',
+            validation: (Rule) => Rule.min(0).max(100),
+          },
+        ],
+        preview: {
+          select: {
+            year: 'year',
+            employmentRate: 'employmentRate',
+          },
+          prepare({ year, employmentRate }) {
+            return {
+              title: `Year: ${year}, Employment Rate: ${employmentRate}%`,
+            };
+          },
+        },
+      },
+    ],
   }),
 
   defineField({
@@ -481,7 +537,7 @@ export const ProfileFields = [
     type: 'array',
     group: INPUT_GROUP.CONFIG,
     title: 'Primary School Pass Rates',
-    hidden: ({ parent }) => parent.schoolLevel !== 'primary-school',
+    hidden: ({ parent }) => parent.level !== 'primary-school',
     of: [
       {
         type: 'object',
@@ -519,7 +575,7 @@ export const ProfileFields = [
     type: 'array',
     group: INPUT_GROUP.CONFIG,
     title: 'O Level School Pass Rates',
-    hidden: ({ parent }) => parent.schoolLevel !== 'high-school',
+    hidden: ({ parent }) => parent.level !== 'high-school',
     of: [
       {
         type: 'object',
@@ -557,7 +613,7 @@ export const ProfileFields = [
     type: 'array',
     group: INPUT_GROUP.CONFIG,
     title: 'A Level School Pass Rates',
-    hidden: ({ parent }) => parent.schoolLevel !== 'high-school',
+    hidden: ({ parent }) => parent.level !== 'high-school',
     of: [
       {
         type: 'object',
@@ -612,7 +668,7 @@ export const ProfileFields = [
             type: 'string',
             validation: (Rule) =>
               Rule.regex(
-                /^\+263\d{9}$/,
+                /^\+263\d+$/,
                 'Phone number must be in the format +263XXXXXXXXX',
               ),
           },

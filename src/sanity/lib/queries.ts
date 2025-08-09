@@ -315,3 +315,25 @@ export const allArticlesByAuthorSlugQuery: string = groq`
   }
 }
 `;
+
+export const allSchoolsByLevelQuery: string = groq`*[_type == "profile" && entityType == "school" && level == $level && defined(province)] {
+  _id,
+  name,
+  level,
+  oLevelSchoolType,
+  aLevelSchoolType,
+  primarySchoolType,
+  location,
+  province,
+  feesHistory,
+  church,
+  primarySchoolPassRates,
+  oLevelSchoolPassRates,
+  aLevelSchoolPassRates,
+  contacts[] {
+    name,
+    phone,
+    role
+  }
+}
+`;

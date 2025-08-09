@@ -75,7 +75,7 @@ export default function Footer({ siteShortName }: Props) {
         </div>
         <div className="flex flex-col gap-6 pt-20 text-center md:gap-8">
           <p className="text-sm font-medium text-zinc-400">
-            © 2023 - 2025 IBZim Blog. ALL RIGHTS RESERVED.
+            © 2023 - 2025 IBZim. ALL RIGHTS RESERVED.
           </p>
           <p className="text-sm text-zinc-400">
             {siteShortName} is among the federally registered trademarks of

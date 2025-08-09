@@ -43,24 +43,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { schools } from './data';
 import Container from '@/components/container';
 import Link from 'next/link';
 import { textify } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { SchoolPickerProfilesType } from '@/types';
 
 const educationLevels = [
   { value: 'primary-education', label: 'Primary' },
   { value: 'o-level-education', label: 'O Level' },
   { value: 'a-level-education', label: 'A Level' },
-  { value: 'tetiary-education', label: 'Tetiary' },
+  { value: 'tertiary-education', label: 'Tertiary' },
 ];
 
 export default function SchoolPicker({
+  level,
   selectedLevel,
+  schools,
 }: {
+  level: string;
   selectedLevel: string;
+  schools: SchoolPickerProfilesType[];
 }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProvince, setSelectedLocation] = useState('all');
@@ -116,7 +120,7 @@ export default function SchoolPicker({
 
   const filteredSchools = useMemo(() => {
     return schools.filter((school) => {
-      const matchesLevel = school.level === selectedLevel;
+      const matchesLevel = school.level === level;
       const matchesSearch = school.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -124,12 +128,33 @@ export default function SchoolPicker({
       const matchesLocation =
         selectedProvince === 'all' || school.province === selectedProvince;
       const matchesType =
-        selectedType === 'all' || school.type === selectedType;
+        selectedType === 'all' ||
+        (() => {
+          let typeToCheck;
+
+          if (school.level === 'primary school') {
+            typeToCheck = school.primarySchoolType;
+          } else if (school.level === 'high school') {
+            if (level === 'a-level-education') {
+              typeToCheck = school.aLevelSchoolType;
+            } else if (level === 'o-level-education') {
+              typeToCheck = school.oLevelSchoolType;
+            }
+          }
+
+          return typeToCheck === selectedType;
+        })();
+      const averageFee =
+        school.feesHistory && school.feesHistory.length > 0
+          ? school.feesHistory.reduce((sum, fee) => sum + fee.amount, 0) /
+            school.feesHistory.length
+          : 0;
+
       const matchesFees =
-        school.fees >= feeRange[0] && school.fees <= feeRange[1];
+        averageFee >= feeRange[0] && averageFee <= feeRange[1];
       // For universities, ignore church filter since they typically don't have religious affiliations
       const matchesChurch =
-        selectedLevel === 'tetiary-education' ||
+        selectedLevel === 'tertiary-education' ||
         selectedChurch === 'all' ||
         school.church === selectedChurch;
 
@@ -210,7 +235,7 @@ export default function SchoolPicker({
       link: '/education/rankings/top-100-best-a-level-schools-in-zimbabwe',
     },
     {
-      level: 'tetiary-education',
+      level: 'tertiary-education',
       text: 'Best Universities in Zimbabwe',
       link: '/education/rankings/top-20-best-universities-in-zimbabwe',
     },
@@ -298,7 +323,7 @@ export default function SchoolPicker({
                 </Select>
               </div>
 
-              {selectedLevel === 'tetiary-education' ? (
+              {selectedLevel === 'tertiary-education' ? (
                 <div>
                   <Label htmlFor="type" className="mb-2 text-sm font-normal">
                     School Type
@@ -343,11 +368,11 @@ export default function SchoolPicker({
                 <Select
                   value={selectedChurch}
                   onValueChange={setSelectedChurch}
-                  disabled={selectedLevel === 'tetiary-education'}
+                  disabled={selectedLevel === 'tertiary-education'}
                 >
                   <SelectTrigger
                     className={`w-full ${
-                      selectedLevel === 'tetiary-education'
+                      selectedLevel === 'tertiary-education'
                         ? 'cursor-not-allowed opacity-50'
                         : ''
                     }`}
@@ -415,311 +440,391 @@ export default function SchoolPicker({
         {/* Results */}
         <div>
           <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredSchools.map((school) => (
-              <li key={school.id}>
-                <Card className="relative transition-shadow hover:shadow-lg">
-                  <CardHeader>
-                    <div className="flex items-start justify-between pt-4">
-                      <div>
-                        <CardTitle className="text-lg">{school.name}</CardTitle>
-                        <CardDescription className="mt-1 flex items-center gap-1">
-                          <MapPin className="h-3 w-3" />
-                          {school.location}
-                        </CardDescription>
-                      </div>
-                      <div className="absolute top-3 right-3 flex items-center gap-1 text-xs">
-                        <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                        <span className="font-medium text-gray-600">
-                          {school.rating} (120 reviews)
-                        </span>
-                      </div>
-                    </div>
-                  </CardHeader>
+            {filteredSchools.map((school) => {
+              const averageFee =
+                school.feesHistory && school.feesHistory.length > 0
+                  ? school.feesHistory.reduce(
+                      (sum, fee) => sum + fee.amount,
+                      0,
+                    ) / school.feesHistory.length
+                  : 0;
 
-                  <CardContent className="space-y-4">
-                    {/* <p className="text-sm text-gray-600">
+              return (
+                <li key={school._id}>
+                  <Card className="relative transition-shadow hover:shadow-lg">
+                    <CardHeader>
+                      <div className="flex items-start justify-between pt-4">
+                        <div>
+                          <CardTitle className="text-lg">
+                            {school.name}
+                          </CardTitle>
+                          <CardDescription className="mt-1 flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {school.location}
+                          </CardDescription>
+                        </div>
+                        <div className="absolute top-3 right-3 flex items-center gap-1 text-xs">
+                          <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
+                          <span className="font-medium text-gray-600">
+                            4.8 (120 reviews)
+                          </span>
+                        </div>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent className="space-y-4">
+                      {/* <p className="text-sm text-gray-600">
                       {school.description}
                     </p> */}
 
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className={getTypeColor(school.type)}
-                        >
-                          {school.type}
-                        </Badge>
-                        {school.church && (
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                           <Badge
                             variant="outline"
-                            className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                            className={getTypeColor(
+                              school.primarySchoolType ||
+                                school.oLevelSchoolType ||
+                                school.aLevelSchoolType ||
+                                '',
+                            )}
                           >
-                            {school.church}
+                            {school.primarySchoolType ||
+                              school.oLevelSchoolType ||
+                              school.aLevelSchoolType ||
+                              ''}
                           </Badge>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between gap-2 text-sm">
-                      <div className="flex items-center gap-1">
-                        <DollarSign className="h-4 w-4 text-green-600" />
-                        <span>
-                          ${school.fees.toLocaleString()}/
-                          {school.level === 'tetiary-education'
-                            ? 'semester'
-                            : 'term'}
-                        </span>
-                      </div>
-                      {school.level === 'tetiary-education' ? (
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm">{`${school.employmentRate}% employed`}</span>
-                          <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
+                          {school.church && (
+                            <Badge
+                              variant="outline"
+                              className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                            >
+                              {school.church}
+                            </Badge>
+                          )}
                         </div>
-                      ) : (
+                      </div>
+
+                      <div className="flex justify-between gap-2 text-sm">
                         <div className="flex items-center gap-1">
-                          <span className="text-sm">{`${school.passRate}% pass rate`}</span>
-                          <GraduationCap className="h-4 w-4 text-purple-600" />
+                          <DollarSign className="h-4 w-4 text-green-600" />
+                          <span>
+                            ${averageFee.toLocaleString()}/
+                            {school.level === 'tertiary-institution'
+                              ? 'semester'
+                              : 'term'}
+                          </span>
                         </div>
-                      )}
-                    </div>
+                        {school.level === 'tertiary-institution'
+                          ? // For tertiary institutions — average from employmentRatesHistory
+                            (() => {
+                              const avgEmploymentRate = school
+                                .employmentRatesHistory?.length
+                                ? (
+                                    school.employmentRatesHistory.reduce(
+                                      (sum, item) => sum + item.employmentRate,
+                                      0,
+                                    ) / school.employmentRatesHistory.length
+                                  ).toFixed(1)
+                                : null;
 
-                    <div className="flex gap-2 pt-2">
-                      <Link
-                        // href={`/profiles/school/${Linkify(school.name)}`}
-                        href="#"
-                        className="bg-primary hover:bg-primary/90 block w-full flex-1 rounded-md py-1 text-center text-white transition-colors"
-                      >
-                        View Details
-                      </Link>
-                      <Dialog
-                        open={isContactDialogOpen}
-                        onOpenChange={setIsContactDialogOpen}
-                      >
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className="cursor-pointer"
-                            size="sm"
-                            onClick={() => openContactDialog(school)}
-                          >
-                            <Phone className="mr-1 h-4 w-4" />
-                            Call
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-lg">
-                          <DialogHeader>
-                            <DialogTitle>
-                              Contact {selectedSchoolForContact?.name}
-                            </DialogTitle>
-                            <DialogDescription>
-                              View available contacts or add new ones
-                            </DialogDescription>
-                          </DialogHeader>
-
-                          <Tabs
-                            value={contactDialogTab}
-                            onValueChange={setContactDialogTab}
-                            className="w-full"
-                          >
-                            <TabsList className="grid w-full grid-cols-2">
-                              <TabsTrigger value="view">
-                                View Contacts
-                              </TabsTrigger>
-                              <TabsTrigger value="add">Add Contact</TabsTrigger>
-                            </TabsList>
-
-                            <TabsContent value="view" className="space-y-4">
-                              <div>
-                                <h4 className="mb-3 font-medium">
-                                  Available Contacts:
-                                </h4>
-                                <div className="space-y-2">
-                                  {selectedSchoolForContact?.contacts?.map(
-                                    (contact: any, index: any) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-center justify-between rounded-lg border p-3"
-                                      >
-                                        <div className="flex-1">
-                                          <p className="text-sm font-medium">
-                                            {contact.name}
-                                          </p>
-                                          <p className="text-xs text-gray-600">
-                                            {contact.role}
-                                          </p>
-                                          <p className="mt-1 text-xs text-gray-500">
-                                            {contact.phone}
-                                          </p>
-                                        </div>
-                                        <div className="flex gap-2">
-                                          <Button
-                                            size="sm"
-                                            variant="default"
-                                            onClick={() =>
-                                              window.open(
-                                                `tel:${contact.phone}`,
-                                              )
-                                            }
-                                          >
-                                            <Phone className="mr-1 h-3 w-3" />
-                                            Call
-                                          </Button>
-                                          <Button
-                                            size="sm"
-                                            variant="outline"
-                                            onClick={() =>
-                                              alert(
-                                                `Report submitted for ${contact.phone}. Thank you for helping us maintain accurate contact information.`,
-                                              )
-                                            }
-                                          >
-                                            Report
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    ),
-                                  ) || (
-                                    <div className="py-8 text-center text-gray-500">
-                                      <Phone className="mx-auto mb-2 h-8 w-8 opacity-50" />
-                                      <p className="text-sm">
-                                        No contacts available for this school.
-                                      </p>
-                                      <p className="mt-1 text-xs">
-                                        Be the first to add one!
-                                      </p>
-                                    </div>
+                              return (
+                                <div className="flex items-center gap-1">
+                                  {avgEmploymentRate !== null ? (
+                                    <>
+                                      <span className="text-sm">{`${avgEmploymentRate}% employed`}</span>
+                                      <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
+                                    </>
+                                  ) : (
+                                    <span className="text-sm text-gray-500">
+                                      No data
+                                    </span>
                                   )}
                                 </div>
-                              </div>
-                            </TabsContent>
+                              );
+                            })()
+                          : // For high schools — decide array based on `level` param
+                            (() => {
+                              let ratesArray:
+                                | { year: number; passRate: number }[]
+                                | undefined;
 
-                            <TabsContent value="add" className="space-y-4">
-                              <div>
-                                <h4 className="mb-3 text-base font-medium">
-                                  Submit a New Contact:
-                                </h4>
-                                <form
-                                  onSubmit={handleContactSubmit}
-                                  className="space-y-4"
-                                >
-                                  <div>
-                                    <Label
-                                      htmlFor="contactName"
-                                      className="mb-2 text-sm font-normal"
-                                    >
-                                      Contact Name
-                                    </Label>
-                                    <Input
-                                      id="contactName"
-                                      value={newContactName}
-                                      onChange={(e) =>
-                                        setNewContactName(e.target.value)
-                                      }
-                                      placeholder="e.g., John Smith or Main Office"
-                                      required
-                                    />
+                              if (school.level === 'high-school') {
+                                if (level === 'a-level-education') {
+                                  ratesArray = school.oLevelSchoolPassRates; // show O-level rates
+                                } else if (level === 'o-level-education') {
+                                  ratesArray = school.aLevelSchoolPassRates; // show A-level rates
+                                }
+                              }
+
+                              const avgPassRate = ratesArray?.length
+                                ? (
+                                    ratesArray.reduce(
+                                      (sum, item) => sum + item.passRate,
+                                      0,
+                                    ) / ratesArray.length
+                                  ).toFixed(1)
+                                : null;
+
+                              return (
+                                <div className="flex items-center gap-1">
+                                  {avgPassRate !== null ? (
+                                    <>
+                                      <span className="text-sm">{`${avgPassRate}% pass rate`}</span>
+                                      <GraduationCap className="h-4 w-4 text-purple-600" />
+                                    </>
+                                  ) : (
+                                    <span className="text-sm text-gray-500">
+                                      No data
+                                    </span>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                      </div>
+
+                      <div className="flex gap-2 pt-2">
+                        <Link
+                          // href={`/profiles/school/${Linkify(school.name)}`}
+                          href="#"
+                          className="bg-primary hover:bg-primary/90 block w-full flex-1 rounded-md py-1 text-center text-white transition-colors"
+                        >
+                          View Details
+                        </Link>
+                        <Dialog
+                          open={isContactDialogOpen}
+                          onOpenChange={setIsContactDialogOpen}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="cursor-pointer"
+                              size="sm"
+                              onClick={() => openContactDialog(school)}
+                            >
+                              <Phone className="mr-1 h-4 w-4" />
+                              Call
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-lg">
+                            <DialogHeader>
+                              <DialogTitle>
+                                Contact {selectedSchoolForContact?.name}
+                              </DialogTitle>
+                              <DialogDescription>
+                                View available contacts or add new ones
+                              </DialogDescription>
+                            </DialogHeader>
+
+                            <Tabs
+                              value={contactDialogTab}
+                              onValueChange={setContactDialogTab}
+                              className="w-full"
+                            >
+                              <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="view">
+                                  View Contacts
+                                </TabsTrigger>
+                                <TabsTrigger value="add">
+                                  Add Contact
+                                </TabsTrigger>
+                              </TabsList>
+
+                              <TabsContent value="view" className="space-y-4">
+                                <div>
+                                  <h4 className="mb-3 font-medium">
+                                    Available Contacts:
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {selectedSchoolForContact?.contacts?.map(
+                                      (contact: any, index: any) => (
+                                        <div
+                                          key={index}
+                                          className="flex items-center justify-between rounded-lg border p-3"
+                                        >
+                                          <div className="flex-1">
+                                            <p className="text-sm font-medium">
+                                              {contact.name}
+                                            </p>
+                                            <p className="text-xs text-gray-600">
+                                              {contact.role}
+                                            </p>
+                                            <p className="mt-1 text-xs text-gray-500">
+                                              {contact.phone}
+                                            </p>
+                                          </div>
+                                          <div className="flex gap-2">
+                                            <Button
+                                              size="sm"
+                                              variant="default"
+                                              onClick={() =>
+                                                window.open(
+                                                  `tel:${contact.phone}`,
+                                                )
+                                              }
+                                            >
+                                              <Phone className="mr-1 h-3 w-3" />
+                                              Call
+                                            </Button>
+                                            <Button
+                                              size="sm"
+                                              variant="outline"
+                                              onClick={() =>
+                                                alert(
+                                                  `Report submitted for ${contact.phone}. Thank you for helping us maintain accurate contact information.`,
+                                                )
+                                              }
+                                            >
+                                              Report
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      ),
+                                    ) || (
+                                      <div className="py-8 text-center text-gray-500">
+                                        <Phone className="mx-auto mb-2 h-8 w-8 opacity-50" />
+                                        <p className="text-sm">
+                                          No contacts available for this school.
+                                        </p>
+                                        <p className="mt-1 text-xs">
+                                          Be the first to add one!
+                                        </p>
+                                      </div>
+                                    )}
                                   </div>
+                                </div>
+                              </TabsContent>
 
-                                  <div>
-                                    <Label
-                                      htmlFor="contactPhone"
-                                      className="mb-2 text-sm font-normal"
-                                    >
-                                      Phone Number
-                                    </Label>
-                                    <Input
-                                      id="contactPhone"
-                                      value={newContactPhone}
-                                      onChange={(e) =>
-                                        setNewContactPhone(e.target.value)
-                                      }
-                                      placeholder="+263-XX-XXXXXXX"
-                                      required
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <Label
-                                      htmlFor="contactRole"
-                                      className="mb-2 text-sm font-normal"
-                                    >
-                                      Role/Position
-                                    </Label>
-                                    <Select
-                                      value={newContactRole}
-                                      onValueChange={setNewContactRole}
-                                      required
-                                    >
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select role" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="School Landline">
-                                          School Landline
-                                        </SelectItem>
-                                        <SelectItem value="Principal">
-                                          Principal
-                                        </SelectItem>
-                                        <SelectItem value="Headmaster">
-                                          Headmaster
-                                        </SelectItem>
-                                        <SelectItem value="Admissions Officer">
-                                          Admissions Officer
-                                        </SelectItem>
-                                        <SelectItem value="Bursar">
-                                          Bursar
-                                        </SelectItem>
-                                        <SelectItem value="Secretary">
-                                          Secretary
-                                        </SelectItem>
-                                        <SelectItem value="Deputy Head">
-                                          Deputy Head
-                                        </SelectItem>
-                                        <SelectItem value="Other">
-                                          Other
-                                        </SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                  </div>
-
-                                  <div className="flex items-center space-x-2">
-                                    <Checkbox
-                                      id="terms"
-                                      checked={agreesToTerms}
-                                      onCheckedChange={() =>
-                                        setAgreesToTerms(!agreesToTerms)
-                                      }
-                                    />
-                                    <Label htmlFor="terms" className="text-xs">
-                                      I confirm that this phone number belongs
-                                      to a member of{' '}
-                                      {selectedSchoolForContact?.name}
-                                    </Label>
-                                  </div>
-
-                                  <Button
-                                    type="submit"
-                                    className="w-full"
-                                    disabled={
-                                      !agreesToTerms ||
-                                      !newContactName ||
-                                      !newContactPhone ||
-                                      !newContactRole
-                                    }
+                              <TabsContent value="add" className="space-y-4">
+                                <div>
+                                  <h4 className="mb-3 text-base font-medium">
+                                    Submit a New Contact:
+                                  </h4>
+                                  <form
+                                    onSubmit={handleContactSubmit}
+                                    className="space-y-4"
                                   >
-                                    Submit Contact
-                                  </Button>
-                                </form>
-                              </div>
-                            </TabsContent>
-                          </Tabs>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              </li>
-            ))}
+                                    <div>
+                                      <Label
+                                        htmlFor="contactName"
+                                        className="mb-2 text-sm font-normal"
+                                      >
+                                        Contact Name
+                                      </Label>
+                                      <Input
+                                        id="contactName"
+                                        value={newContactName}
+                                        onChange={(e) =>
+                                          setNewContactName(e.target.value)
+                                        }
+                                        placeholder="e.g., John Smith or Main Office"
+                                        required
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <Label
+                                        htmlFor="contactPhone"
+                                        className="mb-2 text-sm font-normal"
+                                      >
+                                        Phone Number
+                                      </Label>
+                                      <Input
+                                        id="contactPhone"
+                                        value={newContactPhone}
+                                        onChange={(e) =>
+                                          setNewContactPhone(e.target.value)
+                                        }
+                                        placeholder="+263-XX-XXXXXXX"
+                                        required
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <Label
+                                        htmlFor="contactRole"
+                                        className="mb-2 text-sm font-normal"
+                                      >
+                                        Role/Position
+                                      </Label>
+                                      <Select
+                                        value={newContactRole}
+                                        onValueChange={setNewContactRole}
+                                        required
+                                      >
+                                        <SelectTrigger>
+                                          <SelectValue placeholder="Select role" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="School Landline">
+                                            School Landline
+                                          </SelectItem>
+                                          <SelectItem value="Principal">
+                                            Principal
+                                          </SelectItem>
+                                          <SelectItem value="Headmaster">
+                                            Headmaster
+                                          </SelectItem>
+                                          <SelectItem value="Admissions Officer">
+                                            Admissions Officer
+                                          </SelectItem>
+                                          <SelectItem value="Bursar">
+                                            Bursar
+                                          </SelectItem>
+                                          <SelectItem value="Secretary">
+                                            Secretary
+                                          </SelectItem>
+                                          <SelectItem value="Deputy Head">
+                                            Deputy Head
+                                          </SelectItem>
+                                          <SelectItem value="Other">
+                                            Other
+                                          </SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+
+                                    <div className="flex items-center space-x-2">
+                                      <Checkbox
+                                        id="terms"
+                                        checked={agreesToTerms}
+                                        onCheckedChange={() =>
+                                          setAgreesToTerms(!agreesToTerms)
+                                        }
+                                      />
+                                      <Label
+                                        htmlFor="terms"
+                                        className="text-xs"
+                                      >
+                                        I confirm that this phone number belongs
+                                        to a member of{' '}
+                                        {selectedSchoolForContact?.name}
+                                      </Label>
+                                    </div>
+
+                                    <Button
+                                      type="submit"
+                                      className="w-full"
+                                      disabled={
+                                        !agreesToTerms ||
+                                        !newContactName ||
+                                        !newContactPhone ||
+                                        !newContactRole
+                                      }
+                                    >
+                                      Submit Contact
+                                    </Button>
+                                  </form>
+                                </div>
+                              </TabsContent>
+                            </Tabs>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </li>
+              );
+            })}
           </ul>
 
           {filteredSchools.length === 0 && (

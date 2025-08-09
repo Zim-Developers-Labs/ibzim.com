@@ -9,13 +9,14 @@ import Footer from '@/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { validateRequest } from '@/lib/auth/validate-request';
+import { getSearchData } from '@/sanity/lib/actions';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'IBZim Blog',
+  title: 'IBZim: Zimbabwean Information Hub',
   description:
-    'All about Zimbabwe. Read articles, vote for awards, use tools and enjoy the IBZim events calendar all year round.',
+    'An information hub empowering Zimbabweans with raw and authentic knowledge. Signup and complete your profile to join the community.',
 };
 
 export default async function RootLayout({
@@ -24,6 +25,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { user } = await validateRequest();
+
+  const { allArticles, popularArticles } = await getSearchData(
+    siteConfig.popularArticleIds,
+    siteConfig.documentPrefix,
+  );
 
   return (
     <html
@@ -34,7 +40,11 @@ export default async function RootLayout({
       <body>
         <Toaster />
         <Banner />
-        <Header user={user} />
+        <Header
+          articles={allArticles}
+          popularArticles={popularArticles}
+          user={user}
+        />
         {children}
         <Footer siteShortName={siteConfig.shortName} />
         <Analytics />
