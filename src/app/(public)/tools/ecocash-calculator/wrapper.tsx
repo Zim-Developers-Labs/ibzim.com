@@ -33,6 +33,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User } from 'lucia';
 import { Answer } from '@/server/db/schema';
 import ToolFAQs from '../faq';
+import Container from '@/components/container';
 
 type TransactionType =
   | 'send'
@@ -256,10 +257,10 @@ export default function EcoCashCalculatorPageWrapper({
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <Container className="py-12">
       <div className="mb-6">
         <Link
-          href="/tools"
+          href="/#ib-tools"
           className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -783,6 +784,6 @@ export default function EcoCashCalculatorPageWrapper({
         </CardContent>
       </Card>
       <ToolFAQs tool="ecocash-calculator" user={user} dbAnswers={dbAnswers} />
-    </div>
+    </Container>
   );
 }

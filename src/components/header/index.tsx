@@ -18,16 +18,20 @@ import Link from 'next/link';
 
 export const tools = [
   {
+    name: 'Calendar',
+    href: '/tools/event-calendar',
+  },
+  {
     name: 'Ecocash Calculator',
     href: '/tools/ecocash-calculator',
   },
   {
-    name: 'Distance Calculator',
-    href: '/tools/distance-calculator',
+    name: 'Travel Planner',
+    href: '/tools/travel-planner',
   },
   {
     name: 'School Picker',
-    href: '/tools/school-picker/a-level-education',
+    href: '/tools/school-picker/best-a-level-schools',
   },
   {
     name: 'Currency Converter',
@@ -71,10 +75,10 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="/calendar"
+                    href="/articles"
                     className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
                   >
-                    Calendar
+                    Blog
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -95,11 +99,11 @@ export default function Header({
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuLink
-                    href="https://news.ibzim.com"
+                    href="/support"
                     target="_blank"
                     className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
                   >
-                    News
+                    Support
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -107,11 +111,9 @@ export default function Header({
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Link href="/tools">
-                    <NavigationMenuTrigger className="bg-transparent text-white">
-                      Tools
-                    </NavigationMenuTrigger>
-                  </Link>
+                  <NavigationMenuTrigger className="bg-transparent text-white">
+                    Tools
+                  </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
                       {tools.map((nav) => (

@@ -360,7 +360,7 @@ export type SchoolPickerProfilesType = {
     year: number;
     passRate: number;
   }[];
-  church?: string;
+  churchAffiliation?: string;
 
   contacts?: {
     name: string;

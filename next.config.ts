@@ -78,6 +78,16 @@ const getConfig = () => {
             '/media/rankings/top-30-most-followed-zimbabweans-on-instagram',
           permanent: true,
         },
+        {
+          source: '/tools/distance-calculator',
+          destination: '/tools/travel-planner',
+          permanent: true,
+        },
+        {
+          source: '/tools/calendar',
+          destination: '/tools/events-calendar',
+          permanent: true,
+        },
       ];
     },
   } as NextConfig;

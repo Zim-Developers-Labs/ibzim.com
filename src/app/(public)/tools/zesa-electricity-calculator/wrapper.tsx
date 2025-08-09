@@ -75,7 +75,7 @@ export default function ZesaCalculatorPageWrapper() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <Link
-          href="/tools"
+          href="/#ib-tools"
           className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />

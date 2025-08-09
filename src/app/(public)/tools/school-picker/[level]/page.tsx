@@ -5,6 +5,7 @@ import SchoolPickerPageWrapper from '../wrapper';
 import { textify } from '@/lib/utils';
 import { SchoolPickerProfilesType } from '@/types';
 import { getAllSchoolsByLevel } from '@/sanity/lib/client';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ level: string }>;
@@ -14,21 +15,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { level } = await params;
 
   return preparePageMetadata({
-    title: `${textify(level)} Schools Picker Tool | IBZim`,
-    description: `Explore ${textify(level)} schools in Zimbabwe. Find the best fit for your educational needs.`,
+    title: `${textify(level)} Picker Tool`,
+    description: `Explore ${level == 'best-tertiary-institutions' ? '30+' : '100+'} ${textify(level)} in Zimbabwe. Find the perfect fit for your educational needs.`,
     pageUrl: `/tools/school-picker/${level}`,
     imageUrl: '/banner.webp',
     siteConfig: siteConfig,
   });
 }
 
+export async function generateStaticParams() {
+  return [
+    { level: 'best-primary-schools' },
+    { level: 'best-o-level-schools' },
+    { level: 'best-a-level-schools' },
+    { level: 'best-tertiary-institutions' },
+  ];
+}
+
+const allowedLevels = [
+  'best-primary-schools',
+  'best-o-level-schools',
+  'best-a-level-schools',
+  'best-tertiary-institutions',
+];
+
 export default async function SchoolPickerPage({ params }: Props) {
   const { level } = await params;
 
+  if (!allowedLevels.includes(level)) {
+    return notFound();
+  }
+
   const normalizedLevel =
-    level === 'o-level-education' || level === 'a-level-education'
+    level === 'best-o-level-schools' || level === 'best-a-level-schools'
       ? 'high-school'
-      : level === 'primary-education'
+      : level === 'best-primary-schools'
         ? 'primary-school'
         : 'tertiary-institution';
 
@@ -43,7 +64,7 @@ export default async function SchoolPickerPage({ params }: Props) {
 
   profiles.sort((a, b) => {
     if (
-      level === 'primary-education' &&
+      level === 'best-primary-schools' &&
       a.primarySchoolPassRates &&
       b.primarySchoolPassRates
     ) {
@@ -53,7 +74,7 @@ export default async function SchoolPickerPage({ params }: Props) {
       );
     }
     if (
-      level === 'o-level-education' &&
+      level === 'best-o-level-schools' &&
       a.oLevelSchoolPassRates &&
       b.oLevelSchoolPassRates
     ) {
@@ -63,7 +84,7 @@ export default async function SchoolPickerPage({ params }: Props) {
       );
     }
     if (
-      level === 'a-level-education' &&
+      level === 'best-a-level-schools' &&
       a.aLevelSchoolPassRates &&
       b.aLevelSchoolPassRates
     ) {

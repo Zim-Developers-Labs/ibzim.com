@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Repeat } from 'lucide-react'; // Using Repeat icon
 import Link from 'next/link';
+import Container from '@/components/container';
 
 export default function CurrencyConverterPageWrapper() {
   const [usdAmount, setUsdAmount] = useState<string>('');
@@ -116,10 +117,10 @@ export default function CurrencyConverterPageWrapper() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <Container className="py-12">
       <div className="mb-6">
         <Link
-          href="/tools"
+          href="/#ib-tools"
           className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -212,6 +213,6 @@ export default function CurrencyConverterPageWrapper() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </Container>
   );
 }

@@ -7,7 +7,7 @@ export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: `Chats | IBZim`,
     description: `Join our topic-based WhatsApp groups where Zimbabweans connect, share ideas, and build networks. Groups open on schedule for focused, meaningful conversations.`,
-    pageUrl: '/calendar',
+    pageUrl: '/chats',
     imageUrl: '/banner.webp',
     siteConfig: siteConfig,
   });

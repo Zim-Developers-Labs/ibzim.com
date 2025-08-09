@@ -381,7 +381,7 @@ export const ProfileFields = [
     type: 'string',
     group: INPUT_GROUP.CONFIG,
     hidden: ({ parent }) =>
-      parent.entityType !== 'school' || parent.schoolType !== 'high-school',
+      parent.entityType !== 'school' || parent.level !== 'high-school',
     title: 'O Level School Type',
     options: {
       layout: 'dropdown',
@@ -394,7 +394,7 @@ export const ProfileFields = [
     type: 'string',
     group: INPUT_GROUP.CONFIG,
     hidden: ({ parent }) =>
-      parent.entityType !== 'school' || parent.schoolType !== 'high-school',
+      parent.entityType !== 'school' || parent.level !== 'high-school',
     title: 'A Level School Type',
     options: {
       layout: 'dropdown',
@@ -407,7 +407,7 @@ export const ProfileFields = [
     type: 'string',
     group: INPUT_GROUP.CONFIG,
     hidden: ({ parent }) =>
-      parent.entityType !== 'school' || parent.schoolType !== 'primary-school',
+      parent.entityType !== 'school' || parent.level !== 'primary-school',
     title: 'Primary School Type',
     options: {
       layout: 'dropdown',

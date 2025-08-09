@@ -1,7 +1,6 @@
 'use client';
 
 import { ChevronRightIcon } from 'lucide-react';
-import Link from 'next/link';
 
 export default function Banner() {
   return (
@@ -33,15 +32,20 @@ export default function Banner() {
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
           <p className="text-sm leading-6 text-gray-900">
-            Get easy access to IBZIM
+            IBZIM is launching soon
           </p>
-          <Link
-            href="/install-app"
-            className="flex cursor-pointer items-center gap-1 rounded-sm bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+          <button
+            onClick={() => {
+              window.open(
+                'https://wa.me/+263717238876?text=Hey%20IBZim%20Team%2C%20I%27m%20%5BYour%20name%5D.%20I%20am%20excited%20for%20the%20launch.%20Notify%20me!',
+                '_blank',
+              );
+            }}
+            className="flex cursor-pointer items-center gap-1 rounded-full bg-gray-900 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            Install App
+            Join Waitlist
             <ChevronRightIcon className="h-4 w-4" />
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

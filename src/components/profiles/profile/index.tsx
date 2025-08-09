@@ -93,13 +93,13 @@ export default function ProfileArticleWrapper({
 
 function ActionBar({ profile }: { profile: ProfileType }) {
   return (
-    <div className="sticky top-0 z-50 mb-8 flex items-center justify-between border border-t border-r-0 border-b border-l-0 border-zinc-200 bg-white px-2 py-4">
+    <div className="sticky top-0 z-50 mb-8 flex items-center justify-between bg-teal-200 px-2 py-4">
       <Container className="g flex w-full items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <Link
             // href={`/profiles/${profile.entityType}/${profile.slug.current}/discussions`}
             href="#"
-            className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
+            className="rounded bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
             title="Talk about this profile"
           >
             Talk
@@ -109,7 +109,7 @@ function ActionBar({ profile }: { profile: ProfileType }) {
             <Link
               // href={`/profiles/${profile.entityType}/${profile.slug.current}/reviews`}
               href="#"
-              className="rounded border border-zinc-200 bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
+              className="rounded bg-zinc-900 px-2 py-1 text-xs text-white transition-colors hover:bg-zinc-700"
               title="Review this profile"
             >
               Reviews

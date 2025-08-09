@@ -6,11 +6,9 @@ import {
   MapPin,
   DollarSign,
   Star,
-  Filter,
   X,
   Phone,
   Info,
-  LinkIcon,
   BriefcaseBusiness,
   GraduationCap,
 } from 'lucide-react';
@@ -51,10 +49,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SchoolPickerProfilesType } from '@/types';
 
 const educationLevels = [
-  { value: 'primary-education', label: 'Primary' },
-  { value: 'o-level-education', label: 'O Level' },
-  { value: 'a-level-education', label: 'A Level' },
-  { value: 'tertiary-education', label: 'Tertiary' },
+  { value: 'best-primary-schools', label: 'Primary' },
+  { value: 'best-o-level-schools', label: 'O Level' },
+  { value: 'best-a-level-schools', label: 'A Level' },
+  { value: 'best-tertiary-institutions', label: 'Tertiary' },
 ];
 
 export default function SchoolPicker({
@@ -69,7 +67,6 @@ export default function SchoolPicker({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProvince, setSelectedLocation] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
-  const [feeRange, setFeeRange] = useState([0, 20000]);
   const [selectedChurch, setSelectedChurch] = useState('all');
 
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
@@ -80,6 +77,18 @@ export default function SchoolPicker({
   const [newContactRole, setNewContactRole] = useState('');
   const [agreesToTerms, setAgreesToTerms] = useState(false);
   const [contactDialogTab, setContactDialogTab] = useState('view');
+
+  const averages = schools.map((school) => {
+    const amounts = school.feesHistory.map((f) => f.amount);
+    const sum = amounts.reduce((acc, curr) => acc + curr, 0);
+    const avg = amounts.length > 0 ? sum / amounts.length : 0;
+    return avg;
+  });
+
+  const lowestAverage = Math.min(...averages);
+  const highestAverage = Math.max(...averages);
+
+  const [feeRange, setFeeRange] = useState([lowestAverage, highestAverage]);
 
   const provinces = [
     'all',
@@ -132,12 +141,12 @@ export default function SchoolPicker({
         (() => {
           let typeToCheck;
 
-          if (school.level === 'primary school') {
+          if (school.level === 'primary-school') {
             typeToCheck = school.primarySchoolType;
-          } else if (school.level === 'high school') {
-            if (level === 'a-level-education') {
+          } else if (school.level === 'high-school') {
+            if (level === 'best-a-level-schools') {
               typeToCheck = school.aLevelSchoolType;
-            } else if (level === 'o-level-education') {
+            } else if (level === 'best-o-level-schools') {
               typeToCheck = school.oLevelSchoolType;
             }
           }
@@ -154,9 +163,9 @@ export default function SchoolPicker({
         averageFee >= feeRange[0] && averageFee <= feeRange[1];
       // For universities, ignore church filter since they typically don't have religious affiliations
       const matchesChurch =
-        selectedLevel === 'tertiary-education' ||
+        selectedLevel === 'best-tertiary-institutions' ||
         selectedChurch === 'all' ||
-        school.church === selectedChurch;
+        school.churchAffiliation === selectedChurch;
 
       return (
         matchesLevel &&
@@ -181,7 +190,7 @@ export default function SchoolPicker({
     setSelectedLocation('all');
     setSelectedType('all');
     setSelectedChurch('all');
-    setFeeRange([0, 20000]);
+    setFeeRange([lowestAverage, highestAverage]);
   };
 
   const handleContactSubmit = (e: any) => {
@@ -218,29 +227,6 @@ export default function SchoolPicker({
     setIsContactDialogOpen(true);
   };
 
-  const alertData = [
-    {
-      level: 'primary-education',
-      text: 'Best Primary Schools in Zimbabwe',
-      link: '/education/rankings/top-100-best-primary-schools-in-zimbabwe',
-    },
-    {
-      level: 'o-level-education',
-      text: 'Best O Level Schools in Zimbabwe',
-      link: '/education/rankings/top-100-best-o-level-schools-in-zimbabwe',
-    },
-    {
-      level: 'a-level-education',
-      text: 'Best A Level Schools in Zimbabwe',
-      link: '/education/rankings/top-100-best-a-level-schools-in-zimbabwe',
-    },
-    {
-      level: 'tertiary-education',
-      text: 'Best Universities in Zimbabwe',
-      link: '/education/rankings/top-20-best-universities-in-zimbabwe',
-    },
-  ];
-
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'Boys Boarding':
@@ -256,15 +242,17 @@ export default function SchoolPicker({
   };
 
   return (
-    <Container className="">
+    <Container className="py-12">
       {/* Header */}
       <div className="mb-8 text-center">
         <h1 className="mb-2 text-3xl font-bold text-gray-900">
-          {textify(selectedLevel)} School Picker Tool
+          {textify(selectedLevel)} Table
         </h1>
         <p className="mx-auto max-w-sm text-zinc-600">
-          Browse through {textify(selectedLevel)} schools in Zimbabwe to find
-          the best fit for your educational needs.
+          Browse through{' '}
+          {selectedLevel !== 'best-tertiary-institutions' ? '100+' : '30+'}{' '}
+          {textify(selectedLevel)} in Zimbabwe to find the best fit for your
+          educational needs.
         </p>
       </div>
 
@@ -288,20 +276,8 @@ export default function SchoolPicker({
 
         {/* Search and Filters */}
         <div className="mb-6 py-6">
-          <div className="mb-6 flex flex-col gap-4 lg:flex-row">
-            <div className="relative flex-1">
-              <Search className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search schools..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-
           <div className="space-y-8">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               <div>
                 <Label htmlFor="location" className="mb-2 text-sm font-normal">
                   Province
@@ -323,7 +299,7 @@ export default function SchoolPicker({
                 </Select>
               </div>
 
-              {selectedLevel === 'tertiary-education' ? (
+              {selectedLevel === 'best-tertiary-institutions' ? (
                 <div>
                   <Label htmlFor="type" className="mb-2 text-sm font-normal">
                     School Type
@@ -368,11 +344,11 @@ export default function SchoolPicker({
                 <Select
                   value={selectedChurch}
                   onValueChange={setSelectedChurch}
-                  disabled={selectedLevel === 'tertiary-education'}
+                  disabled={selectedLevel === 'best-tertiary-institutions'}
                 >
                   <SelectTrigger
                     className={`w-full ${
-                      selectedLevel === 'tertiary-education'
+                      selectedLevel === 'best-tertiary-institutions'
                         ? 'cursor-not-allowed opacity-50'
                         : ''
                     }`}
@@ -389,17 +365,13 @@ export default function SchoolPicker({
                 </Select>
               </div>
 
-              <div className="flex w-full items-end gap-2">
-                <Button variant="default" className="w-full flex-1">
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filter Schools
-                </Button>
+              <div className="self-end">
                 <Button
-                  variant="outline"
+                  variant="default"
                   onClick={clearFilters}
                   className="w-full flex-1"
                 >
-                  <X className="mr-2 h-4 w-4" />
+                  <X className="h-4 w-4" />
                   Clear Filters
                 </Button>
               </div>
@@ -407,7 +379,8 @@ export default function SchoolPicker({
 
             <div>
               <Label className="mb-4 text-sm font-normal">
-                Term Fees Range: ${feeRange[0]} - ${feeRange[1]}
+                {level === 'tertiary-institution' ? 'Semester' : 'Term'} Fees
+                Range: ${feeRange[0]} - ${feeRange[1]}
               </Label>
               <Slider
                 value={feeRange}
@@ -424,16 +397,7 @@ export default function SchoolPicker({
           <Info />
           <AlertDescription className="text-primary">
             Figures provided are estimates and averages based on available data.
-            Click the link below to check the figures for:
-            <Link
-              href={
-                alertData.find((item) => item.level === selectedLevel)!.link
-              }
-              className="mt-2 block font-medium hover:underline"
-            >
-              {alertData.find((item) => item.level === selectedLevel)?.text}{' '}
-              2025 <LinkIcon className="inline h-4 w-fit" />
-            </Link>
+            For better experience view on wider screens like laptops or tablets.
           </AlertDescription>
         </Alert>
 
@@ -493,12 +457,12 @@ export default function SchoolPicker({
                               school.aLevelSchoolType ||
                               ''}
                           </Badge>
-                          {school.church && (
+                          {school.churchAffiliation && (
                             <Badge
                               variant="outline"
                               className="border-purple-200 bg-purple-50 text-xs text-purple-700"
                             >
-                              {school.church}
+                              {school.churchAffiliation}
                             </Badge>
                           )}
                         </div>
@@ -549,10 +513,12 @@ export default function SchoolPicker({
                                 | undefined;
 
                               if (school.level === 'high-school') {
-                                if (level === 'a-level-education') {
-                                  ratesArray = school.oLevelSchoolPassRates; // show O-level rates
-                                } else if (level === 'o-level-education') {
+                                if (selectedLevel === 'best-a-level-schools') {
                                   ratesArray = school.aLevelSchoolPassRates; // show A-level rates
+                                } else if (
+                                  selectedLevel === 'best-o-level-schools'
+                                ) {
+                                  ratesArray = school.oLevelSchoolPassRates; // show O-level rates
                                 }
                               }
 
@@ -584,8 +550,7 @@ export default function SchoolPicker({
 
                       <div className="flex gap-2 pt-2">
                         <Link
-                          // href={`/profiles/school/${Linkify(school.name)}`}
-                          href="#"
+                          href={`/profiles/school/${school.slug.current}`}
                           className="bg-primary hover:bg-primary/90 block w-full flex-1 rounded-md py-1 text-center text-white transition-colors"
                         >
                           View Details

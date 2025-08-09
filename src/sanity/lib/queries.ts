@@ -319,6 +319,7 @@ export const allArticlesByAuthorSlugQuery: string = groq`
 export const allSchoolsByLevelQuery: string = groq`*[_type == "profile" && entityType == "school" && level == $level && defined(province)] {
   _id,
   name,
+  slug,
   level,
   oLevelSchoolType,
   aLevelSchoolType,
@@ -326,7 +327,7 @@ export const allSchoolsByLevelQuery: string = groq`*[_type == "profile" && entit
   location,
   province,
   feesHistory,
-  church,
+  churchAffiliation,
   primarySchoolPassRates,
   oLevelSchoolPassRates,
   aLevelSchoolPassRates,

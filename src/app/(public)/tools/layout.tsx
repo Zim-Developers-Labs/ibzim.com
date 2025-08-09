@@ -1,4 +1,3 @@
-import Container from '@/components/container';
 import FeedbackModal from './feedback-modal';
 import { SmileIcon } from 'lucide-react';
 
@@ -8,8 +7,8 @@ export default function ToolsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Container className="py-12">{children}</Container>
+    <>
+      {children}
       <aside className="relative mt-12 flex flex-col items-center border-b border-zinc-600 bg-zinc-900 px-4 py-24 text-center">
         <div className="absolute top-0 left-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-8 transform items-center justify-center rounded-full bg-zinc-900 text-2xl">
           <SmileIcon className="h-8 w-8 text-white" />
@@ -23,6 +22,6 @@ export default function ToolsLayout({
         </p>
         <FeedbackModal />
       </aside>
-    </div>
+    </>
   );
 }

@@ -36,7 +36,12 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteConfig.url.web}/calendar`,
+      url: `${siteConfig.url.web}/articles`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
+      url: `${siteConfig.url.web}/profiles`,
       lastModified: new Date(),
       priority: 1,
     },
@@ -51,22 +56,7 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteConfig.url.web}/tools`,
-      lastModified: new Date(),
-      priority: 1,
-    },
-    {
-      url: `${siteConfig.url.web}/tools/ecocash-calculator`,
-      lastModified: new Date(),
-      priority: 1,
-    },
-    {
-      url: `${siteConfig.url.web}/tools/distance-calculator`,
-      lastModified: new Date(),
-      priority: 1,
-    },
-    {
-      url: `${siteConfig.url.web}/profiles`,
+      url: `${siteConfig.url.web}/support`,
       lastModified: new Date(),
       priority: 1,
     },
