@@ -13,7 +13,7 @@ export default function ProfileTruthScore({
   const getScoreClass = () => {
     if (score > 75) return 'text-green-600';
     if (score > 0) return 'text-yellow-600';
-    return 'text-zinc-600';
+    return 'text-zinc-900';
   };
 
   return (

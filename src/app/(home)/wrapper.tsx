@@ -7,12 +7,14 @@ import {
   Zap,
   UserIcon,
   ChevronRight,
+  Search,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import HomeSearchToggler from './home-search-toggler';
 import { User } from 'lucia';
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
+import SearchToggler from '@/components/header/search-toggler';
+import { Button } from '@/components/ui/button';
 
 const features = [
   {
@@ -107,10 +109,20 @@ export default function HomeWrapper({
 
           {/* Search Box */}
           <div className="relative mb-8 flex w-full justify-center">
-            <HomeSearchToggler
+            <SearchToggler
               articles={articles}
               popularArticles={popularArticles}
-            />
+            >
+              <Button
+                variant="outline"
+                className="h-fit w-full max-w-2xl cursor-pointer rounded-full border-zinc-200 bg-white py-4 text-base hover:bg-zinc-100"
+              >
+                <Search className="size-5 text-zinc-600" />
+                <div className="pr-2 text-xs text-zinc-600">
+                  Search/Request Articles
+                </div>
+              </Button>
+            </SearchToggler>
           </div>
 
           {/* OR Divider */}

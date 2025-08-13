@@ -206,7 +206,7 @@ export async function getAllAuthorSlugs(): Promise<{ slug: string }[]> {
 
 export async function getAllProfileSlugsAndTypeByBlog(
   profileDocumentType: string,
-): Promise<{ slug: string; type: string; _updatedAt?: string }[]> {
+): Promise<{ slug: string; type: string; _updatedAt?: string; _id: string }[]> {
   if (client) {
     return (
       (await client.fetch(profileSlugsAndTypeByBlogQuery, {

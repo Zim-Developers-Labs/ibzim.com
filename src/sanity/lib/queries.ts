@@ -235,6 +235,22 @@ const profileFields = groq`
     "description": seo.description,
     picture,
     entityType,
+  },
+  level,
+  oLevelSchoolType,
+  aLevelSchoolType,
+  primarySchoolType,
+  location,
+  province,
+  feesHistory,
+  churchAffiliation,
+  primarySchoolPassRates,
+  oLevelSchoolPassRates,
+  aLevelSchoolPassRates,
+  contacts[] {
+    name,
+    phone,
+    role
   }
 `;
 
@@ -277,6 +293,7 @@ export const authorSlugsQuery: string = groq`*[_type == "author"] {
 }`;
 
 export const profileSlugsAndTypeByBlogQuery: string = groq`*[_type == $profileDocumentType] {
+   _id,
    "slug": slug.current,
    "type": entityType,
    _updatedAt,

@@ -13,13 +13,14 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRightIcon, Grip, Search } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '../ui/button';
 
 export const tools = [
   {
-    name: 'Calendar',
-    href: '/tools/event-calendar',
+    name: 'Events Calendar',
+    href: '/tools/events-calendar',
   },
   {
     name: 'Ecocash Calculator',
@@ -61,96 +62,57 @@ export default function Header({
     >
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
-          <div className="flex gap-x-4 lg:hidden">
-            <SideBar />
+          <div className="flex items-center gap-x-4 lg:hidden">
+            <Link href="#ib-tools">
+              <Button
+                variant="outline"
+                className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+              >
+                <Grip className="h-5 w-5" />
+                <span className="sr-only">View Tools</span>
+              </Button>
+            </Link>
             <Link href="/">
               <span className="sr-only" aria-hidden="true">
                 IBZim logo
               </span>
-              <Icons.logo className="h-7 w-fit md:hidden" />
+              <Icons.logo className="h-7 w-fit" />
             </Link>
           </div>
-          <div className="hidden flex-1 lg:flex lg:gap-x-6">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/articles"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
-                  >
-                    Blog
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/zimbabwe-peoples-choice-awards"
-                    className="rounded-md bg-gradient-to-tr from-yellow-500 via-yellow-600 to-yellow-500 px-2 text-white hover:text-white"
-                  >
-                    2025 Awards
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/support"
-                    target="_blank"
-                    className="group relative flex w-full flex-row items-center rounded-lg p-3 text-white hover:bg-zinc-800 hover:text-white"
-                  >
-                    Support
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="bg-transparent text-white">
-                    Tools
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="flex flex-col md:w-[200px] lg:w-[200px]">
-                      {tools.map((nav) => (
-                        <li key={nav.name}>
-                          <Link
-                            href={nav.href}
-                            className="group flex w-full flex-row items-center rounded-lg p-3 hover:bg-gray-50"
-                          >
-                            <span className="flex items-center">
-                              <ChevronRightIcon className="group-hover:text-primaryColor mr-1 size-3" />
-                              <span className="text-sm text-gray-900">
-                                {nav.name}
-                              </span>
-                            </span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+          <div className="hidden flex-1 items-center lg:flex lg:gap-x-6">
+            <Link href="#ib-tools">
+              <Button
+                variant="outline"
+                className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+              >
+                <Grip className="h-5 w-5" />
+                <span className="">Menu</span>
+              </Button>
+            </Link>
+            <Link href="/" className="">
+              <span className="sr-only">IBZim Logo</span>
+              <Icons.logo className="hidden h-8 w-fit md:block" />
+            </Link>
           </div>
-          <Link
-            href="/"
-            className="absolute left-1/2 -m-1.5 -translate-x-1/2 transform p-1.5"
-          >
-            <span className="sr-only">IBZim Logo</span>
-            <Icons.logo className="hidden h-8 w-fit md:block" />
-          </Link>
-          <div className="flex flex-none items-center gap-2 md:gap-4">
-            {articles && popularArticles && (
+          {articles && popularArticles && (
+            <div className="absolute left-1/2 -m-1.5 hidden w-full -translate-x-1/2 transform p-1.5 px-72 md:block lg:px-96">
               <SearchToggler
                 articles={articles}
                 popularArticles={popularArticles}
-              />
-            )}
+              >
+                <Button
+                  variant="outline"
+                  className="relative w-full cursor-pointer border-zinc-600 bg-zinc-800 hover:bg-zinc-600"
+                >
+                  <Search className="size-5 text-zinc-300" />
+                  <div className="pr-2 text-xs text-zinc-300">
+                    Search/Request Articles
+                  </div>
+                </Button>
+              </SearchToggler>
+            </div>
+          )}
+          <div className="flex flex-none items-center gap-2 md:gap-4">
             <Notifications />
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}

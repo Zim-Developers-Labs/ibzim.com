@@ -45,6 +45,8 @@ export async function getComments(articleId: string): Promise<CommentsResult> {
     .from(comments)
     .where(eq(comments.articleId, articleId));
 
+  // TODO: this can be improved by doing what i did in the reviews actions.ts instead of fetching comments and user separately i can use left join to map the needed user information in the allComment const above
+
   const activeUsers = await db
     .select()
     .from(users)

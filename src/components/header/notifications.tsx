@@ -75,7 +75,7 @@ export function Notifications() {
             </span>
           )}
           <BellIcon className="h-5 w-5" />
-          <span className="sr-only">Open notifications</span>
+          <span className="hidden md:inline">Notifications</span>
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full max-w-[350px] flex-col sm:w-[540px]">

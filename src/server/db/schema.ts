@@ -11,6 +11,7 @@ import {
   primaryKey,
   jsonb,
   pgEnum,
+  decimal,
 } from 'drizzle-orm/pg-core';
 import { DATABASE_PREFIX as prefix } from '@/lib/constants';
 
@@ -95,6 +96,45 @@ export const organizerProfiles = pgTable(
 
 export type OrganizerProfile = typeof organizerProfiles.$inferSelect;
 export type NewOrganizerProfile = typeof organizerProfiles.$inferInsert;
+
+// Add the recommended enum
+export const recommendedEnum = pgEnum('recommended', ['yes', 'no', 'neutral']);
+
+// Add the reviews table
+export const reviews = pgTable(
+  'reviews',
+  {
+    id: varchar('id', { length: 21 }).primaryKey(),
+    reviewerId: varchar('reviewer_id', { length: 21 })
+      .notNull()
+      .references(() => users.id),
+    profileId: varchar('profile_id', { length: 50 }).notNull(),
+    rating: decimal('rating', { precision: 2, scale: 1 }).notNull(),
+    comment: text('comment'),
+    recommended: recommendedEnum('recommended').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+      () => new Date(),
+    ),
+    deletedAt: timestamp('deleted_at'),
+  },
+  (t) => ({
+    reviewerIdx: index('review_reviewer_idx').on(t.reviewerId),
+    profileIdx: index('review_profile_idx').on(t.profileId),
+    ratingIdx: index('review_rating_idx').on(t.rating),
+    profileRatingIdx: index('review_profile_rating_idx').on(
+      t.profileId,
+      t.rating,
+    ),
+    reviewerProfileIdx: index('review_reviewer_profile_idx').on(
+      t.reviewerId,
+      t.profileId,
+    ),
+  }),
+);
+
+export type Review = typeof reviews.$inferSelect;
+export type NewReview = typeof reviews.$inferInsert;
 
 export const sessions = pgTable(
   'sessions',
@@ -191,6 +231,48 @@ export const commentReactions = pgTable(
 
 export type CommentLike = typeof commentReactions.$inferSelect;
 export type NewCommentLike = typeof commentReactions.$inferInsert;
+
+export const reviewReactionEnum = pgEnum('review_reaction', [
+  'yes',
+  'no',
+  'funny',
+  'tier1Award',
+  'tier2Award',
+  'tier3Award',
+]);
+
+export const reviewReactions = pgTable(
+  'review_reactions',
+  {
+    id: varchar('id', { length: 21 }).primaryKey(),
+    userId: varchar('user_id', { length: 21 })
+      .notNull()
+      .references(() => users.id),
+    reviewId: varchar('review_id', { length: 21 })
+      .notNull()
+      .references(() => reviews.id),
+    reaction: reviewReactionEnum('review_reaction').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' }).$onUpdate(
+      () => new Date(),
+    ),
+  },
+  (t) => ({
+    reviewIdx: index('review_reaction_review_idx').on(t.reviewId),
+    userIdx: index('review_reaction_user_idx').on(t.userId),
+    userReviewIdx: index('review_reaction_user_review_idx').on(
+      t.userId,
+      t.reviewId,
+    ),
+    reviewReactionIdx: index('review_reaction_type_idx').on(
+      t.reviewId,
+      t.reaction,
+    ),
+  }),
+);
+
+export type ReviewReaction = typeof reviewReactions.$inferSelect;
+export type NewReviewReaction = typeof reviewReactions.$inferInsert;
 
 export const actionTakenEnum = pgEnum('action_taken', [
   'none',
@@ -508,6 +590,15 @@ export const savedArticlesRelations = relations(savedArticles, ({ one }) => ({
   }),
 }));
 
+// Add relations for the reviews table
+export const reviewsRelations = relations(reviews, ({ one, many }) => ({
+  reviewer: one(users, {
+    fields: [reviews.reviewerId],
+    references: [users.id],
+  }),
+  reviewReactions: many(reviewReactions),
+}));
+
 // Add relations for the events table
 export const eventsRelations = relations(events, ({ one }) => ({
   organizer: one(organizerProfiles, {
@@ -516,11 +607,13 @@ export const eventsRelations = relations(events, ({ one }) => ({
   }),
 }));
 
-// Update the userRelations to include events
+// Update the userRelations to include reviews
 export const userRelations = relations(users, ({ many }) => ({
   achievements: many(userAchievements),
   followVerificationRequests: many(followVerificationRequests),
-  organizedEvents: many(events), // Add this line
+  organizedEvents: many(events),
+  reviewsGiven: many(reviews), // Reviews this user has written
+  reviewReactions: many(reviewReactions),
 }));
 
 export const commentReportRelations = relations(commentReports, ({ one }) => ({
@@ -564,5 +657,19 @@ export const answersRelations = relations(answers, ({ one }) => ({
     references: [users.fullName],
   }),
 }));
+
+export const reviewReactionsRelations = relations(
+  reviewReactions,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [reviewReactions.userId],
+      references: [users.id],
+    }),
+    review: one(reviews, {
+      fields: [reviewReactions.reviewId],
+      references: [reviews.id],
+    }),
+  }),
+);
 
 // ----------------------- End of Relationships------------------------------------- //

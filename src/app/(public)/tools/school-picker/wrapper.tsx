@@ -109,13 +109,15 @@ export default function SchoolPicker({
     'Mixed Boarding',
     'Day School',
   ];
-  const tetiaryTypes = [
+  const tertiaryTypes = [
     'all',
-    'Public',
-    'Private',
-    'Polytechnic',
-    'Teacher Training',
+    'University',
+    'Polytechnic College',
+    'Teaching College',
     'Technical College',
+    'Nursing School',
+    'Vocational Training Centre',
+    'Business School',
   ];
   const churches = [
     'all',
@@ -309,7 +311,7 @@ export default function SchoolPicker({
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {tetiaryTypes.map((type) => (
+                      {tertiaryTypes.map((type) => (
                         <SelectItem key={type} value={type}>
                           {type === 'all' ? 'All Types' : type}
                         </SelectItem>

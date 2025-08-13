@@ -18,7 +18,7 @@ type EventSharePopoverProps = {
 };
 
 export default function EventSharePopover({ eventId }: EventSharePopoverProps) {
-  const shareUrl = `https://www.ibzim.com/tools/event-calendar?highlight_event_id=${eventId}`;
+  const shareUrl = `https://www.ibzim.com/tools/events-calendar?highlight_event_id=${eventId}`;
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(shareUrl).then(() => {

@@ -517,7 +517,7 @@ function FaqAnswer({
             )}
             {index === 0 && answer.isVerified && (
               <span className="text-xs font-medium text-green-600">
-                Official Answer
+                Curator Answer
               </span>
             )}
           </div>

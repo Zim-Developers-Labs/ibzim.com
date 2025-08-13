@@ -11,6 +11,7 @@ import { urlForImage } from '@/sanity/lib/image';
 import { ProfileType } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getReviewsForProfile } from './reviews/actions';
 
 type Props = {
   params: Promise<{ slug: string; type: string }>;
@@ -77,8 +78,11 @@ export default async function ProfilePage({ params }: Props) {
     siteConfig.documentPrefix,
   );
 
+  const reviews = await getReviewsForProfile(profile._id);
+
   return (
     <ProfileArticleWrapper
+      reviews={reviews}
       user={user}
       allArticles={allArticles}
       popularArticles={popularArticles}

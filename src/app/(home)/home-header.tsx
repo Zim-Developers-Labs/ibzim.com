@@ -20,13 +20,15 @@ export default function HomeHeader({ user }: HeaderProps) {
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-x-2 lg:hidden">
-            <Button
-              variant="outline"
-              className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
-            >
-              <Grip className="h-5 w-5" />
-              <span className="sr-only">View Tools</span>
-            </Button>
+            <Link href="#ib-tools">
+              <Button
+                variant="outline"
+                className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+              >
+                <Grip className="h-5 w-5" />
+                <span className="sr-only">View Tools</span>
+              </Button>
+            </Link>
             <Link href="/">
               <span className="sr-only" aria-hidden="true">
                 IBZim logo
@@ -41,7 +43,7 @@ export default function HomeHeader({ user }: HeaderProps) {
                 className="relative flex cursor-pointer items-center gap-2 border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
               >
                 <Grip className="h-5 w-5" />
-                <span className="">Tools</span>
+                <span className="">Menu</span>
               </Button>
             </Link>
           </div>

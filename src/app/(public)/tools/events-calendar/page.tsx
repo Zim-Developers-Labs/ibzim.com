@@ -10,7 +10,7 @@ export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: `Events Calendar | IBZim`,
     description: `Stay updated with the latest events and activities in Zimbabwe, Check out the IBZim Calendar for upcoming events.`,
-    pageUrl: '/tools/event-calendar',
+    pageUrl: '/tools/events-calendar',
     imageUrl: '/banner.webp',
     siteConfig,
   });

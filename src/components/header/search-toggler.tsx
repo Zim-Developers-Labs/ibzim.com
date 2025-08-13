@@ -15,9 +15,11 @@ import { Button } from '../ui/button';
 export default function SearchToggler({
   articles,
   popularArticles,
+  children,
 }: {
   articles?: any[];
   popularArticles?: any[];
+  children: React.ReactNode;
 }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -55,17 +57,7 @@ export default function SearchToggler({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="relative cursor-pointer border-zinc-600 bg-transparent hover:bg-zinc-800"
-        >
-          <Search className="size-5 text-zinc-300" />
-          <div className="hidden pr-2 text-xs text-zinc-300 md:block">
-            Search/Request Articles
-          </div>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogTitle className="sr-only">Search Articles</DialogTitle>
         <div className="flex items-center border-b pb-4">

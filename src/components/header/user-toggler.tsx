@@ -53,7 +53,7 @@ export default function UserToggler({ user }: UserTogglerType) {
   return (
     <div className="w-fit">
       <Menu>
-        <MenuButton className="relative inline-flex items-center gap-2 rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1.5 text-sm/6 text-white">
+        <MenuButton className="relative inline-flex cursor-pointer items-center gap-2 rounded-md border border-zinc-600 bg-transparent px-2 py-1.5 text-sm/6 text-white hover:bg-zinc-800">
           {user.avatar ? (
             <Image
               alt={user.fullName || ''}
@@ -68,13 +68,13 @@ export default function UserToggler({ user }: UserTogglerType) {
               {lname[0]}
             </div>
           )}
-          <ChevronDownIcon className="size-4 fill-zinc-700" />
+          <ChevronDownIcon className="size-4 fill-white" />
         </MenuButton>
 
         <MenuItems
           transition
           anchor="bottom end"
-          className="mt-4 w-64 origin-top-right rounded-xl border border-zinc-200 bg-white p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+          className="z-50 mt-2 w-64 origin-top-right rounded-xl border border-zinc-200 bg-white p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
         >
           <div className="px-2 py-4 text-xs">{user.email}</div>
           <MenuItem>
@@ -131,7 +131,7 @@ export default function UserToggler({ user }: UserTogglerType) {
               className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
               onClick={open}
             >
-              <ArrowRightStartOnRectangleIcon className="size-4 text-black/30" />
+              <ArrowRightStartOnRectangleIcon className="size-4 text-black" />
               Logout
               <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
                 ⌘A

@@ -240,7 +240,7 @@ export type ProfileType = {
   intro: string;
   body: any;
   picture: {
-    ratio: string;
+    ratio: '1:1' | '16:9';
     asset: {
       _ref: string;
     };
@@ -256,7 +256,7 @@ export type ProfileType = {
     _key: string;
   }[];
   yearFounded: number;
-  entityType: string;
+  entityType: 'company' | 'person' | 'school' | 'place' | 'day' | 'other';
   birthDate?: string;
   isBirthDateApproximate?: boolean;
   birthYear?: number;
@@ -275,6 +275,71 @@ export type ProfileType = {
     };
     name: string;
     description: string;
+  }[];
+  // schools
+  level?:
+    | 'pre-school'
+    | 'primary-school'
+    | 'high-school'
+    | 'tertiary-institution';
+  oLevelSchoolType?:
+    | 'Boys Boarding'
+    | 'Girls Boarding'
+    | 'Mixed Boarding'
+    | 'Day School';
+  aLevelSchoolType?:
+    | 'Boys Boarding'
+    | 'Girls Boarding'
+    | 'Mixed Boarding'
+    | 'Day School';
+  primarySchoolType?:
+    | 'Boys Boarding'
+    | 'Girls Boarding'
+    | 'Mixed Boarding'
+    | 'Day School';
+  tertiaryInstitutionType?:
+    | 'University'
+    | 'Polytechnic College'
+    | 'Teaching College'
+    | 'Technical College'
+    | 'Nursing School'
+    | 'Vocational Training Centre'
+    | 'Business School';
+  province?:
+    | 'Harare'
+    | 'Bulawayo'
+    | 'Manicaland'
+    | 'Mashonaland Central'
+    | 'Mashonaland East'
+    | 'Mashonaland West'
+    | 'Masvingo'
+    | 'Midlands'
+    | 'Matabeleland South'
+    | 'Matabeleland North';
+  churchAffiliation?:
+    | 'Anglican'
+    | 'Catholic'
+    | 'Dutch'
+    | 'Methodist'
+    | 'Pentecostal'
+    | 'Presbyterian'
+    | 'Seventh-day'
+    | 'Other';
+  employmentRatesHistory?: {
+    year: number;
+    employmentRate: number;
+  }[];
+  primarySchoolPassRates?: {
+    year: number;
+    passRate: number;
+  }[];
+  oLevelSchoolPassRates?: {
+    year: number;
+    passRate: number;
+  }[];
+  aLevelSchoolPassRates?: {
+    year: number;
+    passRate: number;
   }[];
 };
 
