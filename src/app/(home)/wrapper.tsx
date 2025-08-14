@@ -16,7 +16,7 @@ import { Icons } from '@/components/icons';
 import SearchToggler from '@/components/header/search-toggler';
 import { Button } from '@/components/ui/button';
 
-const features = [
+export const menuItems = [
   {
     title: 'Articles Blog',
     description: 'Read latest articles and insights',
@@ -213,7 +213,7 @@ export default function HomeWrapper({
                 </Card>
               </Link>
             </li>
-            {features.map((feature, index) => {
+            {menuItems.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <li key={index}>

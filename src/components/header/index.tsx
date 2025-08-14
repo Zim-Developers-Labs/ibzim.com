@@ -16,6 +16,7 @@ import {
 import { ChevronRightIcon, Grip, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import { MenuDrawer } from './menu-drawer';
 
 export const tools = [
   {
@@ -63,7 +64,7 @@ export default function Header({
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-x-4 lg:hidden">
-            <Link href="#ib-tools">
+            <MenuDrawer>
               <Button
                 variant="outline"
                 className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
@@ -71,7 +72,7 @@ export default function Header({
                 <Grip className="h-5 w-5" />
                 <span className="sr-only">View Tools</span>
               </Button>
-            </Link>
+            </MenuDrawer>
             <Link href="/">
               <span className="sr-only" aria-hidden="true">
                 IBZim logo
@@ -80,7 +81,7 @@ export default function Header({
             </Link>
           </div>
           <div className="hidden flex-1 items-center lg:flex lg:gap-x-6">
-            <Link href="#ib-tools">
+            <MenuDrawer>
               <Button
                 variant="outline"
                 className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
@@ -88,14 +89,14 @@ export default function Header({
                 <Grip className="h-5 w-5" />
                 <span className="">Menu</span>
               </Button>
-            </Link>
+            </MenuDrawer>
             <Link href="/" className="">
               <span className="sr-only">IBZim Logo</span>
               <Icons.logo className="hidden h-8 w-fit md:block" />
             </Link>
           </div>
           {articles && popularArticles && (
-            <div className="absolute left-1/2 -m-1.5 hidden w-full -translate-x-1/2 transform p-1.5 px-72 md:block lg:px-96">
+            <div className="absolute left-1/2 z-0 -m-1.5 hidden w-fit -translate-x-1/2 transform p-1.5 md:block lg:w-full lg:max-w-sm xl:max-w-lg">
               <SearchToggler
                 articles={articles}
                 popularArticles={popularArticles}

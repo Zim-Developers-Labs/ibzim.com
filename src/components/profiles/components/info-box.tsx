@@ -5,11 +5,11 @@ import { TxtRenderer } from '../../pt-renderer';
 import { ProfileType } from '@/types';
 import { urlForImage } from '@/sanity/lib/image';
 import { Icons } from '@/components/icons';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, TriangleAlert } from 'lucide-react';
 
 export default function InfoBox({ profile }: { profile: ProfileType }) {
   return (
-    <div className="mx-auto block w-full rounded-md border border-zinc-200 bg-zinc-50 p-2 md:mx-0 md:max-w-[300px]">
+    <div className="mx-auto block w-full rounded-md border border-zinc-200 bg-zinc-50 md:mx-0 md:max-w-[300px]">
       <figure className="mb-2">
         {profile.picture.ratio === '16:9' ? (
           <Image
@@ -42,7 +42,7 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
         <caption className="mb-4 w-full border-y text-center text-sm text-zinc-700">
           Details
         </caption>
-        <tbody className="mx-auto block w-full max-w-[300px] overflow-x-hidden text-sm">
+        <tbody className="mx-auto block w-full max-w-[300px] overflow-x-hidden px-2 text-sm md:px-3">
           {profile.legalName && (
             <tr className="grid grid-cols-[40%_60%]">
               <th className="pr-2 pb-2 text-left align-top">Legal Name</th>
@@ -95,7 +95,7 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
         </tbody>
       </table>
       {profile.socialLinks && (
-        <div className="border-t border-t-zinc-200 pt-3">
+        <div className="border-t border-t-zinc-200 px-2 pt-3 md:px-3">
           <span className="mb-3 block text-lg">Social Media Links</span>
           <ul className="text-primaryColor mb-5 flex w-fit items-center space-x-4 text-xs">
             {profile.socialLinks?.map((socialLink, index) => (
@@ -143,7 +143,7 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
         </div>
       )}
       {profile.relatedProfiles && (
-        <div className="border-t border-t-zinc-200 pt-3">
+        <div className="border-t border-t-zinc-200 px-2 pt-3 md:px-3">
           <span className="mb-3 block text-lg">People Are Interested In</span>
           <ul>
             {profile.relatedProfiles?.map((relatedProfile, index) => {
@@ -188,6 +188,14 @@ export default function InfoBox({ profile }: { profile: ProfileType }) {
           </ul>
         </div>
       )}
+      <div
+        className="cursor-pointer rounded-b-md border-t border-zinc-200 p-2 hover:bg-red-200"
+        onClick={() => window.open('https://wa.me/+263717238876', '_blank')}
+      >
+        <div className="flex items-center justify-center gap-1 rounded-sm border-red-900 text-xs text-red-900">
+          <TriangleAlert className="size-3" /> Report Inaccuracy
+        </div>
+      </div>
     </div>
   );
 }
