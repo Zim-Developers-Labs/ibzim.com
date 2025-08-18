@@ -192,7 +192,7 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
 
 function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
   return (
-    <div className="pr-6">
+    <div className={`pr-6 ${className}`}>
       <ul
         id="ib-tools"
         className="grid -translate-y-40 grid-cols-2 gap-3 pt-40 sm:grid-cols-3 sm:gap-4 lg:gap-6"

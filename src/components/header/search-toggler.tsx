@@ -10,7 +10,6 @@ import {
 } from '../ui/dialog';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { Button } from '../ui/button';
 
 export default function SearchToggler({
   articles,

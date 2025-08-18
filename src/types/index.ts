@@ -432,4 +432,6 @@ export type SchoolPickerProfilesType = {
     phone: string;
     role: string;
   }[];
+  averageRating?: number;
+  reviewsCount?: number;
 };

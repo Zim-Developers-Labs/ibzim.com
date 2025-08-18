@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import type { ProfileType } from '@/types';
 import { TriangleAlert } from 'lucide-react';
 

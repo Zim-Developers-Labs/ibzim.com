@@ -6,6 +6,7 @@ import { textify } from '@/lib/utils';
 import { SchoolPickerProfilesType } from '@/types';
 import { getAllSchoolsByLevel } from '@/sanity/lib/client';
 import { notFound } from 'next/navigation';
+import { getReviewsCountAndAverageReviewByProfile } from '@/app/(blog)/profiles/[type]/[slug]/reviews/actions';
 
 type Props = {
   params: Promise<{ level: string }>;
@@ -96,11 +97,25 @@ export default async function SchoolPickerPage({ params }: Props) {
     return 0;
   });
 
+  // map throughs profiles and map reviewsCount and averageRating to each school from getReviewsCountAndAverageReviewByProfile(profile._id)
+  const profilesWithReviews = await Promise.all(
+    profiles.map(async (profile) => {
+      const { count, average } = await getReviewsCountAndAverageReviewByProfile(
+        profile._id,
+      );
+      return {
+        ...profile,
+        reviewsCount: count,
+        averageRating: average,
+      };
+    }),
+  );
+
   return (
     <SchoolPickerPageWrapper
       level={normalizedLevel}
       selectedLevel={level}
-      schools={profiles}
+      schools={profilesWithReviews}
     />
   );
 }

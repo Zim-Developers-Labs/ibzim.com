@@ -14,7 +14,7 @@ import { ChevronLeft, Plus, Star } from 'lucide-react';
 import ReviewsList from './reviews-list';
 import { ReviewWithUser } from './actions';
 import PostReviewDialog from '@/components/profiles/profile/post-review-dialog';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function ProfileReviewsWrapper({
@@ -31,6 +31,11 @@ export default function ProfileReviewsWrapper({
   user: User | null;
 }) {
   const [updatedReviews, setUpdatedReviews] = useState(reviews);
+
+  // TODO: Remove this use effect only added to remove unused variable error of setUpdatedReviews
+  useEffect(() => {
+    setUpdatedReviews(reviews);
+  }, [reviews]);
 
   const averageRating = updatedReviews.length
     ? Number(

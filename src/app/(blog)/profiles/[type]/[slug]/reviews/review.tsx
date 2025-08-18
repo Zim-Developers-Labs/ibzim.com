@@ -110,9 +110,9 @@ export default function ProfileReview({
     }
   };
 
-  const openAwardDialog = (reviewId: string) => {
-    setAwardDialogOpen((prev) => ({ ...prev, [reviewId]: true }));
-  };
+  // const openAwardDialog = (reviewId: string) => {
+  //   setAwardDialogOpen((prev) => ({ ...prev, [reviewId]: true }));
+  // };
 
   const isReviewEditable = (review: ReviewWithUser) => {
     if (!user || review.reviewerId !== user.id) return false;
@@ -461,9 +461,9 @@ export function ProfileReviewMini({
     }
   };
 
-  const openAwardDialog = (reviewId: string) => {
-    setAwardDialogOpen((prev) => ({ ...prev, [reviewId]: true }));
-  };
+  // const openAwardDialog = (reviewId: string) => {
+  //   setAwardDialogOpen((prev) => ({ ...prev, [reviewId]: true }));
+  // };
 
   const isReviewEditable = (review: ReviewWithUser) => {
     if (!user || review.reviewerId !== user.id) return false;

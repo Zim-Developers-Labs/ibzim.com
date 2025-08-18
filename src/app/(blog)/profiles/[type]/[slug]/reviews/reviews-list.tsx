@@ -11,22 +11,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import {
-  MoreVertical,
-  Flag,
-  Trash2,
-  Edit,
   Star,
   MessageCircle,
-  ThumbsUp,
-  ThumbsDown,
-  Smile,
-  Award,
   ChevronDown,
   Plus,
   Info,
   ArrowRight,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 import { useState, useMemo } from 'react';
 import { ReviewWithUser } from './actions';
 import { ProfileType } from '@/types';

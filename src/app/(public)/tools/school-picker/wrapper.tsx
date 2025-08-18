@@ -14,14 +14,6 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Select,
@@ -32,21 +24,14 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import Container from '@/components/container';
 import Link from 'next/link';
 import { textify } from '@/lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SchoolPickerProfilesType } from '@/types';
+import { DialogContent, DialogDescription } from '@radix-ui/react-dialog';
+import { DialogTitle } from '@headlessui/react';
 
 const educationLevels = [
   { value: 'best-primary-schools', label: 'Primary' },
@@ -399,163 +384,198 @@ export default function SchoolPicker({
           <Info />
           <AlertDescription className="text-primary">
             Figures provided are estimates and averages based on available data.
-            For better experience view on wider screens like laptops or tablets.
+            For better experience rotate your phone or use IBZIM on wider
+            screens like laptops or tablets.
           </AlertDescription>
         </Alert>
 
-        {/* Results */}
-        <div>
-          <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredSchools.map((school) => {
-              const averageFee =
-                school.feesHistory && school.feesHistory.length > 0
-                  ? school.feesHistory.reduce(
-                      (sum, fee) => sum + fee.amount,
-                      0,
-                    ) / school.feesHistory.length
-                  : 0;
+        {/* Schools List */}
+        {/* Schools Table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Rank
+                </th>
+                <th className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900 md:max-w-[200px] md:min-w-[200px]">
+                  School Name
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Location
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Type
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Church
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Fees
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Performance
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Rating
+                </th>
+                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSchools.map((school, index) => {
+                const averageFee =
+                  school.feesHistory && school.feesHistory.length > 0
+                    ? school.feesHistory.reduce(
+                        (sum, fee) => sum + fee.amount,
+                        0,
+                      ) / school.feesHistory.length
+                    : 0;
 
-              return (
-                <li key={school._id}>
-                  <Card className="relative transition-shadow hover:shadow-lg">
-                    <CardHeader>
-                      <div className="flex items-start justify-between pt-4">
-                        <div>
-                          <CardTitle className="text-lg">
-                            {school.name}
-                          </CardTitle>
-                          <CardDescription className="mt-1 flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {school.location}
-                          </CardDescription>
-                        </div>
-                        <div className="absolute top-3 right-3 flex items-center gap-1 text-xs">
-                          <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                          <span className="font-medium text-gray-600">
-                            4.8 (120 reviews)
-                          </span>
-                        </div>
+                return (
+                  <tr key={school._id} className="hover:bg-gray-50">
+                    <td className="border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-800">
+                        {index + 1}
                       </div>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                      {/* <p className="text-sm text-gray-600">
-                      {school.description}
-                    </p> */}
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant="outline"
-                            className={getTypeColor(
-                              school.primarySchoolType ||
-                                school.oLevelSchoolType ||
-                                school.aLevelSchoolType ||
-                                '',
-                            )}
-                          >
-                            {school.primarySchoolType ||
-                              school.oLevelSchoolType ||
-                              school.aLevelSchoolType ||
-                              ''}
-                          </Badge>
-                          {school.churchAffiliation && (
-                            <Badge
-                              variant="outline"
-                              className="border-purple-200 bg-purple-50 text-xs text-purple-700"
-                            >
-                              {school.churchAffiliation}
-                            </Badge>
-                          )}
-                        </div>
+                    </td>
+                    <td className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50 md:max-w-[200px] md:min-w-[200px]">
+                      <div className="font-medium text-gray-900">
+                        {school.name}
                       </div>
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                        <MapPin className="h-3 w-3" />
+                        {school.location}
+                      </div>
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      <Badge
+                        variant="outline"
+                        className={getTypeColor(
+                          school.primarySchoolType ||
+                            school.oLevelSchoolType ||
+                            school.aLevelSchoolType ||
+                            '',
+                        )}
+                      >
+                        {school.primarySchoolType ||
+                          school.oLevelSchoolType ||
+                          school.aLevelSchoolType ||
+                          'N/A'}
+                      </Badge>
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      {school.churchAffiliation ? (
+                        <Badge
+                          variant="outline"
+                          className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                        >
+                          {school.churchAffiliation}
+                        </Badge>
+                      ) : (
+                        <span className="text-sm text-gray-400">None</span>
+                      )}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      <div className="flex items-center gap-1 text-sm">
+                        <DollarSign className="h-4 w-4 text-green-600" />
+                        <span>
+                          ${averageFee.toLocaleString()}/
+                          {school.level === 'tertiary-institution'
+                            ? 'semester'
+                            : 'term'}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      {school.level === 'tertiary-institution'
+                        ? // For tertiary institutions — average from employmentRatesHistory
+                          (() => {
+                            const avgEmploymentRate = school
+                              .employmentRatesHistory?.length
+                              ? (
+                                  school.employmentRatesHistory.reduce(
+                                    (sum, item) => sum + item.employmentRate,
+                                    0,
+                                  ) / school.employmentRatesHistory.length
+                                ).toFixed(1)
+                              : null;
 
-                      <div className="flex justify-between gap-2 text-sm">
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4 text-green-600" />
-                          <span>
-                            ${averageFee.toLocaleString()}/
-                            {school.level === 'tertiary-institution'
-                              ? 'semester'
-                              : 'term'}
-                          </span>
-                        </div>
-                        {school.level === 'tertiary-institution'
-                          ? // For tertiary institutions — average from employmentRatesHistory
-                            (() => {
-                              const avgEmploymentRate = school
-                                .employmentRatesHistory?.length
-                                ? (
-                                    school.employmentRatesHistory.reduce(
-                                      (sum, item) => sum + item.employmentRate,
-                                      0,
-                                    ) / school.employmentRatesHistory.length
-                                  ).toFixed(1)
-                                : null;
+                            return (
+                              <div className="flex items-center gap-1">
+                                {avgEmploymentRate !== null ? (
+                                  <>
+                                    <span className="text-sm">{`${avgEmploymentRate}%`}</span>
+                                    <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
+                                  </>
+                                ) : (
+                                  <span className="text-sm text-gray-500">
+                                    No data
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()
+                        : // For high schools — decide array based on `level` param
+                          (() => {
+                            let ratesArray:
+                              | { year: number; passRate: number }[]
+                              | undefined;
 
-                              return (
-                                <div className="flex items-center gap-1">
-                                  {avgEmploymentRate !== null ? (
-                                    <>
-                                      <span className="text-sm">{`${avgEmploymentRate}% employed`}</span>
-                                      <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
-                                    </>
-                                  ) : (
-                                    <span className="text-sm text-gray-500">
-                                      No data
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })()
-                          : // For high schools — decide array based on `level` param
-                            (() => {
-                              let ratesArray:
-                                | { year: number; passRate: number }[]
-                                | undefined;
-
-                              if (school.level === 'high-school') {
-                                if (selectedLevel === 'best-a-level-schools') {
-                                  ratesArray = school.aLevelSchoolPassRates; // show A-level rates
-                                } else if (
-                                  selectedLevel === 'best-o-level-schools'
-                                ) {
-                                  ratesArray = school.oLevelSchoolPassRates; // show O-level rates
-                                }
+                            if (school.level === 'high-school') {
+                              if (selectedLevel === 'best-a-level-schools') {
+                                ratesArray = school.aLevelSchoolPassRates;
+                              } else if (
+                                selectedLevel === 'best-o-level-schools'
+                              ) {
+                                ratesArray = school.oLevelSchoolPassRates;
                               }
+                            }
 
-                              const avgPassRate = ratesArray?.length
-                                ? (
-                                    ratesArray.reduce(
-                                      (sum, item) => sum + item.passRate,
-                                      0,
-                                    ) / ratesArray.length
-                                  ).toFixed(1)
-                                : null;
+                            const avgPassRate = ratesArray?.length
+                              ? (
+                                  ratesArray.reduce(
+                                    (sum, item) => sum + item.passRate,
+                                    0,
+                                  ) / ratesArray.length
+                                ).toFixed(1)
+                              : null;
 
-                              return (
-                                <div className="flex items-center gap-1">
-                                  {avgPassRate !== null ? (
-                                    <>
-                                      <span className="text-sm">{`${avgPassRate}% pass rate`}</span>
-                                      <GraduationCap className="h-4 w-4 text-purple-600" />
-                                    </>
-                                  ) : (
-                                    <span className="text-sm text-gray-500">
-                                      No data
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })()}
+                            return (
+                              <div className="flex items-center gap-1">
+                                {avgPassRate !== null ? (
+                                  <>
+                                    <span className="text-sm">{`${avgPassRate}%`}</span>
+                                    <GraduationCap className="h-4 w-4 text-purple-600" />
+                                  </>
+                                ) : (
+                                  <span className="text-sm text-gray-500">
+                                    No data
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      <div className="flex items-center gap-1 text-xs">
+                        <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
+                        <span className="font-medium text-gray-600">
+                          {school.averageRating} ({school.reviewsCount})
+                        </span>
                       </div>
-
-                      <div className="flex gap-2 pt-2">
+                    </td>
+                    <td className="border border-gray-200 px-4 py-3">
+                      <div className="flex gap-2">
                         <Link
                           href={`/profiles/school/${school.slug.current}`}
-                          className="bg-primary hover:bg-primary/90 block w-full flex-1 rounded-md py-1 text-center text-white transition-colors"
+                          className="bg-primary hover:bg-primary/90 rounded-md px-3 py-1 text-xs text-white transition-colors"
                         >
-                          View Details
+                          View
                         </Link>
                         <Dialog
                           open={isContactDialogOpen}
@@ -564,235 +584,45 @@ export default function SchoolPicker({
                           <DialogTrigger asChild>
                             <Button
                               variant="outline"
-                              className="cursor-pointer"
                               size="sm"
+                              className="px-2 py-1 text-xs"
                               onClick={() => openContactDialog(school)}
                             >
-                              <Phone className="mr-1 h-4 w-4" />
-                              Call
+                              <Phone className="h-3 w-3" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-lg">
-                            <DialogHeader>
-                              <DialogTitle>
-                                Contact {selectedSchoolForContact?.name}
-                              </DialogTitle>
-                              <DialogDescription>
-                                View available contacts or add new ones
-                              </DialogDescription>
-                            </DialogHeader>
-
-                            <Tabs
-                              value={contactDialogTab}
-                              onValueChange={setContactDialogTab}
-                              className="w-full"
-                            >
-                              <TabsList className="grid w-full grid-cols-2">
-                                <TabsTrigger value="view">
-                                  View Contacts
-                                </TabsTrigger>
-                                <TabsTrigger value="add">
-                                  Add Contact
-                                </TabsTrigger>
-                              </TabsList>
-
-                              <TabsContent value="view" className="space-y-4">
-                                <div>
-                                  <h4 className="mb-3 font-medium">
-                                    Available Contacts:
-                                  </h4>
-                                  <div className="space-y-2">
-                                    {selectedSchoolForContact?.contacts?.map(
-                                      (contact: any, index: any) => (
-                                        <div
-                                          key={index}
-                                          className="flex items-center justify-between rounded-lg border p-3"
-                                        >
-                                          <div className="flex-1">
-                                            <p className="text-sm font-medium">
-                                              {contact.name}
-                                            </p>
-                                            <p className="text-xs text-gray-600">
-                                              {contact.role}
-                                            </p>
-                                            <p className="mt-1 text-xs text-gray-500">
-                                              {contact.phone}
-                                            </p>
-                                          </div>
-                                          <div className="flex gap-2">
-                                            <Button
-                                              size="sm"
-                                              variant="default"
-                                              onClick={() =>
-                                                window.open(
-                                                  `tel:${contact.phone}`,
-                                                )
-                                              }
-                                            >
-                                              <Phone className="mr-1 h-3 w-3" />
-                                              Call
-                                            </Button>
-                                            <Button
-                                              size="sm"
-                                              variant="outline"
-                                              onClick={() =>
-                                                alert(
-                                                  `Report submitted for ${contact.phone}. Thank you for helping us maintain accurate contact information.`,
-                                                )
-                                              }
-                                            >
-                                              Report
-                                            </Button>
-                                          </div>
-                                        </div>
-                                      ),
-                                    ) || (
-                                      <div className="py-8 text-center text-gray-500">
-                                        <Phone className="mx-auto mb-2 h-8 w-8 opacity-50" />
-                                        <p className="text-sm">
-                                          No contacts available for this school.
-                                        </p>
-                                        <p className="mt-1 text-xs">
-                                          Be the first to add one!
-                                        </p>
-                                      </div>
-                                    )}
-                                  </div>
+                          {/* TODO: Forgot to add the UI which the V0 AI left out maybe try to find it in  v0 or git history on these commits*/}
+                          <DialogContent>
+                            <DialogTitle>Contact {school.name}</DialogTitle>
+                            <DialogDescription>
+                              Please fill out the form below to get in touch
+                              with {school.name}.
+                            </DialogDescription>
+                            <form action={handleContactSubmit}>
+                              {/* Form fields go here */}
+                              {contactDialogTab === 'view' ? (
+                                <div className="space-y-4">
+                                  <p className="text-sm text-gray-600">
+                                    View Mode
+                                  </p>
                                 </div>
-                              </TabsContent>
-
-                              <TabsContent value="add" className="space-y-4">
-                                <div>
-                                  <h4 className="mb-3 text-base font-medium">
-                                    Submit a New Contact:
-                                  </h4>
-                                  <form
-                                    onSubmit={handleContactSubmit}
-                                    className="space-y-4"
-                                  >
-                                    <div>
-                                      <Label
-                                        htmlFor="contactName"
-                                        className="mb-2 text-sm font-normal"
-                                      >
-                                        Contact Name
-                                      </Label>
-                                      <Input
-                                        id="contactName"
-                                        value={newContactName}
-                                        onChange={(e) =>
-                                          setNewContactName(e.target.value)
-                                        }
-                                        placeholder="e.g., John Smith or Main Office"
-                                        required
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <Label
-                                        htmlFor="contactPhone"
-                                        className="mb-2 text-sm font-normal"
-                                      >
-                                        Phone Number
-                                      </Label>
-                                      <Input
-                                        id="contactPhone"
-                                        value={newContactPhone}
-                                        onChange={(e) =>
-                                          setNewContactPhone(e.target.value)
-                                        }
-                                        placeholder="+263-XX-XXXXXXX"
-                                        required
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <Label
-                                        htmlFor="contactRole"
-                                        className="mb-2 text-sm font-normal"
-                                      >
-                                        Role/Position
-                                      </Label>
-                                      <Select
-                                        value={newContactRole}
-                                        onValueChange={setNewContactRole}
-                                        required
-                                      >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="Select role" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="School Landline">
-                                            School Landline
-                                          </SelectItem>
-                                          <SelectItem value="Principal">
-                                            Principal
-                                          </SelectItem>
-                                          <SelectItem value="Headmaster">
-                                            Headmaster
-                                          </SelectItem>
-                                          <SelectItem value="Admissions Officer">
-                                            Admissions Officer
-                                          </SelectItem>
-                                          <SelectItem value="Bursar">
-                                            Bursar
-                                          </SelectItem>
-                                          <SelectItem value="Secretary">
-                                            Secretary
-                                          </SelectItem>
-                                          <SelectItem value="Deputy Head">
-                                            Deputy Head
-                                          </SelectItem>
-                                          <SelectItem value="Other">
-                                            Other
-                                          </SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </div>
-
-                                    <div className="flex items-center space-x-2">
-                                      <Checkbox
-                                        id="terms"
-                                        checked={agreesToTerms}
-                                        onCheckedChange={() =>
-                                          setAgreesToTerms(!agreesToTerms)
-                                        }
-                                      />
-                                      <Label
-                                        htmlFor="terms"
-                                        className="text-xs"
-                                      >
-                                        I confirm that this phone number belongs
-                                        to a member of{' '}
-                                        {selectedSchoolForContact?.name}
-                                      </Label>
-                                    </div>
-
-                                    <Button
-                                      type="submit"
-                                      className="w-full"
-                                      disabled={
-                                        !agreesToTerms ||
-                                        !newContactName ||
-                                        !newContactPhone ||
-                                        !newContactRole
-                                      }
-                                    >
-                                      Submit Contact
-                                    </Button>
-                                  </form>
+                              ) : (
+                                <div className="space-y-4">
+                                  <p className="text-sm text-gray-600">
+                                    Edit Mode
+                                  </p>
                                 </div>
-                              </TabsContent>
-                            </Tabs>
+                              )}
+                            </form>
                           </DialogContent>
                         </Dialog>
                       </div>
-                    </CardContent>
-                  </Card>
-                </li>
-              );
-            })}
-          </ul>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
 
           {filteredSchools.length === 0 && (
             <div className="py-12 text-center">

@@ -1,19 +1,10 @@
 import Container from '@/components/container';
 import { Notifications } from '@/components/header/notifications';
 import SearchToggler from '@/components/header/search-toggler';
-import SideBar from '@/components/header/side-bar';
 import { SignToggler } from '@/components/header/sign-toggler';
 import UserToggler from '@/components/header/user-toggler';
 import { Icons } from '@/components/icons';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import { ChevronRightIcon, Grip, Search } from 'lucide-react';
+import { Grip, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { MenuDrawer } from './menu-drawer';

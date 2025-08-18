@@ -27,7 +27,7 @@ import Link from 'next/link';
 import { User } from 'lucia';
 import GoogleAdUnit from '@/components/ad-unit';
 import Header from '@/components/header';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -43,9 +43,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import { ReviewWithUser } from '@/app/(blog)/profiles/[type]/[slug]/reviews/actions';
 import PostReviewDialog from './post-review-dialog';
-import ProfileReview, {
-  ProfileReviewMini,
-} from '@/app/(blog)/profiles/[type]/[slug]/reviews/review';
+import { ProfileReviewMini } from '@/app/(blog)/profiles/[type]/[slug]/reviews/review';
 import { ReviewFeedback } from '@/app/(blog)/profiles/[type]/[slug]/reviews/reviews-list';
 import RankingCard from './ranking-card';
 
@@ -146,6 +144,11 @@ function ActionBar({
   const [isPostReviewOpen, setIsPostReviewOpen] = useState(false);
 
   const [updatedReviews, setUpdatedReviews] = useState(reviews || []);
+
+  // TODO: remove useEffect only added so that setUpdatedReviews isnt an used variable error
+  useEffect(() => {
+    setUpdatedReviews(reviews || []);
+  }, [reviews]);
 
   const averageRating = updatedReviews.length
     ? Number(
@@ -394,7 +397,7 @@ function ActionBar({
 
               <p className="max-w-[320px] text-xs text-zinc-600">
                 Your review could be the one that helps someone find exactly
-                what they're looking for.
+                what they&#39;re looking for.
               </p>
             </div>
           )}
