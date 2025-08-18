@@ -5,11 +5,12 @@ import { AuthorType, CardArticleType } from '@/types';
 import { ChevronRightIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { deploymentDomain } from '@/lib/config';
 
 const ArticleCard = ({ article }: { article: CardArticleType }) => {
   const domains = {
     article: {
-      production: 'https://www.ibzim.com',
+      production: `https://${deploymentDomain}`,
       development: 'localhost:5001',
     },
     'sa.article': {

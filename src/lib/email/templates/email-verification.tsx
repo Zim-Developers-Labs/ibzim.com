@@ -12,6 +12,7 @@ import {
   Text,
 } from '@react-email/components';
 import { APP_TITLE } from '@/lib/constants';
+import { deploymentDomain } from '@/lib/config';
 
 export interface EmailVerificationTemplateProps {
   code: string;
@@ -31,7 +32,7 @@ export const EmailVerificationTemplate = ({
           <Section style={coverSection}>
             <Section style={imageSection}>
               <Img
-                src={`https://www.ibzim.com/static.png`}
+                src={`https://${deploymentDomain}/static.png`}
                 width="176"
                 height="45"
                 alt="IBZim's Logo"
@@ -75,7 +76,7 @@ export const EmailVerificationTemplate = ({
             </Link>
             , Inc. View our{' '}
             <Link
-              href="https://www.ibzim.com/policies/privacy"
+              href={`https://${deploymentDomain}/policies/privacy`}
               target="_blank"
               style={link}
             >
