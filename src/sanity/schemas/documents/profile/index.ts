@@ -411,7 +411,13 @@ export const ProfileFields = [
     title: 'Primary School Type',
     options: {
       layout: 'dropdown',
-      list: ['Boys Boarding', 'Girls Boarding', 'Mixed Boarding', 'Day School'],
+      list: [
+        'Boys Boarding',
+        'Girls Boarding',
+        'Mixed Boarding',
+        'Day School',
+        'Boarding & Day',
+      ],
     },
   }),
 
@@ -454,6 +460,7 @@ export const ProfileFields = [
     name: 'churchAffiliation',
     type: 'string',
     group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) => parent.level == 'primary-school',
     title: 'Church Affiliation',
     options: {
       layout: 'dropdown',
@@ -464,6 +471,7 @@ export const ProfileFields = [
         'Methodist',
         'Pentecostal',
         'Presbyterian',
+        'Salvation Army',
         'Seventh-day',
       ],
     },
@@ -485,7 +493,17 @@ export const ProfileFields = [
             validation: (Rule) => Rule.min(0).warning('Fees must be positive'),
           },
           {
+            name: 'feesStatus',
+            title: 'Fees Status',
+            type: 'string',
+            options: {
+              layout: 'dropdown',
+              list: ['Needs Confirmation', 'Verified', 'Custom'],
+            },
+          },
+          {
             name: 'notes',
+            hidden: ({ parent }) => parent.feesStatus !== 'Custom',
             type: 'string',
             title: 'School Fees Notes',
           },
@@ -498,8 +516,8 @@ export const ProfileFields = [
     name: 'employmentRatesHistory',
     type: 'array',
     group: INPUT_GROUP.CONFIG,
-    title: 'Tertiary Insitution Employment Rates',
-    hidden: ({ parent }) => parent.level !== 'primary-school',
+    title: 'Tertiary Institution Employment Rates',
+    hidden: ({ parent }) => parent.level !== 'tertiary-institution',
     of: [
       {
         type: 'object',

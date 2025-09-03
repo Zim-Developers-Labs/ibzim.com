@@ -11,6 +11,8 @@ import {
   Info,
   BriefcaseBusiness,
   GraduationCap,
+  TriangleAlert,
+  CheckCircle,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -32,6 +34,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SchoolPickerProfilesType } from '@/types';
 import { DialogContent, DialogDescription } from '@radix-ui/react-dialog';
 import { DialogTitle } from '@headlessui/react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const educationLevels = [
   { value: 'best-primary-schools', label: 'Primary' },
@@ -112,6 +115,7 @@ export default function SchoolPicker({
     'Dutch',
     'Methodist',
     'Presbyterian',
+    'Salvation Army',
   ];
 
   const filteredSchools = useMemo(() => {
@@ -249,7 +253,7 @@ export default function SchoolPicker({
           {educationLevels.map((level) => (
             <Link
               key={level.value}
-              href={`/tools/school-picker/${level.value}`}
+              href={`/tools/school-picker/${level.value}-in-zimbabwe`}
               className={`flex h-full w-full items-center justify-center rounded-md py-1 text-sm ${
                 selectedLevel === level.value
                   ? 'bg-teal-200'
@@ -389,7 +393,6 @@ export default function SchoolPicker({
           </AlertDescription>
         </Alert>
 
-        {/* Schools List */}
         {/* Schools Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse border border-gray-200">
@@ -407,21 +410,23 @@ export default function SchoolPicker({
                 <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
                   Type
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Church
-                </th>
+                {!schools.find((s) => s.level === 'primary-school') && (
+                  <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                    Church
+                  </th>
+                )}
                 <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
                   Fees
                 </th>
                 <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
                   Performance
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                {/* <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
                   Rating
                 </th>
                 <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -435,16 +440,22 @@ export default function SchoolPicker({
                     : 0;
 
                 return (
-                  <tr key={school._id} className="hover:bg-gray-50">
+                  <tr
+                    key={school._id}
+                    className="text-xs hover:bg-gray-50 sm:text-sm"
+                  >
                     <td className="border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-800">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100 text-sm font-semibold text-yellow-800">
                         {index + 1}
                       </div>
                     </td>
-                    <td className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50 md:max-w-[200px] md:min-w-[200px]">
-                      <div className="font-medium text-gray-900">
+                    <td className="sticky left-0 z-10 max-w-[100px] min-w-[75px] border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50 md:max-w-[200px] md:min-w-[200px]">
+                      <Link
+                        href={`/profiles/school/${school.slug.current}`}
+                        className="hover:text-primaryColor pb-2 font-medium text-yellow-800 underline decoration-dotted underline-offset-2"
+                      >
                         {school.name}
-                      </div>
+                      </Link>
                     </td>
                     <td className="border border-gray-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-sm text-gray-600">
@@ -468,21 +479,32 @@ export default function SchoolPicker({
                           'N/A'}
                       </Badge>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      {school.churchAffiliation ? (
-                        <Badge
-                          variant="outline"
-                          className="border-purple-200 bg-purple-50 text-xs text-purple-700"
-                        >
-                          {school.churchAffiliation}
-                        </Badge>
-                      ) : (
-                        <span className="text-sm text-gray-400">None</span>
-                      )}
-                    </td>
+                    {!school.primarySchoolType && (
+                      <td className="border border-gray-200 px-4 py-3">
+                        {school.churchAffiliation ? (
+                          <Badge
+                            variant="outline"
+                            className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                          >
+                            {school.churchAffiliation}
+                          </Badge>
+                        ) : (
+                          <span className="text-sm text-gray-400">None</span>
+                        )}
+                      </td>
+                    )}
                     <td className="border border-gray-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-sm">
-                        <DollarSign className="h-4 w-4 text-green-600" />
+                        {school.feesHistory[0].feesStatus ===
+                          'Needs Confirmation' && (
+                          <TriangleAlert className="size-4 text-red-600" />
+                        )}
+                        {school.feesHistory[0].feesStatus === 'Custom' && (
+                          <TriangleAlert className="size-4 text-yellow-600" />
+                        )}
+                        {school.feesHistory[0].feesStatus === 'Verified' && (
+                          <CheckCircle className="size-4 text-green-600" />
+                        )}
                         <span>
                           ${averageFee.toLocaleString()}/
                           {school.level === 'tertiary-institution'
@@ -536,6 +558,12 @@ export default function SchoolPicker({
                               }
                             }
 
+                            if (school.level == 'primary-school') {
+                              if (selectedLevel === 'best-primary-schools') {
+                                ratesArray = school.primarySchoolPassRates;
+                              }
+                            }
+
                             const avgPassRate = ratesArray?.length
                               ? (
                                   ratesArray.reduce(
@@ -561,22 +589,22 @@ export default function SchoolPicker({
                             );
                           })()}
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
+                    {/* Ratings */}
+                    {/* <td className="border border-gray-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-xs">
                         <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
                         <span className="font-medium text-gray-600">
                           {school.averageRating} ({school.reviewsCount})
                         </span>
                       </div>
-                    </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/profiles/school/${school.slug.current}`}
-                          className="bg-primary hover:bg-primary/90 rounded-md px-3 py-1 text-xs text-white transition-colors"
-                        >
-                          View
-                        </Link>
+                    </td> */}
+                    {/* Actions */}
+                    {/* <td className="border border-gray-200 px-4 py-3">
+                      <div className="flex flex-col gap-2">
+                        <Button size="sm" variant="outline">
+                          <Checkbox id="ibCompare" />
+                          <Label htmlFor="ibCompare">Compare</Label>
+                        </Button>
                         <Dialog
                           open={isContactDialogOpen}
                           onOpenChange={setIsContactDialogOpen}
@@ -589,9 +617,10 @@ export default function SchoolPicker({
                               onClick={() => openContactDialog(school)}
                             >
                               <Phone className="h-3 w-3" />
+                              Call
                             </Button>
                           </DialogTrigger>
-                          {/* TODO: Forgot to add the UI which the V0 AI left out maybe try to find it in  v0 or git history on these commits*/}
+                          // TODO: Forgot to add the UI which the V0 AI left out maybe try to find it in  v0 or git history on these commits
                           <DialogContent>
                             <DialogTitle>Contact {school.name}</DialogTitle>
                             <DialogDescription>
@@ -599,7 +628,7 @@ export default function SchoolPicker({
                               with {school.name}.
                             </DialogDescription>
                             <form action={handleContactSubmit}>
-                              {/* Form fields go here */}
+                              // Form fields go here 
                               {contactDialogTab === 'view' ? (
                                 <div className="space-y-4">
                                   <p className="text-sm text-gray-600">
@@ -617,7 +646,7 @@ export default function SchoolPicker({
                           </DialogContent>
                         </Dialog>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
@@ -638,6 +667,14 @@ export default function SchoolPicker({
             </div>
           )}
         </div>
+
+        <Alert className="border-primaryColor mt-6 border bg-yellow-200">
+          <Info />
+          <AlertDescription className="text-primary">
+            We are still working on adding more schools with as much accurate
+            data as we can find. Contact us on +263717238876 (Whatsapp).
+          </AlertDescription>
+        </Alert>
       </div>
     </Container>
   );

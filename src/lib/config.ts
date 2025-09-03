@@ -10,6 +10,9 @@ export const siteConfig = {
   twitterUsername: '@IBZimBlog',
   country: 'Zimbabwe',
   documentPrefix: '',
+  features: {
+    auth: 'disabled',
+  },
   url: {
     logo: `https://${deploymentDomain}/apple-touch-icon.png`,
     web: `https://${deploymentDomain}`,

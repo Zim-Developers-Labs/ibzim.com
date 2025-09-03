@@ -24,7 +24,7 @@ export const tools = [
   },
   {
     name: 'School Picker',
-    href: '/tools/school-picker/best-a-level-schools',
+    href: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
   },
   {
     name: 'Currency Converter',

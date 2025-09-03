@@ -1,9 +1,9 @@
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import SchoolPickerPageWrapper from '../wrapper';
 import { textify } from '@/lib/utils';
-import { SchoolPickerProfilesType } from '@/types';
+import type { SchoolPickerProfilesType } from '@/types';
 import { getAllSchoolsByLevel } from '@/sanity/lib/client';
 import { notFound } from 'next/navigation';
 import { getReviewsCountAndAverageReviewByProfile } from '@/app/(blog)/profiles/[type]/[slug]/reviews/actions';
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return preparePageMetadata({
     title: `${textify(level)} Picker Tool`,
     description: `Explore ${level == 'best-tertiary-institutions' ? '30+' : '100+'} ${textify(level)} in Zimbabwe. Find the perfect fit for your educational needs.`,
-    pageUrl: `/tools/school-picker/${level}`,
+    pageUrl: `/tools/school-picker/${level}-in-zimbabwe`,
     imageUrl: '/banner.webp',
     siteConfig: siteConfig,
   });
@@ -26,18 +26,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   return [
-    { level: 'best-primary-schools' },
-    { level: 'best-o-level-schools' },
-    { level: 'best-a-level-schools' },
-    { level: 'best-tertiary-institutions' },
+    { level: 'best-primary-schools-in-zimbabwe' },
+    { level: 'best-o-level-schools-in-zimbabwe' },
+    { level: 'best-a-level-schools-in-zimbabwe' },
+    { level: 'best-tertiary-institutions-in-zimbabwe' },
   ];
 }
 
 const allowedLevels = [
-  'best-primary-schools',
-  'best-o-level-schools',
-  'best-a-level-schools',
-  'best-tertiary-institutions',
+  'best-primary-schools-in-zimbabwe',
+  'best-o-level-schools-in-zimbabwe',
+  'best-a-level-schools-in-zimbabwe',
+  'best-tertiary-institutions-in-zimbabwe',
 ];
 
 export default async function SchoolPickerPage({ params }: Props) {
@@ -48,9 +48,10 @@ export default async function SchoolPickerPage({ params }: Props) {
   }
 
   const normalizedLevel =
-    level === 'best-o-level-schools' || level === 'best-a-level-schools'
+    level === 'best-o-level-schools-in-zimbabwe' ||
+    level === 'best-a-level-schools-in-zimbabwe'
       ? 'high-school'
-      : level === 'best-primary-schools'
+      : level === 'best-primary-schools-in-zimbabwe'
         ? 'primary-school'
         : 'tertiary-institution';
 
@@ -58,14 +59,29 @@ export default async function SchoolPickerPage({ params }: Props) {
     getAllSchoolsByLevel(normalizedLevel),
   ]);
 
+  const filteredProfiles = profiles.filter((school) => {
+    if (level === 'best-o-level-schools-in-zimbabwe') {
+      return (
+        school.oLevelSchoolPassRates && school.oLevelSchoolPassRates.length > 0
+      );
+    }
+    if (level === 'best-a-level-schools-in-zimbabwe') {
+      return (
+        school.aLevelSchoolPassRates && school.aLevelSchoolPassRates.length > 0
+      );
+    }
+    // For other levels, return all schools
+    return true;
+  });
+
   const getAveragePassRate = (rates?: { year: number; passRate: number }[]) =>
     rates && rates.length > 0
       ? rates.reduce((sum, rate) => sum + rate.passRate, 0) / rates.length
       : 0;
 
-  profiles.sort((a, b) => {
+  filteredProfiles.sort((a, b) => {
     if (
-      level === 'best-primary-schools' &&
+      level === 'best-primary-schools-in-zimbabwe' &&
       a.primarySchoolPassRates &&
       b.primarySchoolPassRates
     ) {
@@ -75,7 +91,7 @@ export default async function SchoolPickerPage({ params }: Props) {
       );
     }
     if (
-      level === 'best-o-level-schools' &&
+      level === 'best-o-level-schools-in-zimbabwe' &&
       a.oLevelSchoolPassRates &&
       b.oLevelSchoolPassRates
     ) {
@@ -85,7 +101,7 @@ export default async function SchoolPickerPage({ params }: Props) {
       );
     }
     if (
-      level === 'best-a-level-schools' &&
+      level === 'best-a-level-schools-in-zimbabwe' &&
       a.aLevelSchoolPassRates &&
       b.aLevelSchoolPassRates
     ) {
@@ -97,9 +113,8 @@ export default async function SchoolPickerPage({ params }: Props) {
     return 0;
   });
 
-  // map throughs profiles and map reviewsCount and averageRating to each school from getReviewsCountAndAverageReviewByProfile(profile._id)
   const profilesWithReviews = await Promise.all(
-    profiles.map(async (profile) => {
+    filteredProfiles.map(async (profile) => {
       const { count, average } = await getReviewsCountAndAverageReviewByProfile(
         profile._id,
       );
@@ -114,7 +129,7 @@ export default async function SchoolPickerPage({ params }: Props) {
   return (
     <SchoolPickerPageWrapper
       level={normalizedLevel}
-      selectedLevel={level}
+      selectedLevel={level.replace('-in-zimbabwe', '')}
       schools={profilesWithReviews}
     />
   );
