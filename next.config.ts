@@ -106,6 +106,12 @@ const getConfig = () => {
           destination: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
           permanent: true,
         },
+        {
+          source: '/education/rankings/top-20-best-universities-in-zimbabwe',
+          destination:
+            '/tools/school-picker/best-tertiary-institutions-in-zimbabwee',
+          permanent: true,
+        },
       ];
     },
   } as NextConfig;

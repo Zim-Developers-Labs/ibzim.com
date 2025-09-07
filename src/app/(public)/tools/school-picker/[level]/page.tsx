@@ -91,6 +91,13 @@ export default async function SchoolPickerPage({ params }: Props) {
       );
     }
     if (
+      level === 'best-tertiary-institutions-in-zimbabwe' &&
+      a.ibzimRating !== undefined &&
+      b.ibzimRating !== undefined
+    ) {
+      return b.ibzimRating - a.ibzimRating;
+    }
+    if (
       level === 'best-o-level-schools-in-zimbabwe' &&
       a.oLevelSchoolPassRates &&
       b.oLevelSchoolPassRates

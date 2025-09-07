@@ -35,6 +35,12 @@ import { SchoolPickerProfilesType } from '@/types';
 import { DialogContent, DialogDescription } from '@radix-ui/react-dialog';
 import { DialogTitle } from '@headlessui/react';
 import { Checkbox } from '@/components/ui/checkbox';
+import PtRenderer from '@/components/pt-renderer';
+import primaryContent from './content/primary.json';
+import oLevelContent from './content/o-level.json';
+import aLevelContent from './content/a-level.json';
+import tertiaryContent from './content/tertiary.json';
+import GoogleAdUnit from '@/components/ad-unit';
 
 const educationLevels = [
   { value: 'best-primary-schools', label: 'Primary' },
@@ -77,6 +83,15 @@ export default function SchoolPicker({
   const highestAverage = Math.max(...averages);
 
   const [feeRange, setFeeRange] = useState([lowestAverage, highestAverage]);
+
+  const contentBody =
+    selectedLevel === 'best-primary-schools'
+      ? primaryContent
+      : selectedLevel === 'best-o-level-schools'
+        ? oLevelContent
+        : selectedLevel === 'best-a-level-schools'
+          ? aLevelContent
+          : tertiaryContent;
 
   const provinces = [
     'all',
@@ -228,7 +243,7 @@ export default function SchoolPicker({
         return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'Day School':
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-zinc-100 text-zinc-800 border-zinc-200';
     }
   };
 
@@ -236,7 +251,7 @@ export default function SchoolPicker({
     <Container className="py-12">
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+        <h1 className="mb-2 text-4xl font-bold text-zinc-900">
           {textify(selectedLevel)} Table
         </h1>
         <p className="mx-auto max-w-sm text-zinc-600">
@@ -335,7 +350,10 @@ export default function SchoolPicker({
                 <Select
                   value={selectedChurch}
                   onValueChange={setSelectedChurch}
-                  disabled={selectedLevel === 'best-tertiary-institutions'}
+                  disabled={
+                    selectedLevel === 'best-tertiary-institutions' ||
+                    selectedLevel === 'best-primary-schools'
+                  }
                 >
                   <SelectTrigger
                     className={`w-full ${
@@ -395,36 +413,47 @@ export default function SchoolPicker({
 
         {/* Schools Table */}
         <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-gray-200">
+          <table className="min-w-full border-collapse border border-zinc-200">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900">
+              <tr className="bg-zinc-50">
+                <th className="border border-zinc-200 bg-zinc-50 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Rank
                 </th>
-                <th className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900 md:max-w-[200px] md:min-w-[200px]">
-                  School Name
+                <th className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-zinc-200 bg-zinc-50 px-4 py-3 text-left text-sm font-medium text-zinc-900 md:max-w-[200px] md:min-w-[200px]">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Institution Name'
+                    : 'School Name'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Location
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Main Campus'
+                    : 'Location'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Type
-                </th>
-                {!schools.find((s) => s.level === 'primary-school') && (
-                  <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                    Church
+                {selectedLevel !== 'best-tertiary-institutions' && (
+                  <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                    Type
                   </th>
                 )}
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Fees
+                {selectedLevel !== 'best-primary-schools' &&
+                  selectedLevel !== 'best-tertiary-institutions' && (
+                    <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                      Church
+                    </th>
+                  )}
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Fees + Living Cost'
+                    : 'Fees'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Performance
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Year Founded'
+                    : 'Performance'}
                 </th>
-                {/* <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                {/* <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Rating
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Actions
                 </th> */}
               </tr>
@@ -442,14 +471,14 @@ export default function SchoolPicker({
                 return (
                   <tr
                     key={school._id}
-                    className="text-xs hover:bg-gray-50 sm:text-sm"
+                    className="text-xs hover:bg-zinc-50 sm:text-sm"
                   >
-                    <td className="border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50">
+                    <td className="border border-zinc-200 bg-white px-4 py-3 hover:bg-zinc-50">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100 text-sm font-semibold text-yellow-800">
                         {index + 1}
                       </div>
                     </td>
-                    <td className="sticky left-0 z-10 max-w-[100px] min-w-[75px] border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50 md:max-w-[200px] md:min-w-[200px]">
+                    <td className="sticky left-0 z-10 max-w-[100px] min-w-[75px] border border-zinc-200 bg-white px-4 py-3 hover:bg-zinc-50 md:max-w-[200px] md:min-w-[200px]">
                       <Link
                         href={`/profiles/school/${school.slug.current}`}
                         className="hover:text-primaryColor pb-2 font-medium text-yellow-800 underline decoration-dotted underline-offset-2"
@@ -457,43 +486,46 @@ export default function SchoolPicker({
                         {school.name}
                       </Link>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <td className="border border-zinc-200 px-4 py-3">
+                      <div className="flex items-center gap-1 text-sm text-zinc-600">
                         <MapPin className="h-3 w-3" />
                         {school.location}
                       </div>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <Badge
-                        variant="outline"
-                        className={getTypeColor(
-                          school.primarySchoolType ||
+                    {selectedLevel !== 'best-tertiary-institutions' && (
+                      <td className="border border-zinc-200 px-4 py-3">
+                        <Badge
+                          variant="outline"
+                          className={getTypeColor(
+                            school.primarySchoolType ||
+                              school.oLevelSchoolType ||
+                              school.aLevelSchoolType ||
+                              '',
+                          )}
+                        >
+                          {school.primarySchoolType ||
                             school.oLevelSchoolType ||
                             school.aLevelSchoolType ||
-                            '',
-                        )}
-                      >
-                        {school.primarySchoolType ||
-                          school.oLevelSchoolType ||
-                          school.aLevelSchoolType ||
-                          'N/A'}
-                      </Badge>
-                    </td>
-                    {!school.primarySchoolType && (
-                      <td className="border border-gray-200 px-4 py-3">
-                        {school.churchAffiliation ? (
-                          <Badge
-                            variant="outline"
-                            className="border-purple-200 bg-purple-50 text-xs text-purple-700"
-                          >
-                            {school.churchAffiliation}
-                          </Badge>
-                        ) : (
-                          <span className="text-sm text-gray-400">None</span>
-                        )}
+                            'N/A'}
+                        </Badge>
                       </td>
                     )}
-                    <td className="border border-gray-200 px-4 py-3">
+                    {!school.primarySchoolType &&
+                      selectedLevel !== 'best-tertiary-institutions' && (
+                        <td className="border border-zinc-200 px-4 py-3">
+                          {school.churchAffiliation ? (
+                            <Badge
+                              variant="outline"
+                              className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                            >
+                              {school.churchAffiliation}
+                            </Badge>
+                          ) : (
+                            <span className="text-sm text-zinc-400">None</span>
+                          )}
+                        </td>
+                      )}
+                    <td className="border border-zinc-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-sm">
                         {school.feesHistory[0].feesStatus ===
                           'Needs Confirmation' && (
@@ -513,37 +545,9 @@ export default function SchoolPicker({
                         </span>
                       </div>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      {school.level === 'tertiary-institution'
-                        ? // For tertiary institutions — average from employmentRatesHistory
-                          (() => {
-                            const avgEmploymentRate = school
-                              .employmentRatesHistory?.length
-                              ? (
-                                  school.employmentRatesHistory.reduce(
-                                    (sum, item) => sum + item.employmentRate,
-                                    0,
-                                  ) / school.employmentRatesHistory.length
-                                ).toFixed(1)
-                              : null;
-
-                            return (
-                              <div className="flex items-center gap-1">
-                                {avgEmploymentRate !== null ? (
-                                  <>
-                                    <span className="text-sm">{`${avgEmploymentRate}%`}</span>
-                                    <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
-                                  </>
-                                ) : (
-                                  <span className="text-sm text-gray-500">
-                                    No data
-                                  </span>
-                                )}
-                              </div>
-                            );
-                          })()
-                        : // For high schools — decide array based on `level` param
-                          (() => {
+                    <td className="border border-zinc-200 px-4 py-3">
+                      {school.level !== 'tertiary-institution'
+                        ? (() => {
                             let ratesArray:
                               | { year: number; passRate: number }[]
                               | undefined;
@@ -576,30 +580,31 @@ export default function SchoolPicker({
                             return (
                               <div className="flex items-center gap-1">
                                 {avgPassRate !== null ? (
-                                  <>
+                                  <div>
                                     <span className="text-sm">{`${avgPassRate}%`}</span>
                                     <GraduationCap className="h-4 w-4 text-purple-600" />
-                                  </>
+                                  </div>
                                 ) : (
-                                  <span className="text-sm text-gray-500">
+                                  <span className="text-sm text-zinc-500">
                                     No data
                                   </span>
                                 )}
                               </div>
                             );
-                          })()}
+                          })()
+                        : school.yearFounded || 'N/A'}
                     </td>
                     {/* Ratings */}
-                    {/* <td className="border border-gray-200 px-4 py-3">
+                    {/* <td className="border border-zinc-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-xs">
                         <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                        <span className="font-medium text-gray-600">
+                        <span className="font-medium text-zinc-600">
                           {school.averageRating} ({school.reviewsCount})
                         </span>
                       </div>
                     </td> */}
                     {/* Actions */}
-                    {/* <td className="border border-gray-200 px-4 py-3">
+                    {/* <td className="border border-zinc-200 px-4 py-3">
                       <div className="flex flex-col gap-2">
                         <Button size="sm" variant="outline">
                           <Checkbox id="ibCompare" />
@@ -631,13 +636,13 @@ export default function SchoolPicker({
                               // Form fields go here 
                               {contactDialogTab === 'view' ? (
                                 <div className="space-y-4">
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-zinc-600">
                                     View Mode
                                   </p>
                                 </div>
                               ) : (
                                 <div className="space-y-4">
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-zinc-600">
                                     Edit Mode
                                   </p>
                                 </div>
@@ -655,13 +660,13 @@ export default function SchoolPicker({
 
           {filteredSchools.length === 0 && (
             <div className="py-12 text-center">
-              <div className="mb-4 text-gray-400">
+              <div className="mb-4 text-zinc-400">
                 <Search className="mx-auto h-12 w-12" />
               </div>
-              <h3 className="mb-2 text-lg font-medium text-gray-900">
+              <h3 className="mb-2 text-lg font-medium text-zinc-900">
                 No schools found
               </h3>
-              <p className="text-gray-600">
+              <p className="text-zinc-600">
                 Try adjusting your search criteria or filters
               </p>
             </div>
@@ -675,6 +680,16 @@ export default function SchoolPicker({
             data as we can find. Contact us on +263717238876 (Whatsapp).
           </AlertDescription>
         </Alert>
+        <div className="mt-6 flex flex-col gap-8 pb-10 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_350px] md:pb-20">
+          <div className="h-fit">
+            <PtRenderer body={contentBody.body} />
+          </div>
+          <aside className="relative w-full">
+            <div className="top-[10vh] p-1 md:sticky md:p-2">
+              <GoogleAdUnit adSlot="6137077018" />
+            </div>
+          </aside>
+        </div>
       </div>
     </Container>
   );

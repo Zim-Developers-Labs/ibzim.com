@@ -55,17 +55,6 @@ function SchoolRanking({ profile }: { profile: ProfileType }) {
     return sum / passRates.length;
   };
 
-  const calculateEmploymentRateAverage = (
-    employmentRates?: { year: number; employmentRate: number }[],
-  ) => {
-    if (!employmentRates || employmentRates.length === 0) return 0;
-    const sum = employmentRates.reduce(
-      (acc, rate) => acc + rate.employmentRate,
-      0,
-    );
-    return sum / employmentRates.length;
-  };
-
   const generateRankFromPerformance = (performance: number) => {
     // Higher performance = better rank (lower number)
     // This is a mock calculation - in real app, you'd compare against all schools
@@ -195,19 +184,6 @@ function SchoolRanking({ profile }: { profile: ProfileType }) {
         title="Primary School Ranking"
         performance={avgPassRate}
         suffix="pass rate"
-      />
-    );
-  }
-
-  if (profile.level === 'tertiary-institution') {
-    const avgEmploymentRate = calculateEmploymentRateAverage(
-      profile.employmentRatesHistory,
-    );
-    return (
-      <RankingSection
-        title="Tertiary Institution Ranking"
-        performance={avgEmploymentRate}
-        suffix="employment rate"
       />
     );
   }

@@ -326,10 +326,6 @@ export type ProfileType = {
     | 'Salvation Army'
     | 'Seventh-day'
     | 'Other';
-  employmentRatesHistory?: {
-    year: number;
-    employmentRate: number;
-  }[];
   primarySchoolPassRates?: {
     year: number;
     passRate: number;
@@ -406,6 +402,8 @@ export type SchoolPickerProfilesType = {
   level: string;
   location: string;
   province: string;
+  yearFounded?: number;
+  ibzimRating: number;
   feesHistory: {
     feesStatus: 'Needs Confirmation' | 'Verified' | 'Custom';
     notes?: string;
@@ -414,10 +412,6 @@ export type SchoolPickerProfilesType = {
   oLevelSchoolType?: string;
   aLevelSchoolType?: string;
   primarySchoolType?: string;
-  employmentRatesHistory?: {
-    year: number;
-    employmentRate: number;
-  }[];
   primarySchoolPassRates?: {
     year: number;
     passRate: number;

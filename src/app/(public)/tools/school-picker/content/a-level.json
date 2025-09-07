@@ -1,0 +1,134 @@
+{
+  "body": [
+    {
+      "_key": "aeb4d556dcfc",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "db3657fc70050",
+          "_type": "span",
+          "marks": [],
+          "text": "How to pick a high school for A Level Education"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "8bb08a705fad",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "5143cb121c26",
+          "_type": "span",
+          "marks": [],
+          "text": "It is no secret that the school you decide to go to has a major impact on your performance. Some schools were once great now just dead heroes while others are uprising stars."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "18c9bb21fca4",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "294af44dca36",
+          "_type": "span",
+          "marks": [],
+          "text": "However unlike choosing a primary or secondary school when it comes to A Level there are very specific requirements for certain combinations and even getting enrolled. Top schools like St Faith's have minimum requirements as their demand is also higher."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "62e96bdffdfb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "769cea2b82b4",
+          "_type": "span",
+          "marks": [],
+          "text": "When picking a school for Advanced level education make sure your wallet and O'Level results are and narrow down a list 3 to 5 schools you would prefer which are within your financial, regional and extra-curricular performance preferences."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2c037a454544",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f55d4c680031",
+          "_type": "span",
+          "marks": [],
+          "text": "After having your top 3 choices proceed with them on the EMAP portal (an enrollment platform published by the Ministry of Education)"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "80d91ad71569",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "df945f908907",
+          "_type": "span",
+          "marks": [],
+          "text": "Statistics about the Advanced Level Education sector in Zimbabwe"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "62d4db5fb05f",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "70b8a20299ab",
+          "_type": "span",
+          "marks": [],
+          "text": "On average ZIMSEC affiliated boarding high schools in Zimbabwe cost $600 per term whilst day schools cost $250."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "688c5296f7f2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f4ef85e9b0bd",
+          "_type": "span",
+          "marks": [],
+          "text": "Students perform better on A Level ZIMSEC from boarding schools in Manicaland."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "230e4dfd5e26",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4946989d228b",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}
