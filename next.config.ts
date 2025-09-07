@@ -109,7 +109,7 @@ const getConfig = () => {
         {
           source: '/education/rankings/top-20-best-universities-in-zimbabwe',
           destination:
-            '/tools/school-picker/best-tertiary-institutions-in-zimbabwee',
+            '/tools/school-picker/best-tertiary-institutions-in-zimbabwe',
           permanent: true,
         },
       ];
