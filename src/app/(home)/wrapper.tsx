@@ -64,7 +64,7 @@ export const menuItems = [
     title: 'ZESA Calculator',
     description: 'Calculate electricity costs',
     icon: Zap,
-    href: '/tools/zesa-calculator',
+    href: '/tools/zesa-electricity-calculator',
     gradient: 'from-primaryColor/20 to-primaryColor/5',
   },
   // {
