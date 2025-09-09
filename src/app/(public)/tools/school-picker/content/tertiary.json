@@ -1,0 +1,170 @@
+{
+  "body": [
+    {
+      "_key": "7396a03e1664",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b0c61408f0f3",
+          "_type": "span",
+          "marks": [],
+          "text": "How to pick an institution for tertiary education in Zimbabwe"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "05257a1f9cf3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3769f483b71e",
+          "_type": "span",
+          "marks": [],
+          "text": "Choosing where to study after high school is one of the biggest decisions for students especially in Zimbabwe where some believe tertiary education to be a optional. For those who are willing and can afford tertiary education the first step it to think about your goals and the kind of qualifications you need to achieve these goals. For example, someone who wants to be a doctor will need to study at a university with a medical school."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "259854470af1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ac87d07e4598",
+          "_type": "span",
+          "marks": [],
+          "text": "It is important to attend accredited institutions which are also recognized by ZIMCHE (Zimbabwe Council for Higher Education). This ensures that your qualification upon completion will be accepted by employers and other institutions within Zimbabwean and in other countries as well."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b08fee4589c0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4a21bcecd932",
+          "_type": "span",
+          "marks": [],
+          "text": "Factors to consider include location, facilities and most importantly costs as these can go up to US$2000 per semester at bigger institutions like UZ depending on your program and choice of accommodation. In the end, the best institution is the one that matches your goals, budget, and the kind of environment where you will thrive."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "59c7dd1d31de",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ecba084c29c6",
+          "_type": "span",
+          "marks": [],
+          "text": "Statistics about the Tertiary Education sector in Zimbabwe"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "42662024bdc2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "28f5022864f6",
+          "_type": "span",
+          "marks": [],
+          "text": "Zimbabwe has 65+ registered higher and tertiary institutions, including universities, polytechnics, teachers’ colleges, and vocational training centers."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e9b4af5a19d6",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d673ce55c6b9",
+          "_type": "span",
+          "marks": [],
+          "text": "There are both public and private universities, with most located in Harare, Bulawayo, Gweru, and Mutare."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "72f5852fde30",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4fa0f8f40334",
+          "_type": "span",
+          "marks": [],
+          "text": "Over 150,000 students are enrolled in universities and colleges across Zimbabwe."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9274a109941b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c4a8d9904d1a",
+          "_type": "span",
+          "marks": [],
+          "text": "Public universities like University of Zimbabwe (UZ), Midlands State University (MSU), and NUST take the largest share of enrollments."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c3f3bb8ec5af",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8b15a89c9bf8",
+          "_type": "span",
+          "marks": [],
+          "text": "Female participation has increased, though men still dominate in STEM (science, technology, engineering, and math) programs."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "6ca62f53baeb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "318271855a7f",
+          "_type": "span",
+          "marks": [],
+          "text": "Demand for higher education is greater than available spaces, which has pushed private universities and colleges to expand."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}

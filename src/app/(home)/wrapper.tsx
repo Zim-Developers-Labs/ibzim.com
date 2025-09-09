@@ -64,7 +64,7 @@ export const menuItems = [
     title: 'ZESA Calculator',
     description: 'Calculate electricity costs',
     icon: Zap,
-    href: '/tools/zesa-calculator',
+    href: '/tools/zesa-electricity-calculator',
     gradient: 'from-primaryColor/20 to-primaryColor/5',
   },
   // {
@@ -149,7 +149,7 @@ export default function HomeWrapper({
             className="grid -translate-y-40 grid-cols-2 gap-3 pt-40 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6 xl:grid-cols-5"
           >
             <li className="col-span-2">
-              <Card className="group h-full cursor-pointer border border-zinc-200/50 bg-white py-2 hover:bg-zinc-50/50 hover:shadow-lg">
+              <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-zinc-50/50">
                 <CardContent className="p-4 text-center">
                   <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
                     School Picker
@@ -159,21 +159,21 @@ export default function HomeWrapper({
                   </p>
                   <div className="mt-4 grid grid-cols-2 gap-2">
                     <Link
-                      href="/tools/school-picker/best-primary-schools"
+                      href="/tools/school-picker/best-primary-schools-in-zimbabwe"
                       className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
                     >
                       Primary
                       <ChevronRight className="ml-1 inline-block h-4 w-4" />
                     </Link>
                     <Link
-                      href="/tools/school-picker/best-o-level-schools"
+                      href="/tools/school-picker/best-o-level-schools-in-zimbabwe"
                       className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
                     >
                       O&nbsp;Level
                       <ChevronRight className="ml-1 inline-block h-4 w-4" />
                     </Link>
                     <Link
-                      href="/tools/school-picker/best-a-level-schools"
+                      href="/tools/school-picker/best-a-level-schools-in-zimbabwe"
                       className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
                     >
                       A&nbsp;Level
@@ -181,7 +181,7 @@ export default function HomeWrapper({
                     </Link>
 
                     <Link
-                      href="/tools/school-picker/best-tertiary-institutions"
+                      href="/tools/school-picker/best-tertiary-institutions-in-zimbabwe"
                       className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
                     >
                       Tertiary
@@ -193,7 +193,7 @@ export default function HomeWrapper({
             </li>
             <li>
               <Link href="/zimbabwe-peoples-choice-awards">
-                <Card className="group h-full cursor-pointer border border-zinc-200/50 bg-white py-2 transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50 hover:shadow-lg">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
                     <div
                       className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
@@ -218,10 +218,10 @@ export default function HomeWrapper({
               return (
                 <li key={index}>
                   <Link href={feature.href}>
-                    <Card className="group h-full cursor-pointer border border-zinc-200/50 bg-white py-2 transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50 hover:shadow-lg">
+                    <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                       <CardContent className="p-4 text-center">
                         <div
-                          className={`mx-auto mb-3 h-fit w-full rounded-2xl bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                          className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
                         >
                           <Icon
                             className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"

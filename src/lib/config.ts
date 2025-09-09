@@ -1,5 +1,7 @@
 import { SiteConfigType } from '@/types';
 
+export const deploymentDomain = 'ibzim.com';
+
 export const siteConfig = {
   name: 'IBZim',
   isNew: false,
@@ -8,16 +10,19 @@ export const siteConfig = {
   twitterUsername: '@IBZimBlog',
   country: 'Zimbabwe',
   documentPrefix: '',
+  features: {
+    auth: 'disabled',
+  },
   url: {
-    logo: 'https://www.ibzim.com/apple-touch-icon.png',
-    web: 'https://www.ibzim.com',
-    twitter: 'https://twitter.com/@IBZimBlog',
-    instagram: 'https://www.instagram.com/ibzimblog',
-    linkedin: 'https://www.linkedin.com/company/ibzimblog',
-    github: 'https://github.com/orgs/XfinityPros/repositories',
-    youtube: 'https://www.youtube.com/@IBZimBlog',
-    facebook: 'https://www.facebook.com/IBZimBlog1',
-    banner: 'https://www.ibzim.com/banner.webp',
+    logo: `https://${deploymentDomain}/apple-touch-icon.png`,
+    web: `https://${deploymentDomain}`,
+    twitter: `https://twitter.com/@IBZimBlog`,
+    instagram: `https://www.instagram.com/ibzimblog`,
+    linkedin: `https://www.linkedin.com/company/ibzimblog`,
+    github: `https://github.com/orgs/XfinityPros/repositories`,
+    youtube: `https://www.youtube.com/@IBZimBlog`,
+    facebook: `https://www.facebook.com/IBZimBlog1`,
+    banner: `https://${deploymentDomain}/banner.webp`,
   },
   popularArticleIds: [
     '34292b05-7130-43cd-881e-37b86784c65e',

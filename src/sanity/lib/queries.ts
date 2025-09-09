@@ -344,6 +344,8 @@ export const allSchoolsByLevelQuery: string = groq`*[_type == "profile" && entit
   location,
   province,
   feesHistory,
+  yearFounded,
+  ibzimRating,
   churchAffiliation,
   primarySchoolPassRates,
   oLevelSchoolPassRates,

@@ -91,19 +91,25 @@ const getConfig = () => {
         {
           source:
             '/education/rankings/top-100-best-primary-schools-in-zimbabwe',
-          destination: '/tools/school-picker/best-primary-schools',
+          destination: '/tools/school-picker/best-primary-schools-in-zimbabwe',
           permanent: true,
         },
         {
           source:
             '/education/rankings/top-100-best-o-level-schools-in-zimbabwe',
-          destination: '/tools/school-picker/best-o-level-schools',
+          destination: '/tools/school-picker/best-o-level-schools-in-zimbabwe',
           permanent: true,
         },
         {
           source:
             '/education/rankings/top-100-best-a-level-schools-in-zimbabwe',
-          destination: '/tools/school-picker/best-a-level-schools',
+          destination: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
+          permanent: true,
+        },
+        {
+          source: '/education/rankings/top-20-best-universities-in-zimbabwe',
+          destination:
+            '/tools/school-picker/best-tertiary-institutions-in-zimbabwe',
           permanent: true,
         },
       ];

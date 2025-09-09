@@ -1,0 +1,122 @@
+{
+  "body": [
+    {
+      "_key": "61fcef9d9b72",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c68b95e426820",
+          "_type": "span",
+          "marks": [],
+          "text": "How to pick a high school for O Level Education"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "adf9b8d63526",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6684dbbb9401",
+          "_type": "span",
+          "marks": [],
+          "text": "Even though less strict compared to A Level enrollemt, most O Level schools have minimum grade 7 units requirements. In primary school children are less serious therefore it's a parent duty to keep pushing their children so that they can secure a place at a good school for Secondary/Ordinary Level Education."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "dbc2707c502e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ed4e5d37f40e",
+          "_type": "span",
+          "marks": [],
+          "text": "When choosing a school for O Level consider factors such as fees, location, church  if its a boarding and a childs behavior. From these factors and other notable ones narrow down to a list of 3 to 5 O Level schools you would prefer the most."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4335a7ffb795",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4d4eee16819b",
+          "_type": "span",
+          "marks": [],
+          "text": "With your top 3 choices go to EMAP, the Ministry of Education released portal for Form 1 enrollment."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1cdee497f0cb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e5fc1f6039820",
+          "_type": "span",
+          "marks": [],
+          "text": "Statistics about the Ordinary Level Education sector in Zimbabwe"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "f41795a0c083",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "135527a6d844",
+          "_type": "span",
+          "marks": [],
+          "text": "After O Level students generally either advance to A level, go straight to varsity or repeat the year if they failed to get at least 5 O Level passes."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "431bb802c738",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0c0da59b3033",
+          "_type": "span",
+          "marks": [],
+          "text": "O Level education is cheaper than A Level education."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1409c613de61",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "bdc3eb12b05f",
+          "_type": "span",
+          "marks": [],
+          "text": "At O Level students do many subjects on average 8 to 16 subjects."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}

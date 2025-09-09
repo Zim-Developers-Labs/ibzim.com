@@ -1,0 +1,122 @@
+{
+  "body": [
+    {
+      "_key": "af7b99484f95",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4099e604cf2b",
+          "_type": "span",
+          "marks": [],
+          "text": "How to pick a school for your child's Primary School Education"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "20e93f982df9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6fa0adadccdf",
+          "_type": "span",
+          "marks": [],
+          "text": "Usually the obvious choice is the nearest school to where you live for most parents. The logic is correct but sometimes the nearest isn't the best and might cost the future of a suppossedly bright student."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "323457eb7189",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "56bccdfbbd3f",
+          "_type": "span",
+          "marks": [],
+          "text": "There is no one school fits all. Each child has differents needs therefore you must know what the students needs best, is it sports, academics, clubbing or a balanced mixture. The fees and costs are also a major factor to consider."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "396092b4f64e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f4fe10be18e3",
+          "_type": "span",
+          "marks": [],
+          "text": "Whether to send your child to a Boarding Primary School or Day Primary School is up to you. For a child who misbehaves more often or whose parents are not always around Boarding school might be best."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b07a20847f66",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "9ec340830405",
+          "_type": "span",
+          "marks": [],
+          "text": "Statistics about the Primary Education Sector in Zimbabwe"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "2fcb7fbb8fe3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4b0418916c79",
+          "_type": "span",
+          "marks": [],
+          "text": "ZIMSEC Primary School passrates are higher especially in urban areas."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "41346a2b6ca2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "412f872dfedb",
+          "_type": "span",
+          "marks": [],
+          "text": "Primary boarding schools fees average $1000USD/term whilst Primary day schools fees avarage $100."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fafc651943a7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a4ba99ab522c",
+          "_type": "span",
+          "marks": [],
+          "text": "In Harare, Mutare and Rusape are where most preferred Primary schools are located."
+        }
+      ],
+      "level": 1,
+      "listItem": "bullet",
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}

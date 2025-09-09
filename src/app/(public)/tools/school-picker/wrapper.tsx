@@ -11,6 +11,8 @@ import {
   Info,
   BriefcaseBusiness,
   GraduationCap,
+  TriangleAlert,
+  CheckCircle,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -32,6 +34,13 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { SchoolPickerProfilesType } from '@/types';
 import { DialogContent, DialogDescription } from '@radix-ui/react-dialog';
 import { DialogTitle } from '@headlessui/react';
+import { Checkbox } from '@/components/ui/checkbox';
+import PtRenderer from '@/components/pt-renderer';
+import primaryContent from './content/primary.json';
+import oLevelContent from './content/o-level.json';
+import aLevelContent from './content/a-level.json';
+import tertiaryContent from './content/tertiary.json';
+import GoogleAdUnit from '@/components/ad-unit';
 
 const educationLevels = [
   { value: 'best-primary-schools', label: 'Primary' },
@@ -75,6 +84,15 @@ export default function SchoolPicker({
 
   const [feeRange, setFeeRange] = useState([lowestAverage, highestAverage]);
 
+  const contentBody =
+    selectedLevel === 'best-primary-schools'
+      ? primaryContent
+      : selectedLevel === 'best-o-level-schools'
+        ? oLevelContent
+        : selectedLevel === 'best-a-level-schools'
+          ? aLevelContent
+          : tertiaryContent;
+
   const provinces = [
     'all',
     'Harare',
@@ -112,6 +130,7 @@ export default function SchoolPicker({
     'Dutch',
     'Methodist',
     'Presbyterian',
+    'Salvation Army',
   ];
 
   const filteredSchools = useMemo(() => {
@@ -224,7 +243,7 @@ export default function SchoolPicker({
         return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'Day School':
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-zinc-100 text-zinc-800 border-zinc-200';
     }
   };
 
@@ -232,7 +251,7 @@ export default function SchoolPicker({
     <Container className="py-12">
       {/* Header */}
       <div className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+        <h1 className="mb-2 text-4xl font-bold text-zinc-900">
           {textify(selectedLevel)} Table
         </h1>
         <p className="mx-auto max-w-sm text-zinc-600">
@@ -249,7 +268,7 @@ export default function SchoolPicker({
           {educationLevels.map((level) => (
             <Link
               key={level.value}
-              href={`/tools/school-picker/${level.value}`}
+              href={`/tools/school-picker/${level.value}-in-zimbabwe`}
               className={`flex h-full w-full items-center justify-center rounded-md py-1 text-sm ${
                 selectedLevel === level.value
                   ? 'bg-teal-200'
@@ -331,7 +350,10 @@ export default function SchoolPicker({
                 <Select
                   value={selectedChurch}
                   onValueChange={setSelectedChurch}
-                  disabled={selectedLevel === 'best-tertiary-institutions'}
+                  disabled={
+                    selectedLevel === 'best-tertiary-institutions' ||
+                    selectedLevel === 'best-primary-schools'
+                  }
                 >
                   <SelectTrigger
                     className={`w-full ${
@@ -389,39 +411,51 @@ export default function SchoolPicker({
           </AlertDescription>
         </Alert>
 
-        {/* Schools List */}
         {/* Schools Table */}
         <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-gray-200">
+          <table className="min-w-full border-collapse border border-zinc-200">
             <thead>
-              <tr className="bg-gray-50">
-                <th className="border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900">
+              <tr className="bg-zinc-50">
+                <th className="border border-zinc-200 bg-zinc-50 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Rank
                 </th>
-                <th className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-gray-50 px-4 py-3 text-left text-sm font-medium text-gray-900 md:max-w-[200px] md:min-w-[200px]">
-                  School Name
+                <th className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-zinc-200 bg-zinc-50 px-4 py-3 text-left text-sm font-medium text-zinc-900 md:max-w-[200px] md:min-w-[200px]">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Institution Name'
+                    : 'School Name'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Location
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Main Campus'
+                    : 'Location'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Type
+                {selectedLevel !== 'best-tertiary-institutions' && (
+                  <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                    Type
+                  </th>
+                )}
+                {selectedLevel !== 'best-primary-schools' &&
+                  selectedLevel !== 'best-tertiary-institutions' && (
+                    <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                      Church
+                    </th>
+                  )}
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Fees + Living Cost'
+                    : 'Fees'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Church
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
+                  {selectedLevel === 'best-tertiary-institutions'
+                    ? 'Year Founded'
+                    : 'Performance'}
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Fees
-                </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
-                  Performance
-                </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                {/* <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Rating
                 </th>
-                <th className="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-900">
+                <th className="border border-zinc-200 px-4 py-3 text-left text-sm font-medium text-zinc-900">
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -435,54 +469,74 @@ export default function SchoolPicker({
                     : 0;
 
                 return (
-                  <tr key={school._id} className="hover:bg-gray-50">
-                    <td className="border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-800">
+                  <tr
+                    key={school._id}
+                    className="text-xs hover:bg-zinc-50 sm:text-sm"
+                  >
+                    <td className="border border-zinc-200 bg-white px-4 py-3 hover:bg-zinc-50">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100 text-sm font-semibold text-yellow-800">
                         {index + 1}
                       </div>
                     </td>
-                    <td className="sticky left-0 z-10 max-w-[75px] min-w-[65px] border border-gray-200 bg-white px-4 py-3 hover:bg-gray-50 md:max-w-[200px] md:min-w-[200px]">
-                      <div className="font-medium text-gray-900">
+                    <td className="sticky left-0 z-10 max-w-[100px] min-w-[75px] border border-zinc-200 bg-white px-4 py-3 hover:bg-zinc-50 md:max-w-[200px] md:min-w-[200px]">
+                      <Link
+                        href={`/profiles/school/${school.slug.current}`}
+                        className="hover:text-primaryColor pb-2 font-medium text-yellow-800 underline decoration-dotted underline-offset-2"
+                      >
                         {school.name}
-                      </div>
+                      </Link>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <td className="border border-zinc-200 px-4 py-3">
+                      <div className="flex items-center gap-1 text-sm text-zinc-600">
                         <MapPin className="h-3 w-3" />
                         {school.location}
                       </div>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <Badge
-                        variant="outline"
-                        className={getTypeColor(
-                          school.primarySchoolType ||
-                            school.oLevelSchoolType ||
-                            school.aLevelSchoolType ||
-                            '',
-                        )}
-                      >
-                        {school.primarySchoolType ||
-                          school.oLevelSchoolType ||
-                          school.aLevelSchoolType ||
-                          'N/A'}
-                      </Badge>
-                    </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      {school.churchAffiliation ? (
+                    {selectedLevel !== 'best-tertiary-institutions' && (
+                      <td className="border border-zinc-200 px-4 py-3">
                         <Badge
                           variant="outline"
-                          className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                          className={getTypeColor(
+                            school.primarySchoolType ||
+                              school.oLevelSchoolType ||
+                              school.aLevelSchoolType ||
+                              '',
+                          )}
                         >
-                          {school.churchAffiliation}
+                          {school.primarySchoolType ||
+                            school.oLevelSchoolType ||
+                            school.aLevelSchoolType ||
+                            'N/A'}
                         </Badge>
-                      ) : (
-                        <span className="text-sm text-gray-400">None</span>
+                      </td>
+                    )}
+                    {!school.primarySchoolType &&
+                      selectedLevel !== 'best-tertiary-institutions' && (
+                        <td className="border border-zinc-200 px-4 py-3">
+                          {school.churchAffiliation ? (
+                            <Badge
+                              variant="outline"
+                              className="border-purple-200 bg-purple-50 text-xs text-purple-700"
+                            >
+                              {school.churchAffiliation}
+                            </Badge>
+                          ) : (
+                            <span className="text-sm text-zinc-400">None</span>
+                          )}
+                        </td>
                       )}
-                    </td>
-                    <td className="border border-gray-200 px-4 py-3">
+                    <td className="border border-zinc-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-sm">
-                        <DollarSign className="h-4 w-4 text-green-600" />
+                        {school.feesHistory[0].feesStatus ===
+                          'Needs Confirmation' && (
+                          <TriangleAlert className="size-4 text-red-600" />
+                        )}
+                        {school.feesHistory[0].feesStatus === 'Custom' && (
+                          <TriangleAlert className="size-4 text-yellow-600" />
+                        )}
+                        {school.feesHistory[0].feesStatus === 'Verified' && (
+                          <CheckCircle className="size-4 text-green-600" />
+                        )}
                         <span>
                           ${averageFee.toLocaleString()}/
                           {school.level === 'tertiary-institution'
@@ -491,37 +545,9 @@ export default function SchoolPicker({
                         </span>
                       </div>
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      {school.level === 'tertiary-institution'
-                        ? // For tertiary institutions — average from employmentRatesHistory
-                          (() => {
-                            const avgEmploymentRate = school
-                              .employmentRatesHistory?.length
-                              ? (
-                                  school.employmentRatesHistory.reduce(
-                                    (sum, item) => sum + item.employmentRate,
-                                    0,
-                                  ) / school.employmentRatesHistory.length
-                                ).toFixed(1)
-                              : null;
-
-                            return (
-                              <div className="flex items-center gap-1">
-                                {avgEmploymentRate !== null ? (
-                                  <>
-                                    <span className="text-sm">{`${avgEmploymentRate}%`}</span>
-                                    <BriefcaseBusiness className="h-4 w-4 text-purple-600" />
-                                  </>
-                                ) : (
-                                  <span className="text-sm text-gray-500">
-                                    No data
-                                  </span>
-                                )}
-                              </div>
-                            );
-                          })()
-                        : // For high schools — decide array based on `level` param
-                          (() => {
+                    <td className="border border-zinc-200 px-4 py-3">
+                      {school.level !== 'tertiary-institution'
+                        ? (() => {
                             let ratesArray:
                               | { year: number; passRate: number }[]
                               | undefined;
@@ -533,6 +559,12 @@ export default function SchoolPicker({
                                 selectedLevel === 'best-o-level-schools'
                               ) {
                                 ratesArray = school.oLevelSchoolPassRates;
+                              }
+                            }
+
+                            if (school.level == 'primary-school') {
+                              if (selectedLevel === 'best-primary-schools') {
+                                ratesArray = school.primarySchoolPassRates;
                               }
                             }
 
@@ -548,35 +580,36 @@ export default function SchoolPicker({
                             return (
                               <div className="flex items-center gap-1">
                                 {avgPassRate !== null ? (
-                                  <>
+                                  <div>
                                     <span className="text-sm">{`${avgPassRate}%`}</span>
                                     <GraduationCap className="h-4 w-4 text-purple-600" />
-                                  </>
+                                  </div>
                                 ) : (
-                                  <span className="text-sm text-gray-500">
+                                  <span className="text-sm text-zinc-500">
                                     No data
                                   </span>
                                 )}
                               </div>
                             );
-                          })()}
+                          })()
+                        : school.yearFounded || 'N/A'}
                     </td>
-                    <td className="border border-gray-200 px-4 py-3">
+                    {/* Ratings */}
+                    {/* <td className="border border-zinc-200 px-4 py-3">
                       <div className="flex items-center gap-1 text-xs">
                         <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                        <span className="font-medium text-gray-600">
+                        <span className="font-medium text-zinc-600">
                           {school.averageRating} ({school.reviewsCount})
                         </span>
                       </div>
-                    </td>
-                    <td className="border border-gray-200 px-4 py-3">
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/profiles/school/${school.slug.current}`}
-                          className="bg-primary hover:bg-primary/90 rounded-md px-3 py-1 text-xs text-white transition-colors"
-                        >
-                          View
-                        </Link>
+                    </td> */}
+                    {/* Actions */}
+                    {/* <td className="border border-zinc-200 px-4 py-3">
+                      <div className="flex flex-col gap-2">
+                        <Button size="sm" variant="outline">
+                          <Checkbox id="ibCompare" />
+                          <Label htmlFor="ibCompare">Compare</Label>
+                        </Button>
                         <Dialog
                           open={isContactDialogOpen}
                           onOpenChange={setIsContactDialogOpen}
@@ -589,9 +622,10 @@ export default function SchoolPicker({
                               onClick={() => openContactDialog(school)}
                             >
                               <Phone className="h-3 w-3" />
+                              Call
                             </Button>
                           </DialogTrigger>
-                          {/* TODO: Forgot to add the UI which the V0 AI left out maybe try to find it in  v0 or git history on these commits*/}
+                          // TODO: Forgot to add the UI which the V0 AI left out maybe try to find it in  v0 or git history on these commits
                           <DialogContent>
                             <DialogTitle>Contact {school.name}</DialogTitle>
                             <DialogDescription>
@@ -599,16 +633,16 @@ export default function SchoolPicker({
                               with {school.name}.
                             </DialogDescription>
                             <form action={handleContactSubmit}>
-                              {/* Form fields go here */}
+                              // Form fields go here 
                               {contactDialogTab === 'view' ? (
                                 <div className="space-y-4">
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-zinc-600">
                                     View Mode
                                   </p>
                                 </div>
                               ) : (
                                 <div className="space-y-4">
-                                  <p className="text-sm text-gray-600">
+                                  <p className="text-sm text-zinc-600">
                                     Edit Mode
                                   </p>
                                 </div>
@@ -617,7 +651,7 @@ export default function SchoolPicker({
                           </DialogContent>
                         </Dialog>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
@@ -626,17 +660,35 @@ export default function SchoolPicker({
 
           {filteredSchools.length === 0 && (
             <div className="py-12 text-center">
-              <div className="mb-4 text-gray-400">
+              <div className="mb-4 text-zinc-400">
                 <Search className="mx-auto h-12 w-12" />
               </div>
-              <h3 className="mb-2 text-lg font-medium text-gray-900">
+              <h3 className="mb-2 text-lg font-medium text-zinc-900">
                 No schools found
               </h3>
-              <p className="text-gray-600">
+              <p className="text-zinc-600">
                 Try adjusting your search criteria or filters
               </p>
             </div>
           )}
+        </div>
+
+        <Alert className="border-primaryColor mt-6 border bg-yellow-200">
+          <Info />
+          <AlertDescription className="text-primary">
+            We are still working on adding more schools with as much accurate
+            data as we can find. Contact us on +263717238876 (Whatsapp).
+          </AlertDescription>
+        </Alert>
+        <div className="mt-6 flex flex-col gap-8 pb-10 md:mt-8 md:grid md:flex-none md:grid-cols-[1fr_350px] md:pb-20">
+          <div className="h-fit">
+            <PtRenderer body={contentBody.body} />
+          </div>
+          <aside className="relative w-full">
+            <div className="top-[10vh] p-1 md:sticky md:p-2">
+              <GoogleAdUnit adSlot="6137077018" />
+            </div>
+          </aside>
         </div>
       </div>
     </Container>

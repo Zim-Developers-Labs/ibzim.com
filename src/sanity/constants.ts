@@ -49,7 +49,7 @@ export const INPUT_GROUP = {
 export const INPUT_GROUPS: FieldGroupDefinition[] = [
   {
     name: INPUT_GROUP.CONFIG,
-    title: 'Config',
+    title: 'Metadata',
     icon: CogIcon,
     // default: true,
   },

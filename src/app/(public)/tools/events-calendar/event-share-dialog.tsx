@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { ChevronRightIcon, LinkIcon } from '@heroicons/react/20/solid';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
-import { siteConfig } from '@/lib/config';
+import { deploymentDomain, siteConfig } from '@/lib/config';
 import { Icons } from '@/components/icons';
 import {
   Popover,
@@ -18,7 +18,7 @@ type EventSharePopoverProps = {
 };
 
 export default function EventSharePopover({ eventId }: EventSharePopoverProps) {
-  const shareUrl = `https://www.ibzim.com/tools/events-calendar?highlight_event_id=${eventId}`;
+  const shareUrl = `https://${deploymentDomain}/tools/events-calendar?highlight_event_id=${eventId}`;
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(shareUrl).then(() => {

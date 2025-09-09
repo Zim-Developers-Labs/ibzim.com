@@ -58,7 +58,6 @@ export const schools = [
     location: 'Harare',
     fees: 600,
     rating: 4.7,
-    employmentRate: 49,
     church: null,
   },
 ];

@@ -31,6 +31,7 @@ import Link from 'next/link';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ArticleType } from '@/types';
 import { MArticleType } from '@/data/m-articles';
+import { deploymentDomain } from '@/lib/config';
 
 export function ArticleDropdownMenu({
   article,
@@ -45,7 +46,7 @@ export function ArticleDropdownMenu({
       article:
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:5001'
-          : 'https://www.ibzim.com',
+          : `https://${deploymentDomain}`,
       'sa.article':
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:5002'

@@ -411,7 +411,13 @@ export const ProfileFields = [
     title: 'Primary School Type',
     options: {
       layout: 'dropdown',
-      list: ['Boys Boarding', 'Girls Boarding', 'Mixed Boarding', 'Day School'],
+      list: [
+        'Boys Boarding',
+        'Girls Boarding',
+        'Mixed Boarding',
+        'Day School',
+        'Boarding & Day',
+      ],
     },
   }),
 
@@ -454,6 +460,9 @@ export const ProfileFields = [
     name: 'churchAffiliation',
     type: 'string',
     group: INPUT_GROUP.CONFIG,
+    hidden: ({ parent }) =>
+      parent.level == 'primary-school' ||
+      parent.level == 'tertiary-institution',
     title: 'Church Affiliation',
     options: {
       layout: 'dropdown',
@@ -464,6 +473,7 @@ export const ProfileFields = [
         'Methodist',
         'Pentecostal',
         'Presbyterian',
+        'Salvation Army',
         'Seventh-day',
       ],
     },
@@ -485,49 +495,21 @@ export const ProfileFields = [
             validation: (Rule) => Rule.min(0).warning('Fees must be positive'),
           },
           {
+            name: 'feesStatus',
+            title: 'Fees Status',
+            type: 'string',
+            options: {
+              layout: 'dropdown',
+              list: ['Needs Confirmation', 'Verified', 'Custom'],
+            },
+          },
+          {
             name: 'notes',
+            hidden: ({ parent }) => parent.feesStatus !== 'Custom',
             type: 'string',
             title: 'School Fees Notes',
           },
         ],
-      },
-    ],
-  }),
-
-  defineField({
-    name: 'employmentRatesHistory',
-    type: 'array',
-    group: INPUT_GROUP.CONFIG,
-    title: 'Tertiary Insitution Employment Rates',
-    hidden: ({ parent }) => parent.level !== 'primary-school',
-    of: [
-      {
-        type: 'object',
-        fields: [
-          {
-            name: 'year',
-            title: 'Year',
-            type: 'number',
-            validation: (Rule) => Rule.min(2000).max(new Date().getFullYear()),
-          },
-          {
-            name: 'employmentRate',
-            title: 'Employment Rate',
-            type: 'number',
-            validation: (Rule) => Rule.min(0).max(100),
-          },
-        ],
-        preview: {
-          select: {
-            year: 'year',
-            employmentRate: 'employmentRate',
-          },
-          prepare({ year, employmentRate }) {
-            return {
-              title: `Year: ${year}, Employment Rate: ${employmentRate}%`,
-            };
-          },
-        },
       },
     ],
   }),
@@ -644,6 +626,15 @@ export const ProfileFields = [
         },
       },
     ],
+  }),
+
+  defineField({
+    name: 'ibzimRating',
+    title: 'Our Rating Percentage',
+    type: 'number',
+    validation: (Rule) => Rule.min(0).max(100),
+    hidden: ({ parent }) => parent.level !== 'tertiary-institution',
+    group: INPUT_GROUP.CONFIG,
   }),
 
   defineField({

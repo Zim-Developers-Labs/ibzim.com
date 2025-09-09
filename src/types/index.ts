@@ -323,12 +323,9 @@ export type ProfileType = {
     | 'Methodist'
     | 'Pentecostal'
     | 'Presbyterian'
+    | 'Salvation Army'
     | 'Seventh-day'
     | 'Other';
-  employmentRatesHistory?: {
-    year: number;
-    employmentRate: number;
-  }[];
   primarySchoolPassRates?: {
     year: number;
     passRate: number;
@@ -375,6 +372,9 @@ export type SiteConfigType = {
   vercelProjectName: string;
   country: string;
   documentPrefix?: string;
+  features: {
+    auth: 'enabled' | 'disabled';
+  };
   url: {
     logo: string;
     web: string;
@@ -402,17 +402,16 @@ export type SchoolPickerProfilesType = {
   level: string;
   location: string;
   province: string;
+  yearFounded?: number;
+  ibzimRating: number;
   feesHistory: {
-    notes: string;
+    feesStatus: 'Needs Confirmation' | 'Verified' | 'Custom';
+    notes?: string;
     amount: number;
   }[];
   oLevelSchoolType?: string;
   aLevelSchoolType?: string;
   primarySchoolType?: string;
-  employmentRatesHistory?: {
-    year: number;
-    employmentRate: number;
-  }[];
   primarySchoolPassRates?: {
     year: number;
     passRate: number;
