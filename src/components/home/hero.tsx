@@ -79,6 +79,35 @@ export default function Hero({
   pinnedRankingArticles,
   siteConfig,
 }: HeroProps) {
+  // Temporary fix for schools listing articles
+  // These articles have been moved to the school picker tool
+  // This is a temporary fix until we can update the links in the articles
+  const getArticleHref = () => {
+    if (heroArticle.slug.current === 'top-20-best-universities-in-zimbabwe') {
+      return '/tools/school-picker/best-tertiary-institutions-in-zimbabwe';
+    }
+
+    if (
+      heroArticle.slug.current === 'top-100-best-a-level-schools-in-zimbabwe'
+    ) {
+      return '/tools/school-picker/best-a-level-schools-in-zimbabwe';
+    }
+
+    if (
+      heroArticle.slug.current === 'top-100-best-o-level-schools-in-zimbabwe'
+    ) {
+      return '/tools/school-picker/best-o-level-schools-in-zimbabwe';
+    }
+    if (
+      heroArticle.slug.current === 'top-100-best-primary-schools-in-zimbabwe'
+    ) {
+      return '/tools/school-picker/best-primary-schools-in-zimbabwe';
+    }
+
+    // Return default href for all other articles
+    return `/${heroArticle.industry.slug}/${heroArticle.type}/${heroArticle.slug.current}`;
+  };
+
   return (
     <section className="md:py-10">
       <div className="relative mx-auto flex w-full max-w-7xl flex-col-reverse gap-8 px-0 md:px-8 lg:px-12 xl:flex-row">
@@ -88,7 +117,7 @@ export default function Hero({
         />
         <div>
           <Link
-            href={`/${heroArticle.industry.slug}/${heroArticle.type}/${heroArticle.slug.current}`}
+            href={getArticleHref()}
             className="group mb-4 flex flex-col md:flex-row"
           >
             <div className="aspect-[16/9] max-w-[500px] flex-2 overflow-hidden md:rounded-tl-xl md:rounded-bl-xl">
