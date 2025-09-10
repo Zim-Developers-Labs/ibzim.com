@@ -1,6 +1,6 @@
 import { SiteConfigType } from '@/types';
 
-export const deploymentDomain = 'ibzim.com';
+export const deploymentDomain = 'WWW.ibzim.com';
 
 export const siteConfig = {
   name: 'IBZim',
