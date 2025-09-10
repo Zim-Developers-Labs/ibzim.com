@@ -29,14 +29,14 @@ export const menuItems = [
     description: 'Explore notable personalities',
     icon: UserIcon,
     href: '/profiles',
-    gradient: 'from-secondaryColor/20 to-secondaryColor/5',
+    gradient: 'from-primaryColor/20 to-primaryColor/5',
   },
   {
     title: 'Events Calendar',
     description: 'Discover upcoming events',
     icon: Calendar,
     href: '/tools/events-calendar',
-    gradient: 'from-secondaryColor/20 to-secondaryColor/5',
+    gradient: 'from-primaryColor/20 to-primaryColor/5',
   },
   {
     title: 'Ecocash Calculator',
@@ -58,7 +58,7 @@ export const menuItems = [
     description: 'Convert local currencies',
     icon: DollarSign,
     href: '/tools/currency-converter/usd-zig',
-    gradient: 'from-secondaryColor/20 to-secondaryColor/5',
+    gradient: 'from-primaryColor/20 to-primaryColor/5',
   },
   {
     title: 'ZESA Calculator',
@@ -79,7 +79,7 @@ export const menuItems = [
   //   description: 'Get help and assistance',
   //   icon: HelpCircle,
   //   href: '/support',
-  //   gradient: 'from-secondaryColor/20 to-secondaryColor/5',
+  //   gradient: 'from-primaryColor/20 to-primaryColor/5',
   // },
 ];
 
