@@ -23,11 +23,44 @@ export default function annotationLink(props: any) {
 
 export function annotationInternalLink(props: any) {
   const { internalPage, children } = props;
-  const url =
-    internalPage._type == 'article'
-      ? `/${internalPage.industry.slug}/${internalPage.type}/${internalPage.slug.current}`
-      : `/profiles/${internalPage.entityType}/${internalPage.slug.current}`;
+  // Temporary fix for schools listing articles
+  // These articles have been moved to the school picker tool
+  // This is a temporary fix until we can update the links in the articles
+  const getInternalPageHref = () => {
+    if (internalPage._type === 'article') {
+      if (
+        internalPage.slug.current === 'top-20-best-universities-in-zimbabwe'
+      ) {
+        return '/tools/school-picker/best-tertiary-institutions-in-zimbabwe';
+      }
 
+      if (
+        internalPage.slug.current === 'top-100-best-a-level-schools-in-zimbabwe'
+      ) {
+        return '/tools/school-picker/best-a-level-schools-in-zimbabwe';
+      }
+
+      if (
+        internalPage.slug.current === 'top-100-best-o-level-schools-in-zimbabwe'
+      ) {
+        return '/tools/school-picker/best-o-level-schools-in-zimbabwe';
+      }
+
+      if (
+        internalPage.slug.current === 'top-100-best-primary-schools-in-zimbabwe'
+      ) {
+        return '/tools/school-picker/best-primary-schools-in-zimbabwe';
+      }
+
+      // Return default href for all other articles
+      return `/${internalPage.industry.slug}/${internalPage.type}/${internalPage.slug.current}`;
+    }
+
+    // For non-article types, use the existing logic
+    return `/profiles/${internalPage.entityType}/${internalPage.slug.current}`;
+  };
+
+  const url = getInternalPageHref();
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
