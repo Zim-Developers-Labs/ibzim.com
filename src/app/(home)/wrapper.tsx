@@ -8,6 +8,7 @@ import {
   UserIcon,
   ChevronRight,
   Search,
+  Building2,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { User } from 'lucia';
@@ -15,65 +16,54 @@ import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import SearchToggler from '@/components/header/search-toggler';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { GithubIcon } from '@sanity/icons';
 
 export const menuItems = [
-  {
-    title: 'Articles Blog',
-    description: 'Read latest articles and insights',
-    icon: BookOpen,
-    href: '/articles',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
-  },
   {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',
     icon: UserIcon,
     href: '/profiles',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    isOpenSource: false,
   },
   {
     title: 'Events Calendar',
     description: 'Discover upcoming events',
     icon: Calendar,
     href: '/tools/events-calendar',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    isOpenSource: false,
   },
   {
     title: 'Ecocash Calculator',
-    description: 'Calculate transaction fees',
+    description: 'Transaction fees',
     icon: Calculator,
-    href: '/tools/ecocash-calculator',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    href: 'https://calculators.zimdevelopers.com/ecocash-calculator',
+    isOpenSource: true,
   },
 
   {
     title: 'Travel Planner',
-    description: 'Plan your next adventure',
+    description: 'Plan your next trip',
     icon: MapPin,
-    href: '/tools/travel-planner',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    href: 'https://calculators.zimdevelopers.com/travel-planner',
+    isOpenSource: true,
   },
   {
     title: 'Currency Converter',
     description: 'Convert local currencies',
     icon: DollarSign,
-    href: '/tools/currency-converter/usd-zig',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    href: 'https://calculators.zimdevelopers.com/currency-converter/usd-zig',
+    isOpenSource: true,
   },
   {
     title: 'ZESA Calculator',
-    description: 'Calculate electricity costs',
+    description: 'Electricity costs',
     icon: Zap,
-    href: '/tools/zesa-electricity-calculator',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
+    href: 'https://calculators.zimdevelopers.com/zesa-electricity-calculator',
+    isOpenSource: true,
   },
-  // {
-  //   title: 'Government Structure',
-  //   description: 'Understand civic systems',
-  //   icon: Building2,
-  //   href: '/government',
-  //   gradient: 'from-primaryColor/20 to-primaryColor/5',
-  // },
+
   // {
   //   title: 'Support',
   //   description: 'Get help and assistance',
@@ -213,15 +203,156 @@ export default function HomeWrapper({
                 </Card>
               </Link>
             </li>
+            <li>
+              <Link href="https://www.zimdevelopers.com">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.zimdevelopersIcon
+                        className="text-primaryColor h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Developers Labs
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Hire a developer or get hired
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
+            <li>
+              <Link href="https://earn.ibzim.com">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.earnLogo
+                        className="h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Earn
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Convert your data and time into income
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
+            <li>
+              <Link href="https://www.peyapeya.com">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.peyapeyaPLogo
+                        className="h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Peya Peya
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Best finance app in Zimbabwe
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
+            <li>
+              <Link href="https://advertising.ibzim.com">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.advertisingALogo
+                        className="h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Advertising
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Reach thousands of Zimbabweans
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
+            <li>
+              <Link href="/articles">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.ibLogoSM
+                        className="h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Articles Blog
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Read latest articles and insights
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
+            <li>
+              <Link href="/zimbabwean-government-structure">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                  <CardContent className="p-4 text-center">
+                    <div
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.zimFlagRound
+                        className="h-10 w-10 sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                      Government
+                    </h3>
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                      Zimbabwean Government Structure
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
             {menuItems.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <li key={index}>
                   <Link href={feature.href}>
-                    <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                    <Card className="group relative h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                       <CardContent className="p-4 text-center">
+                        {feature.isOpenSource && (
+                          <Badge
+                            variant="secondary"
+                            className="absolute right-3 bottom-3 flex items-center gap-1 bg-green-100 text-xs text-green-800 dark:bg-green-900 dark:text-green-200"
+                          >
+                            <GithubIcon className="h-3 w-3" />
+                            Open Source
+                          </Badge>
+                        )}
                         <div
-                          className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                          className={`from-primaryColor/20 to-primaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
                         >
                           <Icon
                             className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
