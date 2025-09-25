@@ -179,7 +179,7 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
                 <Card className="group h-full w-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
                   <CardContent className="p-4 text-center">
                     <div
-                      className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                      className={`from-primaryColor/10 via-secondaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br to-transparent p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
                     >
                       <Icon
                         className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
@@ -283,7 +283,7 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
                   <CardContent className="p-4 text-center">
                     <div
-                      className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                      className={`from-primaryColor/10 via-secondaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br to-transparent p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
                     >
                       <Icon
                         className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
