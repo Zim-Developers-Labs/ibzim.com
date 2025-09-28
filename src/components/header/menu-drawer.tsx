@@ -68,13 +68,6 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
             Tools to help you find the information you need and express
             yourself.
           </DrawerDescription> */}
-          <Alert className="border-primaryColor border bg-yellow-200">
-            <Info />
-            <AlertDescription className="text-primary">
-              IBZIM tools are still in development so feel free to give us
-              feedback on +263717238876 (Whatsapp) for issues or improvements.
-            </AlertDescription>
-          </Alert>
         </DrawerHeader>
         {/*  Added scroll instruction for mobile users */}
         <div className="mb-4 px-4 pb-2">
