@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Schema for full name validation
 export const fullNameSchema = z.object({
   name: z
     .string()
-    .min(1, "Name is required")
-    .max(32, "Name must be 32 characters or less"),
+    .min(1, 'Name is required')
+    .max(32, 'Name must be 32 characters or less'),
 });
 
 export type FullNameInput = z.infer<typeof fullNameSchema>;
@@ -14,11 +14,11 @@ export type FullNameInput = z.infer<typeof fullNameSchema>;
 export const usernameSchema = z.object({
   username: z
     .string()
-    .min(1, "Username is required")
-    .max(48, "Username must be 48 characters or less")
+    .min(1, 'Username is required')
+    .max(48, 'Username must be 48 characters or less')
     .regex(
       /^[a-zA-Z0-9_-]+$/,
-      "Username can only contain letters, numbers, underscores, and hyphens"
+      'Username can only contain letters, numbers, underscores, and hyphens',
     ),
 });
 
@@ -28,10 +28,10 @@ export type UsernameInput = z.infer<typeof usernameSchema>;
 export const phoneNumberSchema = z.object({
   phoneNumber: z
     .string()
-    .min(1, "Phone number is required")
+    .min(1, 'Phone number is required')
     .regex(
       /^\+?[0-9]{10,14}$/,
-      "Please enter a valid phone number (10-14 digits, optionally starting with +)."
+      'Please enter a valid phone number (10-14 digits, optionally starting with +).',
     ),
 });
 

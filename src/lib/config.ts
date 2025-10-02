@@ -7,7 +7,7 @@ export const siteConfig = {
   isNew: false,
   shortName: 'IBZIM',
   vercelProjectName: 'ibzim',
-  twitterUsername: '@IBZimBlog',
+  twitterUsername: '@IBZimDotCom',
   country: 'Zimbabwe',
   documentPrefix: '',
   features: {
@@ -16,12 +16,12 @@ export const siteConfig = {
   url: {
     logo: `https://${deploymentDomain}/apple-touch-icon.png`,
     web: `https://${deploymentDomain}`,
-    twitter: `https://twitter.com/@IBZimBlog`,
-    instagram: `https://www.instagram.com/ibzimblog`,
-    linkedin: `https://www.linkedin.com/company/ibzimblog`,
+    twitter: `https://twitter.com/@IBZimDotCom`,
+    instagram: `https://www.instagram.com/ibzimdotcom`,
+    linkedin: `https://www.linkedin.com/company/XfinityPros`,
     github: `https://github.com/orgs/XfinityPros/repositories`,
-    youtube: `https://www.youtube.com/@IBZimBlog`,
-    facebook: `https://www.facebook.com/IBZimBlog1`,
+    youtube: `https://www.youtube.com/@IBZimDotCom`,
+    facebook: `https://www.facebook.com/IBZimDotCom`,
     banner: `https://${deploymentDomain}/banner.webp`,
   },
   popularArticleIds: [
