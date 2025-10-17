@@ -366,15 +366,8 @@ export type HomeType = {
 
 export type SiteConfigType = {
   name: string;
-  isNew: boolean;
   shortName: string;
   twitterUsername: string;
-  vercelProjectName: string;
-  country: string;
-  documentPrefix?: string;
-  features: {
-    auth: 'enabled' | 'disabled';
-  };
   url: {
     logo: string;
     web: string;
@@ -433,4 +426,36 @@ export type SchoolPickerProfilesType = {
   }[];
   averageRating?: number;
   reviewsCount?: number;
+};
+
+export type NotificationType = {
+  _id: string;
+  _createdAt: string;
+  description: string;
+  icon:
+    | 'info'
+    | 'warning'
+    | 'error'
+    | 'success'
+    | 'user'
+    | 'users'
+    | 'award'
+    | 'ib'
+    | 'article';
+  payloadForIcon?: any[];
+  type:
+    | 'withButtonLink'
+    | 'withSocialButtons'
+    | 'globalGeneral'
+    | 'userGeneral';
+  payloadForType?: {
+    buttonLinkText?: string;
+    buttonLinkUrl?: string;
+    facebookLink?: string;
+    twitterLink?: string;
+    instagramLink?: string;
+    youTubeLink?: string;
+  }[];
+  isRead?: boolean;
+  from?: 'neon' | 'sanity';
 };

@@ -22,19 +22,26 @@ import {
 } from '@/components/ui/drawer';
 import { Card, CardContent } from '../ui/card';
 import Link from 'next/link';
-import { ChevronRight, Info } from 'lucide-react';
+import { ChevronRight, Grip, Info } from 'lucide-react';
 import { Icons } from '../icons';
-import { menuItems } from '@/app/(home)/wrapper';
-import { Alert, AlertDescription } from '../ui/alert';
+import { menuItems } from '@/app/(home)/component';
 
-export function MenuDrawer({ children }: { children: React.ReactNode }) {
+export function MenuDrawer() {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+          >
+            <Grip className="h-5 w-5" />
+            <span className="">Menu</span>
+          </Button>
+        </DialogTrigger>
         <DialogContent className="h-[90vh] bg-zinc-50 pl-0 sm:max-w-[756px]">
           <DialogHeader className="pl-6">
             <DialogTitle>IBZim Suite</DialogTitle>
@@ -42,13 +49,6 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
               Tools to help you find the information you need and express
               yourself.
             </DialogDescription> */}
-            <Alert className="border-primaryColor border bg-yellow-200">
-              <Info />
-              <AlertDescription className="text-primary">
-                IBZIM tools are still in development so feel free to give us
-                feedback on +263717238876 (Whatsapp) for issues or improvements.
-              </AlertDescription>
-            </Alert>
           </DialogHeader>
           <div className="overflow-y-auto">
             <DesktopMenuItems />
@@ -60,7 +60,15 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>
+        <Button
+          variant="outline"
+          className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+        >
+          <Grip className="h-5 w-5" />
+          <span className="sr-only">View Tools</span>
+        </Button>
+      </DrawerTrigger>
       <DrawerContent className="bg-zinc-50 data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-t-4xl data-[vaul-drawer-direction=top]:max-h-[85vh]">
         <DrawerHeader className="text-left">
           <DrawerTitle>IBZim Suite</DrawerTitle>

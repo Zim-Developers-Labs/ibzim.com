@@ -6,8 +6,12 @@ import Banner from '@/components/banner';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import HomeHeader from './home-header';
-import { validateRequest } from '@/lib/auth/validate-request';
 import Footer from '@/components/footer';
+import { getCurrentSession } from '@/lib/server/session';
+import { UserProvider } from '@/hooks/user-context';
+import { env } from '@/env';
+import { getAllNotifications } from '@/lib/sanity/client';
+import { getUserNotifications } from '@/components/header/notifications/actions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +26,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
+  const notifications = await getAllNotifications();
+  const neonUserNotifications = user ? await getUserNotifications(user.id) : [];
 
   return (
     <html
@@ -31,14 +37,20 @@ export default async function RootLayout({
       className={`${inter.className} h-full antialiased`}
     >
       <body>
-        <Toaster />
-        <Banner />
-        <HomeHeader user={user} />
-        {children}
-        <Footer siteShortName="IBZIM" />
+        <UserProvider dbUser={user}>
+          <Toaster position="top-center" />
+          <Banner />
+          <HomeHeader
+            user={user}
+            notifications={notifications}
+            neonUserNotifications={neonUserNotifications}
+          />
+          {children}
+          <Footer siteShortName="IBZIM" />
+        </UserProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
-        <GoogleAnalytics gaId={process.env.GA_SECRET!} />
+        <GoogleAnalytics gaId={env.GA_SECRET!} />
       </body>
     </html>
   );

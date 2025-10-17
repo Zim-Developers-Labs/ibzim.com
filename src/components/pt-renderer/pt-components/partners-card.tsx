@@ -1,4 +1,4 @@
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import { CircleCheck, ExternalLink, Info } from 'lucide-react';
 import Image from 'next/image';
 

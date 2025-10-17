@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import AwardsPageWrapper from './wrapper';
+import AwardsPageComponent from './components';
 import { preparePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/lib/config';
 
@@ -13,5 +13,5 @@ export const generateMetadata = (): Metadata =>
   });
 
 export default function AwardsPage() {
-  return <AwardsPageWrapper />;
+  return <AwardsPageComponent />;
 }

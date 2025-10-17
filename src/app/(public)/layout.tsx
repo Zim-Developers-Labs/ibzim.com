@@ -1,34 +1,32 @@
-import '../globals.css';
 import { Inter } from 'next/font/google';
-import { Metadata } from 'next';
-import { siteConfig } from '@/lib/config';
+import '../globals.css';
+import { getCurrentSession } from '@/lib/server/session';
+import { getAllNotifications } from '@/lib/sanity/client';
+import { getUserNotifications } from '@/components/header/notifications/actions';
+import { UserProvider } from '@/hooks/user-context';
 import { Toaster } from '@/components/ui/sonner';
 import Banner from '@/components/banner';
-import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { validateRequest } from '@/lib/auth/validate-request';
-import { getSearchData } from '@/sanity/lib/actions';
+import { env } from '@/env';
+import Header from '@/components/header';
+import { getSearchData } from '@/lib/sanity/actions';
+import { siteConfig } from '@/lib/config';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: 'IBZim: Zimbabwean Information Hub',
-  description:
-    'An information hub empowering Zimbabweans with raw and authentic knowledge. Signup and complete your profile to join the community.',
-};
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
+  const sanityGlobalNotifications = await getAllNotifications();
+  const neonUserNotifications = user ? await getUserNotifications(user.id) : [];
 
-  const { allArticles, popularArticles } = await getSearchData(
+  const { allDocuments, popularArticles } = await getSearchData(
     siteConfig.popularArticleIds,
-    siteConfig.documentPrefix,
   );
 
   return (
@@ -38,18 +36,22 @@ export default async function RootLayout({
       className={`${inter.className} h-full antialiased`}
     >
       <body>
-        <Toaster />
-        <Banner />
-        <Header
-          articles={allArticles}
-          popularArticles={popularArticles}
-          user={user}
-        />
-        {children}
-        <Footer siteShortName={siteConfig.shortName} />
+        <UserProvider dbUser={user}>
+          <Toaster position="top-center" />
+          <Banner />
+          <Header
+            user={user}
+            sanityGlobalNotifications={sanityGlobalNotifications}
+            neonUserNotifications={neonUserNotifications}
+            articles={allDocuments}
+            popularArticles={popularArticles}
+          />
+          {children}
+          <Footer siteShortName="IBZIM" />
+        </UserProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
-        <GoogleAnalytics gaId={process.env.GA_SECRET!} />
+        <GoogleAnalytics gaId={env.GA_SECRET!} />
       </body>
     </html>
   );

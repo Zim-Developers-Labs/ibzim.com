@@ -11,9 +11,6 @@ import blockGreenCard from './pt-components/green-card';
 import blockPartnersCard from './pt-components/partners-card';
 import blockTable from './pt-components/table';
 import blockButtonCta from './pt-components/button-cta';
-import blockEcocashCalculator from './pt-components/calculators/ecocash-calculator';
-import blockOneMoneyCalculator from './pt-components/calculators/onemoney-calculator';
-import blockMukuruCalculator from './pt-components/calculators/mukuru-calculator';
 import Superscript from './pt-components/sup';
 import imageCarouselModule from './pt-components/image-carousel';
 import annotationLink, { annotationInternalLink } from './pt-components/a';
@@ -29,9 +26,6 @@ const PtComponents = () => {
     blockConsCard,
     imageModule,
     imagesModule: imageCarouselModule,
-    blockEcocashCalculator,
-    blockOneMoneyCalculator,
-    blockMukuruCalculator,
     blockGreenCard,
     blockPartnersCard,
     blockVideoEmbed: VideoEmbed,
@@ -89,9 +83,6 @@ const PPtComponents = () => {
     blockConsCard,
     imageModule,
     imagesModule: imageCarouselModule,
-    blockEcocashCalculator,
-    blockOneMoneyCalculator,
-    blockMukuruCalculator,
     blockGreenCard,
     blockPartnersCard,
     blockVideoEmbed: VideoEmbed,

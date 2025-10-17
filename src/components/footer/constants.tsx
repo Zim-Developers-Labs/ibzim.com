@@ -1,37 +1,42 @@
+import { DOMAIN_URLS } from '@/lib/constants';
+
 export const navigation = {
-  articles: [
-    { name: 'Guides', href: '/guides' },
-    { name: 'Reviews', href: '/reviews' },
-    { name: 'Best Lists', href: '/lists' },
-    { name: 'Profiles', href: '/profiles' },
-    { name: 'Events', href: '/events' },
-  ],
-  blogs: [
-    { name: "Tino's Tech Blog", href: 'https://www.tinomazorodze.com' },
-    { name: "Watida's Music Blog", href: 'https://www.watida.com' },
-    { name: 'TDMarena Ecommerce Blog', href: 'https://www.tdmarena.com' },
+  solutions: [
+    { name: 'Blog', href: '/blog' },
+    { name: 'Events', href: '/events-calendar' },
     {
-      name: 'Zimclassroom Education Blog',
-      href: 'https://www.zimclassroom.com',
+      name: 'Compare',
+      href: '/compare',
     },
-    { name: 'The Word Bible Blog', href: 'https://www.theword.fyi' },
+    {
+      name: 'Awards',
+      href: '/zimbabwe-peoples-choice-awards',
+    },
   ],
   company: [
-    { name: 'About', href: '#' },
+    { name: 'About', href: '/about' },
     { name: 'Authors', href: '/authors' },
     { name: 'Press', href: '/press' },
-    { name: 'Partners', href: '#' },
+    { name: 'Partners', href: DOMAIN_URLS.PARTNERS() },
   ],
-  legal: [
-    { name: 'Privacy', href: '/policies/privacy' },
-    { name: 'Terms', href: '/policies/terms' },
+  support: [
+    { name: 'Submit Ticket', href: '/support' },
+    { name: 'Learn IBZIM', href: DOMAIN_URLS.DOCS() },
     {
-      name: 'Disclaimer',
-      href: '/policies/disclaimer',
+      name: 'Whatsapp Group',
+      href: 'https://chat.whatsapp.com/DHR6FZ6Qf49KYzvpxEQbij?mode=ems_share_c',
+    },
+  ],
+  platforms: [
+    { name: 'Billboard', href: DOMAIN_URLS.BILLBOARD() },
+    { name: 'Earn', href: DOMAIN_URLS.EARN() },
+    {
+      name: 'Advertising',
+      href: DOMAIN_URLS.ADVERTISE(),
     },
     {
-      name: 'Commenting',
-      href: '/policies/commenting',
+      name: 'Peya Peya',
+      href: 'https://peyapeya.com',
     },
   ],
   social: [

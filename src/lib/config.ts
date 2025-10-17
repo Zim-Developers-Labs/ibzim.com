@@ -1,28 +1,20 @@
 import { SiteConfigType } from '@/types';
-
-export const deploymentDomain = 'WWW.ibzim.com';
+import { DOMAIN_URLS } from './constants';
 
 export const siteConfig = {
   name: 'IBZim',
-  isNew: false,
   shortName: 'IBZIM',
-  vercelProjectName: 'ibzim',
   twitterUsername: '@IBZimDotCom',
-  country: 'Zimbabwe',
-  documentPrefix: '',
-  features: {
-    auth: 'disabled',
-  },
   url: {
-    logo: `https://${deploymentDomain}/apple-touch-icon.png`,
-    web: `https://${deploymentDomain}`,
+    logo: `${DOMAIN_URLS.MAIN()}/apple-touch-icon.png`,
+    web: `${DOMAIN_URLS.MAIN()}`,
     twitter: `https://twitter.com/@IBZimDotCom`,
     instagram: `https://www.instagram.com/ibzimdotcom`,
     linkedin: `https://www.linkedin.com/company/XfinityPros`,
     github: `https://github.com/orgs/XfinityPros/repositories`,
     youtube: `https://www.youtube.com/@IBZimDotCom`,
     facebook: `https://www.facebook.com/IBZimDotCom`,
-    banner: `https://${deploymentDomain}/banner.webp`,
+    banner: `${DOMAIN_URLS.MAIN()}/banner.webp`,
   },
   popularArticleIds: [
     '60a33879-89b0-45bb-ac07-0f3e89b06e95',

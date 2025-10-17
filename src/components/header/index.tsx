@@ -8,6 +8,7 @@ import { Grip, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { MenuDrawer } from './menu-drawer';
+import { NotificationType } from '@/types';
 
 export const tools = [
   {
@@ -15,24 +16,24 @@ export const tools = [
     href: '/tools/events-calendar',
   },
   {
-    name: 'Ecocash Calculator',
-    href: '/tools/ecocash-calculator',
-  },
-  {
-    name: 'Travel Planner',
-    href: '/tools/travel-planner',
-  },
-  {
     name: 'School Picker',
     href: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
   },
   {
+    name: 'Ecocash Calculator',
+    href: 'https://tools.zimdevelopers.com/tools/ecocash-calculator',
+  },
+  {
+    name: 'Travel Planner',
+    href: 'https://tools.zimdevelopers.com/tools/travel-planner',
+  },
+  {
     name: 'Currency Converter',
-    href: '/tools/currency-converter/usd-zig',
+    href: 'https://tools.zimdevelopers.com/tools/currency-converter/usd-zig',
   },
   {
     name: 'ZESA Calculator',
-    href: '/tools/zesa-electricity-calculator',
+    href: 'https://tools.zimdevelopers.com/tools/zesa-electricity-calculator',
   },
 ];
 
@@ -40,12 +41,16 @@ type HeaderProps = {
   user?: any;
   articles?: any[];
   popularArticles?: any[];
+  sanityGlobalNotifications?: NotificationType[];
+  neonUserNotifications?: NotificationType[];
 };
 
 export default function Header({
   articles,
   popularArticles,
   user,
+  neonUserNotifications,
+  sanityGlobalNotifications,
 }: HeaderProps) {
   return (
     <header
@@ -55,15 +60,7 @@ export default function Header({
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-x-4 lg:hidden">
-            <MenuDrawer>
-              <Button
-                variant="outline"
-                className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
-              >
-                <Grip className="h-5 w-5" />
-                <span className="sr-only">View Tools</span>
-              </Button>
-            </MenuDrawer>
+            <MenuDrawer />
             <Link href="/">
               <span className="sr-only" aria-hidden="true">
                 IBZim logo
@@ -72,15 +69,7 @@ export default function Header({
             </Link>
           </div>
           <div className="hidden flex-1 items-center lg:flex lg:gap-x-6">
-            <MenuDrawer>
-              <Button
-                variant="outline"
-                className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
-              >
-                <Grip className="h-5 w-5" />
-                <span className="">Menu</span>
-              </Button>
-            </MenuDrawer>
+            <MenuDrawer />
             <Link href="/" className="">
               <span className="sr-only">IBZim Logo</span>
               <Icons.logo className="hidden h-8 w-fit md:block" />
@@ -91,21 +80,14 @@ export default function Header({
               <SearchToggler
                 articles={articles}
                 popularArticles={popularArticles}
-              >
-                <Button
-                  variant="outline"
-                  className="relative w-full cursor-pointer border-zinc-600 bg-zinc-800 hover:bg-zinc-600"
-                >
-                  <Search className="size-5 text-zinc-300" />
-                  <div className="pr-2 text-xs text-zinc-300">
-                    Search/Request Articles
-                  </div>
-                </Button>
-              </SearchToggler>
+              />
             </div>
           )}
           <div className="flex flex-none items-center gap-2 md:gap-4">
-            <Notifications />
+            <Notifications
+              neonUserNotifications={neonUserNotifications}
+              sanityGlobalNotifications={sanityGlobalNotifications}
+            />
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
           </div>

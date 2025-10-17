@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import VotingPageWrapper from './wrapper';
+import VotingPageComponent from './components';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
 import { siteConfig } from '@/lib/config';
 
@@ -24,5 +24,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function VotingPage() {
-  return <VotingPageWrapper />;
+  return <VotingPageComponent />;
 }

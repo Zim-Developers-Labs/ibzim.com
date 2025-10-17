@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 

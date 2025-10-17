@@ -10,15 +10,14 @@ import {
 } from '../ui/dialog';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import { Button } from '../ui/button';
 
 export default function SearchToggler({
   articles,
   popularArticles,
-  children,
 }: {
   articles?: any[];
   popularArticles?: any[];
-  children: React.ReactNode;
 }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -56,7 +55,17 @@ export default function SearchToggler({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          className="relative w-full cursor-pointer border-zinc-600 bg-zinc-800 hover:bg-zinc-600"
+        >
+          <Search className="size-5 text-zinc-300" />
+          <div className="pr-2 text-xs text-zinc-300">
+            Search/Request Articles
+          </div>
+        </Button>
+      </DialogTrigger>
       <DialogContent className="top-12 translate-y-0 sm:top-[50%] sm:max-w-xl sm:translate-y-[-50%]">
         <DialogTitle className="sr-only">Search Articles</DialogTitle>
         <div className="flex items-center border-b pb-4">

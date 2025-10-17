@@ -3,7 +3,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
