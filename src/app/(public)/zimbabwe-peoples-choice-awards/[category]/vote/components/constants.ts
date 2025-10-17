@@ -647,9 +647,21 @@ export const currentSeason = getCurrentSeason();
 const seasonalStyles = {
   SUMMER: {
     particles: [
-      { emoji: '💧', size: 'text-3xl', color: 'text-blue-400' },
-      { emoji: '💦', size: 'text-2xl', color: 'text-cyan-400' },
-      { emoji: '🌧️', size: 'text-4xl', color: 'text-slate-400' },
+      {
+        emoji: '💧',
+        size: 'text-xl sm:text-2xl xl:text-3xl',
+        color: 'text-blue-400',
+      },
+      {
+        emoji: '💦',
+        size: 'text-lg sm:text-xl xl:text-2xl',
+        color: 'text-cyan-400',
+      },
+      {
+        emoji: '🌧️',
+        size: 'text-2xl sm:text-3xl xl:text-4xl',
+        color: 'text-slate-400',
+      },
     ],
     count: 20,
     bgGradient: 'bg-gradient-to-br from-slate-200 via-white to-blue-100',
@@ -657,9 +669,21 @@ const seasonalStyles = {
   },
   AUTUMN: {
     particles: [
-      { emoji: '🍂', size: 'text-4xl', color: 'text-orange-600' },
-      { emoji: '🍁', size: 'text-5xl', color: 'text-red-600' },
-      { emoji: '🌰', size: 'text-3xl', color: 'text-amber-700' },
+      {
+        emoji: '🍂',
+        size: 'text-2xl sm:text-3xl xl:text-4xl',
+        color: 'text-orange-600',
+      },
+      {
+        emoji: '🍁',
+        size: 'text-3xl sm:text-4xl xl:text-5xl',
+        color: 'text-red-600',
+      },
+      {
+        emoji: '🌰',
+        size: 'text-xl sm:text-2xl xl:text-3xl',
+        color: 'text-amber-700',
+      },
     ],
     count: 15,
     bgGradient: 'bg-gradient-to-br from-orange-200 via-white to-amber-200',
@@ -667,9 +691,21 @@ const seasonalStyles = {
   },
   WINTER: {
     particles: [
-      { emoji: '❄️', size: 'text-4xl', color: 'text-blue-300' },
-      { emoji: '⛄', size: 'text-5xl', color: 'text-slate-400' },
-      { emoji: '🌨️', size: 'text-3xl', color: 'text-cyan-200' },
+      {
+        emoji: '❄️',
+        size: 'text-2xl sm:text-3xl xl:text-4xl',
+        color: 'text-blue-300',
+      },
+      {
+        emoji: '⛄',
+        size: 'text-3xl sm:text-4xl xl:text-5xl',
+        color: 'text-slate-400',
+      },
+      {
+        emoji: '🌨️',
+        size: 'text-xl sm:text-2xl xl:text-3xl',
+        color: 'text-cyan-200',
+      },
     ],
     count: 18,
     bgGradient: 'bg-gradient-to-br from-blue-200 via-white to-slate-200',
@@ -677,9 +713,21 @@ const seasonalStyles = {
   },
   SPRING: {
     particles: [
-      { emoji: '🌸', size: 'text-4xl', color: 'text-pink-400' },
-      { emoji: '🌼', size: 'text-5xl', color: 'text-yellow-400' },
-      { emoji: '🦋', size: 'text-3xl', color: 'text-purple-400' },
+      {
+        emoji: '🌸',
+        size: 'text-2xl sm:text-3xl xl:text-4xl',
+        color: 'text-pink-400',
+      },
+      {
+        emoji: '🌼',
+        size: 'text-3xl sm:text-4xl xl:text-5xl',
+        color: 'text-yellow-400',
+      },
+      {
+        emoji: '🦋',
+        size: 'text-xl sm:text-2xl xl:text-3xl',
+        color: 'text-purple-400',
+      },
     ],
     count: 14,
     bgGradient: 'bg-gradient-to-br from-pink-200 via-white to-green-200',
