@@ -163,11 +163,39 @@ export const reviews = pgTable(
   }),
 );
 
+export const paymentMethods = pgTable(
+  'payment_methods',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    provider: varchar('provider', { length: 50 }).notNull(), // 'stripe', 'peyapeya', 'ecocash'
+    type: varchar('type', { length: 50 }).notNull(), // 'card', 'fantasy-points', 'mobile_money'
+    maskedNumber: varchar('masked_number', { length: 20 }).notNull(), // '**** **** **** 4242'
+    token: text('token').notNull(), // Tokenized payment method for reuse
+    isDefault: boolean('is_default').notNull().default(false),
+    isActive: boolean('is_active').notNull().default(true), // Soft delete capability
+    expiryDate: varchar('expiry_date', { length: 7 }), // 'MM/YY' format for cards
+    metadata: jsonb('metadata'), // Store provider-specific data
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => ({
+    userIdIndex: index('payment_method_user_id_idx').on(table.userId),
+    providerIndex: index('payment_method_provider_idx').on(table.provider),
+    isDefaultIndex: index('payment_method_is_default_idx').on(table.isDefault),
+  }),
+);
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   emailVerificationRequests: many(emailVerificationRequests),
   passwordResetSessions: many(passwordResetSessions),
+  paymentMethods: many(paymentMethods),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -207,6 +235,13 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 export const reviewsRelations = relations(reviews, ({ one }) => ({
   reviewer: one(users, {
     fields: [reviews.reviewerId],
+    references: [users.id],
+  }),
+}));
+
+export const paymentMethodsRelations = relations(paymentMethods, ({ one }) => ({
+  user: one(users, {
+    fields: [paymentMethods.userId],
     references: [users.id],
   }),
 }));
