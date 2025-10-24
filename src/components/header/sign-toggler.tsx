@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Popover,
   PopoverContent,
@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/popover';
 import { Icons } from '../icons';
 import Link from 'next/link';
+import { DOMAIN_URLS } from '@/lib/constants';
 
 type Props = {
   bgColor?: string;
@@ -16,13 +17,15 @@ type Props = {
 };
 
 export function SignToggler({ bgColor, linkText, textColor }: Props) {
-  const [currentUrl, setCurrentUrl] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    // Only access window after component has mounted (client-side)
-    setCurrentUrl(window.location.href);
-  }, []);
+  const onSignInClick = () => {
+    window.location.href = `${DOMAIN_URLS.AUTH()}/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`;
+  };
+
+  const onSignUpClick = () => {
+    window.location.href = `${DOMAIN_URLS.AUTH()}/sign-up?callbackUrl=${encodeURIComponent(window.location.href)}`;
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -50,13 +53,21 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
         </div>
         <div className="flex items-center justify-between gap-2">
           <Link
-            href={`/sign-in?callbackUrl=${currentUrl}`}
+            href={`${DOMAIN_URLS.AUTH()}/sign-in`}
+            onClick={(e) => {
+              e.preventDefault();
+              onSignInClick();
+            }}
             className="flex w-full items-center justify-center rounded-md bg-teal-400 px-4 py-2 text-sm text-zinc-900 transition-colors hover:bg-teal-500"
           >
             Login
           </Link>
           <Link
-            href={`/sign-up?callbackUrl=${currentUrl}`}
+            href={`${DOMAIN_URLS.AUTH()}/sign-up`}
+            onClick={(e) => {
+              e.preventDefault();
+              onSignUpClick();
+            }}
             className="flex w-full items-center justify-center rounded-md bg-zinc-200 px-4 py-2 text-sm text-zinc-900 transition-colors hover:bg-zinc-300"
           >
             Register

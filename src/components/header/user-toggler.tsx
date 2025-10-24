@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Info, UserStar, Vote } from 'lucide-react';
+import { Info, TrophyIcon, UserStar, Vote } from 'lucide-react';
 import { User } from '@/lib/server/constants';
 import { SubmitButton } from '../ui/submit-button';
 import { useActionState } from 'react';
@@ -102,6 +102,15 @@ export default function UserToggler({ user }: UserTogglerType) {
               >
                 <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
                 Saved Articles
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/achievements`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <TrophyIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                Achievements
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>

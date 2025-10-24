@@ -48,6 +48,10 @@ export const domainUrls = [
     production: 'https://dsar.ibzim.com',
     development: 'http://localhost:3011',
   },
+  {
+    production: 'https://www.peyapeya.com',
+    development: 'http://localhost:4000',
+  },
 ];
 
 export function getDomainUrl(index: number): string {
@@ -72,4 +76,5 @@ export const DOMAIN_URLS = {
   PARTNERS: () => getDomainUrl(8),
   POLICIES: () => getDomainUrl(9),
   DSAR: () => getDomainUrl(10),
+  PEYA_CHECKOUT: () => getDomainUrl(11),
 } as const;

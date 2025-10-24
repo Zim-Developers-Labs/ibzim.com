@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
+import { DOMAIN_URLS } from '@/lib/constants';
 
 interface PaymentMethod {
   id: number;
@@ -116,7 +117,13 @@ export function PayDialog({
     tier.frequency === 'monthly' ? 'Every month' : `Every ${tier.frequency}`;
 
   const handlePayOptionClick = (option: string) => {
-    setSelectedProvider(option);
+    if (option === 'ecocash') {
+      window.open(
+        `${DOMAIN_URLS.PEYA_CHECKOUT()}/checkout/ecocash`,
+        'peyaPeyaPopup',
+        'width=360,height=500,menubar=no,toolbar=no,location=no,status=no',
+      );
+    }
   };
 
   return (

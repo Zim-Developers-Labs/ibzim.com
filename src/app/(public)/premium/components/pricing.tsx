@@ -3,6 +3,10 @@ import { TierType } from '.';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { PayDialog } from './pay-dialog';
+import { User } from '@/lib/server/constants';
+import { toast } from 'sonner';
+import { AlertCircleIcon } from 'lucide-react';
+import { DOMAIN_URLS } from '@/lib/constants';
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
@@ -11,9 +15,11 @@ function classNames(...classes: any) {
 export default function PremiumPricing({
   tiers,
   subType,
+  user,
 }: {
   tiers: TierType[];
   subType: string;
+  user: User | null;
 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState<TierType | null>(null);
@@ -38,6 +44,31 @@ export default function PremiumPricing({
   }
 
   const handleBuyClick = (tier: TierType) => {
+    if (!user) {
+      alert('Please log in to purchase a subscription.');
+      toast('Please log in to purchase a subscription.', {
+        icon: <AlertCircleIcon className="h-5 w-5 text-red-600" />,
+        action: {
+          label: 'Log In',
+          onClick: () =>
+            (window.location.href = `${DOMAIN_URLS.AUTH()}/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`),
+        },
+      });
+      return;
+    }
+
+    if (!user.emailVerified) {
+      toast('Verify your email to proceed with the purchase.', {
+        icon: <AlertCircleIcon className="h-5 w-5 text-red-600" />,
+        action: {
+          label: 'Verify Email',
+          onClick: () =>
+            (window.location.href = `${DOMAIN_URLS.AUTH()}/verify-email?callbackUrl=${encodeURIComponent(window.location.href)}&requestId=send_verification_request`),
+        },
+      });
+      return;
+    }
+
     if (subType === 'business' && tier.price.business === undefined) {
       return;
     }

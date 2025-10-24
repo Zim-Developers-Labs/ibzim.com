@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env';
 import { useEffect } from 'react';
 
 type Props = {
@@ -13,7 +14,7 @@ const GoogleAdUnit: React.FC<Props> = ({ adSlot }) => {
     }
   }, []);
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (env.NODE_ENV !== 'production') {
     return (
       <div className="rounded-lg border border-gray-200 bg-white p-2 md:p-4">
         Ad Slot: {adSlot}

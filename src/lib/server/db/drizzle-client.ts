@@ -8,7 +8,7 @@ import { env } from '@/env';
 let connectionString = env.DATABASE_URL;
 
 // Configuring Neon for local development
-if (process.env.NODE_ENV === 'development') {
+if (env.NODE_ENV === 'development') {
   connectionString = 'postgres://postgres:postgres@db.localtest.me:5432/main';
   neonConfig.fetchEndpoint = (host) => {
     const [protocol, port] =

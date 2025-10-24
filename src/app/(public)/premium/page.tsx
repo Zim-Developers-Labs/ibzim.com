@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import PremiumComponents from './components';
 import { preparePageMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/lib/config';
+import { getCurrentSession } from '@/lib/server/session';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -14,5 +15,7 @@ export const generateMetadata = (): Metadata =>
   });
 
 export default async function SubscribePremium() {
-  return <PremiumComponents />;
+  const { user } = await getCurrentSession();
+
+  return <PremiumComponents user={user} />;
 }

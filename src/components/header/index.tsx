@@ -4,9 +4,7 @@ import SearchToggler from '@/components/header/search-toggler';
 import { SignToggler } from '@/components/header/sign-toggler';
 import UserToggler from '@/components/header/user-toggler';
 import { Icons } from '@/components/icons';
-import { Grip, Search } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '../ui/button';
 import { MenuDrawer } from './menu-drawer';
 import { NotificationType } from '@/types';
 

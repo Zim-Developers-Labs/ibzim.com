@@ -37,7 +37,7 @@ export default async function RootLayout({
     >
       <body>
         <UserProvider dbUser={user}>
-          <Toaster position="top-center" />
+          <Toaster position="top-center" theme="light" />
           <Banner />
           <Header
             user={user}

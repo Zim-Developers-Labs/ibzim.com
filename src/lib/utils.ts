@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Filter } from 'bad-words';
 import slugify from 'slugify';
+import { env } from '@/env';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -114,7 +115,7 @@ export function calculateReadingTime(article: string): number {
 
 export function absoluteUrl(path: string) {
   // ! should use env.
-  return new URL(path, process.env.NEXT_PUBLIC_APP_URL).href;
+  return new URL(path, env.NEXT_PUBLIC_APP_URL).href;
 }
 
 export function filterBadWords(text: string): string {

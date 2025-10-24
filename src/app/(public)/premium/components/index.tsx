@@ -4,6 +4,8 @@ import { useState } from 'react';
 import PremiumBenefits from './benefits';
 import PremiumHero from './hero';
 import PremiumPricing from './pricing';
+import { User } from '@/lib/server/constants';
+import VerifyEmailBanner from '@/components/banners/verify-email';
 
 export type TierType = {
   name: string;
@@ -49,13 +51,14 @@ export const tiers = [
   },
 ] satisfies TierType[];
 
-export default function PremiumComponents() {
+export default function PremiumComponents({ user }: { user: User | null }) {
   const [subType, setSubType] = useState('personal');
 
   return (
     <>
+      {user && !user.emailVerified && <VerifyEmailBanner />}
       <PremiumHero subType={subType} setSubType={setSubType} />
-      <PremiumPricing tiers={tiers} subType={subType} />
+      <PremiumPricing tiers={tiers} subType={subType} user={user} />
       <PremiumBenefits subType={subType} />
     </>
   );

@@ -60,7 +60,7 @@ export async function validateSessionToken(
     email: row.userEmail,
     fullName: row.userFullName,
     username: row.userUsername,
-    emailVerified: Boolean(row.userEmailVerified),
+    emailVerified: row.userEmailVerified,
     registered2FA: Boolean(row.userHasTotp),
     accessLevel: row.accessLevel,
     avatar: row.userAvatar,
@@ -111,7 +111,7 @@ export async function setSessionTokenCookie(
     httpOnly: true,
     ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: expiresAt,
   });
@@ -122,7 +122,7 @@ export async function deleteSessionTokenCookie(): Promise<void> {
     httpOnly: true,
     ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 0,
   });

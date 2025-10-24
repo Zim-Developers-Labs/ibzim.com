@@ -10,14 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  Bell,
-  BellIcon,
-  Coins,
-  MessageSquare,
-  ThumbsUp,
-  UserPlus,
-} from 'lucide-react';
+import { Bell, BellIcon, Coins, MessageSquare } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { renderNotification } from './variations';
 import { NotificationType } from '@/types';
