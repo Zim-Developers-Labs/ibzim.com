@@ -44,11 +44,12 @@ export async function validateSessionToken(
     .innerJoin(users, eq(sessions.userId, users.id))
     .where(eq(sessions.id, sessionId));
 
-  const row = rows?.[0];
-
-  if (!row) {
+  if (rows.length === 0) {
     return { session: null, user: null };
   }
+
+  const row = rows[0];
+
   const session: Session = {
     id: row.sessionId,
     userId: row.userId,
