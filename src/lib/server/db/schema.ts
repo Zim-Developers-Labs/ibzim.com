@@ -190,6 +190,39 @@ export const paymentMethods = pgTable(
   }),
 );
 
+export const checkoutTokens = pgTable(
+  'checkout_tokens',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    token: text('token').notNull().unique(),
+    interval: varchar('interval', { length: 20 }).notNull(), // 'one-time', 'monthly', 'yearly'
+    plan: varchar('plan', { length: 50 }).notNull(), // Plan identifier
+    amount: decimal('amount').notNull(), // Amount in cents or smallest currency unit
+    currency: varchar('currency', { length: 3 }).notNull().default('USD'), // ISO 4217 currency code
+    status: varchar('status', { length: 20 }).notNull().default('pending'), // 'pending', 'completed', 'expired', 'cancelled'
+    paymentMethodId: integer('payment_method_id').references(
+      () => paymentMethods.id,
+      { onDelete: 'set null' },
+    ),
+    metadata: jsonb('metadata'), // Store checkout-specific data (items, order info, etc.)
+    expiresAt: timestamp('expires_at').notNull(),
+    completedAt: timestamp('completed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => ({
+    userIdIndex: index('checkout_token_user_id_idx').on(table.userId),
+    tokenIndex: index('checkout_token_token_idx').on(table.token),
+    statusIndex: index('checkout_token_status_idx').on(table.status),
+    expiresAtIndex: index('checkout_token_expires_at_idx').on(table.expiresAt),
+  }),
+);
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
@@ -243,5 +276,16 @@ export const paymentMethodsRelations = relations(paymentMethods, ({ one }) => ({
   user: one(users, {
     fields: [paymentMethods.userId],
     references: [users.id],
+  }),
+}));
+
+export const checkoutTokensRelations = relations(checkoutTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [checkoutTokens.userId],
+    references: [users.id],
+  }),
+  paymentMethod: one(paymentMethods, {
+    fields: [checkoutTokens.paymentMethodId],
+    references: [paymentMethods.id],
   }),
 }));

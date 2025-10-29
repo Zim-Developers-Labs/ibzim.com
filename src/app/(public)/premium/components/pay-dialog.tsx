@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import { DOMAIN_URLS } from '@/lib/constants';
+import { User } from '@/lib/server/constants';
+import { toast } from 'sonner';
 
 interface PaymentMethod {
   id: number;
@@ -34,6 +36,7 @@ interface PayDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   tier: TierType;
+  user: User | null;
   subType: string;
 }
 
@@ -52,6 +55,7 @@ export function PayDialog({
   open,
   onOpenChange,
   tier,
+  user,
   subType,
 }: PayDialogProps) {
   const [defaultPaymentMethod, setDefaultPaymentMethod] =
@@ -116,14 +120,52 @@ export function PayDialog({
   const billingText =
     tier.frequency === 'monthly' ? 'Every month' : `Every ${tier.frequency}`;
 
-  const handlePayOptionClick = (option: string) => {
+  const handlePayOptionClick = async (option: string) => {
+    if (!user) {
+      return;
+    }
+
+    const res = await fetch('/api/create-checkout-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        plan: tier.name,
+        price,
+        interval: tier.frequency,
+        userId: user.id,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!data.checkoutToken) {
+      toast.error('Failed to create token', data);
+      return;
+    }
+
     if (option === 'ecocash') {
+      setSelectedProvider('ecocash');
       window.open(
-        `${DOMAIN_URLS.PEYA_CHECKOUT()}/checkout/ecocash`,
+        `${DOMAIN_URLS.PEYA_CHECKOUT()}/checkout/ecocash?token=${encodeURIComponent(data.checkoutToken)}`,
         'peyaPeyaPopup',
         'width=360,height=500,menubar=no,toolbar=no,location=no,status=no',
       );
     }
+
+    // Listen for message from popup
+    function onMessage(event: MessageEvent) {
+      // validate the origin
+      if (event.origin !== DOMAIN_URLS.PEYA_CHECKOUT()) return;
+      if (event.data?.status === 'success') {
+        // stop loading state, update UI
+        console.log('Payment success', event.data);
+      } else if (event.data?.status === 'error') {
+        console.log('Payment error', event.data);
+      }
+      window.removeEventListener('message', onMessage);
+    }
+
+    window.addEventListener('message', onMessage);
   };
 
   return (

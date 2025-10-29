@@ -182,6 +182,7 @@ export default function PremiumPricing({
       </div>
       {selectedTier && (
         <PayDialog
+          user={user}
           open={dialogOpen}
           onOpenChange={setDialogOpen}
           tier={selectedTier}
