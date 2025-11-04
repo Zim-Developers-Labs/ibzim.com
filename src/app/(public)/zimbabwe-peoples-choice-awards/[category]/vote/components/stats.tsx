@@ -1,7 +1,8 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, Clock, Vote } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Users, Clock, Vote, Trophy } from 'lucide-react';
 import { useState } from 'react';
 
 interface StatsProps {
@@ -14,9 +15,7 @@ interface StatsProps {
 }
 
 export default function VotingStats({ stats }: StatsProps) {
-  const [viewMode, setViewMode] = useState<'percentage' | 'actual'>(
-    'percentage',
-  );
+  const [viewMode, setViewMode] = useState<string>('percentage');
   const votingPercentage =
     (stats.categoriesVoted / stats.totalCategories) * 100;
 
@@ -38,8 +37,23 @@ export default function VotingStats({ stats }: StatsProps) {
                 : stats.totalVotes.toLocaleString()}
             </div>
             <div className="mt-2 flex items-center gap-2">
-              <Users className="h-4 w-4 text-blue-200" />
-              <span className="text-xs text-blue-100">All participants</span>
+              <Tabs value={viewMode} onValueChange={setViewMode}>
+                <TabsList>
+                  <TabsTrigger
+                    value="percentage"
+                    className="cursor-pointer px-2 text-xs data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                  >
+                    Percentage
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="numbers"
+                    className="cursor-pointer px-2 text-xs data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                  >
+                    <Trophy className="size-3" />
+                    Numbers
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
           </div>
         </CardContent>
