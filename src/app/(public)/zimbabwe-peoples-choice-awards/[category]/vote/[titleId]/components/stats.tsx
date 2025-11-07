@@ -74,7 +74,7 @@ export default function VotingStats({ stats }: StatsProps) {
             </div>
             <div className="mt-2 flex items-center gap-2">
               <Clock className="h-4 w-4 text-orange-200" />
-              <span className="text-xs text-orange-100">Until deadline</span>
+              <span className="text-xs text-orange-100">Until next season</span>
             </div>
           </div>
         </CardContent>

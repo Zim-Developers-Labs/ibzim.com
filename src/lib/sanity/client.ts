@@ -4,11 +4,14 @@ import { apiVersion, dataset, projectId } from './api';
 import { env } from '@/env';
 import {
   NotificationType,
+  SanityAwardCategoryType,
   SchoolPickerProfilesType,
   SearchDocumentType,
 } from '@/types';
 import {
   allSchoolsByLevelQuery,
+  awardCategoriesQuery,
+  awardCategoryBySlugQuery,
   documentsForSearchQuery,
   notificationsQuery,
 } from './queries';
@@ -44,4 +47,22 @@ export async function getAllSchoolsByLevel(
     return (await client.fetch(allSchoolsByLevelQuery, { level })) || [];
   }
   return [];
+}
+
+export async function getAllAwardCategories(): Promise<
+  SanityAwardCategoryType[]
+> {
+  if (client) {
+    return (await client.fetch(awardCategoriesQuery)) || [];
+  }
+  return [];
+}
+
+export async function getAwardCategoryBySlug(
+  slug: string,
+): Promise<SanityAwardCategoryType | null> {
+  if (client) {
+    return (await client.fetch(awardCategoryBySlugQuery, { slug })) || null;
+  }
+  return null;
 }

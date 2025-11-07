@@ -625,23 +625,40 @@ interface Season {
   name: 'SUMMER' | 'AUTUMN' | 'WINTER' | 'SPRING';
   number: 1 | 2 | 3 | 4;
   period: string;
+  endMonth: number;
 }
 
 export const seasons: Season[] = [
-  { name: 'SUMMER', number: 1, period: 'December to February' },
-  { name: 'AUTUMN', number: 2, period: 'March to May' },
-  { name: 'WINTER', number: 3, period: 'June to August' },
-  { name: 'SPRING', number: 4, period: 'September to November' },
+  { name: 'SUMMER', number: 1, period: 'November to January', endMonth: 1 },
+  { name: 'AUTUMN', number: 2, period: 'February to March', endMonth: 3 },
+  { name: 'WINTER', number: 3, period: 'April to May', endMonth: 5 },
+  { name: 'SPRING', number: 4, period: 'August to October', endMonth: 10 },
 ];
 
 function getCurrentSeason(date = new Date()) {
   const month = date.getMonth() + 1; // JS months: 0 = Jan, so +1
 
-  if (month >= 12 || month <= 2) return seasons[0]; // Summer
-  if (month >= 3 && month <= 5) return seasons[1]; // Autumn
-  if (month >= 6 && month <= 8) return seasons[2]; // Winter
+  if (month >= 11 || month <= 1) return seasons[0]; // Summer
+  if (month >= 2 && month <= 4) return seasons[1]; // Autumn
+  if (month >= 5 && month <= 7) return seasons[2]; // Winter
   return seasons[3]; // Spring
 }
+
+export function getDaysRemainingInSeason(date = new Date()): number {
+  const season = getCurrentSeason(date);
+  const year = date.getFullYear();
+
+  // Handle season that ends in next year (e.g. Summer: Nov–Jan)
+  const seasonEndYear = season.endMonth < date.getMonth() + 1 ? year + 1 : year;
+
+  // Get the last day of the season end month
+  const seasonEndDate = new Date(seasonEndYear, season.endMonth, 0); // 0 gives last day of prev month
+  const diffMs = seasonEndDate.getTime() - date.getTime();
+  const daysRemaining = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  return daysRemaining > 0 ? daysRemaining : 0;
+}
+
 export const currentSeason = getCurrentSeason();
 
 const seasonalStyles = {

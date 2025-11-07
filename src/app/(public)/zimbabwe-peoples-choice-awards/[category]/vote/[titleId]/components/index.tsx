@@ -26,72 +26,35 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { currentSeason, mockNominees, seasonConfig } from './constants';
+import {
+  currentSeason,
+  getDaysRemainingInSeason,
+  mockNominees,
+  seasonConfig,
+} from './constants';
 import { Icons } from '@/components/icons';
 import Image from 'next/image';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import VotingStats from './stats';
+import { SanityAwardCategoryType } from '@/types';
 
-const categoryInfo = {
-  company: {
-    title: 'Company Awards',
-    period: 'January Voting',
-    categories: [
-      'Company of the Year',
-      'Best CEO',
-      'Best Startup',
-      'Best Services',
-      'Best Product',
-    ],
-  },
-  city: {
-    title: 'City Awards',
-    period: 'March Voting',
-    categories: ['City of the Year', 'Cleanest City', 'Most Enjoyable City'],
-  },
-  movie: {
-    title: 'Movie Awards',
-    period: 'May Voting',
-    categories: ['Movie of the Year', 'Best Actor', 'Best Director'],
-  },
-  comedy: {
-    title: 'Comedy Awards',
-    period: 'July Voting',
-    categories: ['Comedian of the Year', 'Best Skit'],
-  },
-  school: {
-    title: 'School Awards',
-    period: 'September Voting',
-    categories: [
-      'School of the Year',
-      'Best Academics',
-      'Best Sporting',
-      'Best Uniform',
-    ],
-  },
-  music: {
-    title: 'Music Awards',
-    period: 'November Voting',
-    categories: ['Artist of the Year', 'Best Song', 'Best Album'],
-  },
-};
-
-export default function VotingPageComponent() {
+export default function VotingPageComponent({
+  awardCategory,
+}: {
+  awardCategory: SanityAwardCategoryType;
+}) {
   const params = useParams();
   const category = params.category as string;
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [votes, setVotes] = useState<Record<string, string>>({});
   const [categoryStatus, setCategoryStatus] = useState<
     Record<string, { status: 'voted' | 'skipped' | 'pending'; date?: Date }>
   >({});
   const [canEditVotes, setCanEditVotes] = useState<Record<string, boolean>>({});
 
-  const info = categoryInfo[category as keyof typeof categoryInfo];
   const nominees = mockNominees[category as keyof typeof mockNominees] || {};
-  const awardCategories = info?.categories || [];
-  const currentCategory = awardCategories[currentCategoryIndex];
-
-  const currentPeriod = 'voting';
+  const categoryTitles = awardCategory.categoryTitles || [];
+  const currentTitle = categoryTitles[currentTitleIndex];
 
   // Load previous votes on component mount
   useEffect(() => {
@@ -164,7 +127,7 @@ export default function VotingPageComponent() {
   // }
 
   const handleVote = (nomineeId: string) => {
-    const newVotes = { ...votes, [currentCategory]: nomineeId };
+    const newVotes = { ...votes, [currentTitle.slug.current]: nomineeId };
     setVotes(newVotes);
     localStorage.setItem(`votes-${category}`, JSON.stringify(newVotes));
   };
@@ -173,7 +136,7 @@ export default function VotingPageComponent() {
     const now = new Date();
     const newStatus = {
       ...categoryStatus,
-      [currentCategory]: { status: 'voted' as const, date: now },
+      [currentTitle.slug.current]: { status: 'voted' as const, date: now },
     };
     setCategoryStatus(newStatus);
     localStorage.setItem(
@@ -182,18 +145,18 @@ export default function VotingPageComponent() {
     );
 
     // Update edit permissions
-    setCanEditVotes((prev) => ({ ...prev, [currentCategory]: true }));
+    setCanEditVotes((prev) => ({ ...prev, [currentTitle.slug.current]: true }));
 
     // Move to next category if available
-    if (currentCategoryIndex < awardCategories.length - 1) {
-      setCurrentCategoryIndex(currentCategoryIndex + 1);
+    if (currentTitleIndex < categoryTitles.length - 1) {
+      setCurrentTitleIndex(currentTitleIndex + 1);
     }
   };
 
   const handleSkipCategory = () => {
     const newStatus = {
       ...categoryStatus,
-      [currentCategory]: { status: 'skipped' as const },
+      [currentTitle.slug.current]: { status: 'skipped' as const },
     };
     setCategoryStatus(newStatus);
     localStorage.setItem(
@@ -202,24 +165,24 @@ export default function VotingPageComponent() {
     );
 
     // Move to next category if available
-    if (currentCategoryIndex < awardCategories.length - 1) {
-      setCurrentCategoryIndex(currentCategoryIndex + 1);
+    if (currentTitleIndex < categoryTitles.length - 1) {
+      setCurrentTitleIndex(currentTitleIndex + 1);
     }
   };
 
   const goToCategory = (index: number) => {
-    setCurrentCategoryIndex(index);
+    setCurrentTitleIndex(index);
   };
 
   const goToPrevious = () => {
-    if (currentCategoryIndex > 0) {
-      setCurrentCategoryIndex(currentCategoryIndex - 1);
+    if (currentTitleIndex > 0) {
+      setCurrentTitleIndex(currentTitleIndex - 1);
     }
   };
 
   const goToNext = () => {
-    if (currentCategoryIndex < awardCategories.length - 1) {
-      setCurrentCategoryIndex(currentCategoryIndex + 1);
+    if (currentTitleIndex < categoryTitles.length - 1) {
+      setCurrentTitleIndex(currentTitleIndex + 1);
     }
   };
 
@@ -249,17 +212,17 @@ export default function VotingPageComponent() {
     }
   };
 
-  const currentCategoryStatus = getCategoryStatus(currentCategory);
-  const currentCanEdit = canEditVotes[currentCategory] !== false;
-  const hasVoteInCurrentCategory = votes[currentCategory];
+  const currentTitleStatus = getCategoryStatus(currentTitle.slug.current);
+  const currentCanEdit = canEditVotes[currentTitle.slug.current] !== false;
+  const hasVoteInCurrentTitle = votes[currentTitle.slug.current];
   const currentNominees: any =
-    nominees[currentCategory as keyof typeof nominees] || [];
+    nominees[currentTitle as keyof typeof nominees] || [];
 
   const totalVotes = Object.values(nominees)
     .flat()
     .reduce((sum: number, nominee: any) => sum + nominee.votes, 0);
   const votingProgress =
-    ((currentCategoryIndex + 1) / awardCategories.length) * 100;
+    ((currentTitleIndex + 1) / categoryTitles.length) * 100;
 
   return (
     <div className="">
@@ -291,7 +254,7 @@ export default function VotingPageComponent() {
           </span>
           <div className="mb-4">
             <h1 className="mb-4 text-center text-3xl font-medium text-zinc-900 sm:text-4xl">
-              {info?.title} - Voting
+              {awardCategory.title} - Voting
             </h1>
             <p className="text-center tracking-widest text-zinc-600">
               ROAD TO THE NATIONALS
@@ -332,7 +295,7 @@ export default function VotingPageComponent() {
               Your Voting Progress
             </h2>
             <span className="text-sm text-zinc-600">
-              {currentCategoryIndex + 1} of {awardCategories.length} categories
+              {currentTitleIndex + 1} of {categoryTitles.length} categories
             </span>
           </div>
           <div className="relative mb-8 h-2 w-full overflow-hidden rounded-full bg-zinc-200">
@@ -344,20 +307,20 @@ export default function VotingPageComponent() {
 
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2">
-            {awardCategories.map((cat, index) => {
-              const status = getCategoryStatus(cat);
+            {categoryTitles.map((cat, index) => {
+              const status = getCategoryStatus(cat.slug.current);
               return (
                 <button
-                  key={cat}
+                  key={cat._id}
                   onClick={() => goToCategory(index)}
                   className={`flex cursor-pointer items-center gap-1 rounded-sm border px-3 py-1.5 text-xs font-medium transition-colors ${
-                    index === currentCategoryIndex
+                    index === currentTitleIndex
                       ? 'border-blue-300 bg-blue-100 text-blue-700 ring-2 ring-blue-200'
                       : getCategoryStatusColor(status)
                   } hover:shadow-sm`}
                 >
                   {getCategoryStatusIcon(status)}
-                  {cat}
+                  {cat.title}
                 </button>
               );
             })}
@@ -368,11 +331,11 @@ export default function VotingPageComponent() {
         <VotingStats
           stats={{
             totalVotes: totalVotes,
-            daysRemaining: 15,
+            daysRemaining: getDaysRemainingInSeason(),
             categoriesVoted: Object.values(categoryStatus).filter(
               (s) => s.status === 'voted',
             ).length,
-            totalCategories: awardCategories.length,
+            totalCategories: categoryTitles.length,
           }}
         />
 
@@ -383,26 +346,26 @@ export default function VotingPageComponent() {
               <div>
                 <CardTitle className="flex items-center gap-2 text-zinc-900">
                   <Icons.ibzimAwardsIcon className="h-6 w-6" />
-                  {currentCategory}
+                  {currentTitle.title}
                 </CardTitle>
                 <CardDescription className="text-zinc-600">
-                  {currentCategoryStatus === 'voted'
+                  {currentTitleStatus === 'voted'
                     ? currentCanEdit
                       ? 'You can edit your vote for a few more days'
                       : 'Vote submitted (editing period expired)'
-                    : currentCategoryStatus === 'skipped'
+                    : currentTitleStatus === 'skipped'
                       ? 'Category skipped - you can still vote'
                       : 'Choose your favorite nominee in this category'}
                 </CardDescription>
               </div>
               <Badge
                 variant="outline"
-                className={getCategoryStatusColor(currentCategoryStatus)}
+                className={getCategoryStatusColor(currentTitleStatus)}
               >
-                {getCategoryStatusIcon(currentCategoryStatus)}
-                {currentCategoryStatus === 'voted'
+                {getCategoryStatusIcon(currentTitleStatus)}
+                {currentTitleStatus === 'voted'
                   ? 'Voted'
-                  : currentCategoryStatus === 'skipped'
+                  : currentTitleStatus === 'skipped'
                     ? 'Skipped'
                     : 'Pending'}
               </Badge>
@@ -410,7 +373,7 @@ export default function VotingPageComponent() {
           </CardHeader>
           <CardContent>
             {/* Edit Warning */}
-            {currentCategoryStatus === 'voted' && !currentCanEdit && (
+            {currentTitleStatus === 'voted' && !currentCanEdit && (
               <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
                 <p className="text-sm text-amber-800">
                   <Clock className="mr-1 inline h-4 w-4" />
@@ -425,16 +388,15 @@ export default function VotingPageComponent() {
                 <div
                   key={nominee.id}
                   onClick={() => {
-                    if (
-                      !(currentCategoryStatus === 'voted' && !currentCanEdit)
-                    ) {
+                    if (!(currentTitleStatus === 'voted' && !currentCanEdit)) {
                       handleVote(nominee.id.toString());
                     }
                   }}
                   className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
-                    currentCategoryStatus === 'voted' && !currentCanEdit
+                    currentTitleStatus === 'voted' && !currentCanEdit
                       ? 'cursor-not-allowed border-zinc-200 bg-zinc-50'
-                      : votes[currentCategory] === nominee.id.toString()
+                      : votes[currentTitle.slug.current] ===
+                          nominee.id.toString()
                         ? 'border-emerald-500 bg-emerald-50 shadow-md'
                         : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
                   }`}
@@ -482,7 +444,8 @@ export default function VotingPageComponent() {
                     </div>
 
                     {/* Selection Indicator */}
-                    {votes[currentCategory] === nominee.id.toString() && (
+                    {votes[currentTitle.slug.current] ===
+                      nominee.id.toString() && (
                       <div className="flex-shrink-0">
                         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                           <Check className="h-4 w-4 text-white" />
@@ -505,7 +468,7 @@ export default function VotingPageComponent() {
               <Button
                 variant="outline"
                 onClick={goToPrevious}
-                disabled={currentCategoryIndex === 0}
+                disabled={currentTitleIndex === 0}
                 className="flex-1 border-zinc-300 text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
               >
                 <ChevronLeft className="mr-1 h-4 w-4" />
@@ -514,7 +477,7 @@ export default function VotingPageComponent() {
               <Button
                 variant="outline"
                 onClick={goToNext}
-                disabled={currentCategoryIndex === awardCategories.length - 1}
+                disabled={currentTitleIndex === categoryTitles.length - 1}
                 className="flex-1 border-zinc-300 text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
               >
                 Next
@@ -524,7 +487,7 @@ export default function VotingPageComponent() {
 
             {/* Bottom Row - Actions */}
             <div className="flex gap-2">
-              {currentCategoryStatus !== 'voted' && (
+              {currentTitleStatus !== 'voted' && (
                 <Button
                   variant="outline"
                   onClick={handleSkipCategory}
@@ -535,16 +498,16 @@ export default function VotingPageComponent() {
                 </Button>
               )}
 
-              {(currentCategoryStatus !== 'voted' || currentCanEdit) &&
-                hasVoteInCurrentCategory && (
+              {(currentTitleStatus !== 'voted' || currentCanEdit) &&
+                hasVoteInCurrentTitle && (
                   <Button
                     onClick={handleSubmitVote}
                     className={`bg-emerald-600 text-sm hover:bg-emerald-700 ${
-                      currentCategoryStatus !== 'voted' ? 'flex-1' : 'flex-1'
+                      currentTitleStatus !== 'voted' ? 'flex-1' : 'flex-1'
                     }`}
                   >
                     <Vote className="mr-1 h-4 w-4" />
-                    {currentCategoryStatus === 'voted' ? 'Update' : 'Submit'}
+                    {currentTitleStatus === 'voted' ? 'Update' : 'Submit'}
                   </Button>
                 )}
             </div>
@@ -555,7 +518,7 @@ export default function VotingPageComponent() {
             <Button
               variant="outline"
               onClick={goToPrevious}
-              disabled={currentCategoryIndex === 0}
+              disabled={currentTitleIndex === 0}
               className="border-zinc-300 text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
             >
               <ChevronLeft className="mr-2 h-4 w-4" />
@@ -563,7 +526,7 @@ export default function VotingPageComponent() {
             </Button>
 
             <div className="flex gap-3">
-              {currentCategoryStatus !== 'voted' && (
+              {currentTitleStatus !== 'voted' && (
                 <Button
                   variant="outline"
                   onClick={handleSkipCategory}
@@ -574,14 +537,14 @@ export default function VotingPageComponent() {
                 </Button>
               )}
 
-              {(currentCategoryStatus !== 'voted' || currentCanEdit) &&
-                hasVoteInCurrentCategory && (
+              {(currentTitleStatus !== 'voted' || currentCanEdit) &&
+                hasVoteInCurrentTitle && (
                   <Button
                     onClick={handleSubmitVote}
                     className="bg-emerald-600 hover:bg-emerald-700"
                   >
                     <Vote className="mr-2 h-4 w-4" />
-                    {currentCategoryStatus === 'voted'
+                    {currentTitleStatus === 'voted'
                       ? 'Update Vote'
                       : 'Submit Vote'}
                   </Button>
@@ -591,7 +554,7 @@ export default function VotingPageComponent() {
             <Button
               variant="outline"
               onClick={goToNext}
-              disabled={currentCategoryIndex === awardCategories.length - 1}
+              disabled={currentTitleIndex === categoryTitles.length - 1}
               className="border-zinc-300 text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
             >
               Next
@@ -632,7 +595,7 @@ export default function VotingPageComponent() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-zinc-600">
-                  {awardCategories.length - Object.keys(categoryStatus).length}
+                  {categoryTitles.length - Object.keys(categoryStatus).length}
                 </div>
                 <div className="text-sm text-zinc-600">Pending</div>
               </div>

@@ -459,3 +459,33 @@ export type NotificationType = {
   isRead?: boolean;
   from?: 'neon' | 'sanity';
 };
+
+export type SanityAwardCategoryType = {
+  _id: string;
+  slug: Slug;
+  title: string;
+  description: string;
+  votingState: string;
+  categoryTitles: {
+    _id: string;
+    title: string;
+    slug: Slug;
+  }[];
+};
+
+export type AwardMetadataType = {
+  id: string;
+  icon: any;
+  color: string;
+  iconColor: string;
+};
+
+export type AwardCategoryType = SanityAwardCategoryType &
+  AwardMetadataType & {
+    titles?: AwardTitleType[];
+  };
+
+export type AwardTitleType = {
+  _id: string;
+  title: string;
+};

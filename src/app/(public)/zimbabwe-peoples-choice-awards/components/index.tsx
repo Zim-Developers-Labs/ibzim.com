@@ -1,8 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Calendar, ChartLine, Star, Trophy, Vote } from 'lucide-react';
-import { awardCategories } from './constants';
+import { Calendar, ChartLine, Clock, Star, Trophy, Vote } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -17,12 +16,38 @@ import Link from 'next/link';
 import AwardsHero from './hero';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
-import { currentSeason } from '../[category]/vote/components/constants';
+import { currentSeason } from '../[category]/vote/[titleId]/components/constants';
 import FAQSection from './faq';
+import { AwardCategoryType, SanityAwardCategoryType } from '@/types';
+import { awardCategoriesMetadata } from './constants';
 
-export default function AwardsPageComponent() {
+export default function AwardsPageComponent({
+  sanityAwardCategories,
+}: {
+  sanityAwardCategories: SanityAwardCategoryType[];
+}) {
   const selectedYear = 2025;
   const [activeTab, setActiveTab] = useState('voting');
+
+  const awardCategories: AwardCategoryType[] = sanityAwardCategories.map(
+    (cat: SanityAwardCategoryType) => {
+      const match = awardCategoriesMetadata.find(
+        (c) => c.id === cat.slug.current,
+      );
+      return {
+        _id: cat._id,
+        title: cat.title,
+        description: cat.description,
+        votingState: cat.votingState,
+        categoryTitles: cat.categoryTitles,
+
+        id: match?.id || '',
+        icon: match?.icon || null,
+        color: match?.color || '',
+        iconColor: match?.iconColor || '',
+      } as AwardCategoryType;
+    },
+  );
 
   return (
     <>
@@ -104,34 +129,36 @@ export default function AwardsPageComponent() {
                           <Badge
                             variant="outline"
                             className={`${
-                              category.period === 'voting'
-                                ? 'border-yellow-300 bg-yellow-50 text-yellow-700'
-                                : category.period === 'results'
-                                  ? 'border-amber-300 bg-amber-50 text-amber-700'
-                                  : category.period === 'completed'
-                                    ? 'border-blue-300 bg-blue-50 text-blue-700'
-                                    : 'border-gray-300 bg-gray-50 text-gray-700'
+                              category.votingState === 'Not Started'
+                                ? 'border-zinc-300 bg-zinc-50 text-zinc-700'
+                                : category.id === 'company-awards'
+                                  ? 'border-blue-300 bg-blue-50 text-blue-700'
+                                  : category.id === 'tech-awards'
+                                    ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
+                                    : category.id === 'movie-awards'
+                                      ? 'border-purple-300 bg-purple-50 text-purple-700'
+                                      : category.id === 'comedy-awards'
+                                        ? 'border-orange-300 bg-orange-50 text-orange-700'
+                                        : category.id === 'school-awards'
+                                          ? 'border-red-300 bg-red-50 text-red-700'
+                                          : category.id === 'music-awards'
+                                            ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
+                                            : 'border-gray-300 bg-gray-50 text-gray-700'
                             }`}
                           >
-                            {category.period === 'voting' && (
+                            {category.votingState === 'Ongoing' && (
                               <Vote className="mr-1 h-3 w-3" />
                             )}
-                            {category.period === 'results' && (
+                            {category.votingState === 'Results Ready' && (
                               <Trophy className="mr-1 h-3 w-3" />
                             )}
-                            {category.period === 'completed' && (
+                            {category.votingState === 'Getting Results' && (
                               <Star className="mr-1 h-3 w-3" />
                             )}
-                            {category.period === 'upcoming' && (
+                            {category.votingState === 'Not Started' && (
                               <Calendar className="mr-1 h-3 w-3" />
                             )}
-                            {category.period === 'voting'
-                              ? 'Voting Open'
-                              : category.period === 'results'
-                                ? 'Results Available'
-                                : category.period === 'completed'
-                                  ? 'Completed'
-                                  : 'Upcoming'}
+                            {category.votingState}
                           </Badge>
                         </div>
                       </div>
@@ -145,21 +172,50 @@ export default function AwardsPageComponent() {
                     {/* Action Buttons */}
                     {activeTab === 'voting' ? (
                       <div className="flex gap-2 pt-2">
-                        {category.votingState === 'open' && (
+                        {category.votingState === 'Ongoing' && (
                           <Button
                             asChild
                             className={`flex-1 ${
-                              category.id === 'company'
+                              category.id === 'company-awards'
                                 ? 'bg-gradient-to-r from-blue-300 via-blue-600 to-blue-300'
-                                : category.id === 'city'
+                                : category.id === 'tech-awards'
                                   ? 'bg-gradient-to-r from-emerald-300 via-emerald-600 to-emerald-300'
-                                  : category.id === 'movie'
+                                  : category.id === 'movie-awards'
                                     ? 'bg-gradient-to-r from-purple-300 via-purple-600 to-purple-300'
-                                    : category.id === 'comedy'
+                                    : category.id === 'comedy-awards'
                                       ? 'bg-gradient-to-r from-orange-300 via-orange-600 to-orange-300'
-                                      : category.id === 'school'
+                                      : category.id === 'school-awards'
                                         ? 'bg-gradient-to-r from-red-300 via-red-600 to-red-300'
-                                        : category.id === 'music'
+                                        : category.id === 'music-awards'
+                                          ? 'bg-gradient-to-r from-indigo-300 via-indigo-600 to-indigo-300'
+                                          : 'bg-gray-300'
+                            }`}
+                          >
+                            <Link
+                              href={`/zimbabwe-peoples-choice-awards/${category.id}/vote/${category.categoryTitles[0].slug.current}`}
+                              className="text-sm"
+                            >
+                              <Vote className="mr-1 h-4 w-4" />
+                              Vote Now
+                            </Link>
+                          </Button>
+                        )}
+
+                        {category.votingState === 'Results Ready' && (
+                          <Button
+                            asChild
+                            className={`flex-1 ${
+                              category.id === 'company-awards'
+                                ? 'bg-gradient-to-r from-blue-300 via-blue-600 to-blue-300'
+                                : category.id === 'tech-awards'
+                                  ? 'bg-gradient-to-r from-emerald-300 via-emerald-600 to-emerald-300'
+                                  : category.id === 'movie-awards'
+                                    ? 'bg-gradient-to-r from-purple-300 via-purple-600 to-purple-300'
+                                    : category.id === 'comedy-awards'
+                                      ? 'bg-gradient-to-r from-orange-300 via-orange-600 to-orange-300'
+                                      : category.id === 'school-awards'
+                                        ? 'bg-gradient-to-r from-red-300 via-red-600 to-red-300'
+                                        : category.id === 'music-awards'
                                           ? 'bg-gradient-to-r from-indigo-300 via-indigo-600 to-indigo-300'
                                           : 'bg-gray-300'
                             }`}
@@ -169,19 +225,30 @@ export default function AwardsPageComponent() {
                               className="text-sm"
                             >
                               <Vote className="mr-1 h-4 w-4" />
-                              Vote Now
+                              View Results
                             </Link>
                           </Button>
                         )}
 
-                        {category.votingState === 'closed' && (
+                        {category.votingState === 'Getting Results' && (
+                          <Button
+                            variant="outline"
+                            className="flex-1 border-gray-300 text-sm text-gray-600"
+                            disabled
+                          >
+                            <Clock className="mr-1 h-4 w-4" />
+                            Getting Results
+                          </Button>
+                        )}
+
+                        {category.votingState === 'Not Started' && (
                           <Button
                             variant="outline"
                             className="flex-1 border-gray-300 text-sm text-gray-600"
                             disabled
                           >
                             <Calendar className="mr-1 h-4 w-4" />
-                            Processing Statistics
+                            Not Started
                           </Button>
                         )}
                       </div>

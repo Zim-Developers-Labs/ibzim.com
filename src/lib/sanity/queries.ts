@@ -46,3 +46,13 @@ export const allSchoolsByLevelQuery: string = groq`*[_type == "profile" && entit
   }
 }
 `;
+
+export const awardCategoriesQuery = groq`*[_type == "awardCategory"]{
+  ...,
+  categoryTitles[]->{ _id, title, slug }
+}`;
+
+export const awardCategoryBySlugQuery = groq`*[_type == "awardCategory" && slug.current == $slug][0]{
+  ...,
+  categoryTitles[]->{ _id, title, slug }
+}`;
