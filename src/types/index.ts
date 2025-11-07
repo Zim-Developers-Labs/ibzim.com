@@ -470,6 +470,9 @@ export type SanityAwardCategoryType = {
     _id: string;
     title: string;
     slug: Slug;
+    description?: string;
+    withCustomImage?: boolean;
+    withExternalLink?: boolean;
   }[];
 };
 
@@ -488,4 +491,19 @@ export type AwardCategoryType = SanityAwardCategoryType &
 export type AwardTitleType = {
   _id: string;
   title: string;
+};
+
+export type CategoryTitleType = {
+  _id: string;
+  title: string;
+  slug: Slug;
+};
+
+export type NomineeType = {
+  nomineeProfile?: ProfileType;
+  customImage?: Image;
+  externalLink?: {
+    url: string;
+    title: string;
+  };
 };

@@ -223,6 +223,24 @@ export const checkoutTokens = pgTable(
   }),
 );
 
+export const votes = pgTable(
+  'votes',
+  {
+    id: serial('id').primaryKey(),
+    voterId: integer('voter_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    nomineeId: varchar('nominee_id').notNull(),
+    titleId: varchar('title_id', { length: 21 }).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    voterIdIndex: index('votes_voter_id_idx').on(table.voterId),
+    nomineeIdIndex: index('votes_nominee_id_idx').on(table.nomineeId),
+    titleIdIndex: index('votes_title_id_idx').on(table.titleId),
+  }),
+);
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
@@ -287,5 +305,16 @@ export const checkoutTokensRelations = relations(checkoutTokens, ({ one }) => ({
   paymentMethod: one(paymentMethods, {
     fields: [checkoutTokens.paymentMethodId],
     references: [paymentMethods.id],
+  }),
+}));
+
+export const votesRelations = relations(votes, ({ one }) => ({
+  voter: one(users, {
+    fields: [votes.voterId],
+    references: [users.id],
+  }),
+  nominee: one(users, {
+    fields: [votes.nomineeId],
+    references: [users.id],
   }),
 }));

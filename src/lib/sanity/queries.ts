@@ -54,5 +54,29 @@ export const awardCategoriesQuery = groq`*[_type == "awardCategory"]{
 
 export const awardCategoryBySlugQuery = groq`*[_type == "awardCategory" && slug.current == $slug][0]{
   ...,
-  categoryTitles[]->{ _id, title, slug }
+  categoryTitles[]->{ _id, title, slug, description, withCustomImage, withExternalLink }
+
+}`;
+
+export const categoryTitlesBySlugsQuery = groq`*[_type == "awardCategory" && slug.current == $categorySlug][0]{
+  categoryTitles[]->{
+    _id,
+    title,
+    slug
+  }
+}`;
+
+export const titleNomineesByTitleSlugQuery = groq`*[_type == "categoryTitle" && slug.current == $titleSlug][0]{
+  nominees[] {
+    ...,
+    nomineeProfile-> {
+      _id,
+      name,
+      slug,
+      legalName,
+      picture,
+      entityType,
+      industry-> { slug },
+    }
+  }
 }`;

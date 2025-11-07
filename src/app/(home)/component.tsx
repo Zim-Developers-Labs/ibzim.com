@@ -11,6 +11,7 @@ import {
   Search,
   Building2,
   HelpCircle,
+  CrownIcon,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -354,11 +355,14 @@ export default function HomeComponent({
                       <CardContent className="p-4 text-center">
                         {feature.isOpenSource && (
                           <Badge
+                            asChild
                             variant="secondary"
-                            className="absolute right-2 bottom-2 flex items-center gap-1 bg-green-100 text-xs text-green-800 dark:bg-green-900 dark:text-green-200"
+                            className="absolute right-2 bottom-2 flex items-center gap-1 bg-gradient-to-bl from-yellow-500 via-yellow-900 to-yellow-500 text-xs font-normal text-white"
                           >
-                            <GithubIcon className="h-3 w-3" />
-                            Open Source
+                            <Link href="/premium">
+                              <CrownIcon className="h-3 w-3" />
+                              PREMIUM
+                            </Link>
                           </Badge>
                         )}
                         <div

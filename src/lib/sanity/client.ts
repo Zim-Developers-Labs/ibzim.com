@@ -3,6 +3,8 @@ import { createClient } from 'next-sanity';
 import { apiVersion, dataset, projectId } from './api';
 import { env } from '@/env';
 import {
+  CategoryTitleType,
+  NomineeType,
   NotificationType,
   SanityAwardCategoryType,
   SchoolPickerProfilesType,
@@ -12,8 +14,10 @@ import {
   allSchoolsByLevelQuery,
   awardCategoriesQuery,
   awardCategoryBySlugQuery,
+  categoryTitlesBySlugsQuery,
   documentsForSearchQuery,
   notificationsQuery,
+  titleNomineesByTitleSlugQuery,
 } from './queries';
 
 export const client = createClient({
@@ -65,4 +69,26 @@ export async function getAwardCategoryBySlug(
     return (await client.fetch(awardCategoryBySlugQuery, { slug })) || null;
   }
   return null;
+}
+
+export async function getCategoryTitlesByCategorySlug(
+  categorySlug: string,
+): Promise<CategoryTitleType[]> {
+  if (client) {
+    return (
+      (await client.fetch(categoryTitlesBySlugsQuery, { categorySlug })) || {}
+    ).categoryTitles;
+  }
+  return [];
+}
+
+export async function getTitleNomineesByTitleSlug(
+  titleSlug: string,
+): Promise<NomineeType[]> {
+  if (client) {
+    return (
+      (await client.fetch(titleNomineesByTitleSlugQuery, { titleSlug })) || {}
+    ).nominees;
+  }
+  return [];
 }

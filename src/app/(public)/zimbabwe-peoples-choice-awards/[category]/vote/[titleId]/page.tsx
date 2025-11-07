@@ -5,21 +5,23 @@ import { siteConfig } from '@/lib/config';
 import {
   getAllAwardCategories,
   getAwardCategoryBySlug,
+  getTitleNomineesByTitleSlug,
 } from '@/lib/sanity/client';
 import { textify } from '@/lib/utils';
 import { notFound } from 'next/navigation';
+import { getCurrentSession } from '@/lib/server/session';
 
 type Props = {
-  params: Promise<{ category: string }>;
+  params: Promise<{ category: string; titleId: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { category } = await params;
+  const { category, titleId } = await params;
 
   return prepareArticleMetadata({
     title: `${textify(category)} Voting | People's Choice Awards Zimbabwe`,
     description: `Vote for your favorite nominees in the ${textify(category)} category of the People's Choice Awards Zimbabwe.`,
-    pageUrl: `/zimbabwe-peoples-choice-awards/${category}/vote`,
+    pageUrl: `/zimbabwe-peoples-choice-awards/${category}/vote/${titleId}`,
     ogImage: {
       url: '/banner.webp',
       height: 675,
@@ -34,7 +36,7 @@ export async function generateStaticParams(): Promise<
 > {
   const categories = await getAllAwardCategories();
 
-  let params: Array<{ category: string; titleId: string }> = [];
+  const params: Array<{ category: string; titleId: string }> = [];
 
   categories.forEach((category) => {
     category.categoryTitles.forEach((title) => {
@@ -49,7 +51,7 @@ export async function generateStaticParams(): Promise<
 }
 
 export default async function VotingPage({ params }: Props) {
-  const { category } = await params;
+  const { category, titleId } = await params;
 
   const awardCategory = await getAwardCategoryBySlug(category);
 
@@ -57,9 +59,28 @@ export default async function VotingPage({ params }: Props) {
     return notFound();
   }
 
+  const titleExists = awardCategory.categoryTitles.find(
+    (title) => title.slug.current === titleId,
+  );
+
+  if (!titleExists) {
+    return notFound();
+  }
+
   if (awardCategory.votingState !== 'Ongoing') {
     return <div>Voting is not available for this category</div>;
   }
 
-  return <VotingPageComponent awardCategory={awardCategory} />;
+  const nominees = await getTitleNomineesByTitleSlug(titleId);
+
+  const { user } = await getCurrentSession();
+
+  return (
+    <VotingPageComponent
+      user={user}
+      awardCategory={awardCategory}
+      titleId={titleId}
+      nominees={nominees}
+    />
+  );
 }

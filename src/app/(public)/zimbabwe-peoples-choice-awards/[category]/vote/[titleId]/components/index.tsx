@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import {
   ArrowLeft,
@@ -23,6 +22,8 @@ import {
   Check,
   SkipForward,
   AlertCircle,
+  CircleDollarSign,
+  CircleQuestionMark,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -36,25 +37,43 @@ import { Icons } from '@/components/icons';
 import Image from 'next/image';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import VotingStats from './stats';
-import { SanityAwardCategoryType } from '@/types';
+import { NomineeType, SanityAwardCategoryType } from '@/types';
+import { urlForImage } from '@/lib/sanity/image';
+import { submitVote } from './actions';
+import { User } from '@/lib/server/constants';
+import { toast } from 'sonner';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 
 export default function VotingPageComponent({
   awardCategory,
+  titleId,
+  nominees,
+  user,
 }: {
   awardCategory: SanityAwardCategoryType;
+  titleId: string;
+  nominees: NomineeType[];
+  user: User | null;
 }) {
   const params = useParams();
   const category = params.category as string;
-  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(
+    awardCategory.categoryTitles.findIndex(
+      (cat) => cat.slug.current === titleId,
+    ),
+  );
   const [votes, setVotes] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState<boolean>(false);
   const [categoryStatus, setCategoryStatus] = useState<
-    Record<string, { status: 'voted' | 'skipped' | 'pending'; date?: Date }>
+    Record<string, { status: 'voted' | 'pending'; date?: Date }>
   >({});
-  const [canEditVotes, setCanEditVotes] = useState<Record<string, boolean>>({});
+  const [viewMode, setViewMode] = useState<string>('voting');
 
-  const nominees = mockNominees[category as keyof typeof mockNominees] || {};
   const categoryTitles = awardCategory.categoryTitles || [];
-  const currentTitle = categoryTitles[currentTitleIndex];
+  const currentTitle = categoryTitles.find(
+    (cat) => cat.slug.current === titleId,
+  )!;
 
   // Load previous votes on component mount
   useEffect(() => {
@@ -68,71 +87,22 @@ export default function VotingPageComponent({
     if (savedStatus) {
       const status = JSON.parse(savedStatus);
       setCategoryStatus(status);
-
-      // Check edit permissions for voted categories
-      const editPermissions: Record<string, boolean> = {};
-      Object.entries(status).forEach(([cat, data]: [string, any]) => {
-        if (data.status === 'voted' && data.date) {
-          const voteDate = new Date(data.date);
-          const canEdit =
-            new Date().getTime() - voteDate.getTime() < 3 * 24 * 60 * 60 * 1000;
-          editPermissions[cat] = canEdit;
-        } else {
-          editPermissions[cat] = true; // Skipped categories can always be voted
-        }
-      });
-      setCanEditVotes(editPermissions);
     }
   }, [category]);
 
-  // If award is completed, show completed message instead of voting form
-  // if (currentPeriod === 'completed') {
-  //   return (
-  //     <div className="min-h-screen bg-gradient-to-br from-zinc-50 via-white to-zinc-50 p-4">
-  //       <div className="mx-auto max-w-4xl">
-  //         <div className="py-16 text-center">
-  //           <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-blue-300 bg-gradient-to-r from-blue-100 to-blue-200">
-  //             <Star className="h-12 w-12 text-blue-600" />
-  //           </div>
-  //           <h1 className="mb-4 text-3xl font-bold text-zinc-900">
-  //             Awards Completed
-  //           </h1>
-  //           <p className="mb-8 text-lg text-zinc-600">
-  //             The {info?.title} for this year have been completed. Check out the
-  //             current winners!
-  //           </p>
-  //           <div className="flex justify-center gap-4">
-  //             <Button asChild className="bg-blue-600 hover:bg-blue-700">
-  //               <Link
-  //                 href={`/zimbabwe-peoples-choice-awards/${category}/results`}
-  //               >
-  //                 <Trophy className="mr-2 h-4 w-4" />
-  //                 View Current Winners
-  //               </Link>
-  //             </Button>
-  //             <Button
-  //               variant="outline"
-  //               asChild
-  //               className="border-zinc-300 text-zinc-700 hover:bg-zinc-50"
-  //             >
-  //               <Link href="/zimbabwe-peoples-choice-awards">
-  //                 Back to Awards
-  //               </Link>
-  //             </Button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  const handleVote = (nomineeId: string) => {
+  const handleVote = async (nomineeId: string) => {
     const newVotes = { ...votes, [currentTitle.slug.current]: nomineeId };
     setVotes(newVotes);
+    if (!user) {
+      toast.error('You must be logged in to vote.');
+      setLoading(false);
+      return;
+    }
     localStorage.setItem(`votes-${category}`, JSON.stringify(newVotes));
   };
 
   const handleSubmitVote = () => {
+    setLoading(true);
     const now = new Date();
     const newStatus = {
       ...categoryStatus,
@@ -144,34 +114,23 @@ export default function VotingPageComponent({
       JSON.stringify(newStatus),
     );
 
-    // Update edit permissions
-    setCanEditVotes((prev) => ({ ...prev, [currentTitle.slug.current]: true }));
+    if (!user) {
+      toast.error('You must be logged in to vote.');
+      setLoading(false);
+      return;
+    }
+    // const response = await submitVote()
 
     // Move to next category if available
     if (currentTitleIndex < categoryTitles.length - 1) {
       setCurrentTitleIndex(currentTitleIndex + 1);
     }
-  };
-
-  const handleSkipCategory = () => {
-    const newStatus = {
-      ...categoryStatus,
-      [currentTitle.slug.current]: { status: 'skipped' as const },
-    };
-    setCategoryStatus(newStatus);
-    localStorage.setItem(
-      `category-status-${category}`,
-      JSON.stringify(newStatus),
-    );
-
-    // Move to next category if available
-    if (currentTitleIndex < categoryTitles.length - 1) {
-      setCurrentTitleIndex(currentTitleIndex + 1);
-    }
+    setLoading(false);
   };
 
   const goToCategory = (index: number) => {
     setCurrentTitleIndex(index);
+    window.location.href = `/zimbabwe-peoples-choice-awards/${awardCategory.slug.current}/vote/${awardCategory.categoryTitles[index].slug.current}`;
   };
 
   const goToPrevious = () => {
@@ -213,10 +172,7 @@ export default function VotingPageComponent({
   };
 
   const currentTitleStatus = getCategoryStatus(currentTitle.slug.current);
-  const currentCanEdit = canEditVotes[currentTitle.slug.current] !== false;
   const hasVoteInCurrentTitle = votes[currentTitle.slug.current];
-  const currentNominees: any =
-    nominees[currentTitle as keyof typeof nominees] || [];
 
   const totalVotes = Object.values(nominees)
     .flat()
@@ -350,12 +306,8 @@ export default function VotingPageComponent({
                 </CardTitle>
                 <CardDescription className="text-zinc-600">
                   {currentTitleStatus === 'voted'
-                    ? currentCanEdit
-                      ? 'You can edit your vote for a few more days'
-                      : 'Vote submitted (editing period expired)'
-                    : currentTitleStatus === 'skipped'
-                      ? 'Category skipped - you can still vote'
-                      : 'Choose your favorite nominee in this category'}
+                    ? 'Vote submitted (you can vote for this category again in the next season)'
+                    : 'Choose your favorite nominee in this category'}
                 </CardDescription>
               </div>
               <Badge
@@ -363,104 +315,142 @@ export default function VotingPageComponent({
                 className={getCategoryStatusColor(currentTitleStatus)}
               >
                 {getCategoryStatusIcon(currentTitleStatus)}
-                {currentTitleStatus === 'voted'
-                  ? 'Voted'
-                  : currentTitleStatus === 'skipped'
-                    ? 'Skipped'
-                    : 'Pending'}
+                {currentTitleStatus === 'voted' ? 'Voted' : 'Pending'}
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
-            {/* Edit Warning */}
-            {currentTitleStatus === 'voted' && !currentCanEdit && (
-              <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-                <p className="text-sm text-amber-800">
-                  <Clock className="mr-1 inline h-4 w-4" />
-                  Your vote in this category is locked. The 3-day editing period
-                  has expired.
-                </p>
-              </div>
-            )}
+            <Alert
+              variant="default"
+              className="relative mx-auto mb-8 max-w-4xl overflow-hidden bg-zinc-900 py-8 text-white"
+            >
+              <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-yellow-500/20 blur-3xl" />
+              <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-yellow-400/15 blur-3xl" />
 
-            <div className="grid gap-4">
-              {currentNominees.map((nominee: any) => (
-                <div
-                  key={nominee.id}
-                  onClick={() => {
-                    if (!(currentTitleStatus === 'voted' && !currentCanEdit)) {
-                      handleVote(nominee.id.toString());
-                    }
-                  }}
-                  className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
-                    currentTitleStatus === 'voted' && !currentCanEdit
-                      ? 'cursor-not-allowed border-zinc-200 bg-zinc-50'
-                      : votes[currentTitle.slug.current] ===
-                          nominee.id.toString()
-                        ? 'border-emerald-500 bg-emerald-50 shadow-md'
-                        : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
-                  }`}
-                >
-                  <div className="flex items-center space-x-4">
-                    {/* Nominee Image */}
-                    <div className="flex-shrink-0">
-                      <Image
-                        width={72}
-                        height={72}
-                        src={`/placeholder.svg?height=60&width=60&query=${encodeURIComponent(nominee.name)}`}
-                        alt={nominee.name}
-                        className="h-8 w-18 rounded-lg border border-zinc-200 object-cover shadow-sm"
-                      />
-                    </div>
-
-                    {/* Nominee Details */}
-                    <div className="flex-1">
-                      <div className="font-medium text-zinc-900">
-                        {nominee.name}
-                      </div>
-                      {nominee.company && (
-                        <div className="text-sm text-zinc-600">
-                          {nominee.company}
-                        </div>
-                      )}
-                      {nominee.movie && (
-                        <div className="text-sm text-zinc-600">
-                          from &quote;{nominee.movie}&quote;
-                        </div>
-                      )}
-                      {nominee.artist && (
-                        <div className="text-sm text-zinc-600">
-                          by {nominee.artist}
-                        </div>
-                      )}
-                      {nominee.creator && (
-                        <div className="text-sm text-zinc-600">
-                          by {nominee.creator}
-                        </div>
-                      )}
-                      <div className="mt-1 text-sm text-zinc-600">
-                        {nominee.description}
-                      </div>
-                    </div>
-
-                    {/* Selection Indicator */}
-                    {votes[currentTitle.slug.current] ===
-                      nominee.id.toString() && (
-                      <div className="flex-shrink-0">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
-                          <Check className="h-4 w-4 text-white" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
+              <AlertCircle className="relative z-10 h-4 w-4" />
+              <AlertDescription className="relative z-10 text-zinc-300">
+                <div className="mb-4">
+                  Switch to Statistics to view the current poll standings for
+                  the top 3 nominees. With IBZIM Premium you can view standings
+                  for all nominees
                 </div>
+                <Tabs value={viewMode} onValueChange={setViewMode}>
+                  <TabsList>
+                    <TabsTrigger
+                      value="voting"
+                      className="cursor-pointer px-2 text-xs data-[state=active]:bg-yellow-600 data-[state=active]:text-white"
+                    >
+                      Voting
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="statistics"
+                      className="cursor-pointer px-2 text-xs data-[state=active]:bg-yellow-600 data-[state=active]:text-white"
+                    >
+                      <Trophy className="size-3" />
+                      Statistics
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </AlertDescription>
+            </Alert>
+
+            <ul className="grid gap-4">
+              {nominees.map((nominee) => (
+                <li key={nominee.nomineeProfile?._id}>
+                  <div
+                    onClick={() => {
+                      if (
+                        currentTitleStatus !== 'voted' &&
+                        nominee.nomineeProfile?._id
+                      ) {
+                        handleVote(nominee.nomineeProfile._id);
+                      }
+                    }}
+                    className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                      currentTitleStatus === 'voted'
+                        ? 'cursor-not-allowed border-zinc-200 bg-zinc-50'
+                        : votes[currentTitle.slug.current] ===
+                            nominee.nomineeProfile?._id.toString()
+                          ? 'border-emerald-500 bg-emerald-50 shadow-md'
+                          : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-4">
+                      {/* Nominee Image */}
+                      <div className="flex-shrink-0">
+                        <Image
+                          width={72}
+                          height={72}
+                          src={
+                            nominee.nomineeProfile?.picture
+                              ? urlForImage(
+                                  nominee.nomineeProfile.picture,
+                                ).url()
+                              : '/fallback.webp'
+                          }
+                          alt={
+                            nominee.nomineeProfile?.picture.alt ||
+                            'Nominee Image'
+                          }
+                          className="h-18 w-18 rounded-lg border border-zinc-200 object-cover shadow-sm"
+                        />
+                      </div>
+
+                      {/* Nominee Details */}
+                      <div className="flex-1">
+                        <div className="font-medium text-zinc-900">
+                          {nominee.nomineeProfile?.name}
+                        </div>
+                        {titleId === 'comedian-of-the-year' && (
+                          <div className="text-sm text-zinc-600">
+                            {nominee.nomineeProfile?.legalName}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Selection Indicator */}
+                      {votes[currentTitle.slug.current] ===
+                        nominee.nomineeProfile?._id.toString() && (
+                        <div className="flex-shrink-0">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                            <Check className="h-4 w-4 text-white" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-4 space-x-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                      asChild
+                    >
+                      <Link
+                        href={`/profiles/${nominee.nomineeProfile?.entityType}/${nominee.nomineeProfile?.slug.current}`}
+                      >
+                        <CircleQuestionMark className="size-3 h-3 w-3" />
+                        Read Biography
+                      </Link>
+                    </Button>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          <CircleDollarSign className="size-3 h-3 w-3" />
+                          Gift a dollar
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>Set as public/private</DialogContent>
+                    </Dialog>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </CardContent>
         </Card>
 
         {/* Navigation and Action Buttons */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-12 space-y-4">
           {/* Mobile Layout */}
           <div className="flex flex-col gap-3 md:hidden">
             {/* Top Row - Navigation */}
@@ -487,29 +477,16 @@ export default function VotingPageComponent({
 
             {/* Bottom Row - Actions */}
             <div className="flex gap-2">
-              {currentTitleStatus !== 'voted' && (
+              {hasVoteInCurrentTitle && (
                 <Button
-                  variant="outline"
-                  onClick={handleSkipCategory}
-                  className="flex-1 border-amber-300 text-sm text-amber-700 hover:bg-amber-50"
+                  onClick={handleSubmitVote}
+                  className={`flex-1 bg-emerald-600 text-sm hover:bg-emerald-700`}
+                  disabled={loading || currentTitleStatus === 'voted'}
                 >
-                  <SkipForward className="mr-1 h-4 w-4" />
-                  Skip
+                  <Vote className="mr-1 h-4 w-4" />
+                  Submit
                 </Button>
               )}
-
-              {(currentTitleStatus !== 'voted' || currentCanEdit) &&
-                hasVoteInCurrentTitle && (
-                  <Button
-                    onClick={handleSubmitVote}
-                    className={`bg-emerald-600 text-sm hover:bg-emerald-700 ${
-                      currentTitleStatus !== 'voted' ? 'flex-1' : 'flex-1'
-                    }`}
-                  >
-                    <Vote className="mr-1 h-4 w-4" />
-                    {currentTitleStatus === 'voted' ? 'Update' : 'Submit'}
-                  </Button>
-                )}
             </div>
           </div>
 
@@ -526,29 +503,15 @@ export default function VotingPageComponent({
             </Button>
 
             <div className="flex gap-3">
-              {currentTitleStatus !== 'voted' && (
+              {hasVoteInCurrentTitle && (
                 <Button
-                  variant="outline"
-                  onClick={handleSkipCategory}
-                  className="border-amber-300 text-amber-700 hover:bg-amber-50"
+                  onClick={handleSubmitVote}
+                  className="bg-emerald-600 hover:bg-emerald-700"
                 >
-                  <SkipForward className="mr-2 h-4 w-4" />
-                  Skip Category
+                  <Vote className="mr-2 h-4 w-4" />
+                  Submit Vote
                 </Button>
               )}
-
-              {(currentTitleStatus !== 'voted' || currentCanEdit) &&
-                hasVoteInCurrentTitle && (
-                  <Button
-                    onClick={handleSubmitVote}
-                    className="bg-emerald-600 hover:bg-emerald-700"
-                  >
-                    <Vote className="mr-2 h-4 w-4" />
-                    {currentTitleStatus === 'voted'
-                      ? 'Update Vote'
-                      : 'Submit Vote'}
-                  </Button>
-                )}
             </div>
 
             <Button
@@ -562,44 +525,9 @@ export default function VotingPageComponent({
             </Button>
           </div>
         </div>
-
-        {/* Summary */}
-        <Card className="mb-8 border-zinc-200 bg-white">
-          <CardHeader>
-            <CardTitle className="text-zinc-900">Voting Summary</CardTitle>
-            <CardDescription className="text-zinc-600">
-              Your progress across all categories
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <div className="text-2xl font-bold text-emerald-600">
-                  {
-                    Object.values(categoryStatus).filter(
-                      (s) => s.status === 'voted',
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-zinc-600">Voted</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-amber-600">
-                  {
-                    Object.values(categoryStatus).filter(
-                      (s) => s.status === 'skipped',
-                    ).length
-                  }
-                </div>
-                <div className="text-sm text-zinc-600">Skipped</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-zinc-600">
-                  {categoryTitles.length - Object.keys(categoryStatus).length}
-                </div>
-                <div className="text-sm text-zinc-600">Pending</div>
-              </div>
-            </div>
+        <Card className="border-zinc-200 bg-white">
+          <CardContent className="text-center text-sm text-zinc-600">
+            <div>Gifting Leaderboard</div>
           </CardContent>
         </Card>
       </div>

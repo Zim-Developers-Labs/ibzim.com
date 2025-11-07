@@ -15,7 +15,6 @@ interface StatsProps {
 }
 
 export default function VotingStats({ stats }: StatsProps) {
-  const [viewMode, setViewMode] = useState<string>('percentage');
   const votingPercentage =
     (stats.categoriesVoted / stats.totalCategories) * 100;
 
@@ -31,29 +30,10 @@ export default function VotingStats({ stats }: StatsProps) {
             <div className="mb-1 text-sm font-medium text-blue-100">
               Total Votes
             </div>
-            <div className="text-4xl font-bold text-white">
-              {viewMode === 'percentage'
-                ? '100%'
-                : stats.totalVotes.toLocaleString()}
-            </div>
+            <div className="text-4xl font-bold text-white">1200</div>
             <div className="mt-2 flex items-center gap-2">
-              <Tabs value={viewMode} onValueChange={setViewMode}>
-                <TabsList>
-                  <TabsTrigger
-                    value="percentage"
-                    className="cursor-pointer px-2 text-xs data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                  >
-                    Percentage
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="numbers"
-                    className="cursor-pointer px-2 text-xs data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                  >
-                    <Trophy className="size-3" />
-                    Numbers
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+              <Users className="h-4 w-4 text-blue-200" />
+              <span className="text-xs text-blue-100">Submitted votes</span>
             </div>
           </div>
         </CardContent>
