@@ -1,5 +1,6 @@
 import { navigation } from '@/components/footer/constants';
 import { Icons } from '@/components/icons';
+import { RankIcon } from '@/components/ranking/rank-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { formatUpdatedAt } from '@/lib/utils';
@@ -42,6 +43,53 @@ const renderIcon = (icon: string) => {
       );
     case 'award':
       return <Icons.ibzimAwardsIcon className="text-primaryColor h-6 w-auto" />;
+    // New Comer ranks
+    case 'New Comer 1':
+      return <RankIcon id="new-comer-1" className="h-6 w-auto" />;
+    case 'New Comer 2':
+      return <RankIcon id="new-comer-2" className="h-6 w-auto" />;
+    case 'New Comer 3':
+      return <RankIcon id="new-comer-3" className="h-6 w-auto" />;
+    case 'New Comer 4':
+      return <RankIcon id="new-comer-4" className="h-6 w-auto" />;
+    case 'New Comer 5':
+      return <RankIcon id="new-comer-5" className="h-6 w-auto" />;
+
+    // Contributor ranks
+    case 'Contributor 1':
+      return <RankIcon id="contributor-1" className="h-6 w-auto" />;
+    case 'Contributor 2':
+      return <RankIcon id="contributor-2" className="h-6 w-auto" />;
+    case 'Contributor 3':
+      return <RankIcon id="contributor-3" className="h-6 w-auto" />;
+    case 'Contributor 4':
+      return <RankIcon id="contributor-4" className="h-6 w-auto" />;
+    case 'Contributor 5':
+      return <RankIcon id="contributor-5" className="h-6 w-auto" />;
+
+    // Leader ranks
+    case 'Leader 1':
+      return <RankIcon id="leader-1" className="h-6 w-auto" />;
+    case 'Leader 2':
+      return <RankIcon id="leader-2" className="h-6 w-auto" />;
+    case 'Leader 3':
+      return <RankIcon id="leader-3" className="h-6 w-auto" />;
+    case 'Leader 4':
+      return <RankIcon id="leader-4" className="h-6 w-auto" />;
+    case 'Leader 5':
+      return <RankIcon id="leader-5" className="h-6 w-auto" />;
+
+    // Ambassador ranks
+    case 'Ambassador 1':
+      return <RankIcon id="ambassador-1" className="h-6 w-auto" />;
+    case 'Ambassador 2':
+      return <RankIcon id="ambassador-2" className="h-6 w-auto" />;
+    case 'Ambassador 3':
+      return <RankIcon id="ambassador-3" className="h-6 w-auto" />;
+    case 'Ambassador 4':
+      return <RankIcon id="ambassador-4" className="h-6 w-auto" />;
+    case 'Ambassador 5':
+      return <RankIcon id="ambassador-5" className="h-6 w-auto" />;
     default:
       return (
         <Avatar className="grid h-8 w-8 place-content-center border border-zinc-200 bg-zinc-100">

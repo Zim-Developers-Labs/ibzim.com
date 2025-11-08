@@ -37,7 +37,14 @@ export default async function RootLayout({
     >
       <body>
         <UserProvider dbUser={user}>
-          <Toaster position="top-center" theme="light" />
+          <Toaster
+            position="bottom-right"
+            theme="light"
+            expand={true}
+            richColors
+            duration={20000}
+            closeButton
+          />
           <Banner />
           <Header
             user={user}

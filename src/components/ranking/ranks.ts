@@ -1,6 +1,6 @@
 export const ranks = [
-  { name: 'No Rank', minPoints: 0, maxPoints: 199 },
-  { name: 'New Comer 1', minPoints: 200, maxPoints: 560 },
+  { name: 'No Rank', minPoints: 0, maxPoints: 19 },
+  { name: 'New Comer 1', minPoints: 20, maxPoints: 560 },
   { name: 'New Comer 2', minPoints: 561, maxPoints: 920 },
   { name: 'New Comer 3', minPoints: 921, maxPoints: 1280 },
   { name: 'New Comer 4', minPoints: 1281, maxPoints: 1640 },

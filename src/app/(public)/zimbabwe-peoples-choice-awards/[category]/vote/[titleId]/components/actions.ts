@@ -1,30 +1,40 @@
 'use server';
 
-import { db, votes } from '@/lib/server/db';
+import { incrementUserIP } from '@/app/(user)/actions';
+import { db, votes, VotesType } from '@/lib/server/db';
 
 interface ActionResponse {
   error?: string;
-  done?: boolean;
+  vote?: VotesType;
 }
 
 export async function submitVote(
-  voterId: string,
+  userId: number,
+  username: string,
+  userIp: number,
   nomineeId: string,
   titleId: string,
+  categoryId: string,
 ): Promise<ActionResponse> {
   try {
-    await db.insert(votes).values({
-      voterId: Number(voterId),
-      nomineeId,
-      titleId,
-    });
+    const [submittedVote] = await db
+      .insert(votes)
+      .values({
+        userId,
+        categoryId,
+        nomineeId,
+        titleId,
+      })
+      .returning();
+
+    await incrementUserIP(userId, username, userIp + 20, userIp);
+
+    return {
+      vote: submittedVote, // Contains id, userId, nomineeId, titleId, createdAt
+    };
   } catch (err) {
     return {
       error: `${err}`,
     };
   }
-
-  return {
-    done: true,
-  };
 }

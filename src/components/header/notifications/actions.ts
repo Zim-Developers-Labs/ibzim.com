@@ -32,12 +32,14 @@ export async function getUserNotifications(
     _createdAt: n._createdAt.toISOString(),
     icon: n.icon as NotificationType['icon'],
     type: n.type as NotificationType['type'],
-    payloadForIcon: n.payloadForIcon
-      ? JSON.parse(String(n.payloadForIcon))
-      : undefined,
-    payloadForType: n.payloadForType
-      ? JSON.parse(String(n.payloadForType))
-      : undefined,
+    payloadForIcon:
+      typeof n.payloadForIcon === 'string'
+        ? JSON.parse(n.payloadForIcon)
+        : n.payloadForIcon,
+    payloadForType:
+      typeof n.payloadForType === 'string'
+        ? JSON.parse(n.payloadForType)
+        : n.payloadForType,
     isRead: Boolean(n.isRead),
   }));
 }

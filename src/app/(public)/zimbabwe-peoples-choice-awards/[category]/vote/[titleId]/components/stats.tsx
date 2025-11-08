@@ -1,23 +1,15 @@
-'use client';
-
 import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, Clock, Vote, Trophy } from 'lucide-react';
-import { useState } from 'react';
+import { Users, Clock, LockIcon, CircleDollarSign } from 'lucide-react';
 
 interface StatsProps {
   stats: {
     totalVotes: number;
     daysRemaining: number;
-    categoriesVoted: number;
-    totalCategories: number;
+    totalTitles: number;
   };
 }
 
 export default function VotingStats({ stats }: StatsProps) {
-  const votingPercentage =
-    (stats.categoriesVoted / stats.totalCategories) * 100;
-
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
       {/* Total Votes - Blue Gradient */}
@@ -30,7 +22,9 @@ export default function VotingStats({ stats }: StatsProps) {
             <div className="mb-1 text-sm font-medium text-blue-100">
               Total Votes
             </div>
-            <div className="text-4xl font-bold text-white">1200</div>
+            <div className="text-4xl font-bold text-white">
+              {stats.totalVotes}
+            </div>
             <div className="mt-2 flex items-center gap-2">
               <Users className="h-4 w-4 text-blue-200" />
               <span className="text-xs text-blue-100">Submitted votes</span>
@@ -64,19 +58,17 @@ export default function VotingStats({ stats }: StatsProps) {
       <Card className="overflow-hidden border-0 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700">
         <CardContent className="relative p-6">
           <div className="absolute top-4 right-4 opacity-20">
-            <Vote className="h-20 w-20" strokeWidth={1} />
+            <CircleDollarSign className="h-20 w-20" strokeWidth={1} />
           </div>
           <div className="relative">
             <div className="mb-1 text-sm font-medium text-emerald-100">
-              Categories Voted
+              Your Referral Income
             </div>
-            <div className="text-4xl font-bold text-white">
-              {stats.categoriesVoted}
-            </div>
-            <div className="mt-2 flex items-center gap-2">
-              <Vote className="h-4 w-4 text-emerald-200" />
+            <div className="text-4xl font-bold text-white">$0.00</div>
+            <div className="mt-4 flex items-center gap-2">
+              <LockIcon className="h-4 w-4 text-emerald-200" />
               <span className="text-xs text-emerald-100">
-                {votingPercentage.toFixed(0)}% complete
+                In BETA for Leader+ rank users only
               </span>
             </div>
           </div>

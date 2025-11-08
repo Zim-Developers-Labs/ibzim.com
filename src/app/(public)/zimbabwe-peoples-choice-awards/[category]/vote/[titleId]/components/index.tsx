@@ -15,12 +15,9 @@ import {
   Vote,
   Trophy,
   Clock,
-  Users,
-  Star,
   ChevronLeft,
   ChevronRight,
   Check,
-  SkipForward,
   AlertCircle,
   CircleDollarSign,
   CircleQuestionMark,
@@ -30,7 +27,6 @@ import { useParams } from 'next/navigation';
 import {
   currentSeason,
   getDaysRemainingInSeason,
-  mockNominees,
   seasonConfig,
 } from './constants';
 import { Icons } from '@/components/icons';
@@ -44,141 +40,163 @@ import { User } from '@/lib/server/constants';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
+import { textify } from '@/lib/utils';
+import { VotesType } from '@/lib/server/db';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function VotingPageComponent({
   awardCategory,
   titleId,
   nominees,
   user,
+  dbVotes,
+  dbUserCategoryVotes,
 }: {
   awardCategory: SanityAwardCategoryType;
   titleId: string;
   nominees: NomineeType[];
   user: User | null;
+  dbVotes: VotesType[] | null;
+  dbUserCategoryVotes: VotesType[] | null;
 }) {
-  const params = useParams();
-  const category = params.category as string;
-  const [currentTitleIndex, setCurrentTitleIndex] = useState(
-    awardCategory.categoryTitles.findIndex(
-      (cat) => cat.slug.current === titleId,
-    ),
+  const currentTitleIndex = awardCategory.categoryTitles.findIndex(
+    (cat) => cat.slug.current === titleId,
   );
-  const [votes, setVotes] = useState<Record<string, string>>({});
+  const [votes, setVotes] = useState<VotesType[] | null>(dbVotes);
   const [loading, setLoading] = useState<boolean>(false);
-  const [categoryStatus, setCategoryStatus] = useState<
-    Record<string, { status: 'voted' | 'pending'; date?: Date }>
-  >({});
+  const [userCategoryVotes, setUserCategoryVotes] = useState<
+    VotesType[] | null
+  >(dbUserCategoryVotes);
+
+  const initialTitleStatus = userCategoryVotes
+    ? userCategoryVotes.find((vote) => vote.titleId === titleId)
+      ? 'voted'
+      : 'pending'
+    : 'pending';
+  const [titleStatus, setTitleStatus] = useState<'voted' | 'pending'>(
+    initialTitleStatus,
+  );
   const [viewMode, setViewMode] = useState<string>('voting');
 
+  const [selectedNomineeId, setSelectedNomineeId] = useState<string | null>(
+    null,
+  );
   const categoryTitles = awardCategory.categoryTitles || [];
+
+  const [votingProgress, setVotingProgress] = useState<number>(
+    ((userCategoryVotes ? userCategoryVotes.length : 0) /
+      categoryTitles.length) *
+      100,
+  );
   const currentTitle = categoryTitles.find(
     (cat) => cat.slug.current === titleId,
   )!;
 
-  // Load previous votes on component mount
   useEffect(() => {
-    const savedVotes = localStorage.getItem(`votes-${category}`);
-    const savedStatus = localStorage.getItem(`category-status-${category}`);
-
-    if (savedVotes) {
-      setVotes(JSON.parse(savedVotes));
+    if (votes && user) {
+      const existingVote = votes.find(
+        (v) => v.userId === user.id && v.titleId === currentTitle.slug.current,
+      );
+      if (existingVote) {
+        setSelectedNomineeId(existingVote.nomineeId);
+      } else {
+        setSelectedNomineeId(null);
+      }
     }
+  }, [votes, user, currentTitle]);
 
-    if (savedStatus) {
-      const status = JSON.parse(savedStatus);
-      setCategoryStatus(status);
+  const handleNomineeClick = async (nomineeId: string) => {
+    if (titleStatus !== 'voted') {
+      setSelectedNomineeId(nomineeId);
     }
-  }, [category]);
-
-  const handleVote = async (nomineeId: string) => {
-    const newVotes = { ...votes, [currentTitle.slug.current]: nomineeId };
-    setVotes(newVotes);
-    if (!user) {
-      toast.error('You must be logged in to vote.');
-      setLoading(false);
-      return;
-    }
-    localStorage.setItem(`votes-${category}`, JSON.stringify(newVotes));
   };
 
-  const handleSubmitVote = () => {
+  const handleSubmitVote = async () => {
+    if (!user) {
+      toast.error('You must be logged in to vote.');
+      return;
+    }
+
+    if (!selectedNomineeId) {
+      toast.error('Please select a nominee first.');
+      return;
+    }
+
     setLoading(true);
-    const now = new Date();
-    const newStatus = {
-      ...categoryStatus,
-      [currentTitle.slug.current]: { status: 'voted' as const, date: now },
-    };
-    setCategoryStatus(newStatus);
-    localStorage.setItem(
-      `category-status-${category}`,
-      JSON.stringify(newStatus),
-    );
 
-    if (!user) {
-      toast.error('You must be logged in to vote.');
+    try {
+      const result = await submitVote(
+        user.id,
+        user.username,
+        user.ip,
+        selectedNomineeId,
+        currentTitle.slug.current,
+        awardCategory.slug.current,
+      );
+
+      if (result.vote) {
+        // Update local state with new vote
+        const newVote: VotesType = result.vote;
+        setUserCategoryVotes((prev) => (prev ? [...prev, newVote] : [newVote]));
+        setVotingProgress(
+          ((userCategoryVotes ? userCategoryVotes.length + 1 : 1) /
+            categoryTitles.length) *
+            100,
+        );
+
+        setVotes((prev) => (prev ? [...prev, newVote] : [newVote]));
+        setTitleStatus('voted');
+
+        toast.success('Vote submitted successfully!');
+        toast.success(`You have added $0.01 to your nominee balance`);
+        toast.success('You have earned +20 Impact Points');
+      } else {
+        toast.error(result.error || 'Failed to submit vote.');
+      }
+    } catch (error) {
+      console.error('[v0] Error submitting vote:', error);
+      toast.error('An error occurred while submitting your vote.');
+    } finally {
       setLoading(false);
-      return;
     }
-    // const response = await submitVote()
-
-    // Move to next category if available
-    if (currentTitleIndex < categoryTitles.length - 1) {
-      setCurrentTitleIndex(currentTitleIndex + 1);
-    }
-    setLoading(false);
-  };
-
-  const goToCategory = (index: number) => {
-    setCurrentTitleIndex(index);
-    window.location.href = `/zimbabwe-peoples-choice-awards/${awardCategory.slug.current}/vote/${awardCategory.categoryTitles[index].slug.current}`;
   };
 
   const goToPrevious = () => {
     if (currentTitleIndex > 0) {
-      setCurrentTitleIndex(currentTitleIndex - 1);
+      window.location.href = `/zimbabwe-peoples-choice-awards/${awardCategory.slug.current}/vote/${awardCategory.categoryTitles[currentTitleIndex - 1].slug.current}`;
     }
   };
 
   const goToNext = () => {
     if (currentTitleIndex < categoryTitles.length - 1) {
-      setCurrentTitleIndex(currentTitleIndex + 1);
+      window.location.href = `/zimbabwe-peoples-choice-awards/${awardCategory.slug.current}/vote/${awardCategory.categoryTitles[currentTitleIndex + 1].slug.current}`;
     }
   };
 
-  const getCategoryStatus = (categoryName: string) => {
-    return categoryStatus[categoryName]?.status || 'pending';
+  const getAnyTitleStatus = (titleId: string) => {
+    const vote = userCategoryVotes?.find((vote) => vote.titleId === titleId);
+    return vote ? 'voted' : 'pending';
   };
 
-  const getCategoryStatusColor = (status: string) => {
+  const getTitleStatusColor = (selectedTitle: string) => {
+    const status = getAnyTitleStatus(selectedTitle);
     switch (status) {
       case 'voted':
         return 'bg-emerald-50 border-emerald-300 text-emerald-700';
-      case 'skipped':
-        return 'bg-amber-50 border-amber-300 text-amber-700';
       default:
         return 'bg-zinc-50 border-zinc-300 text-zinc-700';
     }
   };
 
-  const getCategoryStatusIcon = (status: string) => {
+  const getTitleStatusIcon = (selectedTitle: string) => {
+    const status = getAnyTitleStatus(selectedTitle);
     switch (status) {
       case 'voted':
         return <Check className="mr-1 h-3 w-3" />;
-      case 'skipped':
-        return <SkipForward className="mr-1 h-3 w-3" />;
       default:
         return <Clock className="mr-1 h-3 w-3" />;
     }
   };
-
-  const currentTitleStatus = getCategoryStatus(currentTitle.slug.current);
-  const hasVoteInCurrentTitle = votes[currentTitle.slug.current];
-
-  const totalVotes = Object.values(nominees)
-    .flat()
-    .reduce((sum: number, nominee: any) => sum + nominee.votes, 0);
-  const votingProgress =
-    ((currentTitleIndex + 1) / categoryTitles.length) * 100;
 
   return (
     <div className="">
@@ -210,7 +228,7 @@ export default function VotingPageComponent({
           </span>
           <div className="mb-4">
             <h1 className="mb-4 text-center text-3xl font-medium text-zinc-900 sm:text-4xl">
-              {awardCategory.title} - Voting
+              {textify(titleId)} - {awardCategory.title}
             </h1>
             <p className="text-center tracking-widest text-zinc-600">
               ROAD TO THE NATIONALS
@@ -251,7 +269,8 @@ export default function VotingPageComponent({
               Your Voting Progress
             </h2>
             <span className="text-sm text-zinc-600">
-              {currentTitleIndex + 1} of {categoryTitles.length} categories
+              {userCategoryVotes ? userCategoryVotes.length : 0} of{' '}
+              {categoryTitles.length} Titles
             </span>
           </div>
           <div className="relative mb-8 h-2 w-full overflow-hidden rounded-full bg-zinc-200">
@@ -263,21 +282,20 @@ export default function VotingPageComponent({
 
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2">
-            {categoryTitles.map((cat, index) => {
-              const status = getCategoryStatus(cat.slug.current);
+            {categoryTitles.map((title, index) => {
               return (
-                <button
-                  key={cat._id}
-                  onClick={() => goToCategory(index)}
+                <Link
+                  href={`/zimbabwe-peoples-choice-awards/${awardCategory.slug.current}/vote/${awardCategory.categoryTitles[index].slug.current}`}
+                  key={title._id}
                   className={`flex cursor-pointer items-center gap-1 rounded-sm border px-3 py-1.5 text-xs font-medium transition-colors ${
                     index === currentTitleIndex
                       ? 'border-blue-300 bg-blue-100 text-blue-700 ring-2 ring-blue-200'
-                      : getCategoryStatusColor(status)
+                      : getTitleStatusColor(title.slug.current)
                   } hover:shadow-sm`}
                 >
-                  {getCategoryStatusIcon(status)}
-                  {cat.title}
-                </button>
+                  {getTitleStatusIcon(title.slug.current)}
+                  {title.title}
+                </Link>
               );
             })}
           </div>
@@ -286,12 +304,9 @@ export default function VotingPageComponent({
         {/* Voting Stats */}
         <VotingStats
           stats={{
-            totalVotes: totalVotes,
+            totalVotes: votes ? (votes.length > 0 ? votes.length : 0) : 0,
             daysRemaining: getDaysRemainingInSeason(),
-            categoriesVoted: Object.values(categoryStatus).filter(
-              (s) => s.status === 'voted',
-            ).length,
-            totalCategories: categoryTitles.length,
+            totalTitles: categoryTitles.length,
           }}
         />
 
@@ -305,17 +320,17 @@ export default function VotingPageComponent({
                   {currentTitle.title}
                 </CardTitle>
                 <CardDescription className="text-zinc-600">
-                  {currentTitleStatus === 'voted'
+                  {titleStatus === 'voted'
                     ? 'Vote submitted (you can vote for this category again in the next season)'
                     : 'Choose your favorite nominee in this category'}
                 </CardDescription>
               </div>
               <Badge
                 variant="outline"
-                className={getCategoryStatusColor(currentTitleStatus)}
+                className={getTitleStatusColor(titleStatus)}
               >
-                {getCategoryStatusIcon(currentTitleStatus)}
-                {currentTitleStatus === 'voted' ? 'Voted' : 'Pending'}
+                {getTitleStatusIcon(titleStatus)}
+                {titleStatus === 'voted' ? 'Voted' : 'Pending'}
               </Badge>
             </div>
           </CardHeader>
@@ -360,19 +375,16 @@ export default function VotingPageComponent({
                   <div
                     onClick={() => {
                       if (
-                        currentTitleStatus !== 'voted' &&
+                        titleStatus !== 'voted' &&
                         nominee.nomineeProfile?._id
                       ) {
-                        handleVote(nominee.nomineeProfile._id);
+                        handleNomineeClick(nominee.nomineeProfile._id);
                       }
                     }}
                     className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
-                      currentTitleStatus === 'voted'
-                        ? 'cursor-not-allowed border-zinc-200 bg-zinc-50'
-                        : votes[currentTitle.slug.current] ===
-                            nominee.nomineeProfile?._id.toString()
-                          ? 'border-emerald-500 bg-emerald-50 shadow-md'
-                          : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
+                      selectedNomineeId === nominee.nomineeProfile?._id
+                        ? 'border-emerald-500 bg-emerald-50 shadow-md'
+                        : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
                     }`}
                   >
                     <div className="flex items-center space-x-4">
@@ -397,6 +409,7 @@ export default function VotingPageComponent({
                       </div>
 
                       {/* Nominee Details */}
+
                       <div className="flex-1">
                         <div className="font-medium text-zinc-900">
                           {nominee.nomineeProfile?.name}
@@ -409,8 +422,7 @@ export default function VotingPageComponent({
                       </div>
 
                       {/* Selection Indicator */}
-                      {votes[currentTitle.slug.current] ===
-                        nominee.nomineeProfile?._id.toString() && (
+                      {selectedNomineeId === nominee.nomineeProfile?._id && (
                         <div className="flex-shrink-0">
                           <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                             <Check className="h-4 w-4 text-white" />
@@ -434,7 +446,7 @@ export default function VotingPageComponent({
                       </Link>
                     </Button>
                     <Dialog>
-                      <DialogTrigger>
+                      <DialogTrigger asChild>
                         <Button size="sm" variant="outline" className="text-xs">
                           <CircleDollarSign className="size-3 h-3 w-3" />
                           Gift a dollar
@@ -477,14 +489,23 @@ export default function VotingPageComponent({
 
             {/* Bottom Row - Actions */}
             <div className="flex gap-2">
-              {hasVoteInCurrentTitle && (
+              {titleStatus === 'pending' ? (
                 <Button
                   onClick={handleSubmitVote}
-                  className={`flex-1 bg-emerald-600 text-sm hover:bg-emerald-700`}
-                  disabled={loading || currentTitleStatus === 'voted'}
+                  className="bg-emerald-600 hover:bg-emerald-700"
                 >
-                  <Vote className="mr-1 h-4 w-4" />
-                  Submit
+                  {loading ? (
+                    <Spinner className="mr-1 h-4 w-4" />
+                  ) : (
+                    <Vote className="mr-1 h-4 w-4" />
+                  )}
+                  {loading ? 'Submitting...' : 'Submit'}
+                </Button>
+              ) : (
+                <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
+                  <Link href={user ? `/${user.username}/votes` : '#'}>
+                    Manage Votes
+                  </Link>
                 </Button>
               )}
             </div>
@@ -503,13 +524,23 @@ export default function VotingPageComponent({
             </Button>
 
             <div className="flex gap-3">
-              {hasVoteInCurrentTitle && (
+              {titleStatus === 'pending' ? (
                 <Button
                   onClick={handleSubmitVote}
                   className="bg-emerald-600 hover:bg-emerald-700"
                 >
-                  <Vote className="mr-2 h-4 w-4" />
-                  Submit Vote
+                  {loading ? (
+                    <Spinner className="mr-2 h-4 w-4" />
+                  ) : (
+                    <Vote className="mr-2 h-4 w-4" />
+                  )}
+                  {loading ? 'Submitting...' : 'Submit Vote'}
+                </Button>
+              ) : (
+                <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
+                  <Link href={user ? `/${user.username}/votes` : '#'}>
+                    Manage Votes
+                  </Link>
                 </Button>
               )}
             </div>
@@ -525,7 +556,7 @@ export default function VotingPageComponent({
             </Button>
           </div>
         </div>
-        <Card className="border-zinc-200 bg-white">
+        <Card className="mb-8 border-zinc-200 bg-white">
           <CardContent className="text-center text-sm text-zinc-600">
             <div>Gifting Leaderboard</div>
           </CardContent>

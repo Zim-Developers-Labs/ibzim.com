@@ -25,7 +25,7 @@ export default function RanksDialog({
             <div>
               <div className="mb-1 text-sm text-zinc-600">New Comer 1 - 5</div>
               <div className="text-xs text-zinc-600">
-                200 - 2000 Impact Points. Limited feature access
+                20 - 2000 Impact Points. Limited feature access
               </div>
             </div>
           </div>

@@ -10,6 +10,8 @@ import {
 import { textify } from '@/lib/utils';
 import { notFound } from 'next/navigation';
 import { getCurrentSession } from '@/lib/server/session';
+import { getAllTitleVotes, getAllUserCategoryVotes } from './actions';
+import { VotesType } from '@/lib/server/db';
 
 type Props = {
   params: Promise<{ category: string; titleId: string }>;
@@ -19,8 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category, titleId } = await params;
 
   return prepareArticleMetadata({
-    title: `${textify(category)} Voting | People's Choice Awards Zimbabwe`,
-    description: `Vote for your favorite nominees in the ${textify(category)} category of the People's Choice Awards Zimbabwe.`,
+    title: `${textify(titleId)} Voting | People's Choice Awards Zimbabwe`,
+    description: `Vote for who deserves the title: "${textify(titleId)}" in the ${textify(category)} category of the People's Choice Awards Zimbabwe.`,
     pageUrl: `/zimbabwe-peoples-choice-awards/${category}/vote/${titleId}`,
     ogImage: {
       url: '/banner.webp',
@@ -75,12 +77,25 @@ export default async function VotingPage({ params }: Props) {
 
   const { user } = await getCurrentSession();
 
+  const votes = await getAllTitleVotes(titleId);
+
+  let userCategoryVotes: VotesType[] | null = null;
+
+  if (user) {
+    userCategoryVotes = await getAllUserCategoryVotes(
+      user.id,
+      awardCategory.slug.current,
+    );
+  }
+
   return (
     <VotingPageComponent
       user={user}
       awardCategory={awardCategory}
       titleId={titleId}
       nominees={nominees}
+      dbVotes={votes}
+      dbUserCategoryVotes={userCategoryVotes}
     />
   );
 }

@@ -227,19 +227,23 @@ export const votes = pgTable(
   'votes',
   {
     id: serial('id').primaryKey(),
-    voterId: integer('voter_id')
+    userId: integer('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     nomineeId: varchar('nominee_id').notNull(),
     titleId: varchar('title_id', { length: 21 }).notNull(),
+    categoryId: varchar('category_id', { length: 21 }).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
   (table) => ({
-    voterIdIndex: index('votes_voter_id_idx').on(table.voterId),
+    userIdIndex: index('votes_user_id_idx').on(table.userId),
     nomineeIdIndex: index('votes_nominee_id_idx').on(table.nomineeId),
     titleIdIndex: index('votes_title_id_idx').on(table.titleId),
   }),
 );
+
+export type VotesType = typeof votes.$inferSelect;
+export type NewVotesType = typeof votes.$inferInsert;
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
@@ -310,7 +314,7 @@ export const checkoutTokensRelations = relations(checkoutTokens, ({ one }) => ({
 
 export const votesRelations = relations(votes, ({ one }) => ({
   voter: one(users, {
-    fields: [votes.voterId],
+    fields: [votes.userId],
     references: [users.id],
   }),
   nominee: one(users, {
