@@ -12,6 +12,7 @@ import {
   Building2,
   HelpCircle,
   CrownIcon,
+  Sparkles,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
@@ -42,33 +43,19 @@ export const menuItems = [
     isOpenSource: false,
   },
   {
-    title: 'Ecocash Calculator',
-    description: 'Transaction fees',
+    title: 'Calculators',
+    description: '10+ useful calculators',
     icon: Calculator,
-    href: 'https://tools.zimdevelopers.com/ecocash-calculator',
+    href: '/calculators',
     isOpenSource: true,
   },
 
   {
-    title: 'Travel Planner',
-    description: 'Plan your next trip',
+    title: 'IBZIM Docs',
+    description: 'Learn about the platform',
     icon: MapPin,
-    href: 'https://tools.zimdevelopers.com/travel-planner',
-    isOpenSource: true,
-  },
-  {
-    title: 'Currency Converter',
-    description: 'Convert local currencies',
-    icon: DollarSign,
-    href: 'https://tools.zimdevelopers.com/currency-converter/usd-zig',
-    isOpenSource: true,
-  },
-  {
-    title: 'ZESA Calculator',
-    description: 'Electricity costs',
-    icon: Zap,
-    href: 'https://tools.zimdevelopers.com/zesa-electricity-calculator',
-    isOpenSource: true,
+    href: 'https://learn.ibzim.com',
+    isOpenSource: false,
   },
   {
     title: 'Support',
@@ -214,6 +201,43 @@ export default function HomeComponent({
                 <div className="absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset sm:rounded-xl lg:rounded-2xl" />
               </Link>
             </li>
+            <li>
+              <Link
+                href="/premium"
+                className="relative block h-full w-auto cursor-pointer overflow-hidden rounded-2xl bg-white p-4 text-center transition-transform hover:scale-105 dark:bg-gray-900"
+              >
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 p-[3px]">
+                  <div className="h-full w-full rounded-2xl bg-white dark:bg-gray-900" />
+                </div>
+                <div className="relative z-10">
+                  <Sparkles
+                    className="mx-auto mb-4 h-10 w-10 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent md:h-16 md:w-16"
+                    fill="url(#gradient)"
+                  />
+                  <svg width="0" height="0">
+                    <defs>
+                      <linearGradient
+                        id="gradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stopColor="#facc15" />
+                        <stop offset="50%" stopColor="#ec4899" />
+                        <stop offset="100%" stopColor="#9333ea" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <h3 className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-base font-bold text-transparent sm:text-lg md:mb-2 md:text-xl">
+                    Premium
+                  </h3>
+                  <p className="text-xs text-gray-600 sm:text-sm dark:text-gray-300">
+                    Get the most out of IBZIM
+                  </p>
+                </div>
+              </Link>
+            </li>
             {/* <li>
               <Link href="https://www.zimdevelopers.com">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
@@ -249,7 +273,7 @@ export default function HomeComponent({
                       />
                     </div>
                     <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
-                      Earn
+                      Earn Online
                     </h3>
                     <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
                       Convert your knowledge into income
@@ -258,7 +282,7 @@ export default function HomeComponent({
                 </Card>
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link href="https://www.peyapeya.com">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
@@ -279,7 +303,7 @@ export default function HomeComponent({
                   </CardContent>
                 </Card>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link href={DOMAIN_URLS.ADVERTISE()}>
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">

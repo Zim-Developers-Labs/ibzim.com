@@ -11,6 +11,7 @@ const features = {
     'Downloadable content (Articles, magazines, videos).',
     'Early access to tools and articles.',
     'Post up to 10 events/month on IBZIM Calendar',
+    'Add up to 3 entities on the compare tool.',
   ],
   business: [
     'Everything in Personal.',

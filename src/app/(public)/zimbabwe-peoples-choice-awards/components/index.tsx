@@ -1,7 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Calendar, ChartLine, Clock, Star, Trophy, Vote } from 'lucide-react';
+import {
+  BookOpen,
+  Calendar,
+  ChartLine,
+  Clock,
+  Star,
+  Trophy,
+  Vote,
+} from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -94,10 +102,10 @@ export default function AwardsPageComponent({
                 Voting
               </TabsTrigger>
               <TabsTrigger
-                value="stats"
+                value="guides"
                 className="data-[state=active]:bg-primaryColor cursor-pointer px-4 data-[state=active]:text-white"
               >
-                Statistics
+                Guides
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -105,72 +113,71 @@ export default function AwardsPageComponent({
       </section>
       <section className="-mt-32 bg-zinc-900">
         <Container>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {awardCategories.map((category) => {
-              const Icon = category.icon;
+          {activeTab === 'voting' && (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {awardCategories.map((category) => {
+                const Icon = category.icon;
 
-              return (
-                <Card
-                  key={category.id}
-                  className={`group border-2 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 ${category.color} hover:scale-[1.02]`}
-                >
-                  <CardHeader className="pb-4">
-                    <div className="mb-2 flex items-center gap-3">
-                      <div
-                        className={`rounded-xl bg-white p-3 shadow-sm ${category.iconColor}`}
-                      >
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-xl text-gray-900">
-                          {category.title}
-                        </CardTitle>
-                        <div className="mt-1 flex items-center gap-2">
-                          <Badge
-                            variant="outline"
-                            className={`${
-                              category.votingState === 'Not Started'
-                                ? 'border-zinc-300 bg-zinc-50 text-zinc-700'
-                                : category.id === 'company-awards'
-                                  ? 'border-blue-300 bg-blue-50 text-blue-700'
-                                  : category.id === 'tech-awards'
-                                    ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
-                                    : category.id === 'movie-awards'
-                                      ? 'border-purple-300 bg-purple-50 text-purple-700'
-                                      : category.id === 'comedy-awards'
-                                        ? 'border-orange-300 bg-orange-50 text-orange-700'
-                                        : category.id === 'school-awards'
-                                          ? 'border-red-300 bg-red-50 text-red-700'
-                                          : category.id === 'music-awards'
-                                            ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
-                                            : 'border-gray-300 bg-gray-50 text-gray-700'
-                            }`}
-                          >
-                            {category.votingState === 'Ongoing' && (
-                              <Vote className="mr-1 h-3 w-3" />
-                            )}
-                            {category.votingState === 'Results Ready' && (
-                              <Trophy className="mr-1 h-3 w-3" />
-                            )}
-                            {category.votingState === 'Getting Results' && (
-                              <Star className="mr-1 h-3 w-3" />
-                            )}
-                            {category.votingState === 'Not Started' && (
-                              <Calendar className="mr-1 h-3 w-3" />
-                            )}
-                            {category.votingState}
-                          </Badge>
+                return (
+                  <Card
+                    key={category.id}
+                    className={`group border-2 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/10 ${category.color} hover:scale-[1.02]`}
+                  >
+                    <CardHeader className="pb-4">
+                      <div className="mb-2 flex items-center gap-3">
+                        <div
+                          className={`rounded-xl bg-white p-3 shadow-sm ${category.iconColor}`}
+                        >
+                          <Icon className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-xl text-gray-900">
+                            {category.title}
+                          </CardTitle>
+                          <div className="mt-1 flex items-center gap-2">
+                            <Badge
+                              variant="outline"
+                              className={`${
+                                category.votingState === 'Not Started'
+                                  ? 'border-zinc-300 bg-zinc-50 text-zinc-700'
+                                  : category.id === 'company-awards'
+                                    ? 'border-blue-300 bg-blue-50 text-blue-700'
+                                    : category.id === 'tech-awards'
+                                      ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
+                                      : category.id === 'movie-awards'
+                                        ? 'border-purple-300 bg-purple-50 text-purple-700'
+                                        : category.id === 'comedy-awards'
+                                          ? 'border-orange-300 bg-orange-50 text-orange-700'
+                                          : category.id === 'school-awards'
+                                            ? 'border-red-300 bg-red-50 text-red-700'
+                                            : category.id === 'music-awards'
+                                              ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
+                                              : 'border-gray-300 bg-gray-50 text-gray-700'
+                              }`}
+                            >
+                              {category.votingState === 'Ongoing' && (
+                                <Vote className="mr-1 h-3 w-3" />
+                              )}
+                              {category.votingState === 'Results Ready' && (
+                                <Trophy className="mr-1 h-3 w-3" />
+                              )}
+                              {category.votingState === 'Getting Results' && (
+                                <Star className="mr-1 h-3 w-3" />
+                              )}
+                              {category.votingState === 'Not Started' && (
+                                <Calendar className="mr-1 h-3 w-3" />
+                              )}
+                              {category.votingState}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <CardDescription className="h-8 text-gray-600">
-                      {category.description}
-                    </CardDescription>
-                  </CardHeader>
+                      <CardDescription className="h-8 text-gray-600">
+                        {category.description}
+                      </CardDescription>
+                    </CardHeader>
 
-                  <CardContent className="space-y-4">
-                    {/* Action Buttons */}
-                    {activeTab === 'voting' ? (
+                    <CardContent className="space-y-4">
                       <div className="flex gap-2 pt-2">
                         {category.votingState === 'Ongoing' && (
                           <Button
@@ -252,41 +259,114 @@ export default function AwardsPageComponent({
                           </Button>
                         )}
                       </div>
-                    ) : (
-                      <div className="flex gap-2 pt-2">
-                        <Button
-                          asChild
-                          className={`flex-1 ${
-                            category.id === 'company'
-                              ? 'bg-gradient-to-r from-blue-300 via-blue-600 to-blue-300'
-                              : category.id === 'city'
-                                ? 'bg-gradient-to-r from-emerald-300 via-emerald-600 to-emerald-300'
-                                : category.id === 'movie'
-                                  ? 'bg-gradient-to-r from-purple-300 via-purple-600 to-purple-300'
-                                  : category.id === 'comedy'
-                                    ? 'bg-gradient-to-r from-orange-300 via-orange-600 to-orange-300'
-                                    : category.id === 'school'
-                                      ? 'bg-gradient-to-r from-red-300 via-red-600 to-red-300'
-                                      : category.id === 'music'
-                                        ? 'bg-gradient-to-r from-indigo-300 via-indigo-600 to-indigo-300'
-                                        : 'bg-gray-300'
-                          }`}
-                        >
-                          <Link
-                            href={`/zimbabwe-peoples-choice-awards/${category.id}/results`}
-                            className="text-sm"
-                          >
-                            <ChartLine className="mr-1 h-4 w-4" />
-                            View Statistics
-                          </Link>
-                        </Button>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+          {activeTab === 'guides' && (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <Card className="group border-2 border-amber-300 bg-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/10">
+                <CardHeader className="pb-4">
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="rounded-xl bg-white p-3 text-amber-500 shadow-sm">
+                      <BookOpen className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl text-gray-900">
+                      Introduction
+                    </CardTitle>
+                  </div>
+                  <CardDescription className="text-gray-600">
+                    Get started with the People's Choice Awards. Learn about the
+                    awards, how they work, and what makes them special.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button
+                    asChild
+                    className="w-full bg-gradient-to-r from-amber-300 via-amber-600 to-amber-300"
+                  >
+                    <Link
+                      href="https://learn.ibzim.com/peoples-choice-awards/introduction"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm"
+                    >
+                      <BookOpen className="mr-1 h-4 w-4" />
+                      Read Guide
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="group border-2 border-purple-300 bg-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-purple-500/10">
+                <CardHeader className="pb-4">
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="rounded-xl bg-white p-3 text-purple-500 shadow-sm">
+                      <Star className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl text-gray-900">
+                      Guide for Nominees
+                    </CardTitle>
+                  </div>
+                  <CardDescription className="text-gray-600">
+                    Everything nominees need to know about participating in the
+                    awards, promotion, and what to expect.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button
+                    asChild
+                    className="w-full bg-gradient-to-r from-purple-300 via-purple-600 to-purple-300"
+                  >
+                    <Link
+                      href="https://learn.ibzim.com/peoples-choice-awards/nominees"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm"
+                    >
+                      <Star className="mr-1 h-4 w-4" />
+                      Read Guide
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="group border-2 border-blue-300 bg-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10">
+                <CardHeader className="pb-4">
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="rounded-xl bg-white p-3 text-blue-500 shadow-sm">
+                      <Vote className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl text-gray-900">
+                      Guide for Voters
+                    </CardTitle>
+                  </div>
+                  <CardDescription className="text-gray-600">
+                    Learn how to vote effectively, understand the voting
+                    process, and discover the rewards for participating.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button
+                    asChild
+                    className="w-full bg-gradient-to-r from-blue-300 via-blue-600 to-blue-300"
+                  >
+                    <Link
+                      href="https://learn.ibzim.com/peoples-choice-awards/voters"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm"
+                    >
+                      <Vote className="mr-1 h-4 w-4" />
+                      Read Guide
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </Container>
       </section>
       <AwardsHero />
