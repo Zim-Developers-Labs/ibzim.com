@@ -13,14 +13,13 @@ import {
   HelpCircle,
   CrownIcon,
   Sparkles,
+  Newspaper,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import SearchToggler from './search-toggler';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { GithubIcon } from '@sanity/icons';
 import { useUser } from '@/hooks/user-context';
 import { DOMAIN_URLS } from '@/lib/constants';
 import Image from 'next/image';
@@ -33,6 +32,13 @@ export const menuItems = [
     description: 'Explore notable personalities',
     icon: UserIcon,
     href: '/profiles',
+    isOpenSource: false,
+  },
+  {
+    title: 'National News',
+    description: 'Get latest updates',
+    icon: Newspaper,
+    href: 'https://news.ibzim.com',
     isOpenSource: false,
   },
   {
@@ -282,7 +288,7 @@ export default function HomeComponent({
                 </Card>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="https://www.peyapeya.com">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
@@ -303,7 +309,7 @@ export default function HomeComponent({
                   </CardContent>
                 </Card>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href={DOMAIN_URLS.ADVERTISE()}>
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
