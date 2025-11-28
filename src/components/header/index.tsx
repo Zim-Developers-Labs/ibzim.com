@@ -83,6 +83,7 @@ export default function Header({
           )}
           <div className="flex flex-none items-center gap-2 md:gap-4">
             <Notifications
+              user={user}
               neonUserNotifications={neonUserNotifications}
               sanityGlobalNotifications={sanityGlobalNotifications}
             />

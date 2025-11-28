@@ -68,6 +68,8 @@ export default function VotingPageComponent({
     VotesType[] | null
   >(dbUserCategoryVotes);
 
+  const userHasPremium = true; // Set to true to unlock all nominee statistics
+
   const initialTitleStatus = userCategoryVotes
     ? userCategoryVotes.find((vote) => vote.titleId === titleId)
       ? 'voted'
@@ -198,6 +200,20 @@ export default function VotingPageComponent({
     }
   };
 
+  const handleTabChange = (value: string) => {
+    if (value === 'statistics') {
+      if (titleStatus !== 'voted') {
+        if (!user) {
+          // or however you check if user is logged in
+          toast.error('Login and vote to see statistics');
+          return;
+        }
+        toast.error('Vote first to see statistics');
+        return;
+      }
+    }
+    setViewMode(value);
+  };
   return (
     <div className="">
       <div
@@ -349,7 +365,7 @@ export default function VotingPageComponent({
                   the top 3 nominees. With IBZIM Premium you can view standings
                   for all nominees
                 </div>
-                <Tabs value={viewMode} onValueChange={setViewMode}>
+                <Tabs value={viewMode} onValueChange={handleTabChange}>
                   <TabsList>
                     <TabsTrigger
                       value="voting"
@@ -370,93 +386,328 @@ export default function VotingPageComponent({
             </Alert>
 
             <ul className="grid gap-4">
-              {nominees.map((nominee) => (
-                <li key={nominee.nomineeProfile?._id}>
-                  <div
-                    onClick={() => {
-                      if (
-                        titleStatus !== 'voted' &&
-                        nominee.nomineeProfile?._id
-                      ) {
-                        handleNomineeClick(nominee.nomineeProfile._id);
-                      }
-                    }}
-                    className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
-                      selectedNomineeId === nominee.nomineeProfile?._id
-                        ? 'border-emerald-500 bg-emerald-50 shadow-md'
-                        : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-4">
-                      {/* Nominee Image */}
-                      <div className="flex-shrink-0">
-                        <Image
-                          width={72}
-                          height={72}
-                          src={
-                            nominee.nomineeProfile?.picture
-                              ? urlForImage(
-                                  nominee.nomineeProfile.picture,
-                                ).url()
-                              : '/fallback.webp'
+              {viewMode === 'statistics'
+                ? (() => {
+                    // Calculate vote counts for each nominee
+                    const nomineeVoteCounts = nominees.map((nominee) => {
+                      const voteCount = votes
+                        ? votes.filter(
+                            (v) => v.nomineeId === nominee.nomineeProfile?._id,
+                          ).length
+                        : 0;
+                      return { nominee, voteCount };
+                    });
+
+                    const sortedNominees = nomineeVoteCounts.sort(
+                      (a, b) => b.voteCount - a.voteCount,
+                    );
+
+                    // Calculate total votes for percentage
+                    const totalVotes = votes ? votes.length : 0;
+
+                    return sortedNominees.map(
+                      ({ nominee, voteCount }, index) => {
+                        const percentage =
+                          totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
+                        const isGold = index === 0;
+                        const isSilver = index === 1;
+                        const isLocked = index > 1 && !userHasPremium;
+
+                        return (
+                          <li
+                            key={nominee.nomineeProfile?._id}
+                            className={isLocked ? 'relative' : ''}
+                          >
+                            <div
+                              className={`relative overflow-hidden rounded-lg border-2 px-4 py-4 transition-all md:px-8 ${
+                                isGold
+                                  ? 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-amber-50 shadow-lg'
+                                  : isSilver
+                                    ? 'border-gray-300 bg-gradient-to-br from-gray-50 to-slate-50 shadow-md'
+                                    : 'border-zinc-200 bg-zinc-50'
+                              } ${isLocked ? 'blur-sm' : ''}`}
+                            >
+                              <div className="flex items-start space-x-4 sm:items-center md:space-x-8">
+                                {!isLocked && (
+                                  <div className="hidden items-center gap-2 sm:flex">
+                                    <Trophy
+                                      className={`h-6 w-6 ${
+                                        isGold
+                                          ? 'text-yellow-500'
+                                          : isSilver
+                                            ? 'text-gray-400'
+                                            : 'text-zinc-400'
+                                      }`}
+                                    />
+                                    <div className="text-xl font-bold text-gray-800">
+                                      #{index + 1}
+                                    </div>
+                                  </div>
+                                )}
+                                {!isLocked && (
+                                  <div className="absolute bottom-4 left-4 flex items-center gap-1 sm:hidden">
+                                    <Trophy
+                                      className={`h-4 w-4 ${
+                                        isGold
+                                          ? 'text-yellow-500'
+                                          : isSilver
+                                            ? 'text-gray-400'
+                                            : 'text-zinc-400'
+                                      }`}
+                                    />
+                                    <div className="text-sm text-zinc-800">
+                                      #{index + 1}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Nominee Image */}
+                                <div className="flex-shrink-0">
+                                  <Image
+                                    width={72}
+                                    height={72}
+                                    src={
+                                      nominee.nomineeProfile?.picture
+                                        ? urlForImage(
+                                            nominee.nomineeProfile.picture,
+                                          ).url()
+                                        : '/fallback.webp'
+                                    }
+                                    alt={
+                                      nominee.nomineeProfile?.picture.alt ||
+                                      'Nominee Image'
+                                    }
+                                    className="h-18 w-18 rounded-lg border-2 border-zinc-200 object-cover shadow-sm"
+                                  />
+                                </div>
+
+                                {/* Nominee Details */}
+                                <div className="flex-1">
+                                  <div
+                                    className={`mb-2 font-semibold sm:mb-0 ${
+                                      isGold
+                                        ? 'text-yellow-900'
+                                        : isSilver
+                                          ? 'text-gray-900'
+                                          : 'text-zinc-900'
+                                    }`}
+                                  >
+                                    {nominee.nomineeProfile?.name}
+                                  </div>
+                                  {titleId === 'comedian-of-the-year' && (
+                                    <div
+                                      className={`text-sm ${
+                                        isGold
+                                          ? 'text-yellow-700'
+                                          : isSilver
+                                            ? 'text-gray-600'
+                                            : 'text-zinc-600'
+                                      }`}
+                                    >
+                                      {nominee.nomineeProfile?.legalName}
+                                    </div>
+                                  )}
+
+                                  {/* Vote Statistics */}
+                                  <div className="mt-5 sm:mt-3">
+                                    <div className="mb-2 flex max-w-sm items-center justify-between text-sm">
+                                      <span
+                                        className={`font-medium ${
+                                          isGold
+                                            ? 'text-yellow-800'
+                                            : isSilver
+                                              ? 'text-gray-700'
+                                              : 'text-zinc-700'
+                                        }`}
+                                      >
+                                        {voteCount} votes
+                                      </span>
+                                      <span
+                                        className={`font-semibold ${
+                                          isGold
+                                            ? 'text-yellow-900'
+                                            : isSilver
+                                              ? 'text-gray-800'
+                                              : 'text-zinc-800'
+                                        }`}
+                                      >
+                                        {percentage.toFixed(1)}%
+                                      </span>
+                                    </div>
+                                    {/* Progress Bar */}
+                                    <div
+                                      className={`relative h-2 w-full max-w-sm overflow-hidden rounded-full ${
+                                        isGold
+                                          ? 'bg-yellow-200'
+                                          : isSilver
+                                            ? 'bg-gray-200'
+                                            : 'bg-zinc-200'
+                                      }`}
+                                    >
+                                      <div
+                                        className={`absolute top-0 left-0 h-2 rounded-full transition-all duration-500 ${
+                                          isGold
+                                            ? 'bg-gradient-to-r from-yellow-400 to-yellow-600'
+                                            : isSilver
+                                              ? 'bg-gradient-to-r from-gray-400 to-gray-600'
+                                              : 'bg-gradient-to-r from-zinc-400 to-zinc-600'
+                                        }`}
+                                        style={{ width: `${percentage}%` }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {isLocked && (
+                              <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-black/40 backdrop-blur-[2px]">
+                                <div className="rounded-lg bg-white px-6 py-4 text-center shadow-xl">
+                                  <Trophy className="mx-auto mb-2 h-8 w-8 text-yellow-600" />
+                                  <h3 className="mb-1 font-semibold text-zinc-900">
+                                    Premium Feature
+                                  </h3>
+                                  <p className="mb-3 text-sm text-zinc-600">
+                                    Upgrade to view all nominee statistics
+                                  </p>
+                                  <Button
+                                    size="sm"
+                                    className="bg-yellow-600 hover:bg-yellow-700"
+                                  >
+                                    Upgrade to Premium
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+
+                            {!isLocked && (
+                              <div className="mt-4 space-x-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-xs"
+                                  asChild
+                                >
+                                  <Link
+                                    href={`/profiles/${nominee.nomineeProfile?.entityType}/${nominee.nomineeProfile?.slug.current}`}
+                                  >
+                                    <CircleQuestionMark className="size-3 h-3 w-3" />
+                                    Read Biography
+                                  </Link>
+                                </Button>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      <CircleDollarSign className="size-3 h-3 w-3" />
+                                      Gift a dollar
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    Set as public/private
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      },
+                    );
+                  })()
+                : nominees.map((nominee) => (
+                    <li key={nominee.nomineeProfile?._id}>
+                      <div
+                        onClick={() => {
+                          if (
+                            titleStatus !== 'voted' &&
+                            nominee.nomineeProfile?._id
+                          ) {
+                            handleNomineeClick(nominee.nomineeProfile._id);
                           }
-                          alt={
-                            nominee.nomineeProfile?.picture.alt ||
-                            'Nominee Image'
-                          }
-                          className="h-18 w-18 rounded-lg border border-zinc-200 object-cover shadow-sm"
-                        />
-                      </div>
-
-                      {/* Nominee Details */}
-
-                      <div className="flex-1">
-                        <div className="font-medium text-zinc-900">
-                          {nominee.nomineeProfile?.name}
-                        </div>
-                        {titleId === 'comedian-of-the-year' && (
-                          <div className="text-sm text-zinc-600">
-                            {nominee.nomineeProfile?.legalName}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Selection Indicator */}
-                      {selectedNomineeId === nominee.nomineeProfile?._id && (
-                        <div className="flex-shrink-0">
-                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
-                            <Check className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-4 space-x-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-xs"
-                      asChild
-                    >
-                      <Link
-                        href={`/profiles/${nominee.nomineeProfile?.entityType}/${nominee.nomineeProfile?.slug.current}`}
+                        }}
+                        className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                          selectedNomineeId === nominee.nomineeProfile?._id
+                            ? 'border-emerald-500 bg-emerald-50 shadow-md'
+                            : 'border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50'
+                        }`}
                       >
-                        <CircleQuestionMark className="size-3 h-3 w-3" />
-                        Read Biography
-                      </Link>
-                    </Button>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button size="sm" variant="outline" className="text-xs">
-                          <CircleDollarSign className="size-3 h-3 w-3" />
-                          Gift a dollar
+                        <div className="flex items-center space-x-4">
+                          {/* Nominee Image */}
+                          <div className="flex-shrink-0">
+                            <Image
+                              width={72}
+                              height={72}
+                              src={
+                                nominee.nomineeProfile?.picture
+                                  ? urlForImage(
+                                      nominee.nomineeProfile.picture,
+                                    ).url()
+                                  : '/fallback.webp'
+                              }
+                              alt={
+                                nominee.nomineeProfile?.picture.alt ||
+                                'Nominee Image'
+                              }
+                              className="h-18 w-18 rounded-lg border border-zinc-200 object-cover shadow-sm"
+                            />
+                          </div>
+
+                          {/* Nominee Details */}
+
+                          <div className="flex-1">
+                            <div className="font-medium text-zinc-900">
+                              {nominee.nomineeProfile?.name}
+                            </div>
+                            {titleId === 'comedian-of-the-year' && (
+                              <div className="text-sm text-zinc-600">
+                                {nominee.nomineeProfile?.legalName}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Selection Indicator */}
+                          {selectedNomineeId ===
+                            nominee.nomineeProfile?._id && (
+                            <div className="flex-shrink-0">
+                              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                                <Check className="h-4 w-4 text-white" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-4 space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-xs"
+                          asChild
+                        >
+                          <Link
+                            href={`/profiles/${nominee.nomineeProfile?.entityType}/${nominee.nomineeProfile?.slug.current}`}
+                          >
+                            <CircleQuestionMark className="size-3 h-3 w-3" />
+                            Read Biography
+                          </Link>
                         </Button>
-                      </DialogTrigger>
-                      <DialogContent>Set as public/private</DialogContent>
-                    </Dialog>
-                  </div>
-                </li>
-              ))}
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              <CircleDollarSign className="size-3 h-3 w-3" />
+                              Gift a dollar
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>Set as public/private</DialogContent>
+                        </Dialog>
+                      </div>
+                    </li>
+                  ))}
             </ul>
           </CardContent>
         </Card>
@@ -488,7 +739,7 @@ export default function VotingPageComponent({
             </div>
 
             {/* Bottom Row - Actions */}
-            <div className="flex gap-2">
+            <div className="flex items-center justify-center">
               {titleStatus === 'pending' ? (
                 <Button
                   onClick={handleSubmitVote}

@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Bell, BellIcon, Coins, MessageSquare } from 'lucide-react';
+import { Bell, BellIcon, Coins, InfoIcon, MessageSquare } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { renderNotification } from './variations';
 import { NotificationType } from '@/types';
@@ -22,9 +22,11 @@ import { DOMAIN_URLS } from '@/lib/constants';
 export function Notifications({
   sanityGlobalNotifications,
   neonUserNotifications,
+  user,
 }: {
   sanityGlobalNotifications?: NotificationType[];
   neonUserNotifications?: NotificationType[];
+  user?: any;
 }) {
   const [userNotifications, setUserNotifications] = useState<
     NotificationType[]
@@ -131,53 +133,63 @@ export function Notifications({
             </TabsList>
           </div>
           <TabsContent value="yours" className="mt-4 flex-1 overflow-y-auto">
-            <div className="">
-              {unreadUserNotifications.length === 0 ? (
-                <Card className="border-0 p-6 shadow-none">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="mb-4 rounded-full bg-zinc-100 p-3">
-                      <Bell className="text-primary h-8 w-8" strokeWidth={1} />
-                    </div>
-                    <h3 className="mb-2 text-lg font-semibold">
-                      All caught up!
-                    </h3>
-                    <p className="text-muted-foreground mb-6 text-sm text-balance">
-                      You&#39;re all up to date. Why not engage with the
-                      community while you&#39;re here?
-                    </p>
+            {user ? (
+              <div className="">
+                {unreadUserNotifications.length === 0 ? (
+                  <Card className="border-0 p-6 shadow-none">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="mb-4 rounded-full bg-zinc-100 p-3">
+                        <Bell
+                          className="text-primary h-8 w-8"
+                          strokeWidth={1}
+                        />
+                      </div>
+                      <h3 className="mb-2 text-lg font-semibold">
+                        All caught up!
+                      </h3>
+                      <p className="text-muted-foreground mb-6 text-sm text-balance">
+                        You&#39;re all up to date. Why not engage with the
+                        community while you&#39;re here?
+                      </p>
 
-                    <div className="mx-auto flex w-full max-w-[250px] flex-col gap-2">
-                      <Link
-                        href="/articles"
-                        className="bg-primaryColor hover:bg-primaryColor/80 flex w-full items-center justify-start gap-2 rounded-md py-1.5 pl-4 text-sm text-white"
-                      >
-                        <MessageSquare className="h-4 w-4" />
-                        Comment on Articles
-                      </Link>
-                      <Link
-                        href="/zimbabwe-peoples-choice-awards"
-                        className="flex w-full items-center justify-start gap-2 rounded-md border border-zinc-200 py-1.5 pl-4 text-sm hover:bg-zinc-100"
-                      >
-                        <Icons.ibzimAwardsIcon className="text-primaryColor h-4 w-4" />
-                        Vote for Favourites
-                      </Link>
-                      <Link
-                        href={DOMAIN_URLS.EARN()}
-                        target="_blank"
-                        className="flex w-full items-center justify-start gap-2 rounded-md border border-zinc-200 py-1.5 pl-4 text-sm hover:bg-zinc-100"
-                      >
-                        <Coins className="text-primaryColor h-4 w-4" />
-                        Earn some Money
-                      </Link>
+                      <div className="mx-auto flex w-full max-w-[250px] flex-col gap-2">
+                        <Link
+                          href="/articles"
+                          className="bg-primaryColor hover:bg-primaryColor/80 flex w-full items-center justify-start gap-2 rounded-md py-1.5 pl-4 text-sm text-white"
+                        >
+                          <MessageSquare className="h-4 w-4" />
+                          Comment on Articles
+                        </Link>
+                        <Link
+                          href="/zimbabwe-peoples-choice-awards"
+                          className="flex w-full items-center justify-start gap-2 rounded-md border border-zinc-200 py-1.5 pl-4 text-sm hover:bg-zinc-100"
+                        >
+                          <Icons.ibzimAwardsIcon className="text-primaryColor h-4 w-4" />
+                          Vote for Favourites
+                        </Link>
+                        <Link
+                          href={DOMAIN_URLS.EARN()}
+                          target="_blank"
+                          className="flex w-full items-center justify-start gap-2 rounded-md border border-zinc-200 py-1.5 pl-4 text-sm hover:bg-zinc-100"
+                        >
+                          <Coins className="text-primaryColor h-4 w-4" />
+                          Earn some Money
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              ) : (
-                unreadUserNotifications.map((notification) =>
-                  renderNotification(notification, markAsRead),
-                )
-              )}
-            </div>
+                  </Card>
+                ) : (
+                  unreadUserNotifications.map((notification) =>
+                    renderNotification(notification, markAsRead),
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="text-muted-foreground px-4 py-8 text-center">
+                <InfoIcon className="mr-2 inline h-4 w-4" />
+                Sign in to view personalized notifications.
+              </div>
+            )}
           </TabsContent>
           <TabsContent value="general" className="mt-4 flex-1 overflow-y-auto">
             <div className="">

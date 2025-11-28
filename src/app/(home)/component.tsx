@@ -379,22 +379,10 @@ export default function HomeComponent({
             {menuItems.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <li key={index}>
+                <li key={index} className="relative">
                   <Link href={feature.href}>
-                    <Card className="group relative h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+                    <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                       <CardContent className="p-4 text-center">
-                        {feature.isOpenSource && (
-                          <Badge
-                            asChild
-                            variant="secondary"
-                            className="absolute right-2 bottom-2 flex items-center gap-1 bg-gradient-to-bl from-yellow-500 via-yellow-900 to-yellow-500 text-xs font-normal text-white"
-                          >
-                            <Link href="/premium">
-                              <CrownIcon className="h-3 w-3" />
-                              PREMIUM
-                            </Link>
-                          </Badge>
-                        )}
                         <div
                           className={`from-primaryColor/20 to-primaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
                         >
@@ -412,6 +400,18 @@ export default function HomeComponent({
                       </CardContent>
                     </Card>
                   </Link>
+                  {feature.isOpenSource && (
+                    <Badge
+                      asChild
+                      variant="secondary"
+                      className="absolute right-2 bottom-2 flex items-center gap-1 bg-gradient-to-bl from-yellow-500 via-yellow-900 to-yellow-500 text-xs font-normal text-white"
+                    >
+                      <Link href="/premium">
+                        <CrownIcon className="h-3 w-3" />
+                        PREMIUM
+                      </Link>
+                    </Badge>
+                  )}
                 </li>
               );
             })}
