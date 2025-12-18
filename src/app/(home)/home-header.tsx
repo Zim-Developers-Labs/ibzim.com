@@ -22,7 +22,7 @@ export default function HomeHeader({
   return (
     <header
       role="navigation"
-      className="sticky top-0 z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
+      className="sticky top-[44px] z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
     >
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">

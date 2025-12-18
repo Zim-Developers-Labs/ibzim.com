@@ -1,10 +1,11 @@
 'use client';
 
 import { ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Banner() {
   return (
-    <aside className="bg-white" role="banner">
+    <aside className="sticky top-0 z-50 bg-white" role="banner">
       <div className="relative isolate flex items-center justify-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 md:gap-x-6">
         <div
           aria-hidden="true"
@@ -32,17 +33,19 @@ export default function Banner() {
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
           <p className="text-sm leading-6 text-gray-900">
-            Ever made money online?
+            {/* Ever made money online? */}
+            Help us get to launch day!
           </p>
-          <button
-            onClick={() => {
-              window.open('https://earn.ibzim.com', '_blank');
-            }}
+          <Link
+            // onClick={() => {
+            //   window.open('https://earn.ibzim.com', '_blank');
+            // }}
+            href="/beta"
             className="flex cursor-pointer items-center gap-1 rounded-full bg-gray-900 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            Start earning
+            Join Beta
             <ChevronRightIcon className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </aside>

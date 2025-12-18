@@ -2,16 +2,17 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 
 const features = {
   personal: [
+    'Ad free article reading experience.',
+    'Longer content: comments and reviews.',
+    'Add up to 3 entities on the compare tool.',
+    'Post up to 10 events/month on IBZIM Calendar',
     'Higher income potential on IBZIM earn.',
+    'Play songs directly on billboard.ibzim.com',
     'Access to our annual IBZIM Magazines.',
-    'Ad free article reading experience (does not apply to IBZIM Promotions).',
     'Unlimited Content Requests.',
     'Access to premium Articles.',
-    'Longer content: comments and reviews.',
     'Downloadable content (Articles, magazines, videos).',
     'Early access to tools and articles.',
-    'Post up to 10 events/month on IBZIM Calendar',
-    'Add up to 3 entities on the compare tool.',
   ],
   business: [
     'Everything in Personal.',
@@ -45,7 +46,7 @@ export default function PremiumBenefits({ subType }: { subType: string }) {
       <div className="mt-4 sm:mt-8 md:mt-10 md:grid md:grid-cols-2 md:gap-x-8 xl:col-span-2 xl:mt-0">
         {subType === 'personal' && (
           <ul role="list" className="divide-y divide-gray-200">
-            {features.personal.slice(0, 5).map((feature, featureIdx) => (
+            {features.personal.slice(0, 6).map((feature, featureIdx) => (
               <li
                 key={feature}
                 className={classNames(
@@ -67,7 +68,7 @@ export default function PremiumBenefits({ subType }: { subType: string }) {
             role="list"
             className="divide-y divide-gray-200 border-t border-gray-200 md:border-t-0"
           >
-            {features.personal.slice(5).map((feature, featureIdx) => (
+            {features.personal.slice(6).map((feature, featureIdx) => (
               <li
                 key={feature}
                 className={classNames(

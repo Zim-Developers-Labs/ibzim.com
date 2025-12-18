@@ -12,6 +12,7 @@ import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
 import { getAllNotifications } from '@/lib/sanity/client';
 import { getUserNotifications } from '@/components/header/notifications/actions';
+import FooterBanner from '@/components/footer/footer-banner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -47,6 +48,7 @@ export default async function RootLayout({
           />
           {children}
           <Footer siteShortName="IBZIM" />
+          <FooterBanner />
         </UserProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
