@@ -8,8 +8,8 @@ interface ProgressCircleProps {
 
 export default function ProgressCircle({
   progress,
-  size = 32,
-  strokeWidth = 3,
+  size = 40,
+  strokeWidth = 4,
   className = '',
   color = 'currentColor',
 }: ProgressCircleProps) {
@@ -46,7 +46,7 @@ export default function ProgressCircle({
         y="50%"
         textAnchor="middle"
         dy=".3em"
-        className="fill-foreground text-[8px] font-medium"
+        className="fill-foreground text-[10px] font-medium"
       >
         {progress}%
       </text>

@@ -68,11 +68,13 @@ interface FeatureRowProps {
   expandedBug: string | null;
   setExpandedBug: (name: string | null) => void;
   onRateClick: (feature: Feature) => void;
+  progressColor?: string;
 }
 
 function FeatureRow({
   feature,
   expandedBug,
+  progressColor,
   setExpandedBug,
   onRateClick,
 }: FeatureRowProps) {
@@ -106,12 +108,15 @@ function FeatureRow({
     <div className="border-b border-zinc-100 last:border-b-0">
       <div
         className={cn(
-          'flex flex-col items-start justify-between gap-3 p-4 transition-colors hover:bg-zinc-50 sm:flex-row sm:items-center',
+          'flex flex-col items-start justify-between gap-6 p-4 py-6 transition-colors hover:bg-zinc-50 sm:flex-row sm:items-center sm:gap-3 sm:py-4',
           isExpanded && 'bg-zinc-50',
         )}
       >
         <div className="flex items-center gap-3">
-          <ProgressCircle progress={feature.progress} color="#10b981" />
+          <ProgressCircle
+            progress={feature.progress}
+            color={progressColor || '#10b981'}
+          />
           <span className="font-medium text-zinc-900">{feature.name}</span>
         </div>
         <div className="flex w-full gap-2 sm:w-auto">
@@ -121,28 +126,28 @@ function FeatureRow({
             className="flex-1 gap-1.5 bg-transparent sm:flex-none"
           >
             <FileText className="size-3.5" />
-            <span className="hidden sm:inline">Docs</span>
+            <span className="">Docs</span>
           </Button>
           <Button
-            variant="outline"
+            variant="default"
             size="sm"
-            className="flex-1 gap-1.5 bg-transparent sm:flex-none"
+            className="flex-1 gap-1.5 sm:flex-none"
             onClick={() => onRateClick(feature)}
           >
             <Star className="size-3.5" />
-            <span className="hidden sm:inline">Rate</span>
+            <span className="">Rate</span>
           </Button>
           <Button
-            variant="outline"
+            variant="default"
             size="sm"
             className={cn(
-              'flex-1 gap-1.5 bg-transparent text-red-600 hover:bg-red-50 hover:text-red-700 sm:flex-none',
-              isExpanded && 'bg-red-50 text-red-700',
+              'flex-1 gap-1.5 bg-red-600 text-white hover:bg-red-700 hover:text-red-50 sm:flex-none',
+              isExpanded && 'bg-red-700 text-red-50',
             )}
             onClick={handleBugClick}
           >
             <Bug className="size-3.5" />
-            <span className="hidden sm:inline">Bug</span>
+            <span className="">Bug</span>
             <ChevronDown
               className={cn(
                 'size-3.5 transition-transform',
@@ -263,6 +268,7 @@ interface FeatureCategoryProps {
   setExpandedBug: (name: string | null) => void;
   onRateClick: (feature: Feature) => void;
   badgeColor: string;
+  progressColor?: string;
 }
 
 function FeatureCategory({
@@ -272,14 +278,15 @@ function FeatureCategory({
   expandedBug,
   setExpandedBug,
   onRateClick,
+  progressColor,
   badgeColor,
 }: FeatureCategoryProps) {
   if (features.length === 0) return null;
 
   return (
-    <Card className="overflow-hidden border-zinc-200 bg-white shadow-sm">
+    <Card className="gap-0 overflow-hidden border-zinc-200 bg-white shadow-none">
       <CardHeader className="border-b border-zinc-200 px-4 py-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
             <CardTitle className="text-base font-semibold text-zinc-900">
               {title}
@@ -292,13 +299,14 @@ function FeatureCategory({
               badgeColor,
             )}
           >
-            {features.length} features
+            {features.length}&nbsp;features
           </span>
         </div>
       </CardHeader>
       <CardContent className="p-0">
         {features.map((feature) => (
           <FeatureRow
+            progressColor={progressColor}
             key={feature.name}
             feature={feature}
             expandedBug={expandedBug}
@@ -348,6 +356,7 @@ export default function FeaturesTable() {
         setExpandedBug={setExpandedBug}
         onRateClick={handleRateClick}
         badgeColor="bg-emerald-100 text-emerald-700"
+        progressColor="#10b981"
       />
 
       <FeatureCategory
@@ -358,6 +367,7 @@ export default function FeaturesTable() {
         setExpandedBug={setExpandedBug}
         onRateClick={handleRateClick}
         badgeColor="bg-blue-100 text-blue-700"
+        progressColor="#3b82f6"
       />
 
       <FeatureCategory
@@ -368,6 +378,7 @@ export default function FeaturesTable() {
         setExpandedBug={setExpandedBug}
         onRateClick={handleRateClick}
         badgeColor="bg-amber-100 text-amber-700"
+        progressColor="#f59e0b"
       />
 
       {/* Rating Dialog */}

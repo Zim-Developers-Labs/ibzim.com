@@ -12,60 +12,61 @@ export default function BetaPageComponents() {
       <div className="screen-line-after h-6 border-y border-zinc-200 before:absolute before:-z-1 before:h-6 before:w-screen before:bg-[repeating-linear-gradient(315deg,var(--color-zinc-300)_0,var(--color-zinc-300)_1px,transparent_0,transparent_50%)] before:bg-size-[10px_10px]" />
       <div className="bg-zinc-50 pb-10">
         <BetaContainer className="min-h-screen pt-8">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card className="border-zinc-200 bg-white shadow-none">
-              <CardContent className="p-4">
+          <div className="grid grid-cols-3 gap-y-4 sm:gap-4 lg:grid-cols-4">
+            <Card className="rounded-r-none border-r-0 border-zinc-200 bg-white shadow-none sm:rounded-r-xl lg:border-r">
+              <CardContent className="sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-zinc-500 uppercase">
-                      Issues Reported
+                      <span className="hidden sm:inline">Issues</span> Reported
                     </p>
                     <p className="mt-1 text-2xl font-bold text-red-600">
                       {stats.issuesSubmitted.toLocaleString()}
                     </p>
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
+                  <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-red-100 sm:flex">
                     <TrendingUp className="size-5 text-red-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-zinc-200 bg-white shadow-none">
-              <CardContent className="p-4">
+            <Card className="rounded-none border-zinc-200 bg-white shadow-none sm:rounded-xl">
+              <CardContent className="sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-zinc-500 uppercase">
-                      Issues Fixed
+                      <span className="hidden sm:inline">Issues</span> Fixed
                     </p>
                     <p className="mt-1 text-2xl font-bold text-emerald-600">
                       {stats.issuesResolved.toLocaleString()}
                     </p>
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+                  <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-emerald-100 sm:flex">
                     <CheckCircle className="size-5 text-emerald-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-zinc-200 bg-white shadow-none">
-              <CardContent className="p-4">
+            <Card className="rounded-l-none border-l-0 border-zinc-200 bg-white shadow-none sm:rounded-l-xl sm:border-l">
+              <CardContent className="sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium text-zinc-500 uppercase">
-                      Funds Raised
+                      <span className="hidden sm:inline">Funds</span> Raised
                     </p>
                     <p className="mt-1 text-2xl font-bold text-zinc-900">
-                      US${stats.fundingRaised.toLocaleString()}
+                      <span className="hidden sm:inline">US</span>$
+                      {stats.fundingRaised.toLocaleString()}
                     </p>
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100">
+                  <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-zinc-100 sm:flex">
                     <DollarSign className="size-5 text-zinc-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-zinc-200 bg-zinc-900 shadow-none">
-              <CardContent className="p-4">
+            <Card className="col-span-3 border-zinc-200 bg-zinc-900 shadow-none lg:col-span-1">
+              <CardContent className="lg:p-4">
                 <div className="flex items-center gap-3">
                   <Avatar>
                     <AvatarImage
@@ -120,8 +121,7 @@ export default function BetaPageComponents() {
                   <InfoIcon className="size-4 text-zinc-900" />
                 </div>
                 <p className="-mt-1 text-sm text-zinc-900 sm:-mt-0">
-                  No Signup required. Jump right into clicking buttons to be
-                  part of the program.
+                  Go to the ibzim.com homepage to tryout these features.
                 </p>
               </div>
             </div>
