@@ -5,8 +5,6 @@ import { Toaster } from '@/components/ui/sonner';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { env } from '@/env';
-import BetaHeader from './header';
-import BetaBanner from './banner';
 import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -30,8 +28,7 @@ export default async function RootLayout({
     >
       <body>
         <Toaster position="top-center" />
-        <BetaBanner />
-        <BetaHeader />
+
         {children}
         <Footer siteShortName="IBZIM" />
         <Analytics />
