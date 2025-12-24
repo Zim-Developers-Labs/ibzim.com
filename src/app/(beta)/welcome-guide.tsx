@@ -85,41 +85,43 @@ export default function WelcomeGuideDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="flex max-w-md flex-col items-center">
+      <DialogContent className="sm:max-w-md">
         <DialogTitle className="sr-only">Welcome Guide Dialog</DialogTitle>
 
-        <div className="text-center text-xl font-semibold">
-          {currentStepData.title}
-        </div>
-        <div className="text-primaryColor text-sm font-medium">
-          Step {currentStep + 1}/{GUIDE_STEPS.length}
-        </div>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="text-center text-xl font-semibold">
+            {currentStepData.title}
+          </div>
+          <div className="text-primaryColor text-sm font-medium">
+            Step {currentStep + 1}/{GUIDE_STEPS.length}
+          </div>
 
-        <div className="text-foreground text-center">
-          {currentStepData.content}
-        </div>
-        <div className="text-muted-foreground text-center text-sm font-semibold">
-          {currentStepData.highlight}
-        </div>
+          <div className="text-foreground text-center">
+            {currentStepData.content}
+          </div>
+          <div className="text-muted-foreground text-center text-sm font-semibold">
+            {currentStepData.highlight}
+          </div>
 
-        <div className="mt-4 flex items-center gap-2">
-          {!isFirstStep && (
-            <Button variant="outline" onClick={handlePrevious}>
-              Previous
+          <div className="mt-4 flex items-center gap-2">
+            {!isFirstStep && (
+              <Button variant="outline" onClick={handlePrevious}>
+                Previous
+              </Button>
+            )}
+            {isFirstStep && (
+              <Button variant="outline" onClick={handleSkip}>
+                Skip Guide
+              </Button>
+            )}
+            <Button
+              variant="default"
+              className="bg-primaryColor text-primary-foreground hover:bg-primaryColor/90"
+              onClick={handleNext}
+            >
+              {isLastStep ? 'Get Started' : 'Next Step'}
             </Button>
-          )}
-          {isFirstStep && (
-            <Button variant="outline" onClick={handleSkip}>
-              Skip Guide
-            </Button>
-          )}
-          <Button
-            variant="default"
-            className="bg-primaryColor text-primary-foreground hover:bg-primaryColor/90"
-            onClick={handleNext}
-          >
-            {isLastStep ? 'Get Started' : 'Next Step'}
-          </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

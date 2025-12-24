@@ -27,22 +27,43 @@ import { cn } from '@/lib/utils';
 import { features } from './data';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Icons } from '@/components/icons';
+import Link from 'next/link';
+import { DOMAIN_URLS } from '@/lib/constants';
 
 // Categorize features by progress
 const categorizeFeatures = () => {
-  const nearlyComplete = features.filter((f) => f.progress >= 80);
-  const inProgress = features.filter(
-    (f) => f.progress >= 40 && f.progress < 80,
-  );
-  const earlyDevelopment = features.filter((f) => f.progress < 40);
+  const nearlyComplete = features.filter((f) => {
+    const progress =
+      (f.issues.filter((issue) => issue.status === 'closed').length /
+        f.issues.length) *
+      100;
+    return progress >= 80;
+  });
+  const inProgress = features.filter((f) => {
+    const progress =
+      (f.issues.filter((issue) => issue.status === 'closed').length /
+        f.issues.length) *
+      100;
+    return progress >= 40 && progress < 80;
+  });
+  const earlyDevelopment = features.filter((f) => {
+    const progress =
+      (f.issues.filter((issue) => issue.status === 'closed').length /
+        f.issues.length) *
+      100;
+    return progress < 40;
+  });
   return { nearlyComplete, inProgress, earlyDevelopment };
 };
 
-interface Feature {
+export interface Feature {
   name: string;
-  progress: number;
   docsUrl: string;
-  pendingIssues: { id: string; title: string; status: string }[];
+  issues: {
+    id: string;
+    title: string;
+    status: 'open' | 'closed' | 'in progress';
+  }[];
 }
 
 interface FeatureRowProps {
@@ -64,7 +85,7 @@ function FeatureRow({
   const [issueDescription, setIssueDescription] = useState('');
   const [bugDialogOpen, setBugDialogOpen] = useState(false);
   const isExpanded = expandedBug === feature.name;
-  const issues = feature.pendingIssues || [];
+  const issues = feature.issues || [];
 
   const handleBugClick = () => {
     setExpandedBug(isExpanded ? null : feature.name);
@@ -87,6 +108,10 @@ function FeatureRow({
     setIssueDescription('');
   };
 
+  const progress =
+    (feature.issues.filter((issue) => issue.status === 'closed').length /
+      feature.issues.length) *
+    100;
   return (
     <div className="border-b border-zinc-100 last:border-b-0">
       <div
@@ -97,7 +122,7 @@ function FeatureRow({
       >
         <div className="flex items-center gap-3">
           <ProgressCircle
-            progress={feature.progress}
+            progress={progress}
             color={progressColor || '#10b981'}
           />
           <span className="font-medium text-zinc-900">{feature.name}</span>
@@ -107,9 +132,15 @@ function FeatureRow({
             variant="outline"
             size="sm"
             className="flex-1 gap-1.5 bg-transparent sm:flex-none"
+            asChild
           >
-            <FileText className="size-3.5" />
-            <span className="">Docs</span>
+            <Link
+              href={`${DOMAIN_URLS.DOCS()}${feature.docsUrl}`}
+              target="_blank"
+            >
+              <FileText className="size-3.5" />
+              <span className="">Docs</span>
+            </Link>
           </Button>
           <Button
             variant="default"
@@ -153,40 +184,43 @@ function FeatureRow({
           </Alert>
 
           {/* Pending Issues List */}
-          {issues.length > 0 && (
+          {issues.filter((issue) => issue.status !== 'closed').length > 0 && (
             <div className="rounded-lg border border-zinc-200 bg-white p-4">
               <h4 className="mb-3 text-sm font-medium text-zinc-900">
-                Pending Issues ({issues.length})
+                Pending Issues (
+                {issues.filter((issue) => issue.status !== 'closed').length})
               </h4>
               <div className="space-y-2">
-                {issues.map((issue) => (
-                  <div
-                    key={issue.id}
-                    className="flex items-center justify-between rounded bg-zinc-50 p-2 text-sm"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-zinc-400">
-                        {issue.id}
-                      </span>
-                      <span className="text-zinc-700">{issue.title}</span>
-                    </div>
-                    <span
-                      className={cn(
-                        'rounded-full px-2 py-0.5 text-xs',
-                        issue.status === 'Open'
-                          ? 'bg-amber-100 text-amber-700'
-                          : 'bg-blue-100 text-blue-700',
-                      )}
+                {issues
+                  .filter((issue) => issue.status !== 'closed')
+                  .map((issue) => (
+                    <div
+                      key={issue.id}
+                      className="flex items-center justify-between rounded bg-zinc-50 p-2 text-sm"
                     >
-                      {issue.status}
-                    </span>
-                  </div>
-                ))}
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs text-zinc-400">
+                          {issue.id}
+                        </span>
+                        <span className="text-zinc-700">{issue.title}</span>
+                      </div>
+                      <span
+                        className={cn(
+                          'rounded-full px-2 py-0.5 text-xs',
+                          issue.status === 'open'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-blue-100 text-blue-700',
+                        )}
+                      >
+                        {issue.status}
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
-          {issues.length === 0 && (
+          {issues.filter((issue) => issue.status !== 'closed').length === 0 && (
             <div className="rounded-lg border border-zinc-200 bg-white p-4">
               <p className="text-sm text-zinc-500">
                 No pending issues for this feature.

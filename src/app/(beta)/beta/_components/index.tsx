@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import BetaContainer from '../../container';
 import { CheckCircle, DollarSign, InfoIcon, TrendingUp } from 'lucide-react';
-import { stats } from './data';
+import { features, stats } from './data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import FeaturesTable from './features-table';
@@ -44,7 +44,7 @@ export default function BetaPageComponents() {
           <BetaContainer className="min-h-screen pt-8">
             <div className="grid grid-cols-3 gap-y-4 sm:gap-4 lg:grid-cols-4">
               <Card className="rounded-r-none border-r-0 border-zinc-200 bg-white shadow-none sm:rounded-r-xl lg:border-r">
-                <CardContent className="sm:px-4">
+                <CardContent className="sm:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs font-medium text-zinc-500 uppercase">
@@ -52,15 +52,8 @@ export default function BetaPageComponents() {
                         Reported
                       </p>
                       <p className="mt-1 text-2xl font-bold text-red-600">
-                        {stats.issuesSubmitted.current.toLocaleString()}
+                        {features.reduce((t, f) => t + f.issues.length, 0)}
                       </p>
-                      <span className="-mt-0.5 block text-xs text-zinc-500 sm:mt-0">
-                        +
-                        {(
-                          stats.issuesSubmitted.current -
-                          stats.issuesSubmitted.previous
-                        ).toLocaleString()}
-                      </span>
                     </div>
                     <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-red-100 sm:flex">
                       <TrendingUp className="size-5 text-red-600" />
@@ -69,21 +62,22 @@ export default function BetaPageComponents() {
                 </CardContent>
               </Card>
               <Card className="rounded-none border-zinc-200 bg-white shadow-none sm:rounded-xl">
-                <CardContent className="sm:px-4">
+                <CardContent className="sm:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs font-medium text-zinc-500 uppercase">
                         <span className="hidden sm:inline">Issues</span> Fixed
                       </p>
                       <p className="mt-1 text-2xl font-bold text-emerald-600">
-                        {stats.issuesResolved.current.toLocaleString()}
+                        {features.reduce(
+                          (total, feature) =>
+                            total +
+                            feature.issues.filter(
+                              (issue) => issue.status === 'closed',
+                            ).length,
+                          0,
+                        )}
                       </p>
-                      <span className="-mt-0.5 block text-xs text-zinc-500 sm:mt-0">
-                        {(
-                          stats.issuesResolved.current -
-                          stats.issuesResolved.previous
-                        ).toLocaleString()}
-                      </span>
                     </div>
                     <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-emerald-100 sm:flex">
                       <CheckCircle className="size-5 text-emerald-600" />
@@ -92,7 +86,7 @@ export default function BetaPageComponents() {
                 </CardContent>
               </Card>
               <Card className="rounded-l-none border-l-0 border-zinc-200 bg-white shadow-none sm:rounded-l-xl sm:border-l">
-                <CardContent className="sm:px-4">
+                <CardContent className="sm:p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-xs font-medium text-zinc-500 uppercase">
@@ -102,13 +96,6 @@ export default function BetaPageComponents() {
                         <span className="hidden sm:inline">US</span>$
                         {stats.fundingRaised.current.toLocaleString()}
                       </p>
-                      <span className="-mt-0.5 block text-xs text-zinc-500 sm:mt-0">
-                        +
-                        {(
-                          stats.fundingRaised.current -
-                          stats.fundingRaised.previous
-                        ).toLocaleString()}
-                      </span>
                     </div>
                     <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-zinc-100 sm:flex">
                       <DollarSign className="size-5 text-zinc-600" />
