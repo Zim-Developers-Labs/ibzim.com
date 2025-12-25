@@ -57,7 +57,7 @@ export const features = [
   },
   {
     name: 'Articles Blog',
-    docsUrl: '/docs/articles-blog/what-are-articles',
+    docsUrl: '/docs/articles-blog',
     issues: [
       { id: 'ab-1', title: 'Initial Feature Page Design', status: 'closed' },
     ],
@@ -77,11 +77,16 @@ export const features = [
     ],
   },
   {
-    name: 'IBZIM Learn',
+    name: 'Platform Documentation',
     docsUrl: '#',
     issues: [
       { id: 'il-1', title: 'Initial Feature Page Design', status: 'closed' },
       { id: 'il-2', title: 'Remove home page redirect', status: 'open' },
+      {
+        id: 'il-3',
+        title: 'Fix: Hidden Search Bar on Sidebar in mobile view',
+        status: 'open',
+      },
     ],
   },
   {

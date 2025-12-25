@@ -122,7 +122,7 @@ function FeatureRow({
       >
         <div className="flex items-center gap-3">
           <ProgressCircle
-            progress={progress}
+            progress={Math.round(progress)}
             color={progressColor || '#10b981'}
           />
           <span className="font-medium text-zinc-900">{feature.name}</span>
@@ -420,7 +420,7 @@ export default function FeaturesTable() {
 
       <FeatureCategory
         title="Early Development"
-        description="Features that are not available for testing yet."
+        description="Features that are not suitable for testing yet."
         features={earlyDevelopment}
         expandedBug={expandedBug}
         setExpandedBug={setExpandedBug}
