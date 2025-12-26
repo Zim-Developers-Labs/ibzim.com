@@ -289,7 +289,7 @@ export default function AwardsPageComponent({
                     className="w-full bg-gradient-to-r from-amber-300 via-amber-600 to-amber-300"
                   >
                     <Link
-                      href={`${DOMAIN_URLS.DOCS()}/docs/peoples-choice-awards/introduction`}
+                      href={`${DOMAIN_URLS.DOCS()}/docs/peoples-choice-awards/overview`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm"

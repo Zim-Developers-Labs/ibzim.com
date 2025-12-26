@@ -137,13 +137,6 @@ export default function FAQSection() {
               claiming{' '}
               <Link href="/profiles" className="text-amber-400 underline">
                 their profile
-              </Link>{' '}
-              and entering a{' '}
-              <Link
-                href={DOMAIN_URLS.PARTNERS()}
-                className="text-amber-400 underline"
-              >
-                partnership with IBZIM
               </Link>
               .
             </span>

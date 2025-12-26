@@ -22,7 +22,7 @@ export const features = [
   },
   {
     name: "People's Choice Awards",
-    docsUrl: '/docs/peoples-choice-awards/introduction',
+    docsUrl: '/docs/peoples-choice-awards/overview',
     issues: [
       { id: 'pca-1', title: 'Initial Feature Page Design', status: 'closed' },
     ],
@@ -71,7 +71,7 @@ export const features = [
   },
   {
     name: 'Biography Profiles',
-    docsUrl: '/docs/biography-profiles/what-are-profiles',
+    docsUrl: '/docs/biography-profiles',
     issues: [
       { id: 'bp-1', title: 'Initial Feature Page Design', status: 'closed' },
     ],
