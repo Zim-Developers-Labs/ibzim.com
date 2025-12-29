@@ -50,10 +50,18 @@ const sponsorData: Record<number, { name: string; icon: any; link: string }[]> =
 // Helper to get current season based on month
 function getCurrentSeason(): Season {
   const month = new Date().getMonth();
-  if (month >= 2 && month <= 4) return 'Spring';
-  if (month >= 5 && month <= 7) return 'Summer';
-  if (month >= 8 && month <= 10) return 'Autumn';
-  return 'Winter';
+
+  // December (11), January (0), February (1)
+  if (month === 11 || month === 0 || month === 1) return 'Summer';
+
+  // March (2) - May (4)
+  if (month >= 2 && month <= 4) return 'Autumn';
+
+  // June (5) - August (7)
+  if (month >= 5 && month <= 7) return 'Winter';
+
+  // September (8) - November (10)
+  return 'Spring';
 }
 
 export default function AwardsHero() {

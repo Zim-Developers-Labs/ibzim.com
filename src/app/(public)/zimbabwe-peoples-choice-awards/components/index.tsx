@@ -180,7 +180,7 @@ export default function AwardsPageComponent({
 
                     <CardContent className="space-y-4">
                       <div className="flex gap-2 pt-2">
-                        {category.votingState === 'Ongoing' && (
+                        {/* {category.votingState === 'Ongoing' && (
                           <Button
                             asChild
                             className={`flex-1 ${
@@ -208,7 +208,7 @@ export default function AwardsPageComponent({
                               Vote Now
                             </Link>
                           </Button>
-                        )}
+                        )} */}
 
                         {category.votingState === 'Results Ready' && (
                           <Button
@@ -260,6 +260,15 @@ export default function AwardsPageComponent({
                             Not Started
                           </Button>
                         )}
+
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-gray-300 text-sm text-gray-600"
+                          disabled
+                        >
+                          <Calendar className="mr-1 h-4 w-4" />
+                          Coming Soon
+                        </Button>
                       </div>
                     </CardContent>
                   </Card>
