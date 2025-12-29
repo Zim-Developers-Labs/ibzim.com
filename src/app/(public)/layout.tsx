@@ -13,6 +13,7 @@ import { env } from '@/env';
 import Header from '@/components/header';
 import { getSearchData } from '@/lib/sanity/actions';
 import { siteConfig } from '@/lib/config';
+import GoogleAdsense from '@/components/google-adsense';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -59,6 +60,7 @@ export default async function RootLayout({
         <Analytics />
         {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={env.GA_SECRET!} />
+        <GoogleAdsense />
       </body>
     </html>
   );

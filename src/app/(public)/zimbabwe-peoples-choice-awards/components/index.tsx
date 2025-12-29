@@ -200,7 +200,8 @@ export default function AwardsPageComponent({
                             }`}
                           >
                             <Link
-                              href={`/zimbabwe-peoples-choice-awards/${category.id}/vote/${category.categoryTitles[0].slug.current}`}
+                              href="#"
+                              // href={`/zimbabwe-peoples-choice-awards/${category.id}/vote/${category.categoryTitles[0].slug.current}`}
                               className="text-sm"
                             >
                               <Vote className="mr-1 h-4 w-4" />

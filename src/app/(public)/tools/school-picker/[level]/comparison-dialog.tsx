@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 import type { SchoolPickerProfilesType } from '@/types';
+import { toast } from 'sonner';
 
 interface ComparisonDialogProps {
   selectedSchools: SchoolPickerProfilesType[];
@@ -88,7 +89,14 @@ export default function ComparisonDialog({
               className="flex-1 bg-teal-600 text-xs hover:bg-teal-700 md:flex-none md:text-sm"
             >
               {selectedSchools.length >= 2 ? (
-                <Link href={generateCompareUrl()}>
+                <Link
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast.info('Feature still under development');
+                  }}
+                  // href={generateCompareUrl()}
+                >
                   Compare ({selectedSchools.length})
                 </Link>
               ) : (

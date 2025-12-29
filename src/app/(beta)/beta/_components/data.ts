@@ -7,10 +7,32 @@ export const currentReleaseNotes = [
 
 export const features = [
   {
+    name: 'My Account',
+    docsUrl: '/docs/my-account',
+    issues: [
+      { id: 'ma-1', title: 'Initial Feature Page Design', status: 'closed' },
+      {
+        id: 'ma-2',
+        title: 'Verification request not being sent on email signup',
+        status: 'open',
+      },
+    ],
+  },
+  {
     name: 'School Picker Tables',
     docsUrl: '/docs/school-picker',
     issues: [
       { id: 'spc-1', title: 'Initial Feature Page Design', status: 'closed' },
+      {
+        id: 'spc-2',
+        title: 'No ratings data displayed on schools',
+        status: 'open',
+      },
+      {
+        id: 'spc-3',
+        title: 'Compare tool link blocked to #',
+        status: 'open',
+      },
     ],
   },
   {

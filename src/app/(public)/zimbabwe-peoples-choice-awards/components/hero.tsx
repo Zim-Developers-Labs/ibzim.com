@@ -21,43 +21,9 @@ interface SeasonData {
 
 // Mock data for seasons
 const seasonData: Record<number, Record<Season, SeasonData | null>> = {
-  2024: {
-    Summer: null, // Locked - no data
-    Autumn: null, // Locked - no data
-    Winter: {
-      prizePool: 'US$50,000',
-      topEarners: [
-        { rank: 1, name: 'Player Alpha', earnings: '$15,000' },
-        { rank: 2, name: 'Player Beta', earnings: '$10,000' },
-        { rank: 3, name: 'Player Gamma', earnings: '$7,500' },
-      ],
-    },
-    Spring: {
-      prizePool: 'US$60,000',
-      topEarners: [
-        { rank: 1, name: 'Player Delta', earnings: '$18,000' },
-        { rank: 2, name: 'Player Epsilon', earnings: '$12,000' },
-        { rank: 3, name: 'Player Zeta', earnings: '$9,000' },
-      ],
-    },
-  },
   2025: {
-    Summer: {
-      prizePool: 'US$75,000',
-      topEarners: [
-        { rank: 1, name: 'Player Omega', earnings: '$22,500' },
-        { rank: 2, name: 'Player Sigma', earnings: '$15,000' },
-        { rank: 3, name: 'Player Theta', earnings: '$11,250' },
-      ],
-    },
-    Autumn: {
-      prizePool: 'US$80,000',
-      topEarners: [
-        { rank: 1, name: 'Player Kappa', earnings: '$24,000' },
-        { rank: 2, name: 'Player Lambda', earnings: '$16,000' },
-        { rank: 3, name: 'Player Mu', earnings: '$12,000' },
-      ],
-    },
+    Summer: null, // Future season
+    Autumn: null, // Future season
     Winter: null, // Future season
     Spring: null, // Future season
   },
@@ -67,18 +33,6 @@ const seasons: Season[] = ['Summer', 'Autumn', 'Winter', 'Spring'];
 
 const sponsorData: Record<number, { name: string; icon: any; link: string }[]> =
   {
-    2024: [
-      {
-        name: 'Peya Peya',
-        icon: Icons.peyapeyaLogo,
-        link: 'https://peyapeya.com',
-      },
-      {
-        name: 'Xfinity Pros',
-        icon: Icons.xfinityLogo,
-        link: 'https://xfinitypros.com',
-      },
-    ],
     2025: [
       {
         name: 'Peya Peya',
@@ -109,12 +63,12 @@ export default function AwardsHero() {
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedSeason, setSelectedSeason] = useState<Season>(currentSeason);
 
-  const availableYears = [2024, 2025];
+  const availableYears = [2025, 2026];
 
   // Determine if a season is locked
   const isSeasonLocked = (year: number, season: Season): boolean => {
     // For 2024, lock Summer and Autumn (data starts from Winter)
-    if (year === 2024 && (season === 'Summer' || season === 'Autumn')) {
+    if (year === 2025 && (season === 'Summer' || season === 'Autumn')) {
       return true;
     }
 

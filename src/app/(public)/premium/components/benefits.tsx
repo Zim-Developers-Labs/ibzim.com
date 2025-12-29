@@ -3,6 +3,7 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 const features = {
   personal: [
     'Ad free article reading experience.',
+    'Access to IBZIM AI',
     'Longer content: comments and reviews.',
     'Add up to 3 entities on the compare tool.',
     'Post up to 10 events/month on IBZIM Calendar',
@@ -20,7 +21,6 @@ const features = {
     'Lower charges on withdrawals and transactions.',
     'View figures on voting statistics.',
     'Deeper analytics on content performance.',
-    'Withdraw and convert Peya Peya fantasy points to cash.',
   ],
 };
 

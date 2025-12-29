@@ -10,6 +10,7 @@ import {
   MessageCircle,
   AlertTriangle,
   Plus,
+  Bell,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -70,7 +71,7 @@ interface FeatureRowProps {
   feature: Feature;
   expandedBug: string | null;
   setExpandedBug: (name: string | null) => void;
-  onRateClick: (feature: Feature) => void;
+  onSubscribeClick: (feature: Feature) => void;
   progressColor?: string;
 }
 
@@ -79,7 +80,7 @@ function FeatureRow({
   expandedBug,
   progressColor,
   setExpandedBug,
-  onRateClick,
+  onSubscribeClick,
 }: FeatureRowProps) {
   const [issueTitle, setIssueTitle] = useState('');
   const [issueDescription, setIssueDescription] = useState('');
@@ -146,10 +147,10 @@ function FeatureRow({
             variant="default"
             size="sm"
             className="flex-1 gap-1.5 sm:flex-none"
-            onClick={() => onRateClick(feature)}
+            onClick={() => onSubscribeClick(feature)}
           >
-            <Star className="size-3.5" />
-            <span className="">Rate</span>
+            <Bell className="size-3.5" />
+            <span className="">Subscribe</span>
           </Button>
           <Button
             variant="default"
@@ -314,7 +315,7 @@ interface FeatureCategoryProps {
   features: Feature[];
   expandedBug: string | null;
   setExpandedBug: (name: string | null) => void;
-  onRateClick: (feature: Feature) => void;
+  onSubscribeClick: (feature: Feature) => void;
   badgeColor: string;
   progressColor?: string;
 }
@@ -325,7 +326,7 @@ function FeatureCategory({
   features,
   expandedBug,
   setExpandedBug,
-  onRateClick,
+  onSubscribeClick,
   progressColor,
   badgeColor,
 }: FeatureCategoryProps) {
@@ -359,7 +360,7 @@ function FeatureCategory({
             feature={feature}
             expandedBug={expandedBug}
             setExpandedBug={setExpandedBug}
-            onRateClick={onRateClick}
+            onSubscribeClick={onSubscribeClick}
           />
         ))}
       </CardContent>
@@ -369,29 +370,17 @@ function FeatureCategory({
 
 export default function FeaturesTable() {
   const [expandedBug, setExpandedBug] = useState<string | null>(null);
-  const [ratingDialogOpen, setRatingDialogOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
 
   const { nearlyComplete, inProgress, earlyDevelopment } = categorizeFeatures();
 
-  const handleRateClick = (feature: Feature) => {
+  const handleSubscribeClick = (feature: Feature) => {
     setSelectedFeature(feature);
-    setRating(0);
-    setReview('');
-    setRatingDialogOpen(true);
-  };
-
-  const submitRating = () => {
     if (!selectedFeature) return;
-    const message = `Feature Review - ${selectedFeature.name}\n\nRating: ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)} (${rating}/5)\n\nReview: ${review}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    const message = `Subscribe to Feature Updates - ${feature.name}.\n\nPlease notify me of any updates regarding this feature.`;
+    const whatsappUrl = `https://wa.me/+263717238876?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
-    setRatingDialogOpen(false);
-    setSelectedFeature(null);
-    setRating(0);
-    setReview('');
   };
 
   return (
@@ -402,7 +391,7 @@ export default function FeaturesTable() {
         features={nearlyComplete}
         expandedBug={expandedBug}
         setExpandedBug={setExpandedBug}
-        onRateClick={handleRateClick}
+        onSubscribeClick={handleSubscribeClick}
         badgeColor="bg-emerald-100 text-emerald-700"
         progressColor="#10b981"
       />
@@ -413,7 +402,7 @@ export default function FeaturesTable() {
         features={inProgress}
         expandedBug={expandedBug}
         setExpandedBug={setExpandedBug}
-        onRateClick={handleRateClick}
+        onSubscribeClick={handleSubscribeClick}
         badgeColor="bg-blue-100 text-blue-700"
         progressColor="#3b82f6"
       />
@@ -424,78 +413,10 @@ export default function FeaturesTable() {
         features={earlyDevelopment}
         expandedBug={expandedBug}
         setExpandedBug={setExpandedBug}
-        onRateClick={handleRateClick}
+        onSubscribeClick={handleSubscribeClick}
         badgeColor="bg-amber-100 text-amber-700"
         progressColor="#f59e0b"
       />
-
-      {/* Rating Dialog */}
-      <Dialog open={ratingDialogOpen} onOpenChange={setRatingDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Rate {selectedFeature?.name}</DialogTitle>
-            <DialogDescription>
-              Share your experience with this feature. Your review will be
-              submitted via WhatsApp.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            {/* Star Rating */}
-            <div className="space-y-2">
-              <Label>Rating</Label>
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => setRating(star)}
-                    className="p-1 transition-transform hover:scale-110"
-                  >
-                    <Star
-                      className={cn(
-                        'size-8 transition-colors',
-                        star <= rating
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'fill-transparent text-zinc-300',
-                      )}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Review Text */}
-            <div className="space-y-2">
-              <Label htmlFor="review">Your Review</Label>
-              <Textarea
-                id="review"
-                placeholder="Tell us what you think about this feature..."
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
-                rows={4}
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="flex-1 bg-transparent"
-              onClick={() => setRatingDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 gap-1.5 bg-emerald-600 hover:bg-emerald-700"
-              onClick={submitRating}
-              disabled={rating === 0}
-            >
-              <MessageCircle className="size-4" />
-              Submit via WhatsApp
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

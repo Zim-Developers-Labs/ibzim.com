@@ -45,7 +45,6 @@ export default function PremiumPricing({
 
   const handleBuyClick = (tier: TierType) => {
     if (!user) {
-      alert('Please log in to purchase a subscription.');
       toast('Please log in to purchase a subscription.', {
         icon: <AlertCircleIcon className="h-5 w-5 text-red-600" />,
         action: {

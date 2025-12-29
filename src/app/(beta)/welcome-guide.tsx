@@ -15,7 +15,7 @@ const GUIDE_STEPS = [
   {
     title: 'What is IBZIM?',
     content:
-      'IBZIM is a platform for information about Zimbabwe. In addition to consuming content, you can create content as well on IBZIM to earn some cash and rewards.',
+      'Our goal at IBZIM is to provide users with accurate information about Zimbabwe in the easiest way possible for our readers and to achieve this goal, we need your help to test and provide feedback on new features.',
   },
   {
     title: 'Further Understanding',
@@ -26,7 +26,7 @@ const GUIDE_STEPS = [
   {
     title: 'Get Started',
     content:
-      'Scroll through the list of features, try them out on ibzim.com and provide feedback through ratings and issue reports.',
+      'Scroll through the list of features, try them out on ibzim.com and provide feedback through issue reports and subscribe to features that interest you inorder to get notifications.',
     highlight:
       'You can reopen this guide anytime by clicking "learn more" on the banner.',
   },

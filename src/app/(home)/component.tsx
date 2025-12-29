@@ -27,6 +27,13 @@ import posterImage from './billboard-poster.png';
 import CompareFeature from './compare';
 
 export const menuItems = [
+  // {
+  //   title: 'Events',
+  //   description: 'Host, manage and discover events',
+  //   icon: Calendar,
+  //   href: 'https://events.ibzim.com',
+  //   isOpenSource: false,
+  // },
   {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',
@@ -41,35 +48,27 @@ export const menuItems = [
     href: 'https://news.ibzim.com',
     isOpenSource: false,
   },
-  {
-    title: 'Events Calendar',
-    description: 'Discover upcoming events',
-    icon: Calendar,
-    href: '/tools/events-calendar',
-    isOpenSource: false,
-  },
-  {
-    title: 'Calculators',
-    description: '10+ useful calculators',
-    icon: Calculator,
-    href: '/calculators',
-    isOpenSource: true,
-  },
-
+  // {
+  //   title: 'Calculators',
+  //   description: '10+ useful calculators',
+  //   icon: Calculator,
+  //   href: '/calculators',
+  //   isOpenSource: true,
+  // },
   {
     title: 'IBZIM Docs',
     description: 'Learn about the platform',
     icon: MapPin,
-    href: 'https://learn.ibzim.com',
+    href: 'https://help.ibzim.com',
     isOpenSource: false,
   },
-  {
-    title: 'Support',
-    description: 'Get help and assistance',
-    icon: HelpCircle,
-    href: '/support',
-    gradient: 'from-primaryColor/20 to-primaryColor/5',
-  },
+  // {
+  //   title: 'Support',
+  //   description: 'Get help and assistance',
+  //   icon: HelpCircle,
+  //   href: '/support',
+  //   gradient: 'from-primaryColor/20 to-primaryColor/5',
+  // },
 ];
 
 export default function HomeComponent({
@@ -207,7 +206,7 @@ export default function HomeComponent({
                 <div className="absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset sm:rounded-xl lg:rounded-2xl" />
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/premium"
                 className="relative block h-full w-auto cursor-pointer overflow-hidden rounded-2xl bg-white p-4 text-center transition-transform hover:scale-105 dark:bg-gray-900"
@@ -243,7 +242,7 @@ export default function HomeComponent({
                   </p>
                 </div>
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href="https://www.zimdevelopers.com">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
@@ -354,7 +353,7 @@ export default function HomeComponent({
                 </Card>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/zimbabwean-government-structure">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
@@ -375,7 +374,7 @@ export default function HomeComponent({
                   </CardContent>
                 </Card>
               </Link>
-            </li>
+            </li> */}
             {menuItems.map((feature, index) => {
               const Icon = feature.icon;
               return (
@@ -415,7 +414,7 @@ export default function HomeComponent({
                 </li>
               );
             })}
-            <CompareFeature />
+            {/* <CompareFeature /> */}
           </ul>
         </div>
       </div>
