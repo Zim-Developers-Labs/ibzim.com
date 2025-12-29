@@ -10,6 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { validateRequest } from '@/lib/auth/validate-request';
 import { getSearchData } from '@/sanity/lib/actions';
+import GoogleAdsense from '@/components/google-adsense';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -50,6 +51,7 @@ export default async function RootLayout({
         <Analytics />
         {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={process.env.GA_SECRET!} />
+        <GoogleAdsense />
       </body>
     </html>
   );
