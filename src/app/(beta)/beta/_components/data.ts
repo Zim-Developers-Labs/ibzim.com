@@ -103,6 +103,7 @@ export const features = [
     docsUrl: '/docs/biography-profiles',
     issues: [
       { id: 'bp-1', title: 'Initial Feature Page Design', status: 'closed' },
+      { id: 'bp-2', title: 'Add action bar functionality', status: 'open' },
     ],
   },
   {

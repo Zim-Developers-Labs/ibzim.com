@@ -1,13 +1,11 @@
 'use client';
 
-import { siteConfig } from '@/lib/config';
 import Hero from './hero';
 import type {
   AuthorType,
   CardArticleType,
   CardProfileType,
   HomeType,
-  SearchDocumentType,
 } from '@/types';
 import ArticlesListing from './listing';
 import ProfilesCard from './profiles-card';

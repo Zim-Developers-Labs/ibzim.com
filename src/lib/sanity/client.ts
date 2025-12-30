@@ -11,6 +11,7 @@ import {
   HomeType,
   NomineeType,
   NotificationType,
+  ProfileType,
   SanityAwardCategoryType,
   SchoolPickerProfilesType,
   SearchDocumentType,
@@ -28,6 +29,8 @@ import {
   documentsForSearchQuery,
   homeQuery,
   notificationsQuery,
+  profileBySlugQuery,
+  profileSlugsAndTypeQuery,
   titleNomineesByTitleSlugQuery,
 } from './queries';
 
@@ -150,6 +153,28 @@ export async function getAllArticleSlugsAndTypesAndIndustries(): Promise<
 > {
   if (client) {
     return (await client.fetch(articleSlugAndTypeAndIndustryQuery)) || {};
+  }
+  return [];
+}
+
+export async function getProfileBySlug(
+  slug: string,
+): Promise<ProfileType | null> {
+  if (client) {
+    return (
+      (await client.fetch(profileBySlugQuery, {
+        slug,
+      })) || null
+    );
+  }
+  return null;
+}
+
+export async function getAllProfileSlugsAndType(): Promise<
+  { slug: string; type: string; _updatedAt?: string; _id: string }[]
+> {
+  if (client) {
+    return (await client.fetch(profileSlugsAndTypeQuery)) || {};
   }
   return [];
 }

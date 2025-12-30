@@ -162,3 +162,96 @@ export const articleSlugAndTypeAndIndustryQuery: string = groq`*[_type == "artic
    "type": type,
    "industry": industry->{"slug": slug.current},
 }`;
+
+export const profileBySlugQuery: string = groq`*[_type == "profile" && slug.current == $slug][0]{
+  _id,
+  _updatedAt,
+  _createdAt,
+  name,
+  slug,
+  tblContentsType,
+  truthScore,
+  title,
+  subTitle,
+  seo,
+  entityType,
+  body[] {
+    ...,
+    markDefs[] {
+      ...,
+      _type == "annotationInternalLink" => {
+        "internalPage": internalPage -> { 
+          seo,
+          picture,
+          _type,
+          slug,
+          "industry": industry->{"slug": slug.current},
+          type,
+          name,
+         },
+      },
+    }
+  },
+  intro,
+  picture,
+  subHeadings,
+  legalName,
+  birthDate,
+  birthYear,
+  useBirthYearOnly,
+  isBirthDateApproximate,
+  yearFounded,
+  additionalInfo[] {
+    ...,
+    tableData[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "annotationInternalLink" => {
+          "internalPage": internalPage -> { 
+            seo,
+            picture,
+            _type,
+            slug,
+            "industry": industry->{"slug": slug.current},
+            type,
+            name,
+           },
+        },
+      }
+    }
+  },
+  socialLinks,
+  relatedProfiles,
+  "relatedProfiles": *[_type == "profile" && references(^._id)] {
+    name, 
+    slug,
+    "description": seo.description,
+    picture,
+    entityType,
+  },
+  level,
+  oLevelSchoolType,
+  aLevelSchoolType,
+  primarySchoolType,
+  location,
+  province,
+  feesHistory,
+  churchAffiliation,
+  primarySchoolPassRates,
+  oLevelSchoolPassRates,
+  aLevelSchoolPassRates,
+  contacts[] {
+    name,
+    phone,
+    role
+  }
+
+}`;
+
+export const profileSlugsAndTypeQuery: string = groq`*[_type == "profile"] {
+   _id,
+   "slug": slug.current,
+   "type": entityType,
+   _updatedAt,
+}`;
