@@ -27,13 +27,13 @@ import posterImage from './billboard-poster.png';
 import CompareFeature from './compare';
 
 export const menuItems = [
-  // {
-  //   title: 'Events',
-  //   description: 'Host, manage and discover events',
-  //   icon: Calendar,
-  //   href: 'https://events.ibzim.com',
-  //   isOpenSource: false,
-  // },
+  {
+    title: 'Events Calendar',
+    description: 'Host, manage and discover events',
+    icon: Calendar,
+    href: '/tools/events-calendar',
+    isOpenSource: false,
+  },
   {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',

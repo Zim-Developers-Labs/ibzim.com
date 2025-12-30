@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { Filter } from 'bad-words';
 import slugify from 'slugify';
 import { env } from '@/env';
+import { randomBytes } from 'crypto';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -151,3 +152,9 @@ export function textify(
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
+export const generateId = (length: number) => {
+  return randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .slice(0, length);
+};
