@@ -1,6 +1,6 @@
 'use server';
 
-import { incrementUserIP } from '@/app/(user)/actions';
+import { incrementUserIP } from '@/app/(user)/u/actions';
 import { db, votes, VotesType } from '@/lib/server/db';
 
 interface ActionResponse {

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { truncateOnWord } from './utils';
-import { SiteConfigType } from '@/types';
+import { siteConfig } from './config';
 
 type ArticleMetadataRecipe = {
   title?: string;
@@ -11,7 +11,6 @@ type ArticleMetadataRecipe = {
     width: number;
     height: number;
   };
-  siteConfig: SiteConfigType;
   author?: {
     name?: string;
     url?: string;
@@ -21,7 +20,7 @@ type ArticleMetadataRecipe = {
 export const prepareArticleMetadata = (
   recipe: ArticleMetadataRecipe,
 ): Metadata => ({
-  metadataBase: new URL(recipe.siteConfig.url.web),
+  metadataBase: new URL(siteConfig.url.web),
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
@@ -57,8 +56,8 @@ export const prepareArticleMetadata = (
     : [],
 
   twitter: {
-    site: recipe.siteConfig.twitterUsername,
-    creator: recipe.siteConfig.twitterUsername,
+    site: siteConfig.twitterUsername,
+    creator: siteConfig.twitterUsername,
     card: 'summary_large_image',
     title: recipe.title,
     description: recipe.description,
@@ -70,9 +69,9 @@ export const prepareArticleMetadata = (
   },
   openGraph: {
     description: truncateOnWord(recipe.description!, 160),
-    url: `${recipe.siteConfig.url.web}${recipe.pageUrl}`,
+    url: `${siteConfig.url.web}${recipe.pageUrl}`,
     type: 'website',
-    siteName: recipe.siteConfig.name,
+    siteName: siteConfig.name,
     title: recipe.title,
     images: {
       url: recipe.ogImage?.url || '',
@@ -82,7 +81,7 @@ export const prepareArticleMetadata = (
     locale: 'en_US',
   },
   alternates: {
-    canonical: `${recipe.siteConfig.url.web}${recipe.pageUrl}`,
+    canonical: `${siteConfig.url.web}${recipe.pageUrl}`,
   },
   title: recipe.title,
   description: recipe.description,

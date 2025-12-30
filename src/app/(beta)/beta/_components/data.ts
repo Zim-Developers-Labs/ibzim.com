@@ -82,6 +82,13 @@ export const features = [
     docsUrl: '/docs/articles-blog',
     issues: [
       { id: 'ab-1', title: 'Initial Feature Page Design', status: 'closed' },
+      { id: 'ab-2', title: 'Add Comment Section', status: 'open' },
+      { id: 'ab-3', title: 'Add article actions (saving etc)', status: 'open' },
+      {
+        id: 'ab-4',
+        title: 'Add functionality to Article truth score',
+        status: 'open',
+      },
     ],
   },
   {

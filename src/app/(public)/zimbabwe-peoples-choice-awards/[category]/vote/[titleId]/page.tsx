@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import VotingPageComponent from './components';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
-import { siteConfig } from '@/lib/config';
 import {
   getAllAwardCategories,
   getAwardCategoryBySlug,
@@ -29,7 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       height: 675,
       width: 1200,
     },
-    siteConfig,
   });
 }
 

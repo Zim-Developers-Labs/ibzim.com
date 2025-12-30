@@ -3,7 +3,12 @@ import { createClient } from 'next-sanity';
 import { apiVersion, dataset, projectId } from './api';
 import { env } from '@/env';
 import {
+  ArticleType,
+  AuthorType,
+  CardArticleType,
+  CardProfileType,
   CategoryTitleType,
+  HomeType,
   NomineeType,
   NotificationType,
   SanityAwardCategoryType,
@@ -11,11 +16,17 @@ import {
   SearchDocumentType,
 } from '@/types';
 import {
+  allArticlesQuery,
+  allAuthorsQuery,
+  allProfilesForListingQuery,
   allSchoolsByLevelQuery,
+  articleBySlyugQuery,
+  articleSlugAndTypeAndIndustryQuery,
   awardCategoriesQuery,
   awardCategoryBySlugQuery,
   categoryTitlesBySlugsQuery,
   documentsForSearchQuery,
+  homeQuery,
   notificationsQuery,
   titleNomineesByTitleSlugQuery,
 } from './queries';
@@ -89,6 +100,56 @@ export async function getTitleNomineesByTitleSlug(
     return (
       (await client.fetch(titleNomineesByTitleSlugQuery, { titleSlug })) || {}
     ).nominees;
+  }
+  return [];
+}
+
+export async function getHome(): Promise<HomeType | null> {
+  if (client) {
+    return (await client.fetch(homeQuery)) || null;
+  }
+  return null;
+}
+
+export async function getAllArticles(): Promise<CardArticleType[]> {
+  if (client) {
+    return (await client.fetch(allArticlesQuery)) || [];
+  }
+  return [];
+}
+
+export async function getAllProfilesForListing(): Promise<CardProfileType[]> {
+  if (client) {
+    return (await client.fetch(allProfilesForListingQuery)) || [];
+  }
+  return [];
+}
+
+export async function getAllAuthors(): Promise<AuthorType[]> {
+  if (client) {
+    return (await client.fetch(allAuthorsQuery)) || {};
+  }
+  return [];
+}
+
+export async function getArticleBySlug(
+  slug: string,
+): Promise<ArticleType | null> {
+  if (client) {
+    return (await client.fetch(articleBySlyugQuery, { slug })) || null;
+  }
+  return null;
+}
+
+export async function getAllArticleSlugsAndTypesAndIndustries(): Promise<
+  {
+    slug: string;
+    type: string;
+    industry: { slug: string };
+  }[]
+> {
+  if (client) {
+    return (await client.fetch(articleSlugAndTypeAndIndustryQuery)) || {};
   }
   return [];
 }
