@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 import { AvatarImage } from '@radix-ui/react-avatar';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -18,15 +17,15 @@ const calculators = [
     description:
       'Calculate EcoCash send money, cash out, and merchant fees with 2% tax included.',
     logoUrl: '/assets/calc-logos/ecocash.png',
-    href: '/calculators/ecocash',
+    href: '/calculators/ecocash-charges',
   },
   {
-    id: 'travel-planner',
-    name: 'Travel Planner',
+    id: 'zimbabwe-distance-table',
+    name: 'Distance Table',
     description:
-      'Estimate travel costs including fuel, tolls, and accommodation for trips across Zimbabwe.',
+      'View distance between Zimbabwe locations and estimate travel costs including fuel and tolls',
     logoUrl: '/assets/calc-logos/zinara.png',
-    href: '/calculators/travel-planner',
+    href: '/calculators/zimbabwe-distance-table',
   },
   {
     id: 'currency-converter',
@@ -42,7 +41,7 @@ const calculators = [
     description:
       'Calculate ZESA electricity units and costs based on your token purchase amount.',
     logoUrl: '/assets/calc-logos/zesa.png',
-    href: '/calculators/zesa',
+    href: '/calculators/zesa-units',
   },
 ] as const;
 

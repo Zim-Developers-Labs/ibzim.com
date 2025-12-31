@@ -799,39 +799,39 @@ export default function EcocashCalculatorPageComponents() {
           <div className="mb-3 text-lg font-semibold">Other Calculators</div>
           <div className="flex flex-col gap-4 md:flex-row">
             <Link
-              href="/calculators/travel-planner"
+              href="/calculators/zimbabwe-distance-table"
               className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 hover:bg-zinc-100 sm:px-4 sm:py-2"
             >
               <Avatar className="h-8 w-8 rounded-md border border-zinc-300">
                 <AvatarImage
                   src="/assets/calc-logos/zinara.png"
-                  alt={`ZiG and USD Ecocash Calculator logo`}
+                  alt={`Distance Table Calculator ZINARA logo`}
                 />
               </Avatar>
-              Travel Planner
+              Distance Table
             </Link>
             <Link
-              href="/calculators/currency-convertor"
+              href="/calculators/currency-converter"
               className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 hover:bg-zinc-100 sm:px-4 sm:py-2"
               rounded-md
             >
               <Avatar className="h-8 w-8 rounded-md border border-zinc-300">
                 <AvatarImage
                   src="/assets/calc-logos/zig.png"
-                  alt={`ZiG and USD Ecocash Calculator logo`}
+                  alt={`ZiG/ZWL Currency Converter logo`}
                 />
               </Avatar>
-              Currency Convertor
+              Currency Converter
             </Link>
             <Link
-              href="/calculators/zesa"
+              href="/calculators/zesa-units"
               className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 hover:bg-zinc-100 sm:px-4 sm:py-2"
               rounded-md
             >
               <Avatar className="h-8 w-8 rounded-md border border-zinc-300">
                 <AvatarImage
                   src="/assets/calc-logos/zesa.png"
-                  alt={`ZiG and USD Ecocash Calculator logo`}
+                  alt={`ZESA logo`}
                 />
               </Avatar>
               ZESA Calculator

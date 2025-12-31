@@ -18,20 +18,8 @@ export const tools = [
     href: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
   },
   {
-    name: 'Ecocash Calculator',
-    href: 'https://tools.zimdevelopers.com/tools/ecocash-calculator',
-  },
-  {
-    name: 'Travel Planner',
-    href: 'https://tools.zimdevelopers.com/tools/travel-planner',
-  },
-  {
-    name: 'Currency Converter',
-    href: 'https://tools.zimdevelopers.com/tools/currency-converter/usd-zig',
-  },
-  {
-    name: 'ZESA Calculator',
-    href: 'https://tools.zimdevelopers.com/tools/zesa-electricity-calculator',
+    name: 'Calculators',
+    href: '/calculators',
   },
 ];
 

@@ -47,7 +47,7 @@ export const menuItems = [
   },
   {
     title: 'Calculators',
-    description: '10+ useful calculators',
+    description: '3+ useful calculators',
     icon: Calculator,
     href: '/calculators',
   },

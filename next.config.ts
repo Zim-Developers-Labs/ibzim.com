@@ -13,24 +13,22 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/tools/travel-planner',
-        destination: 'https://tools.zimdevelopers.com/travel-planner',
+        destination: '/calculators/zimbabwe-distance-table',
         permanent: true,
       },
       {
         source: '/tools/ecocash-calculator',
-        destination: 'https://tools.zimdevelopers.com/ecocash-calculator',
+        destination: '/calculators/ecocash-charges',
         permanent: true,
       },
       {
         source: '/tools/currency-converter/usd-zig',
-        destination:
-          'https://tools.zimdevelopers.com/currency-converter/usd-zig',
+        destination: '/calculators/currency-converter',
         permanent: true,
       },
       {
         source: '/tools/zesa-electricity-calculator',
-        destination:
-          'https://tools.zimdevelopers.com/zesa-electricity-calculator',
+        destination: '/calculators/zesa-units',
         permanent: true,
       },
     ];

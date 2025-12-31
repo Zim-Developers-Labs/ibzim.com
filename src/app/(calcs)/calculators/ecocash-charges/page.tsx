@@ -6,7 +6,7 @@ export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: `Ecocash Calculator | IBZim`,
     description: `Calculate your Ecocash transactions, fees, and balances with the easy-to-use Ecocash Calculator tool.`,
-    pageUrl: '/tools/ecocash-calculator',
+    pageUrl: '/calculators/ecocash-charges',
     imageUrl: '/assets/calc-logos/ecocash-banner.png',
   });
 
