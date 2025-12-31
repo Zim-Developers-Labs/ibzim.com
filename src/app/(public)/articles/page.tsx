@@ -1,4 +1,3 @@
-import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
 import {
   getAllArticles,
@@ -19,7 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
       : 'All about Zimbabwe. Read through our well written how to guides, comparisons, listicles, case studies and more.',
     pageUrl: '/articles',
     imageUrl: '/banner.webp',
-    siteConfig,
   });
 }
 

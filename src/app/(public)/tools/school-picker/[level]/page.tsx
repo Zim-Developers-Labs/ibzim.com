@@ -1,4 +1,3 @@
-import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
 import { textify } from '@/lib/utils';
@@ -20,7 +19,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Explore ${level == 'best-tertiary-institutions' ? '30+' : '100+'} ${textify(level)} in Zimbabwe. Find the perfect fit for your educational needs.`,
     pageUrl: `/tools/school-picker/${level}`,
     imageUrl: '/banner.webp',
-    siteConfig: siteConfig,
   });
 }
 

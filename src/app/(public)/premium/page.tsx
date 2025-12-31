@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import PremiumComponents from './components';
 import { preparePageMetadata } from '@/lib/metadata';
-import { siteConfig } from '@/lib/config';
 import { getCurrentSession } from '@/lib/server/session';
 
 export const generateMetadata = (): Metadata =>
@@ -11,7 +10,6 @@ export const generateMetadata = (): Metadata =>
       'Explore our premium subscription plans tailored for your needs.',
     pageUrl: '/pricing',
     imageUrl: '/banner.webp',
-    siteConfig: siteConfig,
   });
 
 export default async function SubscribePremium() {

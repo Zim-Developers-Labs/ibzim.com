@@ -10,7 +10,6 @@ export const generateMetadata = (): Metadata =>
     description: `All ${siteConfig.shortName} Profiles.`,
     pageUrl: '/profiles',
     imageUrl: '/banner.webp',
-    siteConfig,
   });
 
 export default async function ProfilesPage() {

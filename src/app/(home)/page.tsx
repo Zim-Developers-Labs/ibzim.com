@@ -11,7 +11,6 @@ export const generateMetadata = (): Metadata =>
       'IBZIM is a platform for sharing and discovering information about Zimbabwe through various tools such as tables, biographies, charts, calendars and more.',
     pageUrl: '/',
     imageUrl: '/banner.webp',
-    siteConfig,
   });
 
 export default async function HomePage() {

@@ -32,35 +32,30 @@ export const menuItems = [
     description: 'Host, manage and discover events',
     icon: Calendar,
     href: '/tools/events-calendar',
-    isOpenSource: false,
   },
   {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',
     icon: UserIcon,
     href: '/profiles',
-    isOpenSource: false,
   },
   {
     title: 'National News',
     description: 'Get latest updates',
     icon: Newspaper,
     href: 'https://news.ibzim.com',
-    isOpenSource: false,
   },
-  // {
-  //   title: 'Calculators',
-  //   description: '10+ useful calculators',
-  //   icon: Calculator,
-  //   href: '/calculators',
-  //   isOpenSource: true,
-  // },
+  {
+    title: 'Calculators',
+    description: '10+ useful calculators',
+    icon: Calculator,
+    href: '/calculators',
+  },
   {
     title: 'IBZIM Docs',
     description: 'Learn about the platform',
     icon: MapPin,
     href: 'https://help.ibzim.com',
-    isOpenSource: false,
   },
   // {
   //   title: 'Support',
@@ -82,7 +77,7 @@ export default function HomeComponent({
   return (
     <div className="relative min-h-screen bg-white">
       {/* Search Section with Gradient Background */}
-      <div className="from-primaryColor/10 via-secondaryColor/5 bg-gradient-to-b to-transparent py-12">
+      <div className="from-primaryColor/30 via-secondaryColor/5 bg-gradient-to-b to-transparent py-12">
         <div className="mx-auto max-w-4xl px-4 pt-6">
           {/* Welcome Text */}
           <div className="mb-6 text-center sm:mb-8">
@@ -399,18 +394,6 @@ export default function HomeComponent({
                       </CardContent>
                     </Card>
                   </Link>
-                  {feature.isOpenSource && (
-                    <Badge
-                      asChild
-                      variant="secondary"
-                      className="absolute right-2 bottom-2 flex items-center gap-1 bg-gradient-to-bl from-yellow-500 via-yellow-900 to-yellow-500 text-xs font-normal text-white"
-                    >
-                      <Link href="/premium">
-                        <CrownIcon className="h-3 w-3" />
-                        PREMIUM
-                      </Link>
-                    </Badge>
-                  )}
                 </li>
               );
             })}

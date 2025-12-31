@@ -1,4 +1,3 @@
-import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
 import { Metadata } from 'next';
 import { getAllEventsByApproval } from './_components/actions';
@@ -10,7 +9,6 @@ export const generateMetadata = (): Metadata =>
     description: `Stay updated with the latest events and activities in Zimbabwe, Check out the IBZim Calendar for upcoming events.`,
     pageUrl: '/tools/events-calendar',
     imageUrl: '/banner.webp',
-    siteConfig,
   });
 
 export default async function CalendarPage() {
