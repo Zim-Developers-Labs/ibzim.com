@@ -114,7 +114,7 @@ export default function Footer({ siteShortName }: Props) {
             ))}
           </div>
           <aside className="text-sm font-medium text-zinc-400">
-            © 2023 - 2025 IBZim. ALL RIGHTS RESERVED.
+            © 2023 - {new Date().getFullYear()} IBZim. ALL RIGHTS RESERVED.
           </aside>
           <aside className="text-sm text-zinc-400">
             {siteShortName} is among the federally registered trademarks of

@@ -99,7 +99,7 @@ function SchoolRanking({ profile }: { profile: ProfileType }) {
       <div className="rounded-lg border border-zinc-200 bg-white">
         <div className="border-b border-zinc-200 p-2">
           <h3 className="text-center text-xs font-semibold text-zinc-900">
-            {title} 2025
+            {title} {new Date().getFullYear()}
           </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3">

@@ -826,7 +826,6 @@ export default function EcocashCalculatorPageComponents() {
             <Link
               href="/calculators/zesa-units"
               className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 hover:bg-zinc-100 sm:px-4 sm:py-2"
-              rounded-md
             >
               <Avatar className="h-8 w-8 rounded-md border border-zinc-300">
                 <AvatarImage
