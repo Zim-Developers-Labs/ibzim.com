@@ -31,7 +31,7 @@ export const DeleteVerificationTemplate = ({
           <Section style={coverSection}>
             <Section style={imageSection}>
               <Img
-                src={`https://auth.ibzim.com/static.png`}
+                src={`https://www.ibzim.com/static.png`}
                 width="176"
                 height="45"
                 alt="IBZim Auth Logo"
