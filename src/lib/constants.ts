@@ -9,11 +9,11 @@ export const domainUrls = [
     development: 'http://localhost:3001',
   },
   {
-    production: 'https://help.ibzim.com/docs/earn-online/getting-started',
+    production: 'https://help.ibzim.com',
     development: 'http://localhost:3002',
   },
   {
-    production: 'https://help.ibzim.com',
+    production: 'https://help.ibzim.com/docs/earn-online/getting-started',
     development: 'http://localhost:3003',
   },
   {
