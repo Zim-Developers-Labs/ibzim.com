@@ -65,12 +65,6 @@ export default function AuthorsCard({
           about Zimbabwe. If you have ever wondered about anything then chances
           are we have written something about it.
         </p>
-        <Link
-          href="/press/methodology"
-          className="block w-fit rounded-md bg-teal-100 px-4 py-2 hover:bg-zinc-900 hover:text-yellow-400"
-        >
-          Learn More <ArrowRightIcon className="inline h-4 w-4" />
-        </Link>
       </div>
       <div className="flex-1 bg-zinc-900 px-4 py-8 text-white lg:px-20 lg:py-20">
         <div className="flex flex-col md:flex-row-reverse md:items-center md:justify-between">

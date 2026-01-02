@@ -98,7 +98,7 @@ export const allArticlesQuery = groq`*[_type == "article"] | order(date desc, _c
   "industry": industry->{"slug": slug.current},
   type,
   seo,
-  "author": author->{name, picture, bio, links},
+  "author": author->{name, picture, bio, links, slug},
 }`;
 
 export const allProfilesForListingQuery = groq`*[_type == "profile"]{
@@ -318,3 +318,9 @@ export const policySlugsQuery: string = groq`*[_type == "policy"] {
 }`;
 
 export const policyBySlugQuery: string = groq`*[_type == "policy" && slug.current == $slug][0]`;
+
+export const authorBySlugQuery: string = groq`*[_type == "author" && slug.current == $slug][0]`;
+
+export const authorSlugsQuery: string = groq`*[_type == "author"] {
+   "slug": slug.current,
+}`;

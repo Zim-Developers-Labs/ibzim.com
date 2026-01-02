@@ -27,6 +27,8 @@ import {
   allSchoolsByLevelQuery,
   articleBySlyugQuery,
   articleSlugAndTypeAndIndustryQuery,
+  authorBySlugQuery,
+  authorSlugsQuery,
   awardCategoriesQuery,
   awardCategoryBySlugQuery,
   categoryTitlesBySlugsQuery,
@@ -228,6 +230,23 @@ export async function getPolicyBySlug(
   if (client) {
     const policy = await client.fetch(policyBySlugQuery, { slug });
     return policy || null;
+  }
+  return null;
+}
+
+export async function getAllAuthorSlugs(): Promise<{ slug: string }[]> {
+  if (client) {
+    return (await client.fetch(authorSlugsQuery)) || {};
+  }
+  return [];
+}
+
+export async function getAuthorBySlug(
+  slug: string,
+): Promise<AuthorType | null> {
+  if (client) {
+    const author = await client.fetch(authorBySlugQuery, { slug });
+    return author || null;
   }
   return null;
 }

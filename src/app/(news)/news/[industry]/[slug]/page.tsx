@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return prepareArticleMetadata({
     title: article?.seo.title,
     description: article?.seo.description,
-    pageUrl: `/${industry}/${slug}`,
+    pageUrl: `/news/${industry}/${slug}`,
     ogImage: {
       url: urlForImage(article?.seo.image)
         .height(675)

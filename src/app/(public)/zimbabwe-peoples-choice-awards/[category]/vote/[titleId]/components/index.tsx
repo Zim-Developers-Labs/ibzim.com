@@ -389,7 +389,7 @@ export default function VotingPageComponent({
               {viewMode === 'statistics'
                 ? (() => {
                     // Calculate vote counts for each nominee
-                    const nomineeVoteCounts = nominees.map((nominee) => {
+                    const nomineeVoteCounts = nominees?.map((nominee) => {
                       const voteCount = votes
                         ? votes.filter(
                             (v) => v.nomineeId === nominee.nomineeProfile?._id,
@@ -405,7 +405,7 @@ export default function VotingPageComponent({
                     // Calculate total votes for percentage
                     const totalVotes = votes ? votes.length : 0;
 
-                    return sortedNominees.map(
+                    return sortedNominees?.map(
                       ({ nominee, voteCount }, index) => {
                         const percentage =
                           totalVotes > 0 ? (voteCount / totalVotes) * 100 : 0;
@@ -616,7 +616,7 @@ export default function VotingPageComponent({
                       },
                     );
                   })()
-                : nominees.map((nominee) => (
+                : nominees?.map((nominee) => (
                     <li key={nominee.nomineeProfile?._id}>
                       <div
                         onClick={() => {

@@ -32,7 +32,7 @@ export default function NewsArticleComponents({
 }: {
   article: NewsArticleType;
 }) {
-  const articleUrl = `/${article.industry}/${article.slug.current}`;
+  const articleUrl = `/news/${article.industry}/${article.slug.current}`;
 
   const articleText = [
     article.title,
