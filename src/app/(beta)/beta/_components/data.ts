@@ -108,7 +108,7 @@ export const features = [
   },
   {
     name: 'Platform Documentation',
-    docsUrl: '#',
+    docsUrl: '/docs/introduction',
     issues: [
       { id: 'il-1', title: 'Initial Feature Page Design', status: 'closed' },
       { id: 'il-2', title: 'Remove home page redirect', status: 'open' },
