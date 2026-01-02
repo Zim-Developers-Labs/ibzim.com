@@ -32,10 +32,10 @@ export default function Banner() {
           />
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
-          <p className="text-sm leading-6 text-gray-900">
+          <span className="text-sm leading-6 text-gray-900">
             {/* Ever made money online? */}
             Help us get to launch day!
-          </p>
+          </span>
           <Link
             // onClick={() => {
             //   window.open('https://earn.ibzim.com', '_blank');

@@ -7,7 +7,7 @@ import { ChevronDoubleDownIcon } from '@heroicons/react/16/solid';
 
 export default function CurrencyConverterComponents() {
   return (
-    <div className="bg-zinc-50">
+    <main className="bg-zinc-50">
       <Container className="py-12">
         <div className="mb-6">
           <div className="mb-4 flex gap-3 sm:items-center">
@@ -78,6 +78,6 @@ export default function CurrencyConverterComponents() {
           </div>
         </div>
       </Container>
-    </div>
+    </main>
   );
 }
