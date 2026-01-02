@@ -136,7 +136,7 @@ function FeatureRow({
             asChild
           >
             <Link
-              href={`${DOMAIN_URLS.DOCS()}${feature.docsUrl}`}
+              href={`${DOMAIN_URLS.HELP()}${feature.docsUrl}`}
               target="_blank"
             >
               <FileText className="size-3.5" />

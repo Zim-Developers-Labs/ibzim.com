@@ -2,37 +2,30 @@ import { DOMAIN_URLS } from '@/lib/constants';
 
 export const navigation = {
   solutions: [
-    { name: 'Blog', href: '/blog' },
+    { name: 'Blog', href: '/articles' },
     {
-      name: 'Compare',
-      href: '/compare',
+      name: 'Profiles',
+      href: '/profiles',
     },
     {
-      name: 'Awards',
-      href: '/zimbabwe-peoples-choice-awards',
+      name: 'News',
+      href: '/news',
     },
   ],
   company: [
-    { name: 'About', href: '/about' },
-    { name: 'Authors', href: '/authors' },
-    { name: 'Press', href: '/press' },
-    { name: 'Partners', href: DOMAIN_URLS.PARTNERS() },
+    { name: 'About', href: `${DOMAIN_URLS.HELP()}/docs/introduction` },
+    { name: 'People', href: '#' },
   ],
   support: [
-    { name: 'Submit Ticket', href: '/support' },
-    { name: 'Learn IBZIM', href: DOMAIN_URLS.DOCS() },
+    { name: 'Learn IBZIM', href: DOMAIN_URLS.HELP() },
     {
       name: 'Whatsapp Group',
       href: 'https://chat.whatsapp.com/DHR6FZ6Qf49KYzvpxEQbij?mode=ems_share_c',
     },
   ],
   platforms: [
-    { name: 'News', href: DOMAIN_URLS.NEWS() },
-    { name: 'Earn', href: DOMAIN_URLS.EARN() },
-    {
-      name: 'Advertising',
-      href: DOMAIN_URLS.ADVERTISE(),
-    },
+    { name: 'Zim Developers', href: 'https://www.zimdevelopers.com' },
+
     {
       name: 'Peya Peya',
       href: 'https://peyapeya.com',

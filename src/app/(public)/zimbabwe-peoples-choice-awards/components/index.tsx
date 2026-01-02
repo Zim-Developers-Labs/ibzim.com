@@ -299,7 +299,7 @@ export default function AwardsPageComponent({
                     className="w-full bg-gradient-to-r from-amber-300 via-amber-600 to-amber-300"
                   >
                     <Link
-                      href={`${DOMAIN_URLS.DOCS()}/docs/peoples-choice-awards/overview`}
+                      href={`${DOMAIN_URLS.HELP()}/docs/peoples-choice-awards/overview`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm"
@@ -332,7 +332,7 @@ export default function AwardsPageComponent({
                     className="w-full bg-gradient-to-r from-purple-300 via-purple-600 to-purple-300"
                   >
                     <Link
-                      href={`${DOMAIN_URLS.DOCS()}/docs/peoples-choice-awards/nominees-guide`}
+                      href={`${DOMAIN_URLS.HELP()}/docs/peoples-choice-awards/nominees-guide`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm"
@@ -365,7 +365,7 @@ export default function AwardsPageComponent({
                     className="w-full bg-gradient-to-r from-blue-300 via-blue-600 to-blue-300"
                   >
                     <Link
-                      href={`${DOMAIN_URLS.DOCS()}/docs/peoples-choice-awards/voters-guide`}
+                      href={`${DOMAIN_URLS.HELP()}/docs/peoples-choice-awards/voters-guide`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm"

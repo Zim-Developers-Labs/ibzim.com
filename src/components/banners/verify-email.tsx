@@ -1,10 +1,8 @@
 'use client';
 
-import { DOMAIN_URLS } from '@/lib/constants';
-
 export default function VerifyEmailBanner() {
   const handleVerifyClick = () => {
-    window.location.href = `${DOMAIN_URLS.AUTH()}/verify-email?callbackUrl=${encodeURIComponent(window.location.href)}&requestId=send_verification_request`;
+    window.location.href = `/verify-email?callbackUrl=${encodeURIComponent(window.location.href)}&requestId=send_verification_request`;
   };
 
   return (

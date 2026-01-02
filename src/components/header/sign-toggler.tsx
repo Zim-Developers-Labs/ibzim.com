@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/popover';
 import { Icons } from '../icons';
 import Link from 'next/link';
-import { DOMAIN_URLS } from '@/lib/constants';
 
 type Props = {
   bgColor?: string;
@@ -20,11 +19,11 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const onSignInClick = () => {
-    window.location.href = `${DOMAIN_URLS.AUTH()}/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`;
+    window.location.href = `/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`;
   };
 
   const onSignUpClick = () => {
-    window.location.href = `${DOMAIN_URLS.AUTH()}/sign-up?callbackUrl=${encodeURIComponent(window.location.href)}`;
+    window.location.href = `/sign-up?callbackUrl=${encodeURIComponent(window.location.href)}`;
   };
 
   return (
@@ -53,7 +52,7 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
         </div>
         <div className="flex items-center justify-between gap-2">
           <Link
-            href={`${DOMAIN_URLS.AUTH()}/sign-in`}
+            href={`/sign-in`}
             onClick={(e) => {
               e.preventDefault();
               onSignInClick();
@@ -63,7 +62,7 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
             Login
           </Link>
           <Link
-            href={`${DOMAIN_URLS.AUTH()}/sign-up`}
+            href={`/sign-up`}
             onClick={(e) => {
               e.preventDefault();
               onSignUpClick();

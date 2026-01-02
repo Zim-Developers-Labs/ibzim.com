@@ -25,6 +25,8 @@ import { DOMAIN_URLS } from '@/lib/constants';
 import Image from 'next/image';
 import posterImage from './news-poster.png';
 import CompareFeature from './compare';
+import { Button } from '@/components/ui/button';
+import { PaperAirplaneIcon } from '@heroicons/react/16/solid';
 
 export const menuItems = [
   {
@@ -48,14 +50,6 @@ export const menuItems = [
     href: '/profiles',
     isFeatured: true,
   },
-
-  // {
-  //   title: 'Support',
-  //   description: 'Get help and assistance',
-  //   icon: HelpCircle,
-  //   href: '/support',
-  //   gradient: 'from-primaryColor/20 to-primaryColor/5',
-  // },
 ];
 
 export default function HomeComponent({
@@ -179,7 +173,7 @@ export default function HomeComponent({
             </li>
             <li>
               <Link
-                href={DOMAIN_URLS.NEWS()}
+                href="/news"
                 className="relative mx-auto block h-full w-auto overflow-hidden rounded-lg transition-all duration-300 hover:scale-105"
               >
                 <Image
@@ -230,28 +224,6 @@ export default function HomeComponent({
               </Link>
             </li> */}
             {/* <li>
-              <Link href="https://www.zimdevelopers.com">
-                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
-                  <CardContent className="p-4 text-center">
-                    <div
-                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
-                    >
-                      <Icons.zimdevelopersIcon
-                        className="text-primaryColor h-10 w-10 sm:h-12 sm:w-12"
-                        strokeWidth={1}
-                      />
-                    </div>
-                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
-                      Developers Labs
-                    </h3>
-                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
-                      Hire a developer or get hired
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </li> */}
-            <li>
               <Link href={DOMAIN_URLS.EARN()}>
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
@@ -272,30 +244,9 @@ export default function HomeComponent({
                   </CardContent>
                 </Card>
               </Link>
-            </li>
-            {/* <li>
-              <Link href="https://www.peyapeya.com">
-                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
-                  <CardContent className="p-4 text-center">
-                    <div
-                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
-                    >
-                      <Icons.peyapeyaPLogo
-                        className="h-10 w-10 sm:h-12 sm:w-12"
-                        strokeWidth={1}
-                      />
-                    </div>
-                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
-                      Peya Peya
-                    </h3>
-                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
-                      Best finance app in Zimbabwe
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
             </li> */}
-            <li>
+
+            {/* <li>
               <Link href={DOMAIN_URLS.ADVERTISE()}>
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
@@ -316,7 +267,7 @@ export default function HomeComponent({
                   </CardContent>
                 </Card>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/articles">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
@@ -339,8 +290,8 @@ export default function HomeComponent({
                 </Card>
               </Link>
             </li>
-            {/* <li>
-              <Link href="/zimbabwean-government-structure">
+            <li>
+              <Link href="#">
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
                     <div
@@ -355,12 +306,13 @@ export default function HomeComponent({
                       Government
                     </h3>
                     <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
-                      Zimbabwean Government Structure
+                      Zimbabwean Government Chart
                     </p>
                   </CardContent>
                 </Card>
               </Link>
-            </li> */}
+            </li>
+
             {menuItems.map((feature, index) => {
               const Icon = feature.icon;
               return (
@@ -399,6 +351,30 @@ export default function HomeComponent({
                 </li>
               );
             })}
+            <li>
+              <Link
+                href="https://wa.me/+263717238876"
+                target="_blank"
+                rel="nofollow"
+              >
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-[#103928] py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-[#165239]">
+                  <CardContent className="flex h-full w-full flex-col items-center justify-center p-4 text-center">
+                    <div
+                      className={`mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                    >
+                      <Icons.whatsapp
+                        className="h-10 w-10 text-white sm:h-12 sm:w-12"
+                        strokeWidth={1}
+                      />
+                    </div>
+                    <Button className="rounded-full bg-[#43cd66] text-[#103928] hover:bg-[#38b159]">
+                      Support
+                      <PaperAirplaneIcon className="inline-block h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
+            </li>
             {/* <CompareFeature /> */}
           </ul>
         </div>

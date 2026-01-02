@@ -6,7 +6,6 @@ import { PayDialog } from './pay-dialog';
 import { User } from '@/lib/server/constants';
 import { toast } from 'sonner';
 import { AlertCircleIcon } from 'lucide-react';
-import { DOMAIN_URLS } from '@/lib/constants';
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ');
@@ -50,7 +49,7 @@ export default function PremiumPricing({
         action: {
           label: 'Log In',
           onClick: () =>
-            (window.location.href = `${DOMAIN_URLS.AUTH()}/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`),
+            (window.location.href = `/sign-in?callbackUrl=${encodeURIComponent(window.location.href)}`),
         },
       });
       return;
@@ -62,7 +61,7 @@ export default function PremiumPricing({
         action: {
           label: 'Verify Email',
           onClick: () =>
-            (window.location.href = `${DOMAIN_URLS.AUTH()}/verify-email?callbackUrl=${encodeURIComponent(window.location.href)}&requestId=send_verification_request`),
+            (window.location.href = `/verify-email?callbackUrl=${encodeURIComponent(window.location.href)}&requestId=send_verification_request`),
         },
       });
       return;

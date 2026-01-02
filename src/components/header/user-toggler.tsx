@@ -25,7 +25,6 @@ import { User } from '@/lib/server/constants';
 import { SubmitButton } from '../ui/submit-button';
 import { useActionState } from 'react';
 import { logoutAction } from '@/lib/logout';
-import { DOMAIN_URLS } from '@/lib/constants';
 import { RankIcon } from '../ranking/rank-icon';
 import RanksDialog from '../ranking/ranks-dialog';
 import { getCurrentRank } from '../ranking/ranks';
@@ -142,7 +141,7 @@ export default function UserToggler({ user }: UserTogglerType) {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href={DOMAIN_URLS.ACCOUNT()}
+                href="/my-account"
                 target="_blank"
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
               >

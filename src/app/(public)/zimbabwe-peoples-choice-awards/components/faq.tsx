@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { DOMAIN_URLS } from '@/lib/constants';
 import { AlertCircle, Info } from 'lucide-react';
 import Link from 'next/link';
 

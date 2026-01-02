@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Container from '../container';
 import { navigation } from './constants';
 import { Icons } from '../icons';
-import { DOMAIN_URLS } from '@/lib/constants';
 
 function NavItem(navitem: { name: string; slug: string; type?: string }) {
   return (
@@ -40,7 +39,7 @@ export default function Footer({ siteShortName }: Props) {
               <div className="mx-auto mb-8 grid grid-cols-2 gap-16 md:mx-0 md:grid-cols-4 md:gap-8">
                 <div className="mt-10 md:mt-0">
                   <div className="text-left text-sm leading-6 font-semibold text-white">
-                    Solutions
+                    Content
                   </div>
                   <div className="mt-6 flex flex-col items-start space-y-4">
                     {navigation.solutions.map((item) => (
@@ -126,31 +125,31 @@ export default function Footer({ siteShortName }: Props) {
           </aside>
           <div className="mx-auto grid w-fit grid-cols-2 gap-4 text-xs text-zinc-400 md:grid-cols-5 md:gap-0">
             <Link
-              href={`${DOMAIN_URLS.POLICIES()}/privacy`}
+              href={`/policies/privacy`}
               className="hover:text-primaryColor col-span-1 block w-auto hover:underline"
             >
               Privacy Policy
             </Link>
             <Link
-              href={`${DOMAIN_URLS.POLICIES()}/terms`}
+              href={`/policies/terms`}
               className="hover:text-primaryColor col-span-1 block w-auto hover:underline"
             >
               Terms of Service
             </Link>
             <Link
-              href={`${DOMAIN_URLS.POLICIES()}/disclaimer`}
+              href={`/policies/disclaimer`}
               className="hover:text-primaryColor col-span-1 block w-auto hover:underline"
             >
               Disclaimer
             </Link>
             <Link
-              href={`${DOMAIN_URLS.POLICIES()}/commenting`}
+              href={`/policies/commenting`}
               className="hover:text-primaryColor col-span-1 block w-auto hover:underline"
             >
               Commenting Policy
             </Link>
             <Link
-              href={DOMAIN_URLS.DSAR()}
+              href="#"
               className="hover:text-primaryColor col-span-2 block w-auto hover:underline sm:col-span-1"
             >
               Do Not Sell My Personal Information
