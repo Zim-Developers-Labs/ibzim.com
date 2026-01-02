@@ -13,6 +13,7 @@ import {
   NewsArticleType,
   NomineeType,
   NotificationType,
+  PolicyType,
   ProfileType,
   SanityAwardCategoryType,
   SchoolPickerProfilesType,
@@ -34,6 +35,8 @@ import {
   newsArticleBySlugQuery,
   newsArticleSlugsAndIndustriesQuery,
   notificationsQuery,
+  policyBySlugQuery,
+  policySlugsQuery,
   profileBySlugQuery,
   profileSlugsAndTypeQuery,
   titleNomineesByTitleSlugQuery,
@@ -210,4 +213,21 @@ export async function getAllNewsArticleSlugsAndIndustries(): Promise<
     return (await client.fetch(newsArticleSlugsAndIndustriesQuery)) || {};
   }
   return [];
+}
+
+export async function getAllPolicySlugs(): Promise<{ slug: string }[]> {
+  if (client) {
+    return (await client.fetch(policySlugsQuery)) || {};
+  }
+  return [];
+}
+
+export async function getPolicyBySlug(
+  slug: string,
+): Promise<PolicyType | null> {
+  if (client) {
+    const policy = await client.fetch(policyBySlugQuery, { slug });
+    return policy || null;
+  }
+  return null;
 }

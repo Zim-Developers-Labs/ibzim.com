@@ -312,3 +312,9 @@ export const newsArticleSlugsAndIndustriesQuery: string = groq`*[_type == "zw.ne
   "slug": slug.current,
   industry
 }`;
+
+export const policySlugsQuery: string = groq`*[_type == "policy"] {
+   "slug": slug.current,
+}`;
+
+export const policyBySlugQuery: string = groq`*[_type == "policy" && slug.current == $slug][0]`;
