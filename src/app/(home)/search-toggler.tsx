@@ -58,7 +58,7 @@ export default function SearchToggler({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="h-fit w-full max-w-2xl cursor-pointer rounded-full border-zinc-200 bg-white py-4 text-base hover:bg-zinc-100"
+          className="h-fit w-full max-w-2xl cursor-pointer rounded-full border-zinc-200 bg-white py-4 text-base shadow-none hover:bg-zinc-100"
         >
           <Search className="size-5 text-zinc-600" />
           <div className="pr-2 text-xs text-zinc-600">

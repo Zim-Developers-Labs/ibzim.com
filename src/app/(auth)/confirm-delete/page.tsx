@@ -29,7 +29,7 @@ export default async function VerifyEmailPage({
   const verificationRequest =
     await getUserEmailVerificationRequestFromRequest();
   if (verificationRequest === null) {
-    return redirect(`/my-account`);
+    return redirect(`/my-account/general`);
   }
 
   return (

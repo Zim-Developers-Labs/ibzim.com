@@ -63,7 +63,7 @@ export default function HomeComponent({
   return (
     <div className="relative min-h-screen bg-white">
       {/* Search Section with Gradient Background */}
-      <div className="from-primaryColor/30 via-secondaryColor/5 bg-gradient-to-b to-transparent py-12">
+      <div className="from-primaryColor/25 via-secondaryColor/5 bg-gradient-to-b to-transparent py-12">
         <div className="mx-auto max-w-4xl px-4 pt-6">
           {/* Welcome Text */}
           <div className="mb-6 text-center sm:mb-8">

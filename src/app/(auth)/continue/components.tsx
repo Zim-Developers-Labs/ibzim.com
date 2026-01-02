@@ -22,7 +22,7 @@ export default function ContinuePageComponents({
       <div className="mt-8 flex w-full max-w-4xl flex-col justify-between lg:flex-row">
         <div
           onClick={() => {
-            window.location.href = '/my-account';
+            window.location.href = '/my-account/general';
           }}
           className="group w-full cursor-pointer rounded-t-lg border border-b-0 border-zinc-200 bg-white px-4 py-8 lg:rounded-l-lg lg:rounded-tr-none lg:border-r-0 lg:border-b"
         >

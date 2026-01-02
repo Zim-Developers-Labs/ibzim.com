@@ -36,7 +36,7 @@ export function EmailVerificationForm({
 
   const handleCancel = async () => {
     await deleteUserEmailVerificationRequest(user.id);
-    window.open(`/my-account`, '_self');
+    window.open(`/my-account/general`, '_self');
   };
 
   return (

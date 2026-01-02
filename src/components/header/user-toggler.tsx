@@ -141,7 +141,7 @@ export default function UserToggler({ user }: UserTogglerType) {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                href="/my-account"
+                href="/my-account/general"
                 target="_blank"
                 className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
               >
