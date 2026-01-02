@@ -40,7 +40,7 @@ export const menuItems = [
     title: 'IBZIM Docs',
     description: 'Platform documentation and usage guides',
     icon: Icons.docsIcon,
-    href: 'https://help.ibzim.com',
+    href: 'https://help.ibzim.com/docs/introduction',
     isFeatured: true,
   },
   {

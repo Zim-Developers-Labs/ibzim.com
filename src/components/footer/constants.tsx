@@ -17,7 +17,7 @@ export const navigation = {
     { name: 'People', href: '#' },
   ],
   support: [
-    { name: 'Learn IBZIM', href: DOMAIN_URLS.HELP() },
+    { name: 'Learn IBZIM', href: `${DOMAIN_URLS.HELP()}/docs/introduction` },
     {
       name: 'Whatsapp Group',
       href: 'https://chat.whatsapp.com/DHR6FZ6Qf49KYzvpxEQbij?mode=ems_share_c',

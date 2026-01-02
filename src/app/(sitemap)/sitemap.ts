@@ -105,7 +105,7 @@ async function generateArticlesSitemap(): Promise<MetadataRoute.Sitemap> {
   return articles
     .filter(({ slug = '' }) => slug)
     .map((article) => ({
-      url: `${siteConfig.url.web}/${getArticleHref(article)}`,
+      url: `${siteConfig.url.web}${getArticleHref(article)}`,
       lastModified: new Date(article._updatedAt),
       priority: 0.9,
     }));
