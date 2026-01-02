@@ -14,7 +14,7 @@ export const navigation = {
   ],
   company: [
     { name: 'About', href: `${DOMAIN_URLS.HELP()}/docs/introduction` },
-    { name: 'People', href: '#' },
+    { name: 'People', href: '/authors' },
   ],
   support: [
     { name: 'Learn IBZIM', href: `${DOMAIN_URLS.HELP()}/docs/introduction` },

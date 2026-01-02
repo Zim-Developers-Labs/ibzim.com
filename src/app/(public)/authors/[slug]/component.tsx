@@ -7,10 +7,30 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const ArticleCard = ({ article }: { article: CardArticleType }) => {
+  const getArticleHref = () => {
+    if (article.slug.current === 'top-20-best-universities-in-zimbabwe') {
+      return '/tools/school-picker/best-tertiary-institutions-in-zimbabwe';
+    }
+
+    if (article.slug.current === 'top-100-best-a-level-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-a-level-schools-in-zimbabwe';
+    }
+
+    if (article.slug.current === 'top-100-best-o-level-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-o-level-schools-in-zimbabwe';
+    }
+    if (article.slug.current === 'top-100-best-primary-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-primary-schools-in-zimbabwe';
+    }
+
+    // Return default href for all other articles
+    return `/${article.industry.slug}/${article.type}/${article.slug.current}`;
+  };
+
   return (
     <li>
       <Link
-        href={`/${article.industry.slug}/${article.type}/${article.slug.current}`}
+        href={getArticleHref()}
         className="group flex flex-row-reverse justify-between px-4 md:flex-col md:px-0"
       >
         <div className="mb-4 ml-4 aspect-[16/9] max-w-[150px] overflow-hidden rounded-md md:ml-0 md:max-w-none">
