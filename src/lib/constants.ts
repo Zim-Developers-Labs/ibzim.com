@@ -33,10 +33,6 @@ export const domainUrls = [
     development: 'http://localhost:3007',
   },
   {
-    production: 'https://help.ibzim.com/docs/music-billboard',
-    development: 'http://localhost:3008',
-  },
-  {
     production: 'https://partners.ibzim.com',
     development: 'http://localhost:3009',
   },
@@ -47,6 +43,10 @@ export const domainUrls = [
   {
     production: 'https://dsar.ibzim.com',
     development: 'http://localhost:3011',
+  },
+  {
+    production: 'https://news.ibzim.com',
+    development: 'http://localhost:3012',
   },
   {
     production: 'https://www.peyapeya.com',
@@ -72,9 +72,9 @@ export const DOMAIN_URLS = {
   ACCOUNT: () => getDomainUrl(4),
   AUTH: () => getDomainUrl(5),
   ADMIN: () => getDomainUrl(6),
-  BILLBOARD: () => getDomainUrl(7),
-  PARTNERS: () => getDomainUrl(8),
-  POLICIES: () => getDomainUrl(9),
-  DSAR: () => getDomainUrl(10),
+  PARTNERS: () => getDomainUrl(7),
+  POLICIES: () => getDomainUrl(8),
+  DSAR: () => getDomainUrl(9),
+  NEWS: () => getDomainUrl(10),
   PEYA_CHECKOUT: () => getDomainUrl(11),
 } as const;

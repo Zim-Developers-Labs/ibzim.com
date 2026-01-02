@@ -8,7 +8,7 @@ export const generateMetadata = (): Metadata =>
   preparePageMetadata({
     title: 'IBZim: Zimbabwean Information Hub',
     description:
-      'IBZIM is a platform for sharing and discovering information about Zimbabwe through various tools such as tables, biographies, charts, calendars and more.',
+      'IBZIM is a platform for sharing and discovering information about Zimbabwe through various tools such as tables, biographies, articles and more.',
     pageUrl: '/',
     imageUrl: '/banner.webp',
   });

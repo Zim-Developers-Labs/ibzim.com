@@ -10,10 +10,6 @@ import { NotificationType } from '@/types';
 
 export const tools = [
   {
-    name: 'Events Calendar',
-    href: '/tools/events-calendar',
-  },
-  {
     name: 'School Picker',
     href: '/tools/school-picker/best-a-level-schools-in-zimbabwe',
   },

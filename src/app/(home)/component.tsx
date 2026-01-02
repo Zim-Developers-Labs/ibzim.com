@@ -23,7 +23,7 @@ import { Badge } from '@/components/ui/badge';
 import { useUser } from '@/hooks/user-context';
 import { DOMAIN_URLS } from '@/lib/constants';
 import Image from 'next/image';
-import posterImage from './billboard-poster.png';
+import posterImage from './news-poster.png';
 import CompareFeature from './compare';
 
 export const menuItems = [
@@ -42,24 +42,10 @@ export const menuItems = [
     isFeatured: true,
   },
   {
-    title: 'Events Calendar',
-    description: 'Host, manage and discover events',
-    icon: Icons.calendarIcon,
-    href: '/tools/events-calendar',
-    isFeatured: true,
-  },
-  {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',
     icon: Icons.profilesIcon,
     href: '/profiles',
-    isFeatured: true,
-  },
-  {
-    title: 'National News',
-    description: 'Get latest updates',
-    icon: Icons.NewsIcon,
-    href: 'https://news.ibzim.com',
     isFeatured: true,
   },
 
@@ -193,14 +179,13 @@ export default function HomeComponent({
             </li>
             <li>
               <Link
-                href={DOMAIN_URLS.BILLBOARD()}
+                href={DOMAIN_URLS.NEWS()}
                 className="relative mx-auto block h-full w-auto overflow-hidden rounded-lg transition-all duration-300 hover:scale-105"
-                aria-label="Homepage"
               >
                 <Image
                   className="w-full"
                   src={posterImage}
-                  alt=""
+                  alt="IBZIM NEWS BANNER"
                   sizes="(min-width: 1024px) 20rem, (min-width: 640px) 16rem, 12rem"
                   priority
                 />

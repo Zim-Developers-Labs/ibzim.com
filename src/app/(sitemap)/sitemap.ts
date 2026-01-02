@@ -52,11 +52,6 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       priority: 1,
     },
-    {
-      url: `${siteConfig.url.web}/events-calendar`,
-      lastModified: new Date(),
-      priority: 0.9,
-    },
   ];
 }
 // Temporary fix for schools listing articles

@@ -36,24 +36,10 @@ export const features = [
     ],
   },
   {
-    name: 'Events Calendar',
-    docsUrl: '/docs/events-calendar/getting-started',
-    issues: [
-      { id: 'ec-1', title: 'Initial Feature Page Design', status: 'closed' },
-    ],
-  },
-  {
     name: "People's Choice Awards",
     docsUrl: '/docs/peoples-choice-awards/overview',
     issues: [
       { id: 'pca-1', title: 'Initial Feature Page Design', status: 'closed' },
-    ],
-  },
-  {
-    name: 'Billboard',
-    docsUrl: '/docs/music-billboard',
-    issues: [
-      { id: 'bb-1', title: 'Initial Feature Page Design', status: 'closed' },
     ],
   },
   {

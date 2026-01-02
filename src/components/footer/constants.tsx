@@ -3,7 +3,6 @@ import { DOMAIN_URLS } from '@/lib/constants';
 export const navigation = {
   solutions: [
     { name: 'Blog', href: '/blog' },
-    { name: 'Events', href: '/events-calendar' },
     {
       name: 'Compare',
       href: '/compare',
@@ -28,7 +27,7 @@ export const navigation = {
     },
   ],
   platforms: [
-    { name: 'Billboard', href: DOMAIN_URLS.BILLBOARD() },
+    { name: 'News', href: DOMAIN_URLS.NEWS() },
     { name: 'Earn', href: DOMAIN_URLS.EARN() },
     {
       name: 'Advertising',

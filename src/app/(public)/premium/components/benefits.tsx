@@ -8,7 +8,6 @@ const features = {
     'Add up to 3 entities on the compare tool.',
     'Post up to 10 events/month on IBZIM Calendar',
     'Higher income potential on IBZIM earn.',
-    'Play songs directly on billboard.ibzim.com',
     'Access to our annual IBZIM Magazines.',
     'Unlimited Content Requests.',
     'Access to premium Articles.',
