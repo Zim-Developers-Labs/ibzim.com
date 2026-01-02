@@ -8,7 +8,6 @@ import { ExternalLink } from 'lucide-react';
 import { useUser } from '@/hooks/user-context';
 import ProfileAvatarField from './avatar';
 import DisplayNameField from './display-name';
-import { DOMAIN_URLS } from '@/lib/constants';
 
 export interface EditableFieldProps {
   label: string;
@@ -64,15 +63,11 @@ export type ProfileDataType = {
 export default function ProfileComponents() {
   const { user, updateUser } = useUser();
 
-  if (!user) {
-    return null;
-  }
-
   const [profileData, setProfileData] = useState<ProfileDataType>({
-    fullName: user.fullName,
-    email: user.email,
-    phone: user.phoneNumber,
-    avatar: user.avatar,
+    fullName: user!.fullName,
+    email: user!.email,
+    phone: user!.phoneNumber,
+    avatar: user!.avatar,
   });
 
   const [currentUrl, setCurrentUrl] = useState('');
@@ -87,12 +82,12 @@ export default function ProfileComponents() {
       <ProfileAvatarField
         setProfileData={setProfileData}
         updateUser={updateUser}
-        user={user}
+        user={user!}
       />
       <DisplayNameField
         setProfileData={setProfileData}
         updateUser={updateUser}
-        user={user}
+        user={user!}
       />
 
       {currentUrl && (
