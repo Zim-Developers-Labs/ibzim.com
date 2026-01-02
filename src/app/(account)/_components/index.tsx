@@ -41,13 +41,13 @@ const initialState = {
 export default function AccountLayout({ children }: AccountLayoutProps) {
   const { user } = useUser();
 
-  if (!user) {
-    return null;
-  }
-
   const [, action] = useActionState(logoutAction, initialState);
 
   const pathname = usePathname();
+
+  if (!user) {
+    return null;
+  }
 
   const sidebarItems = [
     {

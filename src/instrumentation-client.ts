@@ -21,6 +21,10 @@ initBotId({
       path: '/api/fetch-checkout-user',
       method: 'POST',
     },
+    {
+      path: '/api/upload-avatar',
+      method: 'POST',
+    },
     // {
     //   // Wildcards can be used to expand multiple segments
     //   // /team/*/activate will match

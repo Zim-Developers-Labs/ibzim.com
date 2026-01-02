@@ -47,6 +47,7 @@
     "@sanity/image-url": "^1.2.0",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/blob": "^2.0.0",
     "arctic": "^3.7.0",
     "bad-words": "^4.0.0",
     "botid": "^1.5.10",
