@@ -88,7 +88,7 @@ export const homeQuery = groq`*[_type == "home"][0]{
   heroLists,
 }`;
 
-export const allArticlesQuery = groq`*[_type == "article"] | order(date desc, _createdAt desc){
+export const allArticlesQuery = groq`*[_type == "article"] | order(date desc, _updatedAt desc){
   _id,
   name,
   title,
@@ -256,7 +256,7 @@ export const profileSlugsAndTypeQuery: string = groq`*[_type == "profile"] {
    _updatedAt,
 }`;
 
-export const allNewsArticlesQuery: string = groq`*[_type == "zw.news" && defined(slug.current)] | order(date desc, _createdAt desc) {
+export const allNewsArticlesQuery: string = groq`*[_type == "zw.news" && defined(slug.current)] | order(date desc, _updatedAt desc) {
   _id,
   name,
   title,

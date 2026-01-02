@@ -28,7 +28,9 @@ const ArticleCard = ({ article }: { article: CardArticleType }) => {
         <div className="mb-2 block font-bold group-hover:underline">
           {article.name}
         </div>
-        <div className="text-xs">{formatUpdatedAt(article._createdAt)}</div>
+        <div className="text-xs">
+          Updated {formatUpdatedAt(article._updatedAt)}
+        </div>
       </div>
     </Link>
   );
