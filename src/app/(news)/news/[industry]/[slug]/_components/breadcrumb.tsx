@@ -1,0 +1,26 @@
+import Container from '@/components/container';
+import Link from 'next/link';
+
+export default function BreadCrumb({
+  industry,
+  name,
+}: {
+  industry: string;
+  name: string;
+}) {
+  return (
+    <div className="bg-primaryColor/10 w-full border-b border-b-gray-200">
+      <Container className="line-clamp-1 max-w-screen-xl text-[.8rem] leading-8">
+        <Link href="/news" className="hover:text-primaryColor">
+          IBZim News &nbsp;
+        </Link>{' '}
+        <span className="text-gray-400">/</span>
+        &nbsp;&nbsp;
+        <span className="capitalize">{industry}</span>{' '}
+        <span className="text-gray-400">/</span>
+        &nbsp;&nbsp;
+        <span>{name}</span>
+      </Container>
+    </div>
+  );
+}

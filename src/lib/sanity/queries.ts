@@ -255,3 +255,60 @@ export const profileSlugsAndTypeQuery: string = groq`*[_type == "profile"] {
    "type": entityType,
    _updatedAt,
 }`;
+
+export const allNewsArticlesQuery: string = groq`*[_type == "zw.news" && defined(slug.current)] | order(date desc, _createdAt desc) {
+  _id,
+  name,
+  title,
+  slug,
+  _updatedAt,
+  _type,
+  _createdAt,
+  industry,
+  seo,
+  "author": author->{name, picture, bio, links, slug},
+}`;
+
+export const newsArticleBySlugQuery: string = groq`*[_type == "zw.news" && slug.current == $slug][0]{
+  _id,
+  _updatedAt,
+  _createdAt,
+  name,
+  slug,
+  title,
+  industry,
+  type,
+  seo,
+  intro,
+  body[] {
+    ...,
+    markDefs[] {
+      ...,
+      _type == "annotationInternalLink" => {
+        "internalPage": internalPage -> { 
+          seo,
+          picture,
+          _type,
+          slug,
+          industry,
+          type,
+          name,
+         },
+      },
+    }
+  },
+  "relatedArticles": *[_type == "zw.news" && references(^._id)] {
+    name, 
+    seo, 
+    slug,
+    "author": author->{name, picture},
+     type,
+    industry,
+  },
+  "author": author->{name, picture, bio, links, postTitle},
+}`;
+
+export const newsArticleSlugsAndIndustriesQuery: string = groq`*[_type == "zw.news"] {
+  "slug": slug.current,
+  industry
+}`;

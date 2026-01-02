@@ -23,6 +23,27 @@ export type CardArticleType = {
   truthScore: number;
 };
 
+export type CardNewsArticleType = {
+  _id: string;
+  title: string;
+  name: string;
+  _type: string;
+  slug: {
+    current: string;
+  };
+  _updatedAt: string;
+  _createdAt: string;
+  industry: string;
+  type: string;
+  seo: {
+    title: string;
+    description: string;
+    image: Image;
+  };
+  author: AuthorType;
+  truthScore: number;
+};
+
 export type AuthorType = {
   _id: string;
   name: string;
@@ -207,6 +228,84 @@ export type ArticleType = {
     industry: {
       slug: string;
     };
+    type: string;
+    author: {
+      name: string;
+      picture: {
+        alt: string;
+        asset: {
+          _ref: string;
+        };
+      };
+    };
+  }[];
+};
+
+export type NewsArticleType = {
+  _id: string;
+  _type: string;
+  _createdAt: string;
+  _updatedAt: string;
+  tblContentsType: string;
+  name: string;
+  slug: {
+    _type: 'slug';
+    current: string;
+  };
+  title: string;
+  hasProductListing: boolean;
+  products?: {
+    name: string;
+    bestFor: string;
+    image: Image;
+    link: {
+      url: string;
+      text: string;
+      dofollow: boolean;
+    };
+  }[];
+  truthScore: number;
+  industry: string;
+  type: string;
+  seo: {
+    title: string;
+    description: string;
+    image: Image;
+  };
+  author: {
+    name: string;
+    picture: {
+      alt: string;
+      asset: {
+        _ref: string;
+      };
+    };
+    bio: string;
+    links: {
+      website?: string;
+      linkedin?: string;
+    };
+    postTitle: string;
+  };
+  intro: string;
+  subHeadings?: {
+    title: string;
+    type: string;
+    _key: string;
+  }[];
+  body: any;
+  relatedArticles?: {
+    name: string;
+    slug: {
+      _type: 'slug';
+      current: string;
+    };
+    seo: {
+      title: string;
+      description: string;
+      image: Image;
+    };
+    industry: string;
     type: string;
     author: {
       name: string;

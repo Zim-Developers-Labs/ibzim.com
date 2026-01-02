@@ -6,9 +6,11 @@ import {
   ArticleType,
   AuthorType,
   CardArticleType,
+  CardNewsArticleType,
   CardProfileType,
   CategoryTitleType,
   HomeType,
+  NewsArticleType,
   NomineeType,
   NotificationType,
   ProfileType,
@@ -19,6 +21,7 @@ import {
 import {
   allArticlesQuery,
   allAuthorsQuery,
+  allNewsArticlesQuery,
   allProfilesForListingQuery,
   allSchoolsByLevelQuery,
   articleBySlyugQuery,
@@ -28,6 +31,8 @@ import {
   categoryTitlesBySlugsQuery,
   documentsForSearchQuery,
   homeQuery,
+  newsArticleBySlugQuery,
+  newsArticleSlugsAndIndustriesQuery,
   notificationsQuery,
   profileBySlugQuery,
   profileSlugsAndTypeQuery,
@@ -175,6 +180,34 @@ export async function getAllProfileSlugsAndType(): Promise<
 > {
   if (client) {
     return (await client.fetch(profileSlugsAndTypeQuery)) || {};
+  }
+  return [];
+}
+
+export async function getAllNewsArticles(): Promise<CardNewsArticleType[]> {
+  if (client) {
+    return (await client.fetch(allNewsArticlesQuery)) || [];
+  }
+  return [];
+}
+
+export async function getNewsArticleBySlug(
+  slug: string,
+): Promise<NewsArticleType> {
+  if (client) {
+    return (await client.fetch(newsArticleBySlugQuery, { slug })) || {};
+  }
+  return {} as NewsArticleType;
+}
+
+export async function getAllNewsArticleSlugsAndIndustries(): Promise<
+  {
+    slug: string;
+    industry: string;
+  }[]
+> {
+  if (client) {
+    return (await client.fetch(newsArticleSlugsAndIndustriesQuery)) || {};
   }
   return [];
 }
