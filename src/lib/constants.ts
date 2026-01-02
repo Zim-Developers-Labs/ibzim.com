@@ -3,6 +3,19 @@ export const DATABASE_PREFIX = 'ibzim';
 export const TEST_DB_PREFIX = 'test_ibzim';
 export const EMAIL_SENDER = '"IBZIM" <noreply@ibzim.com>';
 
+export const WHATSAPP_SENDER = '+263717238876';
+
+export const devConString =
+  'postgres://postgres:postgres@db.localtest.me:5432/main';
+
+export enum Paths {
+  Home = '/',
+  Login = '/sign-in',
+  Signup = '/sign-up',
+  VerifyEmail = '/verify-email',
+  ResetPassword = '/reset-password',
+}
+
 export const domainUrls = [
   {
     production: 'https://www.ibzim.com',

@@ -4,12 +4,13 @@ import { drizzle as drizzleHttp } from 'drizzle-orm/neon-http';
 import * as schema from './schema';
 import ws from 'ws';
 import { env } from '@/env';
+import { devConString } from '@/lib/constants';
 
 let connectionString = env.DATABASE_URL;
 
 // Configuring Neon for local development
-if (env.NODE_ENV === 'development') {
-  connectionString = 'postgres://postgres:postgres@db.localtest.me:5432/main';
+if (env.NODE_ENV === 'development' || !connectionString) {
+  connectionString = devConString;
   neonConfig.fetchEndpoint = (host) => {
     const [protocol, port] =
       host === 'db.localtest.me' ? ['http', 4444] : ['https', 443];

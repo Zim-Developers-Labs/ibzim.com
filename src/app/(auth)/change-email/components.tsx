@@ -1,0 +1,41 @@
+import { Icons } from '@/components/icons';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { User } from '@/lib/server/constants';
+import ChangeEmailForm from './forms';
+
+export default function ChangeEmailComponents({
+  user,
+  callbackUrl,
+}: {
+  user: User;
+  callbackUrl?: string;
+}) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4">
+      <Card className="w-full max-w-md border border-zinc-200 bg-white shadow-none">
+        <CardHeader className="space-y-4 pb-4 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-zinc-200 bg-zinc-50">
+            <Icons.brandedShield className="h-10 w-10 text-zinc-600" />
+          </div>
+          <div className="space-y-2">
+            <CardTitle className="text-2xl font-bold text-gray-900">
+              Change your email address
+            </CardTitle>
+            <CardDescription className="leading-relaxed text-gray-600">
+              You are changing the email for {user.email}.
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <ChangeEmailForm callbackUrl={callbackUrl} />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

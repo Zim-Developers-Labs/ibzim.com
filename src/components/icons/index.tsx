@@ -1451,6 +1451,43 @@ function NewsIcon({ ...props }) {
   );
 }
 
+function brandedShield({ ...props }) {
+  return (
+    <svg
+      width="528"
+      height="599"
+      viewBox="0 0 528 599"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M262.6 0C325.2 63.4 403.9 98.3 494.2 98.3H527.7V203.8C527.7 393.6 414.4 553.1 261 598.3"
+        fill="black"
+      />
+      <path
+        d="M265.1 0C202.5 63.4 123.8 98.3 33.5 98.3H0V203.8C0 393.6 113.3 553.1 266.7 598.3"
+        fill="#EAB308"
+      />
+    </svg>
+  );
+}
+
+function EnvelopIconSolid({ ...props }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="size-6"
+      {...props}
+    >
+      <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+      <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+    </svg>
+  );
+}
+
 export const Icons = {
   animatedSpinner: (props: IconProps) => (
     <svg
@@ -1560,4 +1597,6 @@ export const Icons = {
   calendarIcon: CalendarIcon,
   profilesIcon: profilesIcon,
   NewsIcon: NewsIcon,
+  brandedShield: brandedShield,
+  envelopIconSolid: EnvelopIconSolid,
 };

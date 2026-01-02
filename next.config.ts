@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 import { withBotId } from 'botid/next/config';
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['@node-rs/argon2'],
+
   images: {
     remotePatterns: [
       { hostname: 'cdn.sanity.io' },

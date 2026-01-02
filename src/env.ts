@@ -18,6 +18,7 @@ export const env = createEnv({
       .enum(['development', 'test', 'production'])
       .default('development'),
     MOCK_SEND_EMAIL: z.boolean().default(false),
+    MOCK_SEND_TEXT: z.boolean().default(false),
     SMTP_HOST: z.string().trim().min(1),
     SMTP_PORT: z.number().int().min(1),
     SMTP_USER: z.string().trim().min(1),
@@ -27,6 +28,9 @@ export const env = createEnv({
     SANITY_API_READ_TOKEN: z.string().trim().min(1),
     MUX_TOKEN_ID: z.string().trim().min(1),
     MUX_TOKEN_SECRET: z.string().trim().min(1),
+    ENCRYPTION_KEY: z.string().trim().min(1),
+    GOOGLE_CLIENT_ID: z.string().trim().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().trim().min(1),
   },
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
@@ -54,10 +58,16 @@ export const env = createEnv({
     MOCK_SEND_EMAIL:
       process.env.MOCK_SEND_EMAIL === 'true' ||
       process.env.MOCK_SEND_EMAIL === '1',
+    MOCK_SEND_TEXT:
+      process.env.MOCK_SEND_TEXT === 'true' ||
+      process.env.MOCK_SEND_TEXT === '1',
     MUX_TOKEN_ID: process.env.MUX_TOKEN_ID,
     MUX_TOKEN_SECRET: process.env.MUX_TOKEN_SECRET,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     GA_SECRET: process.env.GA_SECRET,
+    ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     // Client-side env vars
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
