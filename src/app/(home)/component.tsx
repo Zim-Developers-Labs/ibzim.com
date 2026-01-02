@@ -28,35 +28,41 @@ import CompareFeature from './compare';
 
 export const menuItems = [
   {
+    title: 'Calculators',
+    description: '4 Custom useful calculators',
+    icon: Icons.toolsIcon,
+    href: '/calculators',
+    isFeatured: true,
+  },
+  {
+    title: 'IBZIM Docs',
+    description: 'Platform documentation and usage guides',
+    icon: Icons.docsIcon,
+    href: 'https://help.ibzim.com',
+    isFeatured: true,
+  },
+  {
     title: 'Events Calendar',
     description: 'Host, manage and discover events',
-    icon: Calendar,
+    icon: Icons.calendarIcon,
     href: '/tools/events-calendar',
+    isFeatured: true,
   },
   {
     title: 'Biography Profiles',
     description: 'Explore notable personalities',
-    icon: UserIcon,
+    icon: Icons.profilesIcon,
     href: '/profiles',
+    isFeatured: true,
   },
   {
     title: 'National News',
     description: 'Get latest updates',
-    icon: Newspaper,
+    icon: Icons.NewsIcon,
     href: 'https://news.ibzim.com',
+    isFeatured: true,
   },
-  {
-    title: 'Calculators',
-    description: '3+ useful calculators',
-    icon: Calculator,
-    href: '/calculators',
-  },
-  {
-    title: 'IBZIM Docs',
-    description: 'Learn about the platform',
-    icon: MapPin,
-    href: 'https://help.ibzim.com',
-  },
+
   // {
   //   title: 'Support',
   //   description: 'Get help and assistance',
@@ -377,14 +383,25 @@ export default function HomeComponent({
                   <Link href={feature.href}>
                     <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                       <CardContent className="p-4 text-center">
-                        <div
-                          className={`from-primaryColor/20 to-primaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
-                        >
-                          <Icon
-                            className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
-                            strokeWidth={1}
-                          />
-                        </div>
+                        {feature.isFeatured ? (
+                          <div
+                            className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                          >
+                            <Icon
+                              className="h-10 w-10 sm:h-12 sm:w-12"
+                              strokeWidth={1}
+                            />
+                          </div>
+                        ) : (
+                          <div
+                            className={`from-primaryColor/20 to-primaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
+                          >
+                            <Icon
+                              className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
+                              strokeWidth={1}
+                            />
+                          </div>
+                        )}
                         <h3 className="mb-1 text-sm leading-tight font-semibold text-nowrap text-zinc-900 sm:mb-2 sm:text-base">
                           {feature.title}
                         </h3>
