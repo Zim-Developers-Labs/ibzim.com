@@ -368,7 +368,7 @@ export default function HomeComponent({
                       />
                     </div>
                     <Button className="rounded-full bg-[#43cd66] text-[#103928] hover:bg-[#38b159]">
-                      Support
+                      Get Help
                       <PaperAirplaneIcon className="inline-block h-4 w-4" />
                     </Button>
                   </CardContent>
