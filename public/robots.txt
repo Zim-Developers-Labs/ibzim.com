@@ -4,3 +4,4 @@ Allow: /api/og/*
 Sitemap: https://www.ibzim.com/sitemap/articles.xml
 Sitemap: https://www.ibzim.com/sitemap/profiles.xml
 Sitemap: https://www.ibzim.com/sitemap/misc.xml
+Sitemap: https://www.ibzim.com/sitemap/news.xml
