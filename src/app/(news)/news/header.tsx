@@ -15,15 +15,12 @@ export default function CalculatorHeader() {
 
   return (
     <header className="relative overflow-hidden">
-      <Container className="relative flex items-center justify-between py-2">
+      <Container className="relative flex items-center justify-between py-4">
         <div>
-          <Link href="/calculators">
+          <Link href="/">
             <span className={`${logoFont.className} block text-4xl`}>
               <span className="text-zinc-900">IB</span>
               <span className="text-primaryColor">ZIM</span>
-            </span>
-            <span className="block text-xs font-light tracking-[4.5px] text-zinc-700">
-              CALCULATORS
             </span>
           </Link>
         </div>
