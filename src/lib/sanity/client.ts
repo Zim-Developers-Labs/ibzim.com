@@ -208,7 +208,9 @@ export async function getNewsArticleBySlug(
 export async function getAllNewsArticleSlugsAndIndustries(): Promise<
   {
     slug: string;
-    industry: string;
+    industry: {
+      slug: string;
+    };
   }[]
 > {
   if (client) {

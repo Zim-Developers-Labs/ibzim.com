@@ -33,7 +33,9 @@ export type CardNewsArticleType = {
   };
   _updatedAt: string;
   _createdAt: string;
-  industry: string;
+  industry: {
+    slug: string;
+  };
   type: string;
   seo: {
     title: string;
@@ -214,6 +216,13 @@ export type ArticleType = {
     _key: string;
   }[];
   body: any;
+  socialMediaPostUrls: {
+    instagramUrl?: string;
+    facebookUrl?: string;
+    twitterUrl?: string;
+    youtubeUrl?: string;
+    linkedinUrl?: string;
+  };
   relatedArticles?: {
     name: string;
     slug: {
@@ -265,7 +274,9 @@ export type NewsArticleType = {
     };
   }[];
   truthScore: number;
-  industry: string;
+  industry: {
+    slug: string;
+  };
   type: string;
   seo: {
     title: string;
@@ -305,7 +316,9 @@ export type NewsArticleType = {
       description: string;
       image: Image;
     };
-    industry: string;
+    industry: {
+      slug: string;
+    };
     type: string;
     author: {
       name: string;
@@ -317,6 +330,18 @@ export type NewsArticleType = {
       };
     };
   }[];
+};
+
+export type RelatedNewsItem = {
+  name: string;
+  slug: {
+    _type: 'slug';
+    current: string;
+  };
+  industry: {
+    slug: string;
+  };
+  mainImage: Image;
 };
 
 export type ProfileType = {
@@ -364,6 +389,7 @@ export type ProfileType = {
     tableHeading: string;
     tableData: any;
   }[];
+  relatedNews?: RelatedNewsItem[];
   relatedProfiles: {
     entityType: string;
     slug: Slug;

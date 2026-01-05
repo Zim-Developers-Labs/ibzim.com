@@ -44,6 +44,7 @@ import { User } from '@/lib/server/constants';
 import InfoBox from './info-box';
 import References from './references';
 import { ProfileReviewMini } from './profile-review-mini';
+import RelatedNewsGrid from './related-news';
 
 export default function ProfileComponents({
   profile,
@@ -110,6 +111,11 @@ export default function ProfileComponents({
             infoboxTable={profile.additionalInfo!}
           />
         </Container>
+        {profile.relatedNews && profile.relatedNews.length > 0 && (
+          <Container className="mb-4">
+            <RelatedNewsGrid news={profile.relatedNews} />
+          </Container>
+        )}
       </div>
     </>
   );

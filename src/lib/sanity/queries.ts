@@ -183,6 +183,7 @@ export const profileBySlugQuery: string = groq`*[_type == "profile" && slug.curr
         "internalPage": internalPage -> { 
           seo,
           picture,
+          entityType,
           _type,
           slug,
           "industry": industry->{"slug": slug.current},
@@ -211,6 +212,7 @@ export const profileBySlugQuery: string = groq`*[_type == "profile" && slug.curr
           "internalPage": internalPage -> { 
             seo,
             picture,
+            entityType,
             _type,
             slug,
             "industry": industry->{"slug": slug.current},
@@ -222,7 +224,12 @@ export const profileBySlugQuery: string = groq`*[_type == "profile" && slug.curr
     }
   },
   socialLinks,
-  relatedProfiles,
+  "relatedNews": *[_type == "zw.news" && references(^._id)] {
+    name,
+    slug,
+    "industry": industry->{"slug": slug.current},
+    mainImage,
+  },
   "relatedProfiles": *[_type == "profile" && references(^._id)] {
     name, 
     slug,
@@ -264,7 +271,7 @@ export const allNewsArticlesQuery: string = groq`*[_type == "zw.news" && defined
   _updatedAt,
   _type,
   _createdAt,
-  industry,
+  "industry": industry->{"slug": slug.current},
   seo,
   "author": author->{name, picture, bio, links, slug},
 }`;
@@ -276,7 +283,7 @@ export const newsArticleBySlugQuery: string = groq`*[_type == "zw.news" && slug.
   name,
   slug,
   title,
-  industry,
+  "industry": industry->{"slug": slug.current},
   type,
   seo,
   intro,
@@ -288,9 +295,10 @@ export const newsArticleBySlugQuery: string = groq`*[_type == "zw.news" && slug.
         "internalPage": internalPage -> { 
           seo,
           picture,
+          entityType,
           _type,
           slug,
-          industry,
+          "industry": industry->{"slug": slug.current},
           type,
           name,
          },
@@ -303,14 +311,14 @@ export const newsArticleBySlugQuery: string = groq`*[_type == "zw.news" && slug.
     slug,
     "author": author->{name, picture},
      type,
-    industry,
+    "industry": industry->{"slug": slug.current},
   },
   "author": author->{name, picture, bio, links, postTitle},
 }`;
 
 export const newsArticleSlugsAndIndustriesQuery: string = groq`*[_type == "zw.news"] {
   "slug": slug.current,
-  industry
+  "industry": industry->{"slug": slug.current},
 }`;
 
 export const policySlugsQuery: string = groq`*[_type == "policy"] {

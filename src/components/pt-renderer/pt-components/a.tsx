@@ -56,6 +56,10 @@ export function annotationInternalLink(props: any) {
       return `/${internalPage.industry.slug}/${internalPage.type}/${internalPage.slug.current}`;
     }
 
+    if (internalPage._type === 'zw.news') {
+      return `/news/${internalPage.industry.slug}/${internalPage.slug.current}`;
+    }
+
     // For non-article types, use the existing logic
     return `/profiles/${internalPage.entityType}/${internalPage.slug.current}`;
   };

@@ -117,7 +117,7 @@ async function generateNewsSitemap(): Promise<MetadataRoute.Sitemap> {
   return articles
     .filter(({ slug = '' }) => slug)
     .map((article) => ({
-      url: `${siteConfig.url.web}/news/${article.industry}/${article.slug.current}`,
+      url: `${siteConfig.url.web}/news/${article.industry.slug}/${article.slug.current}`,
       lastModified: new Date(article._updatedAt),
       priority: 0.9,
     }));

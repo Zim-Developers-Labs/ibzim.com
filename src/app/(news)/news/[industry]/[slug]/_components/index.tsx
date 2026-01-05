@@ -32,7 +32,7 @@ export default function NewsArticleComponents({
 }: {
   article: NewsArticleType;
 }) {
-  const articleUrl = `/news/${article.industry}/${article.slug.current}`;
+  const articleUrl = `/news/${article.industry.slug}/${article.slug.current}`;
 
   const articleText = [
     article.title,
@@ -66,7 +66,7 @@ export default function NewsArticleComponents({
         }}
       />
       <div className="bg-primaryColor/10 relative pb-8 md:pb-10">
-        <BreadCrumb name={article.name} industry={article.industry} />
+        <BreadCrumb name={article.name} industry={article.industry.slug} />
         <Container className="max-w-screen-md pt-10 md:pt-20">
           <header className="mb-8 flex flex-col">
             <div className="mr-2 mb-6 flex h-fit flex-row items-center">
@@ -104,7 +104,7 @@ export default function NewsArticleComponents({
               <div>
                 <div className="flex items-center gap-2">
                   <div className="mb-2 w-fit rounded-sm bg-zinc-100 p-1 text-xs text-zinc-600 md:text-sm">
-                    {article.industry}
+                    {article.industry.slug}
                   </div>
                   <div className="mb-2 w-fit rounded-sm bg-zinc-100 p-1 text-xs text-zinc-600 md:text-sm">
                     {article.type}

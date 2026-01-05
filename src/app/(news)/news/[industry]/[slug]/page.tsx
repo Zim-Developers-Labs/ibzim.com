@@ -41,7 +41,7 @@ export async function generateStaticParams() {
   const articles = await getAllNewsArticleSlugsAndIndustries();
 
   return (await articles).map((article) => ({
-    industry: article.industry,
+    industry: article.industry.slug,
     slug: article.slug,
   }));
 }

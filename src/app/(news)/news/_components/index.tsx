@@ -8,7 +8,7 @@ import Container from '@/components/container';
 function ArticleCard({ article }: { article: CardNewsArticleType }) {
   return (
     <Link
-      href={`/news/${article.industry}/${article.slug.current}`}
+      href={`/news/${article.industry.slug}/${article.slug.current}`}
       className="group flex flex-row-reverse justify-between px-4 md:flex-col md:px-0"
     >
       <div className="mb-4 ml-4 h-20 w-32 min-w-32 overflow-hidden rounded-md md:ml-0 md:h-[112px] md:w-[200px] md:max-w-none">
