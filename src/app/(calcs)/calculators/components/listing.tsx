@@ -43,6 +43,14 @@ const calculators = [
     logoUrl: '/assets/calc-logos/zesa.png',
     href: '/calculators/zesa-units',
   },
+  {
+    id: 'duty',
+    name: 'ZIMRA Duty Calculator',
+    description:
+      'Calculate ZIMRA duty fees and taxes for imported goods based on Zimbabwe regulations.',
+    logoUrl: '/assets/calc-logos/zimra.png',
+    href: '/calculators/zimra-duty',
+  },
 ] as const;
 
 export default function CalculatorsListing() {

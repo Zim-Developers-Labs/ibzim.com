@@ -75,6 +75,18 @@ export default function CurrencyConverterComponents() {
               </Avatar>
               ZESA Calculator
             </Link>
+            <Link
+              href="/calculators/zimra-duty"
+              className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 hover:bg-zinc-100 sm:px-4 sm:py-2"
+            >
+              <Avatar className="h-8 w-8 rounded-md border border-zinc-300">
+                <AvatarImage
+                  src="/assets/calc-logos/zimra.png"
+                  alt={`ZIMRA logo`}
+                />
+              </Avatar>
+              ZIMRA Duty Calculator
+            </Link>
           </div>
         </div>
       </Container>
