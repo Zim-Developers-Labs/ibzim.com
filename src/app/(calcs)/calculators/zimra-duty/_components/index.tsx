@@ -192,71 +192,87 @@ export default function ZimraDutyCalculatorComponents() {
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="text-2xl">
-              Frequently Asked Questions
+              <h2>Frequently Asked Questions</h2>
             </CardTitle>
             <CardDescription>
-              Common questions about ZIMRA import duties and this calculator
+              <p>
+                Common questions about ZIMRA import duties and this calculator
+              </p>
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
-                <AccordionTrigger className="text-left">
-                  What is Value for Duty Purpose (VDP)?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>What is Value for Duty Purpose (VDP)?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  VDP is the total taxable value used to calculate customs duty.
-                  For vehicles, it includes the invoice value, ocean freight,
-                  and road freight (usually 6% if not specified). For goods, it
-                  includes FOB (Freight on Board) value plus freight costs. All
-                  applicable duties and taxes are calculated based on this VDP.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    VDP is the total taxable value used to calculate customs
+                    duty. For vehicles, it includes the invoice value, ocean
+                    freight, and road freight (usually 6% if not specified). For
+                    goods, it includes FOB (Freight on Board) value plus freight
+                    costs. All applicable duties and taxes are calculated based
+                    on this VDP.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-2">
-                <AccordionTrigger className="text-left">
-                  Who qualifies for Returning Resident duty suspension?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>Who qualifies for Returning Resident duty suspension?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  Zimbabwean citizens or permanent residents who have been
-                  outside Zimbabwe for at least 2 years continuously may
-                  qualify. The duty suspension benefit (up to $40,000) applies
-                  to personal effects, household goods, and one vehicle. Use the
-                  eligibility checker in the calculator to determine your
-                  qualification based on your time abroad.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    Zimbabwean citizens or permanent residents who have been
+                    outside Zimbabwe for at least 2 years continuously may
+                    qualify. The duty suspension benefit (up to $40,000) applies
+                    to personal effects, household goods, and one vehicle. Use
+                    the eligibility checker in the calculator to determine your
+                    qualification based on your time abroad.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3">
-                <AccordionTrigger className="text-left">
-                  What is the 35% surtax on vehicles?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>What is the 35% surtax on vehicles?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  The surtax is an additional tax applied to passenger vehicles
-                  that are 5 years or older (calculated from year of
-                  manufacture). It's 35% of the VDP and is charged on top of the
-                  standard customs duty. Vehicles less than 5 years old and
-                  commercial vehicles (trucks, buses) are generally exempt from
-                  this surtax.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    The surtax is an additional tax applied to passenger
+                    vehicles that are 5 years or older (calculated from year of
+                    manufacture). It's 35% of the VDP and is charged on top of
+                    the standard customs duty. Vehicles less than 5 years old
+                    and commercial vehicles (trucks, buses) are generally exempt
+                    from this surtax.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-4">
-                <AccordionTrigger className="text-left">
-                  Can I import a vehicle older than 10 years?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>Can I import a vehicle older than 10 years?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  No. Zimbabwe has banned the importation of passenger vehicles
-                  (sedans, hatchbacks, SUVs, double cabs) that are 10 years or
-                  older from their year of manufacture. However, commercial
-                  vehicles like trucks, buses, tractors, and specialized
-                  equipment are exempt from this age restriction. The calculator
-                  will alert you if your vehicle falls under the ban.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    No. Zimbabwe has banned the importation of passenger
+                    vehicles (sedans, hatchbacks, SUVs, double cabs) that are 10
+                    years or older from their year of manufacture. However,
+                    commercial vehicles like trucks, buses, tractors, and
+                    specialized equipment are exempt from this age restriction.
+                    The calculator will alert you if your vehicle falls under
+                    the ban.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-5">
-                <AccordionTrigger className="text-left">
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>
+                    What's the difference between the four importation methods
+                    for goods?
+                  </h3>
                   What's the difference between the four importation methods for
                   goods?
                 </AccordionTrigger>
@@ -285,51 +301,59 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-6">
-                <AccordionTrigger className="text-left">
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>What are per-unit duties on goods?</h3>
                   What are per-unit duties on goods?
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  Some goods have additional duties charged per unit (kg, pair,
-                  litre, etc.) on top of the percentage-based duty. For example,
-                  clothing has 40% duty plus $3 per kilogram, and footwear has
-                  40% duty plus $1 per pair. The calculator automatically adds
-                  these per-unit charges when you enter the quantity.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    Some goods have additional duties charged per unit (kg,
+                    pair, litre, etc.) on top of the percentage-based duty. For
+                    example, clothing has 40% duty plus $3 per kilogram, and
+                    footwear has 40% duty plus $1 per pair. The calculator
+                    automatically adds these per-unit charges when you enter the
+                    quantity.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-7">
-                <AccordionTrigger className="text-left">
-                  How is VAT calculated?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>How is VAT calculated?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  VAT (Value Added Tax) is 15% in Zimbabwe and is calculated on
-                  the VDP plus customs duty. The formula is: VAT = (VDP +
-                  Customs Duty) × 15%. This means VAT is charged on the total
-                  value including the duty already added, not just on the
-                  original purchase price.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    VAT (Value Added Tax) is 15% in Zimbabwe and is calculated
+                    on the VDP plus customs duty. The formula is: VAT = (VDP +
+                    Customs Duty) × 15%. This means VAT is charged on the total
+                    value including the duty already added, not just on the
+                    original purchase price.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-8">
-                <AccordionTrigger className="text-left">
-                  What currencies can I use for payment?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>What currencies can I use for payment?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  The calculator supports multiple invoice currencies (USD,
-                  ZAR/NAD, EUR, GBP, CNY, AED) with automatic conversion. All
-                  calculations are displayed in USD for consistency. ZIMRA
-                  typically accepts payment in USD or ZAR, but check with ZIMRA
-                  for current payment options and exchange rates at the time of
-                  clearance.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    The calculator supports multiple invoice currencies (USD,
+                    ZAR/NAD, EUR, GBP, CNY, AED) with automatic conversion. All
+                    calculations are displayed in USD for consistency. ZIMRA
+                    typically accepts payment in USD or ZAR, but check with
+                    ZIMRA for current payment options and exchange rates at the
+                    time of clearance.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-9">
-                <AccordionTrigger className="text-left">
-                  What documents do I need to clear goods at ZIMRA?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>What documents do I need to clear goods at ZIMRA?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  Typical documents required include:
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>Typical documents required include:</p>
                   <ul className="mt-2 list-inside list-disc space-y-1">
                     <li>Commercial invoice or purchase receipt</li>
                     <li>Bill of lading or airway bill</li>
@@ -352,16 +376,18 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-10">
-                <AccordionTrigger className="text-left">
-                  Are there any goods with 0% duty rate?
+                <AccordionTrigger className="text-left" asChild>
+                  <h3>Are there any goods with 0% duty rate?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700">
-                  Yes! Several essential items have 0% duty rates, including:
-                  computers and tablets, printers, chargers, agricultural
-                  machinery, textbooks, diapers, sanitary pads, solar modules,
-                  generators, and many others. However, you may still need to
-                  pay VAT (15%) on these items. Check the goods category in the
-                  calculator to see specific duty rates for each item.
+                <AccordionContent className="text-slate-700" asChild>
+                  <p>
+                    Yes! Several essential items have 0% duty rates, including:
+                    computers and tablets, printers, chargers, agricultural
+                    machinery, textbooks, diapers, sanitary pads, solar modules,
+                    generators, and many others. However, you may still need to
+                    pay VAT (15%) on these items. Check the goods category in
+                    the calculator to see specific duty rates for each item.
+                  </p>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
