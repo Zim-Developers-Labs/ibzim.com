@@ -273,8 +273,6 @@ export default function ZimraDutyCalculatorComponents() {
                     What's the difference between the four importation methods
                     for goods?
                   </h3>
-                  What's the difference between the four importation methods for
-                  goods?
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-700">
                   <ul className="list-inside list-disc space-y-2">
@@ -303,7 +301,6 @@ export default function ZimraDutyCalculatorComponents() {
               <AccordionItem value="item-6">
                 <AccordionTrigger className="text-left" asChild>
                   <h3>What are per-unit duties on goods?</h3>
-                  What are per-unit duties on goods?
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-700" asChild>
                   <p>
@@ -352,7 +349,7 @@ export default function ZimraDutyCalculatorComponents() {
                 <AccordionTrigger className="text-left" asChild>
                   <h3>What documents do I need to clear goods at ZIMRA?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>Typical documents required include:</p>
                   <ul className="mt-2 list-inside list-disc space-y-1">
                     <li>Commercial invoice or purchase receipt</li>
