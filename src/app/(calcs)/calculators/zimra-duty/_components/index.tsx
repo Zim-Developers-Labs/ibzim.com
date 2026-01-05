@@ -203,10 +203,10 @@ export default function ZimraDutyCalculatorComponents() {
           <CardContent>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>What is Value for Duty Purpose (VDP)?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     VDP is the total taxable value used to calculate customs
                     duty. For vehicles, it includes the invoice value, ocean
@@ -219,10 +219,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-2">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>Who qualifies for Returning Resident duty suspension?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     Zimbabwean citizens or permanent residents who have been
                     outside Zimbabwe for at least 2 years continuously may
@@ -235,10 +235,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-3">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>What is the 35% surtax on vehicles?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     The surtax is an additional tax applied to passenger
                     vehicles that are 5 years or older (calculated from year of
@@ -251,10 +251,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-4">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>Can I import a vehicle older than 10 years?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     No. Zimbabwe has banned the importation of passenger
                     vehicles (sedans, hatchbacks, SUVs, double cabs) that are 10
@@ -268,7 +268,7 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-5">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>
                     What's the difference between the four importation methods
                     for goods?
@@ -299,10 +299,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-6">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>What are per-unit duties on goods?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     Some goods have additional duties charged per unit (kg,
                     pair, litre, etc.) on top of the percentage-based duty. For
@@ -315,10 +315,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-7">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>How is VAT calculated?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     VAT (Value Added Tax) is 15% in Zimbabwe and is calculated
                     on the VDP plus customs duty. The formula is: VAT = (VDP +
@@ -330,10 +330,10 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-8">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>What currencies can I use for payment?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     The calculator supports multiple invoice currencies (USD,
                     ZAR/NAD, EUR, GBP, CNY, AED) with automatic conversion. All
@@ -346,37 +346,39 @@ export default function ZimraDutyCalculatorComponents() {
               </AccordionItem>
 
               <AccordionItem value="item-9">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>What documents do I need to clear goods at ZIMRA?</h3>
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-700">
-                  <p>Typical documents required include:</p>
-                  <ul className="mt-2 list-inside list-disc space-y-1">
-                    <li>Commercial invoice or purchase receipt</li>
-                    <li>Bill of lading or airway bill</li>
-                    <li>ZIMRA import declaration form</li>
-                    <li>Proof of payment for duties calculated</li>
-                    <li>
-                      For vehicles: Certificate of registration, roadworthy
-                      certificate
-                    </li>
-                    <li>
-                      For returning residents: Proof of residence abroad,
-                      passport stamps
-                    </li>
-                  </ul>
-                  <p className="mt-2">
-                    Contact ZIMRA or a clearing agent for a complete list
-                    specific to your situation.
-                  </p>
+                  <div>
+                    <p>Typical documents required include:</p>
+                    <ul className="mt-2 list-inside list-disc space-y-1">
+                      <li>Commercial invoice or purchase receipt</li>
+                      <li>Bill of lading or airway bill</li>
+                      <li>ZIMRA import declaration form</li>
+                      <li>Proof of payment for duties calculated</li>
+                      <li>
+                        For vehicles: Certificate of registration, roadworthy
+                        certificate
+                      </li>
+                      <li>
+                        For returning residents: Proof of residence abroad,
+                        passport stamps
+                      </li>
+                    </ul>
+                    <p className="mt-2">
+                      Contact ZIMRA or a clearing agent for a complete list
+                      specific to your situation.
+                    </p>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-10">
-                <AccordionTrigger className="text-left" asChild>
+                <AccordionTrigger className="text-left">
                   <h3>Are there any goods with 0% duty rate?</h3>
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-700" asChild>
+                <AccordionContent className="text-slate-700">
                   <p>
                     Yes! Several essential items have 0% duty rates, including:
                     computers and tablets, printers, chargers, agricultural
