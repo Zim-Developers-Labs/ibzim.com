@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { globalGETRateLimit } from '@/lib/server/request';
 import { NextRequest } from 'next/server';
 import { env } from '@/env';
+import { absoluteUrl } from '@/lib/utils';
 
 export async function GET(request: NextRequest): Promise<Response> {
   if (!(await globalGETRateLimit())) {
@@ -11,6 +12,8 @@ export async function GET(request: NextRequest): Promise<Response> {
       status: 429,
     });
   }
+
+  console.log('Sign-up redirect URI:', absoluteUrl('/sign-up/google/callback'));
 
   const searchParams = request.nextUrl.searchParams;
   const callbackUrl = searchParams.get('callbackUrl');
