@@ -151,7 +151,6 @@ export async function setPasswordResetSessionTokenCookie(
 ): Promise<void> {
   (await cookies()).set('password_reset_session', token, {
     expires: expiresAt,
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     sameSite: 'lax',
     httpOnly: true,
     path: '/',
@@ -162,7 +161,6 @@ export async function setPasswordResetSessionTokenCookie(
 export async function deletePasswordResetSessionTokenCookie(): Promise<void> {
   (await cookies()).set('password_reset_session', '', {
     maxAge: 0,
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     sameSite: 'lax',
     httpOnly: true,
     path: '/',

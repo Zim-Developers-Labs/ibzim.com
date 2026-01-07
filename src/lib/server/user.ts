@@ -50,6 +50,7 @@ export async function createUser(
     registered2FA: false,
   };
 
+  console.log('Created user:', user); //TODO: Remove debug log
   return user;
 }
 

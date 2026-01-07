@@ -24,7 +24,6 @@ export async function GET(request: NextRequest): Promise<Response> {
   ]);
 
   (await cookies()).set('google_oauth_state', state, {
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
@@ -32,7 +31,6 @@ export async function GET(request: NextRequest): Promise<Response> {
     sameSite: 'lax',
   });
   (await cookies()).set('google_code_verifier', codeVerifier, {
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
@@ -42,7 +40,6 @@ export async function GET(request: NextRequest): Promise<Response> {
 
   if (callbackUrl) {
     (await cookies()).set('google_oauth_callbackUrl', callbackUrl, {
-      ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
       path: '/',
       httpOnly: true,
       secure: env.NODE_ENV === 'production',

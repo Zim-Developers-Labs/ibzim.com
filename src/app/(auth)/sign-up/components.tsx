@@ -1,11 +1,10 @@
 import { logoFont } from '@/lib/fonts';
 import Link from 'next/link';
-import { RegisterForm } from './register-form';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { LogIn } from 'lucide-react';
-import { TempErrForm } from '@/components/temp';
+import { RegisterForm } from './register-form';
 
 export default function SignUpComponents({
   callbackUrl,
@@ -44,8 +43,7 @@ export default function SignUpComponents({
                 <span className="text-primaryColor">ZIM</span>
               </span>
             </Link>
-            {/* <RegisterForm callbackUrl={callbackUrl} error={error} /> */}
-            <TempErrForm callbackUrl={callbackUrl} error={error} />
+            <RegisterForm callbackUrl={callbackUrl} error={error} />
           </div>
         </div>
       </div>

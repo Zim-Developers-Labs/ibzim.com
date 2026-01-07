@@ -103,7 +103,7 @@ export async function verifyEmailAction(
         : `/2fa/setup?callbackUrl=${callbackUrl}`,
     );
   }
-  return redirect(callbackUrl !== '' ? callbackUrl : `/continue`);
+  return redirect(callbackUrl !== '' ? callbackUrl : `/`);
 }
 
 export async function resendEmailVerificationCodeAction(): Promise<ActionResult> {

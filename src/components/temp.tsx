@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import type React from 'react';
 
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, MessageCircle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { Icons } from './icons';
 
 export function TempErrForm({

@@ -7,7 +7,7 @@ import { useActionState, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { signupAction } from './actions';
 import { Icons } from '@/components/icons';
-import { EyeIcon, EyeOffIcon, Info } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Info, Check, X } from 'lucide-react';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { DOMAIN_URLS } from '@/lib/constants';
 
@@ -184,6 +184,80 @@ export function RegisterForm({
                 {passwordStrength > 2 && 'Password is strong'}
               </p>
             )}
+            <ul className="mt-3 space-y-1.5 text-sm">
+              <li className="flex items-center gap-2">
+                {password.length >= 8 ? (
+                  <Check className="size-4 text-green-500" />
+                ) : (
+                  <X className="size-4 text-gray-400" />
+                )}
+                <span
+                  className={
+                    password.length >= 8 ? 'text-green-600' : 'text-gray-500'
+                  }
+                >
+                  At least 8 characters
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                {/[a-z]/.test(password) ? (
+                  <Check className="size-4 text-green-500" />
+                ) : (
+                  <X className="size-4 text-gray-400" />
+                )}
+                <span
+                  className={
+                    /[a-z]/.test(password) ? 'text-green-600' : 'text-gray-500'
+                  }
+                >
+                  One lowercase letter (a-z)
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                {/[A-Z]/.test(password) ? (
+                  <Check className="size-4 text-green-500" />
+                ) : (
+                  <X className="size-4 text-gray-400" />
+                )}
+                <span
+                  className={
+                    /[A-Z]/.test(password) ? 'text-green-600' : 'text-gray-500'
+                  }
+                >
+                  One uppercase letter (A-Z)
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                {/\d/.test(password) ? (
+                  <Check className="size-4 text-green-500" />
+                ) : (
+                  <X className="size-4 text-gray-400" />
+                )}
+                <span
+                  className={
+                    /\d/.test(password) ? 'text-green-600' : 'text-gray-500'
+                  }
+                >
+                  One number (0-9)
+                </span>
+              </li>
+              <li className="flex items-center gap-2">
+                {/[^a-zA-Z\d]/.test(password) ? (
+                  <Check className="size-4 text-green-500" />
+                ) : (
+                  <X className="size-4 text-gray-400" />
+                )}
+                <span
+                  className={
+                    /[^a-zA-Z\d]/.test(password)
+                      ? 'text-green-600'
+                      : 'text-gray-500'
+                  }
+                >
+                  One special character (e.g. !@#$%^&*)
+                </span>
+              </li>
+            </ul>
           </div>
           {state.message && (
             <p className="rounded-sm bg-red-100 p-2 text-sm text-red-500">

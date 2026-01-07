@@ -1,4 +1,3 @@
-import { TempErrForm } from '@/components/temp';
 import { LoginForm } from './login-form';
 import { logoFont } from '@/lib/fonts';
 import Image from 'next/image';
@@ -27,8 +26,7 @@ export function SignInComponents({
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            {/* <LoginForm callbackUrl={callbackUrl} error={error} /> */}
-            <TempErrForm callbackUrl={callbackUrl} error={error} />
+            <LoginForm callbackUrl={callbackUrl} error={error} />
           </div>
         </div>
       </div>

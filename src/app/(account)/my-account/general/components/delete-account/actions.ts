@@ -41,7 +41,6 @@ export async function createEmailVerificationRequest(
   (await cookies()).set('email_verification', id, {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: expiresAt,

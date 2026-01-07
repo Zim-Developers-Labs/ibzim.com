@@ -117,7 +117,6 @@ export async function verifyDeleteAction(
   (await cookies()).set('session', '', {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 0,

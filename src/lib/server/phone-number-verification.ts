@@ -88,7 +88,6 @@ export async function setPhoneNumberVerificationRequestCookie(
   (await cookies()).set('phone_number_verification', request.id, {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: request.expiresAt,
@@ -99,7 +98,6 @@ export async function deletePhoneNumberVerificationRequestCookie(): Promise<void
   (await cookies()).set('phone_number_verification', '', {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 0,

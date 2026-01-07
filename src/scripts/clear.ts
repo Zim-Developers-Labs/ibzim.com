@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
-import { users, weeklyCharts } from '@/lib/server/db/schema';
+import { users } from '@/lib/server/db/schema';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import { inArray, like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-http';
@@ -48,13 +48,6 @@ async function clear() {
       .where(like(users.email, 'demo-%'))
       .returning({ id: users.id });
     console.log(`  ✓ Deleted ${usersDeleted.length} user(s)`);
-
-    console.log('\nClearing demo weekly charts...');
-    const chartsDeleted = await db
-      .delete(weeklyCharts)
-      .where(inArray(weeklyCharts.songId, songIds))
-      .returning({ id: weeklyCharts.id });
-    console.log(`  ✓ Deleted ${chartsDeleted.length} weekly chart entry(ies)`);
 
     console.log('\n✅ Demo data cleanup completed successfully!');
   } catch (error) {

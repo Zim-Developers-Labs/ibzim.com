@@ -5,15 +5,11 @@ import {
   reviews,
   paymentMethods,
   votes,
-  fanStatus,
   users,
   sessions,
   notifications,
-  songVotes,
-  weeklyCharts,
 } from '@/lib/server/db/schema';
 import { getDemoData } from './demo-data';
-import { sql } from 'drizzle-orm';
 import { devConString } from '@/lib/constants';
 
 // Load environment variables
@@ -138,29 +134,6 @@ async function seed() {
       console.log(`  ✓ Created payment method for user ${user.id}`);
     }
 
-    console.log('\nCreating demo fan statuses...');
-    for (const fanData of demoData.fanStatuses) {
-      const user = createdUsers[fanData.userIndex];
-      await db.insert(fanStatus).values({
-        userId: user.id,
-        artistProfileId: fanData.artistProfileId,
-      });
-      console.log(`  ✓ Created fan status for user ${user.id}`);
-    }
-
-    console.log('\nCreating demo song votes...');
-    for (const songVoteData of demoData.songVotes) {
-      const user = createdUsers[songVoteData.userIndex];
-      await db.insert(songVotes).values({
-        userId: user.id,
-        songId: songVoteData.songId,
-        voteType: songVoteData.voteType,
-      });
-      console.log(
-        `  ✓ Created song vote for user ${user.id} on ${songVoteData.songId}`,
-      );
-    }
-
     console.log('\nCreating demo votes...');
     for (const voteData of demoData.votes) {
       const user = createdUsers[voteData.userIndex];
@@ -173,73 +146,9 @@ async function seed() {
       console.log(`  ✓ Created vote for user ${user.id}`);
     }
 
-    console.log('\nCreating demo weekly charts with calculated positions...');
-
-    // Group chart entries by weekStartDate
-    const chartsByWeek = new Map<
-      string,
-      { songId: string; weekStartDate: Date }[]
-    >();
-    for (const chartData of demoData.weeklyCharts) {
-      const weekKey = chartData.weekStartDate.toISOString();
-      if (!chartsByWeek.has(weekKey)) {
-        chartsByWeek.set(weekKey, []);
-      }
-      chartsByWeek.get(weekKey)!.push(chartData);
-    }
-
-    // For each week, calculate positions based on upvote counts
-    for (const [weekKey, entries] of chartsByWeek) {
-      // Get upvote counts for each song from the database
-      const songUpvoteCounts = await db
-        .select({
-          songId: songVotes.songId,
-          upVoteCount:
-            sql<number>`count(*) filter (where ${songVotes.voteType} = 'upvote')`.as(
-              'upVoteCount',
-            ),
-          downVoteCount:
-            sql<number>`count(*) filter (where ${songVotes.voteType} = 'downvote')`.as(
-              'downVoteCount',
-            ),
-        })
-        .from(songVotes)
-        .groupBy(songVotes.songId);
-
-      // Create a map of songId to net votes (upvotes - downvotes)
-      const voteCountMap = new Map<string, number>();
-      for (const row of songUpvoteCounts) {
-        voteCountMap.set(row.songId, row.upVoteCount - row.downVoteCount);
-      }
-
-      // Sort songs by net vote count (descending) to determine positions
-      const sortedSongs = entries
-        .map((entry) => ({
-          ...entry,
-          netVotes: voteCountMap.get(entry.songId) || 0,
-        }))
-        .sort((a, b) => b.netVotes - a.netVotes);
-
-      // Insert with calculated positions
-      for (let i = 0; i < sortedSongs.length; i++) {
-        const position = i + 1;
-        await db.insert(weeklyCharts).values({
-          songId: sortedSongs[i].songId,
-          position,
-          weekStartDate: sortedSongs[i].weekStartDate,
-        });
-        console.log(
-          `  ✓ Created chart entry: position ${position} for song ${sortedSongs[i].songId.slice(0, 8)}... (week: ${weekKey.slice(0, 10)})`,
-        );
-      }
-    }
-
     console.log('\n✅ Seed completed successfully!');
     console.log(
       `   Created ${createdUsers.length} demo users with related data.`,
-    );
-    console.log(
-      `   Created ${demoData.weeklyCharts.length} weekly chart entries.`,
     );
     console.log('   Demo users have emails starting with "demo-"');
   } catch (error) {

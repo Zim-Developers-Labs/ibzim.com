@@ -13,7 +13,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       response.cookies.set('session', token, {
         path: '/',
         maxAge: 60 * 60 * 24 * 30,
-        ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
         sameSite: 'lax',
         httpOnly: true,
         secure: env.NODE_ENV === 'production',

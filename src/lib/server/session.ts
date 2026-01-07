@@ -110,7 +110,6 @@ export async function setSessionTokenCookie(
 ): Promise<void> {
   (await cookies()).set('session', token, {
     httpOnly: true,
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
@@ -121,7 +120,6 @@ export async function setSessionTokenCookie(
 export async function deleteSessionTokenCookie(): Promise<void> {
   (await cookies()).set('session', '', {
     httpOnly: true,
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     path: '/',
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',

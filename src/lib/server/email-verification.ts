@@ -62,6 +62,8 @@ export async function createEmailVerificationRequest(
     email,
     expiresAt,
   };
+
+  console.log('Created email verification request:', request); // TODO: Remove debug log
   return request;
 }
 
@@ -80,6 +82,7 @@ export async function sendVerificationEmail(
   await sendMail(email, EmailTemplate.EmailVerification, {
     code: code,
   });
+  console.log(`Sent verification email to ${email} with code ${code}`); // TODO: Remove debug log
 }
 
 export async function sendDeleteVerificationEmail(
@@ -97,18 +100,18 @@ export async function setEmailVerificationRequestCookie(
   (await cookies()).set('email_verification', request.id, {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     expires: request.expiresAt,
   });
+
+  console.log('Sets email verification cookie for request ID:', request.id); // TODO: Remove debug log
 }
 
 export async function deleteEmailVerificationRequestCookie(): Promise<void> {
   (await cookies()).set('email_verification', '', {
     httpOnly: true,
     path: '/',
-    ...(env.NODE_ENV === 'production' ? { domain: '.ibzim.com' } : {}),
     secure: env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 0,
