@@ -7,10 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { User } from '@/lib/server/constants';
-import ChangeEmailForm from './forms';
 import ChangePhoneNumberForm from './forms';
-import { Info } from 'lucide-react';
-import Link from 'next/link';
 
 export default function ChangePhoneNumberComponents({
   user,
@@ -37,15 +34,6 @@ export default function ChangePhoneNumberComponents({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="mx-auto mb-4 flex max-w-[300px] items-center justify-center gap-2 rounded-md border border-yellow-200 bg-yellow-50 px-1.5 py-2 text-center text-sm text-yellow-700">
-            <Info className="inline-block h-4 w-4 text-yellow-700" />
-            <span className="text-sm">
-              Feature not ready.{' '}
-              <Link className="font-medium underline" href={callbackUrl ?? '/'}>
-                Back to site
-              </Link>
-            </span>
-          </div>
           <ChangePhoneNumberForm callbackUrl={callbackUrl} user={user} />
         </CardContent>
       </Card>

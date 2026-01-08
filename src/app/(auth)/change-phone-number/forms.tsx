@@ -23,10 +23,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DOMAIN_URLS } from '@/lib/constants';
 import type { User } from '@/lib/server/constants';
 import ReactCountryFlag from 'react-country-flag';
-import { AlertCircle, CheckCircle2, ExternalLink } from 'lucide-react';
+import { ExternalLink, MessageCircle, MessageSquare } from 'lucide-react';
 import { countryCodes } from './constants';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -56,6 +57,9 @@ export default function ChangePhoneNumberForm({
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [validationError, setValidationError] = useState<string>('');
+  const [verificationMethod, setVerificationMethod] = useState<
+    'whatsapp' | 'sms'
+  >('whatsapp');
 
   useEffect(() => {
     if (state.fieldError) {
@@ -128,6 +132,29 @@ export default function ChangePhoneNumberForm({
   return (
     <>
       <div className="mx-auto max-w-[300px]">
+        <div className="mb-4">
+          <Tabs
+            value={verificationMethod}
+            onValueChange={(value) =>
+              setVerificationMethod(value as 'whatsapp' | 'sms')
+            }
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="whatsapp" className="relative gap-1.5">
+                <span>WhatsApp</span>
+                {verificationMethod === 'whatsapp' && (
+                  <span className="absolute -top-3 -right-2 rounded-full bg-green-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    Recommended
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="sms" className="gap-1.5">
+                <span>SMS</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
         <div className="mb-6 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="country-select">Country</Label>
@@ -189,7 +216,11 @@ export default function ChangePhoneNumberForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="form-phone-number.phoneNumber">Phone number</Label>
+            <Label htmlFor="form-phone-number.phoneNumber">
+              {verificationMethod === 'whatsapp'
+                ? 'WhatsApp number'
+                : 'Mobile number'}
+            </Label>
             <div className="flex gap-2">
               <div className="border-input bg-muted flex items-center justify-center rounded-md border px-3 text-sm font-medium">
                 {selectedCountry.dialCode}
@@ -204,9 +235,9 @@ export default function ChangePhoneNumberForm({
                   required
                   type="tel"
                   placeholder={
-                    selectedCountry.code === 'US'
-                      ? '(555) 123-4567'
-                      : '712345678'
+                    verificationMethod === 'whatsapp'
+                      ? 'Enter WhatsApp number'
+                      : 'Enter mobile number'
                   }
                   className={validationError ? 'border-red-500' : ''}
                 />
@@ -273,6 +304,11 @@ export default function ChangePhoneNumberForm({
               name="countryCode"
               value={selectedCountry.code}
             />
+            <input
+              type="hidden"
+              name="verificationMethod"
+              value={verificationMethod}
+            />
             <input type="hidden" value={callbackUrl} name="callbackUrl" />
 
             <div className="space-y-4 pb-4">
@@ -298,7 +334,9 @@ export default function ChangePhoneNumberForm({
                 </p>
                 <p className="text-muted-foreground mt-1 text-xs">
                   Please double-check before confirming. This number will be
-                  used for OTP verification.
+                  used for{' '}
+                  {verificationMethod === 'whatsapp' ? 'WhatsApp' : 'SMS'}{' '}
+                  verification.
                 </p>
               </div>
             </div>

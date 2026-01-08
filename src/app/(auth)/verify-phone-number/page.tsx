@@ -7,9 +7,13 @@ import VerifyPhoneNumberComponents from './components';
 export default async function VerifyPhoneNumberPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{
+    callbackUrl?: string;
+    countryCode?: string;
+    verificationMethod?: 'sms' | 'whatsapp';
+  }>;
 }) {
-  const { callbackUrl } = await searchParams;
+  const { callbackUrl, countryCode, verificationMethod } = await searchParams;
 
   if (!(await globalGETRateLimit())) {
     return 'Too many requests';
@@ -18,6 +22,12 @@ export default async function VerifyPhoneNumberPage({
 
   if (user === null) {
     return redirect('/sign-in');
+  }
+
+  if (!countryCode || !verificationMethod) {
+    return redirect(
+      `/change-phone-number${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`,
+    );
   }
 
   // TODO: Ideally we'd sent a new verification text automatically if the previous one is expired,
@@ -39,6 +49,8 @@ export default async function VerifyPhoneNumberPage({
       user={user}
       verificationRequest={verificationRequest}
       callbackUrl={callbackUrl}
+      countryCode={countryCode}
+      verificationMethod={verificationMethod}
     />
   );
 }

@@ -93,6 +93,11 @@ export const emailVerificationRequests = pgTable('email_verification_request', {
   expiresAt: integer('expires_at').notNull(),
 });
 
+export const verificationMethodEnum = pgEnum('verification_method', [
+  'sms',
+  'whatsapp',
+]);
+
 // Phone number verification request table
 export const phoneNumberVerificationRequests = pgTable(
   'phone_number_verification_request',
@@ -104,6 +109,8 @@ export const phoneNumberVerificationRequests = pgTable(
         onDelete: 'cascade',
       }),
     phoneNumber: text('phone_number').notNull(),
+    countryCode: varchar('country_code', { length: 5 }).notNull(),
+    verificationMethod: verificationMethodEnum('verification_method').notNull(),
     code: text('code').notNull(),
     expiresAt: integer('expires_at').notNull(),
   },

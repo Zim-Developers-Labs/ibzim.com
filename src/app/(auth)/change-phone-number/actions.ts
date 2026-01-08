@@ -58,7 +58,7 @@ export async function updatePhoneNumberAction(
     };
   }
 
-  const { phoneNumber, countryCode } = parsed.data;
+  const { phoneNumber, countryCode, verificationMethod } = parsed.data;
   const callbackUrl = formData.get('callbackUrl')?.toString();
 
   const validationResult = validatePhoneNumber(
@@ -95,18 +95,22 @@ export async function updatePhoneNumberAction(
   const verificationRequest = await createPhoneNumberVerificationRequest(
     user.id,
     e164Number,
+    countryCode,
+    verificationMethod,
   );
 
   await sendVerificationText(
     verificationRequest.phoneNumber,
     verificationRequest.code,
+    verificationRequest.verificationMethod,
+    verificationRequest.countryCode,
   );
 
   await setPhoneNumberVerificationRequestCookie(verificationRequest);
 
   return redirect(
     callbackUrl
-      ? `/verify-phone-number?callbackUrl=${encodeURIComponent(callbackUrl)}`
+      ? `/verify-phone-number?callbackUrl=${encodeURIComponent(callbackUrl)}&countryCode=${countryCode}&verificationMethod=${verificationMethod}`
       : '/verify-phone-number',
   );
 }

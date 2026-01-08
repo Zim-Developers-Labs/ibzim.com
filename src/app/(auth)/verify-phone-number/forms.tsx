@@ -19,8 +19,12 @@ const phoneNumberVerificationInitialState = {
 
 export function PhoneNumberVerificationForm({
   callbackUrl,
+  countryCode,
+  verificationMethod,
 }: {
   callbackUrl?: string;
+  countryCode: string;
+  verificationMethod: 'sms' | 'whatsapp';
 }) {
   const [state, action] = useActionState(
     verifyNumberAction,
@@ -31,6 +35,12 @@ export function PhoneNumberVerificationForm({
   return (
     <form action={action} className="mx-auto max-w-[300px]">
       <input type="hidden" value={callbackUrl} name="callbackUrl" />
+      <input type="hidden" value={countryCode} name="countryCode" />
+      <input
+        type="hidden"
+        value={verificationMethod}
+        name="verificationMethod"
+      />
       <div className="mb-6 flex w-full items-center justify-center">
         <InputOTP
           maxLength={8}

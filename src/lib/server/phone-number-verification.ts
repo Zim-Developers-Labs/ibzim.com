@@ -31,6 +31,8 @@ export async function getUserPhoneNumberVerificationRequest(
     userId: dbRequest.userId,
     code: dbRequest.code,
     phoneNumber: dbRequest.phoneNumber,
+    countryCode: dbRequest.countryCode,
+    verificationMethod: dbRequest.verificationMethod,
     expiresAt: new Date(dbRequest.expiresAt * 1000),
   };
   return request;
@@ -39,6 +41,8 @@ export async function getUserPhoneNumberVerificationRequest(
 export async function createPhoneNumberVerificationRequest(
   userId: number,
   phoneNumber: string,
+  countryCode: string,
+  verificationMethod: 'sms' | 'whatsapp',
 ): Promise<PhoneNumberVerificationRequest> {
   deleteUserPhoneNumberVerificationRequest(userId);
   const idBytes = new Uint8Array(20);
@@ -52,6 +56,8 @@ export async function createPhoneNumberVerificationRequest(
     userId,
     code,
     phoneNumber,
+    countryCode,
+    verificationMethod,
     expiresAt: Math.floor(expiresAt.getTime() / 1000),
   });
 
@@ -60,6 +66,8 @@ export async function createPhoneNumberVerificationRequest(
     userId,
     code,
     phoneNumber,
+    countryCode,
+    verificationMethod,
     expiresAt,
   };
   return request;
@@ -76,10 +84,18 @@ export async function deleteUserPhoneNumberVerificationRequest(
 export async function sendVerificationText(
   phoneNumber: string,
   code: string,
+  verificationMethod: 'sms' | 'whatsapp',
+  countryCode: string,
 ): Promise<void> {
-  await sendText(phoneNumber, TextTemplate.TextVerification, {
-    verificationCode: code,
-  });
+  await sendText(
+    phoneNumber,
+    TextTemplate.TextVerification,
+    {
+      verificationCode: code,
+    },
+    verificationMethod,
+    countryCode,
+  );
 }
 
 export async function setPhoneNumberVerificationRequestCookie(

@@ -53,16 +53,34 @@ export async function verifyNumberAction(
     };
   }
   const code = formData.get('code');
-  if (typeof code !== 'string') {
+  const countryCode = formData.get('countryCode');
+  const verificationMethod = formData.get('verificationMethod');
+
+  if (
+    typeof code !== 'string' ||
+    typeof countryCode !== 'string' ||
+    typeof verificationMethod !== 'string'
+  ) {
     return {
       message: 'Invalid or missing fields',
     };
   }
+
   if (code === '') {
     return {
       message: 'Enter your code',
     };
   }
+
+  if (
+    countryCode === '' ||
+    (verificationMethod !== 'sms' && verificationMethod !== 'whatsapp')
+  ) {
+    return {
+      message: 'Invalid country code or verification method',
+    };
+  }
+
   if (!bucket.consume(user.id, 1)) {
     return {
       message: 'Too many requests',
@@ -72,10 +90,14 @@ export async function verifyNumberAction(
     verificationRequest = await createPhoneNumberVerificationRequest(
       verificationRequest.userId,
       verificationRequest.phoneNumber,
+      verificationRequest.countryCode,
+      verificationRequest.verificationMethod,
     );
     await sendVerificationText(
       verificationRequest.phoneNumber,
       verificationRequest.code,
+      verificationRequest.verificationMethod,
+      verificationRequest.countryCode,
     );
     return {
       message:
@@ -138,10 +160,7 @@ export async function resendPhoneNumberVerificationCodeAction(): Promise<ActionR
       };
     }
 
-    verificationRequest = await createPhoneNumberVerificationRequest(
-      user.id,
-      user.email,
-    );
+    return redirect(`/change-phone-number`);
   } else {
     if (!sendVerificationTextBucket.consume(user.id, 1)) {
       return {
@@ -151,12 +170,16 @@ export async function resendPhoneNumberVerificationCodeAction(): Promise<ActionR
     verificationRequest = await createPhoneNumberVerificationRequest(
       user.id,
       verificationRequest.phoneNumber,
+      verificationRequest.countryCode,
+      verificationRequest.verificationMethod,
     );
   }
 
   await sendVerificationText(
     verificationRequest.phoneNumber,
     verificationRequest.code,
+    verificationRequest.verificationMethod,
+    verificationRequest.countryCode,
   );
   await setPhoneNumberVerificationRequestCookie(verificationRequest);
 

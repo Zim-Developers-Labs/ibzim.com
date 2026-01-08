@@ -42,6 +42,7 @@ export default function RankingCard({ profile }: { profile: ProfileType }) {
   if (profile.entityType == 'school') {
     return <SchoolRanking profile={profile} />;
   }
+  return null;
 }
 
 function SchoolRanking({ profile }: { profile: ProfileType }) {
@@ -165,7 +166,12 @@ function SchoolRanking({ profile }: { profile: ProfileType }) {
         </div>
         <div
           className="cursor-pointer rounded-b-lg border-t border-zinc-200 p-2 hover:bg-red-200"
-          onClick={() => window.open('https://wa.me/+263717238876', '_blank')}
+          onClick={() =>
+            window.open(
+              `https://wa.me/+263717238876?text=I want to report an inaccuracy for ${profile.name}`,
+              '_blank',
+            )
+          }
         >
           <div className="flex items-center justify-center gap-1 rounded-sm border-red-900 text-xs text-red-900">
             <TriangleAlert className="size-3" /> Report Inaccuracy

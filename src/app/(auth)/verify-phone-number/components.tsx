@@ -17,10 +17,14 @@ export default function VerifyPhoneNumberComponents({
   verificationRequest,
   user,
   callbackUrl,
+  countryCode,
+  verificationMethod,
 }: {
   verificationRequest: PhoneNumberVerificationRequest | null;
   user: User;
   callbackUrl?: string;
+  countryCode: string;
+  verificationMethod: 'sms' | 'whatsapp';
 }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4">
@@ -44,7 +48,11 @@ export default function VerifyPhoneNumberComponents({
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <PhoneNumberVerificationForm callbackUrl={callbackUrl} />
+          <PhoneNumberVerificationForm
+            callbackUrl={callbackUrl}
+            countryCode={countryCode}
+            verificationMethod={verificationMethod}
+          />
           <ResendPhoneNumberVerificationCodeForm />
 
           <div className="border-t border-gray-100 pt-4 text-center">

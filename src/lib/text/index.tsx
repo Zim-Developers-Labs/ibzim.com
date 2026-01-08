@@ -52,6 +52,7 @@ const whatsappConfig = {
 
 // Generic WhatsApp client (can be replaced with specific SDK)
 const sendWhatsAppMessage = async (to: string, body: string, from: string) => {
+  console.log('Sending WhatsApp message to:', to);
   const response = await fetch(
     `${whatsappConfig.apiUrl}/Accounts/${whatsappConfig.accountSid}/Messages.json`,
     {
@@ -77,10 +78,46 @@ const sendWhatsAppMessage = async (to: string, body: string, from: string) => {
   return response.json();
 };
 
+const nationalTextConfig = {
+  accountSid: 'SMS X APP',
+  authToken: env.SMSX_API_TOKEN,
+  apiUrl: 'https://portal.smsx.app/api/v3/',
+};
+
+const sendNationalText = async (to: string, body: string, from: string) => {
+  const response = await fetch(`${nationalTextConfig.apiUrl}sms/send`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${nationalTextConfig.authToken}`,
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      recipient: to,
+      sender_id: from,
+      type: 'plain',
+      message: body,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to send national SMS: ${response.statusText}`);
+  }
+
+  return response.json();
+};
+
+const sendInternationalText = async () => {
+  // Placeholder for sending international SMS texts
+  console.log('Sending international SMS (functionality not yet implemented)');
+};
+
 export const sendText = async <T extends TextTemplate>(
   to: string,
   template: T,
   props: PropsMap[NoInfer<T>],
+  verificationMethod: 'sms' | 'whatsapp',
+  countryCode: string,
 ) => {
   if (env.MOCK_SEND_TEXT) {
     logger.info(
@@ -95,5 +132,16 @@ export const sendText = async <T extends TextTemplate>(
   }
 
   const { body } = getTextTemplate(template, props);
+
+  if (verificationMethod === 'sms') {
+    if (countryCode === 'ZW') {
+      //SMSX for Zimbabwe
+      return sendNationalText(to, body, nationalTextConfig.accountSid);
+    }
+    // TWilio for international SMS
+    return sendInternationalText();
+  }
+
+  // Twilio WhatsApp API
   return sendWhatsAppMessage(to, body, WHATSAPP_SENDER);
 };

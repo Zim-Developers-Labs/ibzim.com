@@ -27,6 +27,8 @@ export interface PhoneNumberVerificationRequest {
   userId: number;
   code: string;
   phoneNumber: string;
+  countryCode: string;
+  verificationMethod: 'sms' | 'whatsapp';
   expiresAt: Date;
 }
 

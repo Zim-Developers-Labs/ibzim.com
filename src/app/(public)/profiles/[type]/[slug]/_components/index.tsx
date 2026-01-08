@@ -45,6 +45,7 @@ import InfoBox from './info-box';
 import References from './references';
 import { ProfileReviewMini } from './profile-review-mini';
 import RelatedNewsGrid from './related-news';
+import RankingCard from './ranking-card';
 
 export default function ProfileComponents({
   profile,
@@ -87,7 +88,7 @@ export default function ProfileComponents({
           <p className="mx-auto mb-6 max-w-xl px-0 text-center text-sm md:px-4 md:text-base">
             {profile.intro}
           </p>
-          {/* <RankingCard profile={profile} /> */}
+          <RankingCard profile={profile} />
         </Container>
       </div>
       <div className="relative min-h-screen">

@@ -26,6 +26,8 @@ export const env = createEnv({
     BLOB_READ_WRITE_TOKEN: z.string().trim().min(1),
     GA_SECRET: z.string().trim().optional(),
     SANITY_API_READ_TOKEN: z.string().trim().min(1),
+    TWILIO_AUTH_TOKEN: z.string().trim().min(1),
+    SMSX_API_TOKEN: z.string().trim().min(1),
     MUX_TOKEN_ID: z.string().trim().min(1),
     MUX_TOKEN_SECRET: z.string().trim().min(1),
     ENCRYPTION_KEY: z.string().trim().min(1),
@@ -55,6 +57,8 @@ export const env = createEnv({
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASSWORD: process.env.SMTP_PASSWORD,
     SANITY_API_READ_TOKEN: process.env.SANITY_API_READ_TOKEN,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    SMSX_API_TOKEN: process.env.SMSX_API_TOKEN,
     MOCK_SEND_EMAIL:
       process.env.MOCK_SEND_EMAIL === 'true' ||
       process.env.MOCK_SEND_EMAIL === '1',

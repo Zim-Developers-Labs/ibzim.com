@@ -8,6 +8,7 @@ export const phoneNumberSchema = z.object({
     .min(1, 'Phone number is required')
     .transform((val) => val.replace(/[\s\-()]/g, '')), // Clean input
   countryCode: z.string().length(2, 'Country code is required'),
+  verificationMethod: z.enum(['sms', 'whatsapp']).default('whatsapp'),
 });
 
 // Refined schema that validates the phone number with libphonenumber-js
