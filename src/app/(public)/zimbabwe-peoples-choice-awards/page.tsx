@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import AwardsPageComponent from './components';
 import { preparePageMetadata } from '@/lib/metadata';
-import { getAllAwardCategories } from '@/lib/sanity/client';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -12,7 +11,5 @@ export const generateMetadata = (): Metadata =>
   });
 
 export default async function AwardsPage() {
-  const sanityAwardCategories = await getAllAwardCategories();
-
-  return <AwardsPageComponent sanityAwardCategories={sanityAwardCategories} />;
+  return <AwardsPageComponent />;
 }

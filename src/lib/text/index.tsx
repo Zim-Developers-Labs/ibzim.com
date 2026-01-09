@@ -1,5 +1,6 @@
 import 'server-only';
 
+import twilio from 'twilio';
 import { NumberVerificationTemplate } from './templates/number-verification';
 import { ResetPasswordTextTemplate } from './templates/reset-password';
 import { WHATSAPP_SENDER } from '@/lib/constants';
@@ -45,41 +46,42 @@ const getTextTemplate = <T extends TextTemplate>(
 
 // WhatsApp API configuration (works with Twilio, WhatsApp Business API, etc.)
 const whatsappConfig = {
-  accountSid: 'sampleAccountSid', // Replace with actual Account SID
-  authToken: 'sampleAuthToken', // Replace with actual Auth Token
-  apiUrl: 'https://api.twilio.com/2010-04-01',
+  accountSid: 'AC1c8ca549f22c45b2f0942437b6b788a2', // Replace with actual Account SID
+  authToken: env.TWILIO_AUTH_TOKEN, // Replace with actual Auth Token
 };
 
-// Generic WhatsApp client (can be replaced with specific SDK)
-const sendWhatsAppMessage = async (to: string, body: string, from: string) => {
-  console.log('Sending WhatsApp message to:', to);
-  const response = await fetch(
-    `${whatsappConfig.apiUrl}/Accounts/${whatsappConfig.accountSid}/Messages.json`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${Buffer.from(
-          `${whatsappConfig.accountSid}:${whatsappConfig.authToken}`,
-        ).toString('base64')}`,
-      },
-      body: new URLSearchParams({
-        To: `whatsapp:${to}`,
-        From: `whatsapp:${from}`,
-        Body: body,
-      }),
-    },
-  );
+const sendWhatsAppMessage = async (to: string, body: string) => {
+  const verificationCode = body.slice(0, 8);
 
-  if (!response.ok) {
-    throw new Error(`Failed to send WhatsApp message: ${response.statusText}`);
+  if (!verificationCode) {
+    throw new Error('Verification code is required for WhatsApp messages');
   }
 
-  return response.json();
+  const client = twilio(whatsappConfig.accountSid, whatsappConfig.authToken);
+
+  try {
+    // Use 'await' instead of .then()
+    const message = await client.messages.create({
+      from: `whatsapp:${WHATSAPP_SENDER}`,
+      contentSid: 'HX229f5a04fd0510ce1b071852155d3e75', // verification message template SID
+      contentVariables: `{"1":"${verificationCode}"}`,
+      to: `whatsapp:${to}`,
+    });
+
+    console.log(message.sid);
+    console.log(message.body);
+    console.log(message.errorMessage);
+    console.log(message.sid);
+    console.log(verificationCode, 'verification code sent via WhatsApp');
+  } catch (error) {
+    // Handle errors appropriately
+    console.error('Twilio Error:', error);
+    throw error; // Re-throw so the calling function knows it failed
+  }
 };
 
 const nationalTextConfig = {
-  accountSid: 'SMS X APP',
+  accountSid: 'SMS X Managed',
   authToken: env.SMSX_API_TOKEN,
   apiUrl: 'https://portal.smsx.app/api/v3/',
 };
@@ -107,9 +109,26 @@ const sendNationalText = async (to: string, body: string, from: string) => {
   return response.json();
 };
 
-const sendInternationalText = async () => {
-  // Placeholder for sending international SMS texts
-  console.log('Sending international SMS (functionality not yet implemented)');
+const internationalTextConfig = {
+  accountSid: 'AC1c8ca549f22c45b2f0942437b6b788a2',
+  authToken: env.TWILIO_AUTH_TOKEN,
+};
+
+const sendInternationalText = async (
+  to: string,
+  body: string,
+  from: string,
+) => {
+  console.log('using international text config');
+  const client = twilio(from, internationalTextConfig.authToken);
+
+  client.verify.v2
+    .services('VAe3f146a99fd6e6e64b23adad2e9869ac')
+    .verifications.create({ to, channel: 'sms' })
+    .then((verification: any) =>
+      console.log(verification.status, 'verification status'),
+    )
+    .catch((error: any) => console.error('Error sending SMS:', error));
 };
 
 export const sendText = async <T extends TextTemplate>(
@@ -118,6 +137,7 @@ export const sendText = async <T extends TextTemplate>(
   props: PropsMap[NoInfer<T>],
   verificationMethod: 'sms' | 'whatsapp',
   countryCode: string,
+  verificationCode?: string,
 ) => {
   if (env.MOCK_SEND_TEXT) {
     logger.info(
@@ -139,9 +159,9 @@ export const sendText = async <T extends TextTemplate>(
       return sendNationalText(to, body, nationalTextConfig.accountSid);
     }
     // TWilio for international SMS
-    return sendInternationalText();
+    return sendInternationalText(to, body, internationalTextConfig.accountSid);
   }
 
   // Twilio WhatsApp API
-  return sendWhatsAppMessage(to, body, WHATSAPP_SENDER);
+  return sendWhatsAppMessage(to, body);
 };

@@ -3,7 +3,7 @@ export const DATABASE_PREFIX = 'ibzim';
 export const TEST_DB_PREFIX = 'test_ibzim';
 export const EMAIL_SENDER = '"IBZIM" <noreply@ibzim.com>';
 
-export const WHATSAPP_SENDER = '+263717238876';
+export const WHATSAPP_SENDER = '+15558998392';
 
 export const devConString =
   'postgres://postgres:postgres@db.localtest.me:5432/main';

@@ -250,7 +250,17 @@ export default function ChangePhoneNumberForm({
             </div>
           </div>
         </div>
-
+        <div className="mb-4 rounded-sm border border-yellow-200 bg-yellow-50 p-2 text-sm text-yellow-600">
+          <p>
+            Feature not yet ready for use.{' '}
+            <Link
+              href={callbackUrl ? callbackUrl : '/'}
+              className="font-semibold underline"
+            >
+              Go back.
+            </Link>
+          </p>
+        </div>
         <div className="mb-4 grid grid-cols-2 gap-2">
           <Button
             onClick={() => {

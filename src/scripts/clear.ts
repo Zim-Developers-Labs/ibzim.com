@@ -3,9 +3,8 @@ dotenv.config({ path: '.env.local' });
 
 import { users } from '@/lib/server/db/schema';
 import { neon, neonConfig } from '@neondatabase/serverless';
-import { inArray, like } from 'drizzle-orm';
+import { like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { songIds } from './demo-data';
 import { devConString } from '@/lib/constants';
 
 // Load environment variables
