@@ -19,7 +19,7 @@ const navigation = {
     },
     {
       name: 'Instagram',
-      href: 'https://www.instagram.com/ibzimblog',
+      href: 'https://www.instagram.com/ibzimdotcom',
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -32,7 +32,7 @@ const navigation = {
     },
     {
       name: 'Youtube',
-      href: 'https://www.youtube.com/@IBZimBlog',
+      href: 'https://www.youtube.com/@ibzimdotcom',
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
