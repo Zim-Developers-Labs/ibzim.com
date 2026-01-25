@@ -9,8 +9,10 @@ import Banner from '@/components/banner';
 import Footer from '@/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { validateRequest } from '@/lib/auth/validate-request';
-import { getSearchData } from '@/sanity/lib/actions';
+import { env } from '@/env';
+import Header from '@/components/header';
+import { getSearchData } from '@/lib/sanity/actions';
+import { siteConfig } from '@/lib/config';
 import GoogleAdsense from '@/components/google-adsense';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -57,7 +59,7 @@ export default async function RootLayout({
         </UserProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
-        <GoogleAnalytics gaId={process.env.GA_SECRET!} />
+        <GoogleAnalytics gaId={env.GA_SECRET!} />
         <GoogleAdsense />
       </body>
     </html>
