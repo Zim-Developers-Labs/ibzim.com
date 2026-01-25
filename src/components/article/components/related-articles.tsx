@@ -29,11 +29,31 @@ type RelatedArticleType = {
 };
 
 const ArticleCard = ({ article }: { article: RelatedArticleType }) => {
+  // Temporary fix for schools listing articles
+  // These articles have been moved to the school picker tool
+  // This is a temporary fix until we can update the links in the articles
+  const getArticleHref = () => {
+    if (article.slug.current === 'top-20-best-universities-in-zimbabwe') {
+      return '/tools/school-picker/best-tertiary-institutions-in-zimbabwe';
+    }
+
+    if (article.slug.current === 'top-100-best-a-level-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-a-level-schools-in-zimbabwe';
+    }
+
+    if (article.slug.current === 'top-100-best-o-level-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-o-level-schools-in-zimbabwe';
+    }
+    if (article.slug.current === 'top-100-best-primary-schools-in-zimbabwe') {
+      return '/tools/school-picker/best-primary-schools-in-zimbabwe';
+    }
+
+    // Return default href for all other articles
+    return `/${article.industry.slug}/${article.type}/${article.slug.current}`;
+  };
+
   return (
-    <a
-      href={`/${article.industry.slug}/${article.type}/${article.slug.current}`}
-      className="mb-4 flex flex-row gap-4 sm:flex-col"
-    >
+    <a href={getArticleHref()} className="mb-4 flex flex-row gap-4 sm:flex-col">
       <div className="mb-4 ml-4 h-20 w-32 min-w-32 overflow-hidden rounded-md md:ml-0 md:h-[112px] md:w-[200px] md:max-w-none">
         <Image
           src={urlForImage(article.seo.image).height(112).width(200).url()}

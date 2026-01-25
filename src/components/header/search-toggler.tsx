@@ -57,7 +57,7 @@ export default function SearchToggler({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="top-12 translate-y-0 sm:top-[50%] sm:max-w-xl sm:translate-y-[-50%]">
         <DialogTitle className="sr-only">Search Articles</DialogTitle>
         <div className="flex items-center border-b pb-4">
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
@@ -70,20 +70,24 @@ export default function SearchToggler({
           />
         </div>
         <div className="max-h-80 scroll-py-2 space-y-4 overflow-y-auto">
-          <div>
-            <h3 className="text-muted-foreground text-sm">Popular Searches</h3>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {popularSearches.map((search) => (
-                <button
-                  key={search}
-                  className="rounded bg-gray-700 px-3 py-1 text-sm text-white"
-                  onClick={() => setQuery(search)}
-                >
-                  {search}
-                </button>
-              ))}
+          {query === '' && (
+            <div>
+              <h3 className="text-muted-foreground text-sm">
+                Popular Searches
+              </h3>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {popularSearches.map((search) => (
+                  <button
+                    key={search}
+                    className="rounded bg-gray-700 px-3 py-1 text-sm text-white"
+                    onClick={() => setQuery(search)}
+                  >
+                    {search}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="space-y-2 text-sm text-gray-700">
             {query !== '' &&
               filteredArticles.length > 0 &&

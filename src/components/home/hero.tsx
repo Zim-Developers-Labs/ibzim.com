@@ -21,19 +21,55 @@ const PinnedLists = ({
         </span>
       </h2>
       <ul className="flex flex-col md:flex-row md:items-center xl:flex-col">
-        {pinnedRankingArticles.map((article, i) => (
-          <li
-            key={i}
-            className="border-t border-dashed border-zinc-900 py-4 md:border-t-0 md:border-l md:px-4 md:py-0 xl:border-t xl:border-l-0 xl:px-0 xl:py-4"
-          >
-            <Link
-              className="text-sm font-bold hover:underline"
-              href={`/${article.industry.slug}/${article.type}/${article.slug.current}`}
+        {pinnedRankingArticles.map((article, i) => {
+          // Temporary fix for schools listing articles
+          // These articles have been moved to the school picker tool
+          // This is a temporary fix until we can update the links in the articles
+          const getArticleHref = () => {
+            if (
+              article.slug.current === 'top-20-best-universities-in-zimbabwe'
+            ) {
+              return '/tools/school-picker/best-tertiary-institutions-in-zimbabwe';
+            }
+
+            if (
+              article.slug.current ===
+              'top-100-best-a-level-schools-in-zimbabwe'
+            ) {
+              return '/tools/school-picker/best-a-level-schools-in-zimbabwe';
+            }
+
+            if (
+              article.slug.current ===
+              'top-100-best-o-level-schools-in-zimbabwe'
+            ) {
+              return '/tools/school-picker/best-o-level-schools-in-zimbabwe';
+            }
+            if (
+              article.slug.current ===
+              'top-100-best-primary-schools-in-zimbabwe'
+            ) {
+              return '/tools/school-picker/best-primary-schools-in-zimbabwe';
+            }
+
+            // Return default href for all other articles
+            return `/${article.industry.slug}/${article.type}/${article.slug.current}`;
+          };
+
+          return (
+            <li
+              key={i}
+              className="border-t border-dashed border-zinc-900 py-4 md:border-t-0 md:border-l md:px-4 md:py-0 xl:border-t xl:border-l-0 xl:px-0 xl:py-4"
             >
-              {article.name}
-            </Link>
-          </li>
-        ))}
+              <Link
+                className="text-sm font-bold hover:underline"
+                href={getArticleHref()}
+              >
+                {article.name}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

@@ -13,8 +13,8 @@ export default function BreadCrumb({
   return (
     <div className="bg-primaryColor/10 w-full border-b border-b-gray-200">
       <Container className="line-clamp-1 max-w-screen-xl text-[.8rem] leading-8">
-        <Link href="/" className="hover:text-primaryColor">
-          Home &nbsp;
+        <Link href="/articles" className="hover:text-primaryColor">
+          Articles &nbsp;
         </Link>{' '}
         <span className="text-gray-400">/</span>
         &nbsp;&nbsp;

@@ -1,6 +1,6 @@
 import { SiteConfigType } from '@/types';
 
-export const deploymentDomain = 'ibzim.com';
+export const deploymentDomain = 'WWW.ibzim.com';
 
 export const siteConfig = {
   name: 'IBZim',
@@ -25,9 +25,9 @@ export const siteConfig = {
     banner: `https://${deploymentDomain}/banner.webp`,
   },
   popularArticleIds: [
-    '34292b05-7130-43cd-881e-37b86784c65e',
-    '6badec74-10d9-4d6a-8c59-bc82bb89a2ba',
-    '702e9ef6-cc22-47be-8e57-a39efba744b8',
+    '60a33879-89b0-45bb-ac07-0f3e89b06e95',
     '931d73c7-e462-44d3-8834-a9facaa7d2ca',
+    '05249379-e874-4185-b387-c55e0adc69df',
+    '5ea92479-e6e8-4b72-b165-0f6220ad3ed8',
   ],
 } satisfies SiteConfigType;
