@@ -551,7 +551,7 @@ export default function AwardCategoryResultsPageWrapper() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {otherNominees.map((nominee: any) => (
+                {otherNominees?.map((nominee: any) => (
                   <div
                     key={nominee.id}
                     className="rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"

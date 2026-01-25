@@ -1,45 +1,57 @@
-// auth/sign-in/google/route.ts
-
+import { generateState, generateCodeVerifier } from 'arctic';
+import { googleSignin } from '@/lib/server/oauth';
 import { cookies } from 'next/headers';
-import { generateCodeVerifier, generateState } from 'arctic';
-import { google } from '@/lib/auth';
-import { env } from '@/env';
+import { globalGETRateLimit } from '@/lib/server/request';
 import { NextRequest } from 'next/server';
+import { env } from '@/env';
 
 export async function GET(request: NextRequest): Promise<Response> {
-  const state = generateState();
-  const codeVerifier = generateCodeVerifier();
-  const url = await google.createAuthorizationURL(state, codeVerifier, [
-    'profile',
-    'email',
-  ]);
+  if (!(await globalGETRateLimit())) {
+    return new Response('Too many requests', {
+      status: 429,
+    });
+  }
 
   const searchParams = request.nextUrl.searchParams;
   const callbackUrl = searchParams.get('callbackUrl');
 
+  const state = generateState();
+  const codeVerifier = generateCodeVerifier();
+  const url = googleSignin.createAuthorizationURL(state, codeVerifier, [
+    'openid',
+    'profile',
+    'email',
+  ]);
+
   (await cookies()).set('google_oauth_state', state, {
     path: '/',
-    secure: env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 60 * 10,
+    secure: env.NODE_ENV === 'production',
+    maxAge: 60 * 10, // 10 minutes
     sameSite: 'lax',
   });
-
-  (await cookies()).set('google_oauth_code_verifier', codeVerifier, {
+  (await cookies()).set('google_code_verifier', codeVerifier, {
     path: '/',
-    secure: env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 60 * 10,
+    secure: env.NODE_ENV === 'production',
+    maxAge: 60 * 10, // 10 minutes
     sameSite: 'lax',
   });
 
-  (await cookies()).set('google_oauth_callbackUrl', callbackUrl || '/', {
-    path: '/',
-    secure: env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 60 * 10,
-    sameSite: 'lax',
-  });
+  if (callbackUrl) {
+    (await cookies()).set('google_oauth_callbackUrl', callbackUrl, {
+      path: '/',
+      httpOnly: true,
+      secure: env.NODE_ENV === 'production',
+      maxAge: 60 * 10, // 10 minutes
+      sameSite: 'lax',
+    });
+  }
 
-  return Response.redirect(url);
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: url.toString(),
+    },
+  });
 }

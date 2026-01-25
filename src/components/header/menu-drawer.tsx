@@ -22,19 +22,29 @@ import {
 } from '@/components/ui/drawer';
 import { Card, CardContent } from '../ui/card';
 import Link from 'next/link';
-import { ChevronRight, Info } from 'lucide-react';
+import { ChevronRight, Grip, Info } from 'lucide-react';
 import { Icons } from '../icons';
-import { menuItems } from '@/app/(home)/wrapper';
-import { Alert, AlertDescription } from '../ui/alert';
+import { menuItems } from '@/app/(home)/component';
+import Image from 'next/image';
+import posterImage from '@/app/(home)/news-poster.png';
+import { PaperAirplaneIcon } from '@heroicons/react/16/solid';
 
-export function MenuDrawer({ children }: { children: React.ReactNode }) {
+export function MenuDrawer() {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogTrigger asChild>
+          <Button
+            variant="outline"
+            className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+          >
+            <Grip className="h-5 w-5" />
+            <span className="">Menu</span>
+          </Button>
+        </DialogTrigger>
         <DialogContent className="h-[90vh] bg-zinc-50 pl-0 sm:max-w-[756px]">
           <DialogHeader className="pl-6">
             <DialogTitle>IBZim Suite</DialogTitle>
@@ -42,13 +52,6 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
               Tools to help you find the information you need and express
               yourself.
             </DialogDescription> */}
-            <Alert className="border-primaryColor border bg-yellow-200">
-              <Info />
-              <AlertDescription className="text-primary">
-                IBZIM tools are still in development so feel free to give us
-                feedback on +263717238876 (Whatsapp) for issues or improvements.
-              </AlertDescription>
-            </Alert>
           </DialogHeader>
           <div className="overflow-y-auto">
             <DesktopMenuItems />
@@ -60,7 +63,15 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>
+        <Button
+          variant="outline"
+          className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+        >
+          <Grip className="h-5 w-5" />
+          <span className="sr-only">View Tools</span>
+        </Button>
+      </DrawerTrigger>
       <DrawerContent className="bg-zinc-50 data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-t-4xl data-[vaul-drawer-direction=top]:max-h-[85vh]">
         <DrawerHeader className="text-left">
           <DrawerTitle>IBZim Suite</DrawerTitle>
@@ -68,13 +79,6 @@ export function MenuDrawer({ children }: { children: React.ReactNode }) {
             Tools to help you find the information you need and express
             yourself.
           </DrawerDescription> */}
-          <Alert className="border-primaryColor border bg-yellow-200">
-            <Info />
-            <AlertDescription className="text-primary">
-              IBZIM tools are still in development so feel free to give us
-              feedback on +263717238876 (Whatsapp) for issues or improvements.
-            </AlertDescription>
-          </Alert>
         </DrawerHeader>
         {/*  Added scroll instruction for mobile users */}
         <div className="mb-4 px-4 pb-2">
@@ -107,7 +111,7 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
         className="grid w-[1100px] grid-cols-[repeat(5,_minmax(200px,_1fr))] grid-rows-2 gap-3 pr-20 pb-10"
       >
         <li className="col-span-2">
-          <Card className="group h-full w-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-yellow-100">
+          <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-zinc-50/50">
             <CardContent className="p-4 text-center">
               <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
                 School Picker
@@ -151,7 +155,7 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
         </li>
         <li>
           <Link href="/zimbabwe-peoples-choice-awards">
-            <Card className="group h-full w-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
               <CardContent className="p-4 text-center">
                 <div
                   className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
@@ -171,25 +175,95 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
             </Card>
           </Link>
         </li>
+        <li>
+          <Link
+            href="/news"
+            className="relative mx-auto block h-full w-auto overflow-hidden rounded-lg transition-all duration-300 hover:scale-105"
+          >
+            <Image
+              className="w-full"
+              src={posterImage}
+              alt="IBZIM NEWS BANNER"
+              sizes="(min-width: 1024px) 20rem, (min-width: 640px) 16rem, 12rem"
+              priority
+            />
+            <div className="absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset sm:rounded-xl lg:rounded-2xl" />
+          </Link>
+        </li>
+        <li>
+          <Link href="/articles">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+              <CardContent className="p-4 text-center">
+                <div
+                  className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.ibLogoSM
+                    className="h-10 w-10 sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                  Articles Blog
+                </h3>
+                <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  Read latest articles and insights
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
+        <li>
+          <Link href="#">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+              <CardContent className="p-4 text-center">
+                <div
+                  className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.zimFlagRound
+                    className="h-10 w-10 sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                  Government
+                </h3>
+                <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  Zimbabwean Government Chart
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
         {menuItems.map((feature, index) => {
           const Icon = feature.icon;
           return (
-            <li key={index}>
+            <li key={index} className="relative">
               <Link href={feature.href}>
-                <Card className="group h-full w-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
+                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
                   <CardContent className="p-4 text-center">
-                    <div
-                      className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
-                    >
-                      <Icon
-                        className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
-                        strokeWidth={1}
-                      />
-                    </div>
-                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                    {feature.isFeatured ? (
+                      <div
+                        className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                      >
+                        <Icon
+                          className="h-10 w-10 sm:h-12 sm:w-12"
+                          strokeWidth={1}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`from-primaryColor/20 to-primaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
+                      >
+                        <Icon
+                          className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
+                          strokeWidth={1}
+                        />
+                      </div>
+                    )}
+                    <h3 className="mb-1 text-sm leading-tight font-semibold text-nowrap text-zinc-900 sm:mb-2 sm:text-base">
                       {feature.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                    <p className="text-no-wrap mb-2 text-xs leading-relaxed text-zinc-600 sm:text-sm md:pb-0">
                       {feature.description}
                     </p>
                   </CardContent>
@@ -198,6 +272,30 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
             </li>
           );
         })}
+        <li>
+          <Link
+            href="https://wa.me/+263717238876"
+            target="_blank"
+            rel="nofollow"
+          >
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-[#103928] py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-[#165239]">
+              <CardContent className="flex h-full w-full flex-col items-center justify-center p-4 text-center">
+                <div
+                  className={`mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.whatsapp
+                    className="h-10 w-10 text-white sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <Button className="rounded-full bg-[#43cd66] text-[#103928] hover:bg-[#38b159]">
+                  Support
+                  <PaperAirplaneIcon className="inline-block h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
       </ul>
     </div>
   );
@@ -211,7 +309,7 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
         className="grid -translate-y-40 grid-cols-2 gap-3 pt-40 sm:grid-cols-3 sm:gap-4 lg:gap-6"
       >
         <li className="col-span-2">
-          <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-yellow-100">
+          <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-zinc-50/50">
             <CardContent className="p-4 text-center">
               <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
                 School Picker
@@ -255,7 +353,7 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
         </li>
         <li>
           <Link href="/zimbabwe-peoples-choice-awards">
-            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
               <CardContent className="p-4 text-center">
                 <div
                   className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
@@ -275,6 +373,65 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
             </Card>
           </Link>
         </li>
+        <li>
+          <Link
+            href="/news"
+            className="relative mx-auto block h-full w-auto overflow-hidden rounded-lg transition-all duration-300 hover:scale-105"
+          >
+            <Image
+              className="w-full"
+              src={posterImage}
+              alt="IBZIM NEWS BANNER"
+              sizes="(min-width: 1024px) 20rem, (min-width: 640px) 16rem, 12rem"
+              priority
+            />
+            <div className="absolute inset-0 rounded-lg ring-1 ring-black/10 ring-inset sm:rounded-xl lg:rounded-2xl" />
+          </Link>
+        </li>
+        <li>
+          <Link href="/articles">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+              <CardContent className="p-4 text-center">
+                <div
+                  className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.ibLogoSM
+                    className="h-10 w-10 sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                  Articles Blog
+                </h3>
+                <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  Read latest articles and insights
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
+        <li>
+          <Link href="#">
+            <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-zinc-50/50">
+              <CardContent className="p-4 text-center">
+                <div
+                  className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.zimFlagRound
+                    className="h-10 w-10 sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                  Government
+                </h3>
+                <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                  Zimbabwean Government Chart
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
         {menuItems.map((feature, index) => {
           const Icon = feature.icon;
           return (
@@ -283,7 +440,7 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
                 <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
                   <CardContent className="p-4 text-center">
                     <div
-                      className={`mx-auto mb-3 h-fit w-full rounded-md bg-gradient-to-br p-4 sm:mb-4 ${feature.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                      className={`from-primaryColor/10 via-secondaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br to-transparent p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
                     >
                       <Icon
                         className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
@@ -302,6 +459,30 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
             </li>
           );
         })}
+        <li>
+          <Link
+            href="https://wa.me/+263717238876"
+            target="_blank"
+            rel="nofollow"
+          >
+            <Card className="group h-full min-h-[200px] cursor-pointer border border-zinc-200 bg-[#103928] py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-[#165239]">
+              <CardContent className="flex h-full w-full flex-col items-center justify-center p-4 text-center">
+                <div
+                  className={`mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
+                >
+                  <Icons.whatsapp
+                    className="h-10 w-10 text-white sm:h-12 sm:w-12"
+                    strokeWidth={1}
+                  />
+                </div>
+                <Button className="rounded-full bg-[#43cd66] text-[#103928] hover:bg-[#38b159]">
+                  Get Help
+                  <PaperAirplaneIcon className="inline-block h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </Link>
+        </li>
       </ul>
     </div>
   );

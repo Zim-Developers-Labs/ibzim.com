@@ -2,9 +2,10 @@ import type { MetadataRoute } from 'next';
 import { siteConfig } from '@/lib/config';
 import { CardArticleType } from '@/types';
 import {
-  getAllArticlesByBlog,
-  getAllProfileSlugsAndTypeByBlog,
-} from '@/sanity/lib/client';
+  getAllArticles,
+  getAllNewsArticles,
+  getAllProfileSlugsAndType,
+} from '@/lib/sanity/client';
 
 export async function generateSitemaps() {
   // This will create three separate sitemaps
@@ -23,6 +24,8 @@ export default async function sitemap({
       return await generateArticlesSitemap();
     case 'profiles':
       return await generateProfilesSitemap();
+    case 'news':
+      return await generateNewsSitemap();
     default:
       return [];
   }
@@ -46,19 +49,29 @@ function generateMiscSitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${siteConfig.url.web}/news`,
+      lastModified: new Date(),
+      priority: 1,
+    },
+    {
       url: `${siteConfig.url.web}/zimbabwe-peoples-choice-awards`,
       lastModified: new Date(),
       priority: 1,
     },
     {
-      url: `${siteConfig.url.web}/chats`,
+      url: `${siteConfig.url.web}/calculators`,
       lastModified: new Date(),
       priority: 1,
     },
     {
-      url: `${siteConfig.url.web}/support`,
+      url: `${siteConfig.url.web}/sign-in`,
       lastModified: new Date(),
-      priority: 1,
+      priority: 0.5,
+    },
+    {
+      url: `${siteConfig.url.web}/sign-up`,
+      lastModified: new Date(),
+      priority: 0.5,
     },
   ];
 }
@@ -87,33 +100,31 @@ function getArticleHref(article: CardArticleType): string {
 }
 
 async function generateArticlesSitemap(): Promise<MetadataRoute.Sitemap> {
-  const articles: CardArticleType[] = await getAllArticlesByBlog(
-    siteConfig.documentPrefix !== ''
-      ? `${siteConfig.documentPrefix}.article`
-      : 'article',
-  );
+  const articles = await getAllArticles();
 
   return articles
     .filter(({ slug = '' }) => slug)
     .map((article) => ({
-      url: `${siteConfig.url.web}/${getArticleHref(article)}`,
+      url: `${siteConfig.url.web}${getArticleHref(article)}`,
       lastModified: new Date(article._updatedAt),
       priority: 0.9,
     }));
 }
 
-type ProfileType = {
-  slug: string;
-  type: string;
-  _updatedAt?: string;
-};
+async function generateNewsSitemap(): Promise<MetadataRoute.Sitemap> {
+  const articles = await getAllNewsArticles();
+
+  return articles
+    .filter(({ slug = '' }) => slug)
+    .map((article) => ({
+      url: `${siteConfig.url.web}/news/${article.industry.slug}/${article.slug.current}`,
+      lastModified: new Date(article._updatedAt),
+      priority: 0.9,
+    }));
+}
 
 async function generateProfilesSitemap(): Promise<MetadataRoute.Sitemap> {
-  const profiles: ProfileType[] = await getAllProfileSlugsAndTypeByBlog(
-    siteConfig.documentPrefix !== ''
-      ? `${siteConfig.documentPrefix}.profile`
-      : 'profile',
-  );
+  const profiles = await getAllProfileSlugsAndType();
 
   return profiles
     .filter(({ slug = '' }) => slug)

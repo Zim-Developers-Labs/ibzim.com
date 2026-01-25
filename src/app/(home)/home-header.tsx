@@ -4,18 +4,25 @@ import { SignToggler } from '@/components/header/sign-toggler';
 import UserToggler from '@/components/header/user-toggler';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
+import { NotificationType } from '@/types';
 import { Grip } from 'lucide-react';
 import Link from 'next/link';
 
 type HeaderProps = {
   user?: any;
+  notifications?: NotificationType[];
+  neonUserNotifications?: NotificationType[];
 };
 
-export default function HomeHeader({ user }: HeaderProps) {
+export default function HomeHeader({
+  user,
+  notifications,
+  neonUserNotifications,
+}: HeaderProps) {
   return (
     <header
       role="navigation"
-      className="sticky top-0 z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
+      className="sticky top-[44px] z-50 w-full border-b border-zinc-700 bg-zinc-900 text-white"
     >
       <Container className="relative py-4">
         <div className="flex w-full items-center justify-between">
@@ -54,11 +61,14 @@ export default function HomeHeader({ user }: HeaderProps) {
             <span className="sr-only">IBZim Logo</span>
             <Icons.logo className="hidden h-8 w-fit md:block" />
           </Link>
-          <div className="flex flex-none items-center gap-2 md:gap-4">
-            <Notifications />
+          <aside className="flex flex-none items-center gap-2 md:gap-4">
+            <Notifications
+              sanityGlobalNotifications={notifications}
+              neonUserNotifications={neonUserNotifications}
+            />
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
-          </div>
+          </aside>
         </div>
       </Container>
     </header>

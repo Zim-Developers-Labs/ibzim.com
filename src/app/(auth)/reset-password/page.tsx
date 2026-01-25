@@ -1,36 +1,21 @@
-import { validateRequest } from '@/lib/auth/validate-request';
+import { validatePasswordResetSessionRequest } from '@/lib/server/password-reset';
+import { globalGETRateLimit } from '@/lib/server/request';
 import { redirect } from 'next/navigation';
-import { Paths } from '@/lib/constants';
-import SendResetEmail from './send-reset-email';
+import ResetPasswordComponents from './components';
 
-export const metadata = {
-  title: 'Reset Password',
-  description: 'Reset Password Page',
-};
-
-export default async function ResetPassword({
-  searchParams,
-}: {
-  searchParams: Promise<{ callbackUrl?: string }>;
-}) {
-  const { user } = await validateRequest();
-
-  const { callbackUrl } = await searchParams;
-
-  if (user) redirect(callbackUrl || Paths.Home);
-
-  return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-20 mb-8 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Forgot password?
-          </h2>
-          <p>Password reset link will be sent to your email.</p>
-        </div>
-
-        <SendResetEmail />
-      </div>
-    </>
-  );
+export default async function Page() {
+  if (!globalGETRateLimit()) {
+    return 'Too many requests';
+  }
+  const { session, user } = await validatePasswordResetSessionRequest();
+  if (session === null) {
+    return redirect('/forgot-password');
+  }
+  if (!session.emailVerified) {
+    return redirect('/reset-password/verify-email');
+  }
+  if (user.registered2FA && !session.twoFactorVerified) {
+    return redirect('/reset-password/2fa');
+  }
+  return <ResetPasswordComponents />;
 }

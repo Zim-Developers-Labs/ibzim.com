@@ -2,6 +2,9 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Filter } from 'bad-words';
 import slugify from 'slugify';
+import { env } from '@/env';
+import { randomBytes } from 'crypto';
+import { encodeBase32UpperCaseNoPadding } from '@oslojs/encoding';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -114,7 +117,7 @@ export function calculateReadingTime(article: string): number {
 
 export function absoluteUrl(path: string) {
   // ! should use env.
-  return new URL(path, process.env.NEXT_PUBLIC_APP_URL).href;
+  return new URL(path, env.NEXT_PUBLIC_APP_URL).href;
 }
 
 export function filterBadWords(text: string): string {
@@ -149,4 +152,24 @@ export function textify(
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+}
+
+export const generateId = (length: number) => {
+  return randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .slice(0, length);
+};
+
+export function generateRandomOTP(): string {
+  const bytes = new Uint8Array(5);
+  crypto.getRandomValues(bytes);
+  const code = encodeBase32UpperCaseNoPadding(bytes);
+  return code;
+}
+
+export function generateRandomRecoveryCode(): string {
+  const recoveryCodeBytes = new Uint8Array(10);
+  crypto.getRandomValues(recoveryCodeBytes);
+  const recoveryCode = encodeBase32UpperCaseNoPadding(recoveryCodeBytes);
+  return recoveryCode;
 }

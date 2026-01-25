@@ -1,12 +1,11 @@
-import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
-import SchoolPickerPageWrapper from '../wrapper';
 import { textify } from '@/lib/utils';
 import type { SchoolPickerProfilesType } from '@/types';
-import { getAllSchoolsByLevel } from '@/sanity/lib/client';
+import { getAllSchoolsByLevel } from '@/lib/sanity/client';
 import { notFound } from 'next/navigation';
-import { getReviewsCountAndAverageReviewByProfile } from '@/app/(blog)/profiles/[type]/[slug]/reviews/actions';
+import SchoolPickerComponent from './component';
+import { getReviewsCountAndAverageReviewByProfile } from '@/app/(public)/profiles/[type]/[slug]/reviews/actions';
 
 type Props = {
   params: Promise<{ level: string }>;
@@ -20,7 +19,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Explore ${level == 'best-tertiary-institutions' ? '30+' : '100+'} ${textify(level)} in Zimbabwe. Find the perfect fit for your educational needs.`,
     pageUrl: `/tools/school-picker/${level}-in-zimbabwe`,
     imageUrl: '/banner.webp',
-    siteConfig: siteConfig,
   });
 }
 
@@ -134,7 +132,7 @@ export default async function SchoolPickerPage({ params }: Props) {
   );
 
   return (
-    <SchoolPickerPageWrapper
+    <SchoolPickerComponent
       level={normalizedLevel}
       selectedLevel={level.replace('-in-zimbabwe', '')}
       schools={profilesWithReviews}

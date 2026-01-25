@@ -1,24 +1,23 @@
-import AuthorLayout from '@/components/authors/author';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
-import { siteConfig } from '@/lib/config';
 import {
   getAllArticles,
   getAllAuthorSlugs,
   getAuthorBySlug,
-} from '@/sanity/lib/client';
-import { urlForImage } from '@/sanity/lib/image';
+} from '@/lib/sanity/client';
+import { urlForImage } from '@/lib/sanity/image';
 import { AuthorType, CardArticleType } from '@/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import AuthorLayout from './component';
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const [author]: [AuthorType | null] = await Promise.all([
-    getAuthorBySlug((await params).slug),
-  ]);
+  const { slug } = await params;
+
+  const author = await getAuthorBySlug(slug);
 
   return prepareArticleMetadata({
     title: `${author?.name} | IBZim`,
@@ -33,7 +32,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       height: 500,
       width: 500,
     },
-    siteConfig,
   });
 }
 

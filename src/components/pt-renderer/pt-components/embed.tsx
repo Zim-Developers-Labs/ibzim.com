@@ -1,4 +1,4 @@
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import { TxtRenderer } from '..';
 import { Icons } from '@/components/icons';
 import Image from 'next/image';

@@ -6,10 +6,13 @@ import { render } from '@react-email/render';
 import { EMAIL_SENDER } from '@/lib/constants';
 import { createTransport, type TransportOptions } from 'nodemailer';
 import type { ComponentProps } from 'react';
-import { logger } from '../logger';
+import { logger } from './logger';
+import { env } from '@/env';
+import { DeleteVerificationTemplate } from './templates/delete-verification';
 
 export enum EmailTemplate {
   EmailVerification = 'EmailVerification',
+  DeleteVerification = 'DeleteVerification',
   PasswordReset = 'PasswordReset',
 }
 
@@ -18,6 +21,9 @@ export type PropsMap = {
     typeof EmailVerificationTemplate
   >;
   [EmailTemplate.PasswordReset]: ComponentProps<typeof ResetPasswordTemplate>;
+  [EmailTemplate.DeleteVerification]: ComponentProps<
+    typeof DeleteVerificationTemplate
+  >;
 };
 
 const getEmailTemplate = <T extends EmailTemplate>(
@@ -43,17 +49,26 @@ const getEmailTemplate = <T extends EmailTemplate>(
           />,
         ),
       };
+    case EmailTemplate.DeleteVerification:
+      return {
+        subject: 'Verify Account Deletion',
+        body: render(
+          <DeleteVerificationTemplate
+            {...(props as PropsMap[EmailTemplate.DeleteVerification])}
+          />,
+        ),
+      };
     default:
       throw new Error('Invalid email template');
   }
 };
 
 const smtpConfig = {
-  host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
+  host: env.SMTP_HOST,
+  port: env.SMTP_PORT,
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASSWORD,
   },
 };
 
@@ -64,7 +79,7 @@ export const sendMail = async <T extends EmailTemplate>(
   template: T,
   props: PropsMap[NoInfer<T>],
 ) => {
-  if (process.env.MOCK_SEND_EMAIL) {
+  if (env.MOCK_SEND_EMAIL) {
     logger.info(
       '📨 Email sent to:',
       to,

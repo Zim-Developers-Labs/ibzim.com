@@ -1,47 +1,39 @@
-import { validateRequest } from '@/lib/auth/validate-request';
-import { redirect } from 'next/navigation';
-import { Paths } from '@/lib/constants';
-import VerifyCode from './verify-code';
-import { Metadata } from 'next';
-import { preparePageMetadata } from '@/lib/metadata';
-import { siteConfig } from '@/lib/config';
+import VerifyEmailComponents from './components';
 
-export const generateMetadata = (): Metadata =>
-  preparePageMetadata({
-    title: 'Verify Email',
-    description: 'Enter the code sent to your email address.',
-    pageUrl: '/verify-email',
-    imageUrl: '/banner.webp',
-    siteConfig,
-  });
+import { getCurrentSession } from '@/lib/server/session';
+import { redirect } from 'next/navigation';
+import { getUserEmailVerificationRequestFromRequest } from '@/lib/server/email-verification';
+import { globalGETRateLimit } from '@/lib/server/request';
 
 export default async function VerifyEmailPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; requestId?: string }>;
 }) {
-  const { user } = await validateRequest();
+  const { callbackUrl, requestId } = await searchParams;
 
-  const { callbackUrl } = await searchParams;
+  if (!(await globalGETRateLimit())) {
+    return 'Too many requests';
+  }
+  const { user } = await getCurrentSession();
 
-  if (!user) redirect(Paths.Login);
-  if (user.emailVerified) redirect(callbackUrl || Paths.Home);
+  if (user === null) {
+    return redirect('/sign-in');
+  }
+
+  // TODO: Ideally we'd sent a new verification email automatically if the previous one is expired,
+  // but we can't set cookies inside server components.
+  const verificationRequest =
+    await getUserEmailVerificationRequestFromRequest();
+  if (verificationRequest === null && user.emailVerified) {
+    return redirect(callbackUrl ? callbackUrl : `/continue`);
+  }
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-20 mb-8 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Verify your email
-          </h2>
-          <p>
-            Verification code was sent to <strong>{user.email}</strong>. Check
-            your spam folder if you can&#39;t find the email.
-          </p>
-        </div>
-
-        <VerifyCode callbackUrl={callbackUrl} />
-      </div>
-    </>
+    <VerifyEmailComponents
+      user={user}
+      verificationRequest={verificationRequest}
+      callbackUrl={callbackUrl}
+    />
   );
 }

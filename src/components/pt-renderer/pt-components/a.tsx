@@ -3,7 +3,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -54,6 +54,10 @@ export function annotationInternalLink(props: any) {
 
       // Return default href for all other articles
       return `/${internalPage.industry.slug}/${internalPage.type}/${internalPage.slug.current}`;
+    }
+
+    if (internalPage._type === 'zw.news') {
+      return `/news/${internalPage.industry.slug}/${internalPage.slug.current}`;
     }
 
     // For non-article types, use the existing logic

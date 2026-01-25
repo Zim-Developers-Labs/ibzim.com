@@ -1,182 +1,168 @@
 'use client';
 
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import Link from 'next/link';
 import {
-  ArrowRightStartOnRectangleIcon,
+  ChevronDownIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/16/solid';
+import {
   BookmarkIcon,
   ChatBubbleBottomCenterTextIcon,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { useState } from 'react';
-import { logout } from '@/lib/auth/actions';
-import Image from 'next/image';
-import { User } from 'lucia';
-import { toast } from 'sonner';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Info, TrophyIcon, UserStar, Vote } from 'lucide-react';
+import { User } from '@/lib/server/constants';
+import { SubmitButton } from '../ui/submit-button';
+import { useActionState } from 'react';
+import { logoutAction } from '@/lib/logout';
+import { RankIcon } from '../ranking/rank-icon';
+import RanksDialog from '../ranking/ranks-dialog';
+import { getCurrentRank } from '../ranking/ranks';
+import { Linkify } from '@/lib/utils';
 
 type UserTogglerType = {
   user: User;
 };
 
+const initialState = {
+  message: '',
+};
+
+const getShadowColor = (rankName: string) => {
+  if (rankName.startsWith('New Comer')) {
+    return 'drop-shadow-[0_0_8px_rgba(13,148,136,0.6)]'; // teal
+  } else if (rankName.startsWith('Contributor')) {
+    return 'drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]'; // yellow
+  } else if (rankName.startsWith('Leader')) {
+    return 'drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]'; // red
+  } else if (rankName.startsWith('Ambassador')) {
+    return 'drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]'; // blue
+  } else {
+    return 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'; // default
+  }
+};
+
 export default function UserToggler({ user }: UserTogglerType) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [, action] = useActionState(logoutAction, initialState);
 
-  function open() {
-    setIsOpen(true);
-  }
-
-  function close() {
-    setIsOpen(false);
-  }
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSignout = async () => {
-    setIsLoading(true);
-    try {
-      await logout();
-      toast.info('Signed out successfully');
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsOpen(false);
-      setIsLoading(false);
-    }
-  };
-  const fname = user.fullName ? user.fullName.split(' ')[0] : 'I';
-  const lname = user.fullName ? user.fullName.split(' ')[1] : 'B';
+  const rank = getCurrentRank(user.ip);
+  const rankProgress = Math.floor((user.ip / rank.maxPoints) * 100);
 
   return (
     <div className="w-fit">
-      <Menu>
-        <MenuButton className="relative inline-flex cursor-pointer items-center gap-2 rounded-md border border-zinc-600 bg-transparent px-2 py-1.5 text-sm/6 text-white hover:bg-zinc-800">
-          {user.avatar ? (
-            <Image
-              alt={user.fullName || ''}
-              height={40}
-              width={40}
-              src={user.avatar}
-              className="h-6 w-6 rounded-full"
-            />
-          ) : (
-            <div className="bg-primaryColor grid h-6 w-6 place-content-center rounded-md text-xs uppercase">
-              {fname[0]}
-              {lname[0]}
-            </div>
-          )}
+      <DropdownMenu>
+        <DropdownMenuTrigger className="relative inline-flex cursor-pointer items-center gap-2 rounded-md border border-zinc-600 bg-transparent px-2 py-1.5 text-sm/6 text-white hover:bg-zinc-800">
+          <Avatar className="h-6 w-6 rounded-full">
+            {user.avatar && <AvatarImage src={user.avatar} />}
+            <AvatarFallback className="bg-primaryColor text-xs text-yellow-900 uppercase">
+              {user.fullName.split(' ')[0][0]}
+              {user.fullName.split(' ')[1][0]}
+            </AvatarFallback>
+          </Avatar>
           <ChevronDownIcon className="size-4 fill-white" />
-        </MenuButton>
+        </DropdownMenuTrigger>
 
-        <MenuItems
-          transition
-          anchor="bottom end"
-          className="z-50 mt-2 w-64 origin-top-right rounded-xl border border-zinc-200 bg-white p-1 text-sm/6 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
-        >
-          <div className="px-2 py-4 text-xs">{user.email}</div>
-          <MenuItem>
-            <Link
-              href={`/user/library/saved-articles`}
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-            >
-              <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              Saved Articles
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘G
-              </kbd>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link
-              href={`/user/library/comments`}
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-            >
-              <ChatBubbleBottomCenterTextIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              My Comments
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘G
-              </kbd>
-            </Link>
-          </MenuItem>
-          {/* <MenuItem>
-            <Link
-              href={`/user/achievements`}
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-            >
-              <TrophyIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
-              My Achievements
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘F
-              </kbd>
-            </Link>
-          </MenuItem> */}
-          <MenuItem>
-            <Link
-              href={`/user/settings/profile-customization`}
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-            >
-              <Cog6ToothIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4 text-black" />
-              Account Settings
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘D
-              </kbd>
-            </Link>
-          </MenuItem>
-          <div className="my-1 h-px bg-black/5" />
-          <MenuItem>
-            <button
-              className="group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-zinc-100"
-              onClick={open}
-            >
-              <ArrowRightStartOnRectangleIcon className="size-4 text-black" />
-              Logout
-              <kbd className="ml-auto hidden font-sans text-xs text-black/50 group-data-[focus]:inline">
-                ⌘A
-              </kbd>
-            </button>
-          </MenuItem>
-        </MenuItems>
-      </Menu>
-      <Dialog
-        open={isOpen}
-        as="div"
-        className="relative z-10 focus:outline-none"
-        onClose={close}
-      >
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-black/70">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
-              <DialogTitle as="h3" className="text-base/7 font-medium">
-                Sign Out of IBZIM?
-              </DialogTitle>
-              <p className="mt-2 text-sm/6 text-black/50">
-                You will be redirected to the home page
-              </p>
-              <div className="mt-4 flex items-center gap-2">
-                <Button
-                  className="inline-flex items-center gap-2 rounded-md border border-gray-400 px-3 py-1.5 text-sm/6 font-semibold focus:outline-none data-[hover]:bg-gray-100"
-                  onClick={close}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="inline-flex items-center gap-2 rounded-md bg-gray-700 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[hover]:bg-gray-600 data-[open]:bg-gray-700"
-                  onClick={handleSignout}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Processing' : 'Sign Out'}
-                </Button>
+        <DropdownMenuContent className="max-w-[280px]" align="end">
+          <DropdownMenuLabel className="flex items-center py-2 text-sm text-zinc-600">
+            <Info className="mr-2 inline h-4 w-4" />
+            <span className="block font-normal">@{user.username}</span>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator className="mb-2" />
+          <RanksDialog>
+            <div className="mb-2 block w-full cursor-pointer rounded-sm bg-gradient-to-br from-zinc-900 to-zinc-700 py-2">
+              <div className="flex min-w-[250px] items-center justify-between px-2 text-white">
+                <div className="flex items-center gap-2">
+                  <div className={getShadowColor(rank.name)}>
+                    <RankIcon id={Linkify(rank.name)} height={32} width={32} />
+                  </div>
+                  <div className="text-xs">
+                    {rank.name} ({rankProgress}%)
+                  </div>
+                </div>
+                <QuestionMarkCircleIcon className="size-4 text-white" />
               </div>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
+            </div>
+          </RanksDialog>
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/saved-articles`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <BookmarkIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                Saved Articles
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/achievements`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <TrophyIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                Achievements
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/comments`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <ChatBubbleBottomCenterTextIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                My Comments
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/reviews`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <UserStar className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                My Reviews
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href={`/${user.username}/votes`}
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <Vote className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4" />
+                My Votes
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                href="/my-account"
+                target="_blank"
+                className="group flex w-full items-center gap-2 rounded-lg py-1.5 data-[focus]:bg-zinc-100"
+              >
+                <Cog6ToothIcon className="group-hover:text-primaryColor group-hover:fill-primaryColor size-4 text-black" />
+                Account Settings
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <div className="my-2 w-full border-b border-zinc-200" />
+          <DropdownMenuGroup className="pb-2">
+            <form action={action} className="flex justify-end">
+              <SubmitButton
+                variant="outline"
+                className="cursor-pointer text-sm"
+              >
+                Logout
+              </SubmitButton>
+            </form>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }

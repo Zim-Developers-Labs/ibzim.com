@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import AwardCategoryResultsPageWrapper from './wrapper';
-import { siteConfig } from '@/lib/config';
 import { prepareArticleMetadata } from '@/lib/article-metadata';
 
 type Props = {
@@ -19,7 +18,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       height: 675,
       width: 1200,
     },
-    siteConfig,
   });
 }
 

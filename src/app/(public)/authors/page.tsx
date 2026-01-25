@@ -1,9 +1,9 @@
-import AuthorsLayout from '@/components/authors';
 import { siteConfig } from '@/lib/config';
 import { preparePageMetadata } from '@/lib/metadata';
-import { getAllArticles, getAllAuthors } from '@/sanity/lib/client';
 import { AuthorType, CardArticleType } from '@/types';
 import { Metadata } from 'next';
+import AuthorsLayout from './component';
+import { getAllArticles, getAllAuthors } from '@/lib/sanity/client';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -11,7 +11,6 @@ export const generateMetadata = (): Metadata =>
     description: `Members of IBZim working towards authoring authentic information.`,
     pageUrl: '/authors',
     imageUrl: '/banner.webp',
-    siteConfig,
   });
 
 export default async function AuthorsPage() {

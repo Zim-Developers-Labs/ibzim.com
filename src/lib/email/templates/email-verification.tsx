@@ -11,8 +11,7 @@ import {
   Section,
   Text,
 } from '@react-email/components';
-import { APP_TITLE } from '@/lib/constants';
-import { deploymentDomain } from '@/lib/config';
+import { APP_TITLE, DOMAIN_URLS } from '@/lib/constants';
 
 export interface EmailVerificationTemplateProps {
   code: string;
@@ -32,17 +31,17 @@ export const EmailVerificationTemplate = ({
           <Section style={coverSection}>
             <Section style={imageSection}>
               <Img
-                src={`https://${deploymentDomain}/static.png`}
+                src={`https://www.ibzim.com/static.png`}
                 width="176"
                 height="45"
-                alt="IBZim's Logo"
+                alt="IBZim Auth Logo"
                 style={{ margin: '0 auto' }}
               />
             </Section>
             <Section style={upperSection}>
               <Heading style={h1}>Verify your email address</Heading>
               <Text style={mainText}>
-                Thanks for starting the new IBZim account creation process. We
+                Thanks for starting the new IBZIM account creation process. We
                 want to make sure it&#39;s really you. Please enter the
                 following verification code when prompted. If you don&apos;t
                 want to create an account, you can ignore this message.
@@ -59,27 +58,24 @@ export const EmailVerificationTemplate = ({
             <Hr />
             <Section style={lowerSection}>
               <Text style={cautionText}>
-                IBZim will never email you and ask you to disclose or verify
+                IBZIM will never email you and ask you to disclose or verify
                 your password, credit card, or banking account number.
               </Text>
             </Section>
           </Section>
           <Text style={footerText}>
-            This message was produced and distributed by IBZim © 2025. All
-            rights reserved. IBZim is a registered trademark of{' '}
+            This message was produced and distributed by IBZIM. ©{' '}
+            {new Date().getFullYear()}, IBZIM, Inc. All rights reserved. IBZIM
+            is a registered trademark of{' '}
             <Link
               href="https://www.xfinitypros.com"
               target="_blank"
               style={link}
             >
-              Xfinty Pros
+              Xfinity Pros
             </Link>
             , Inc. View our{' '}
-            <Link
-              href={`https://${deploymentDomain}/policies/privacy`}
-              target="_blank"
-              style={link}
-            >
+            <Link href={`/policies/privacy`} target="_blank" style={link}>
               privacy policy
             </Link>
             .

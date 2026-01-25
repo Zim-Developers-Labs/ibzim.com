@@ -1,29 +1,37 @@
-import { validateRequest } from '@/lib/auth/validate-request';
-import { Paths } from '@/lib/constants';
-import SignUpLayout from './signup';
+import { getCurrentSession } from '@/lib/server/session';
 import { redirect } from 'next/navigation';
+import { globalGETRateLimit } from '@/lib/server/request';
+import SignUpComponents from './components';
+import { Paths } from '@/lib/constants';
 import { Metadata } from 'next';
-import { preparePageMetadata } from '@/lib/metadata';
-import { siteConfig } from '@/lib/config';
 
-export const generateMetadata = (): Metadata =>
-  preparePageMetadata({
-    title: 'Create Account',
-    description: 'Signup IBZim new account.',
-    pageUrl: '/sign-up',
-    imageUrl: '/banner.webp',
-    siteConfig,
-  });
+export const metadata: Metadata = {
+  title: 'Create IBZIM Account',
+  description: 'Create your IBZim account to get started.',
+};
 
-export default async function SignUpPage({
+export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; error?: string }>;
 }) {
-  const { user } = await validateRequest();
-  const { callbackUrl } = await searchParams;
+  const { callbackUrl, error } = await searchParams;
 
-  if (user) redirect(callbackUrl || Paths.Home);
-
-  return <SignUpLayout callbackUrl={callbackUrl} />;
+  if (!(await globalGETRateLimit())) {
+    return 'Too many requests';
+  }
+  const { session, user } = await getCurrentSession();
+  if (session !== null) {
+    if (!user.emailVerified) {
+      return redirect(Paths.VerifyEmail);
+    }
+    if (!user.registered2FA) {
+      return redirect('/2fa/setup');
+    }
+    if (!session.twoFactorVerified) {
+      return redirect('/2fa');
+    }
+    return redirect(callbackUrl || Paths.Home);
+  }
+  return <SignUpComponents callbackUrl={callbackUrl} error={error} />;
 }

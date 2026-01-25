@@ -23,6 +23,29 @@ export type CardArticleType = {
   truthScore: number;
 };
 
+export type CardNewsArticleType = {
+  _id: string;
+  title: string;
+  name: string;
+  _type: string;
+  slug: {
+    current: string;
+  };
+  _updatedAt: string;
+  _createdAt: string;
+  industry: {
+    slug: string;
+  };
+  type: string;
+  seo: {
+    title: string;
+    description: string;
+    image: Image;
+  };
+  author: AuthorType;
+  truthScore: number;
+};
+
 export type AuthorType = {
   _id: string;
   name: string;
@@ -193,6 +216,13 @@ export type ArticleType = {
     _key: string;
   }[];
   body: any;
+  socialMediaPostUrls: {
+    instagramUrl?: string;
+    facebookUrl?: string;
+    twitterUrl?: string;
+    youtubeUrl?: string;
+    linkedinUrl?: string;
+  };
   relatedArticles?: {
     name: string;
     slug: {
@@ -218,6 +248,100 @@ export type ArticleType = {
       };
     };
   }[];
+};
+
+export type NewsArticleType = {
+  _id: string;
+  _type: string;
+  _createdAt: string;
+  _updatedAt: string;
+  tblContentsType: string;
+  name: string;
+  slug: {
+    _type: 'slug';
+    current: string;
+  };
+  title: string;
+  hasProductListing: boolean;
+  products?: {
+    name: string;
+    bestFor: string;
+    image: Image;
+    link: {
+      url: string;
+      text: string;
+      dofollow: boolean;
+    };
+  }[];
+  truthScore: number;
+  industry: {
+    slug: string;
+  };
+  type: string;
+  seo: {
+    title: string;
+    description: string;
+    image: Image;
+  };
+  author: {
+    name: string;
+    picture: {
+      alt: string;
+      asset: {
+        _ref: string;
+      };
+    };
+    bio: string;
+    links: {
+      website?: string;
+      linkedin?: string;
+    };
+    postTitle: string;
+  };
+  intro: string;
+  subHeadings?: {
+    title: string;
+    type: string;
+    _key: string;
+  }[];
+  body: any;
+  relatedArticles?: {
+    name: string;
+    slug: {
+      _type: 'slug';
+      current: string;
+    };
+    seo: {
+      title: string;
+      description: string;
+      image: Image;
+    };
+    industry: {
+      slug: string;
+    };
+    type: string;
+    author: {
+      name: string;
+      picture: {
+        alt: string;
+        asset: {
+          _ref: string;
+        };
+      };
+    };
+  }[];
+};
+
+export type RelatedNewsItem = {
+  name: string;
+  slug: {
+    _type: 'slug';
+    current: string;
+  };
+  industry: {
+    slug: string;
+  };
+  mainImage: Image;
 };
 
 export type ProfileType = {
@@ -265,6 +389,7 @@ export type ProfileType = {
     tableHeading: string;
     tableData: any;
   }[];
+  relatedNews?: RelatedNewsItem[];
   relatedProfiles: {
     entityType: string;
     slug: Slug;
@@ -366,15 +491,8 @@ export type HomeType = {
 
 export type SiteConfigType = {
   name: string;
-  isNew: boolean;
   shortName: string;
   twitterUsername: string;
-  vercelProjectName: string;
-  country: string;
-  documentPrefix?: string;
-  features: {
-    auth: 'enabled' | 'disabled';
-  };
   url: {
     logo: string;
     web: string;
@@ -433,4 +551,84 @@ export type SchoolPickerProfilesType = {
   }[];
   averageRating?: number;
   reviewsCount?: number;
+};
+
+export type NotificationType = {
+  _id: string;
+  _createdAt: string;
+  description: string;
+  icon:
+    | 'info'
+    | 'warning'
+    | 'error'
+    | 'success'
+    | 'user'
+    | 'users'
+    | 'award'
+    | 'ib'
+    | 'article';
+  payloadForIcon?: any[];
+  type:
+    | 'withButtonLink'
+    | 'withSocialButtons'
+    | 'globalGeneral'
+    | 'userGeneral';
+  payloadForType?: {
+    buttonLinkText?: string;
+    buttonLinkUrl?: string;
+    facebookLink?: string;
+    twitterLink?: string;
+    instagramLink?: string;
+    youTubeLink?: string;
+  }[];
+  isRead?: boolean;
+  from?: 'neon' | 'sanity';
+};
+
+export type SanityAwardCategoryType = {
+  _id: string;
+  slug: Slug;
+  title: string;
+  description: string;
+  votingState: string;
+  categoryTitles: {
+    _id: string;
+    title: string;
+    slug: Slug;
+    description?: string;
+    withCustomImage?: boolean;
+    withExternalLink?: boolean;
+  }[];
+};
+
+export type AwardMetadataType = {
+  id: string;
+  icon: any;
+  color: string;
+  iconColor: string;
+};
+
+export type AwardCategoryType = SanityAwardCategoryType &
+  AwardMetadataType & {
+    titles?: AwardTitleType[];
+  };
+
+export type AwardTitleType = {
+  _id: string;
+  title: string;
+};
+
+export type CategoryTitleType = {
+  _id: string;
+  title: string;
+  slug: Slug;
+};
+
+export type NomineeType = {
+  nomineeProfile?: ProfileType;
+  customImage?: Image;
+  externalLink?: {
+    url: string;
+    title: string;
+  };
 };

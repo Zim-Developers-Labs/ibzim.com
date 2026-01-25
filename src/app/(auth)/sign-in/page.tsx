@@ -1,34 +1,40 @@
-// auth/sign-in/page.tsx
+import { SignInComponents } from './components';
 
-import { validateRequest } from '@/lib/auth/validate-request';
-import SignInLayout from './signin';
+import { getCurrentSession } from '@/lib/server/session';
 import { redirect } from 'next/navigation';
-import { Paths } from '@/lib/constants';
+import { globalGETRateLimit } from '@/lib/server/request';
 import { Metadata } from 'next';
-import { preparePageMetadata } from '@/lib/metadata';
-import { siteConfig } from '@/lib/config';
+import { Paths } from '@/lib/constants';
 
-export const generateMetadata = (): Metadata =>
-  preparePageMetadata({
-    title: 'Login | IBZIM Account',
-    description: 'Complete your IBZim profile.',
-    pageUrl: '/sign-in',
-    imageUrl: '/banner.webp',
-    siteConfig,
-  });
+export const metadata: Metadata = {
+  title: 'Login | IBZIM Account',
+  description: 'Login to access your IBZim account.',
+};
 
 export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; error?: string }>;
 }) {
-  const { user } = await validateRequest();
+  const { callbackUrl, error } = await searchParams;
 
-  const { callbackUrl } = await searchParams;
-
-  if (user) {
-    redirect(callbackUrl || Paths.Home);
+  if (!(await globalGETRateLimit())) {
+    return 'Too many requests';
   }
 
-  return <SignInLayout callbackUrl={callbackUrl} />;
+  const { session, user } = await getCurrentSession();
+
+  if (session !== null) {
+    if (!user.emailVerified) {
+      return redirect(Paths.VerifyEmail);
+    }
+    if (!user.registered2FA) {
+      return redirect('/2fa/setup');
+    }
+    if (!session.twoFactorVerified) {
+      return redirect('/2fa');
+    }
+    return redirect(callbackUrl || Paths.Home);
+  }
+  return <SignInComponents callbackUrl={callbackUrl} error={error} />;
 }

@@ -1,4 +1,4 @@
-import { urlForImage } from '@/sanity/lib/image';
+import { urlForImage } from '@/lib/sanity/image';
 import Image from 'next/image';
 
 export default function imageModule(props: any) {
