@@ -6,7 +6,7 @@ import { getSearchData } from '@/lib/sanity/actions';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
-    title: 'IBZim: Zimbabwean Information Hub',
+    title: 'IBZIM: Zimbabwe First Search Engine',
     description:
       'IBZIM is a platform for sharing and discovering information about Zimbabwe through various tools such as tables, biographies, articles and more.',
     pageUrl: '/',
@@ -14,11 +14,7 @@ export const generateMetadata = (): Metadata =>
   });
 
 export default async function HomePage() {
-  const { allDocuments, popularArticles } = await getSearchData(
-    siteConfig.popularArticleIds,
-  );
+  const { allDocuments } = await getSearchData();
 
-  return (
-    <HomeComponent articles={allDocuments} popularArticles={popularArticles} />
-  );
+  return <HomeComponent documents={allDocuments} />;
 }

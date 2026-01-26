@@ -7,15 +7,15 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { getCurrentSession } from '@/lib/server/session';
 import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
-import HomeHeader from './home-header';
-import HomeFooter from './home-footer';
+import HomeHeader from '../(home)/home-header';
+import HomeFooter from '../(home)/home-footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'IBZim: Zimbabwean Information Hub',
+  title: 'IBZim Search Engine Results Page',
   description:
-    'An information hub empowering Zimbabweans with raw and authentic knowledge. Signup and complete your profile to join the community.',
+    'Results for your search query on IBZim, the Zimbabwean Information Hub.',
 };
 
 export default async function RootLayout({

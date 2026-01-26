@@ -26,9 +26,7 @@ export default async function RootLayout({
   const sanityGlobalNotifications = await getAllNotifications();
   const neonUserNotifications = user ? await getUserNotifications(user.id) : [];
 
-  const { allDocuments, popularArticles } = await getSearchData(
-    siteConfig.popularArticleIds,
-  );
+  const { allDocuments } = await getSearchData();
 
   return (
     <html
@@ -52,7 +50,6 @@ export default async function RootLayout({
             sanityGlobalNotifications={sanityGlobalNotifications}
             neonUserNotifications={neonUserNotifications}
             articles={allDocuments}
-            popularArticles={popularArticles}
           />
           {children}
           <Footer siteShortName="IBZIM" />
