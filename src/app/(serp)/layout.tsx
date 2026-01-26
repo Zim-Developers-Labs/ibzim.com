@@ -7,8 +7,8 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { getCurrentSession } from '@/lib/server/session';
 import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
-import HomeHeader from '../(home)/home-header';
 import HomeFooter from '../(home)/home-footer';
+import SERPHeader from './search/_components/header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,7 +34,6 @@ export default async function RootLayout({
       <body>
         <UserProvider dbUser={user}>
           <Toaster position="top-center" />
-          <HomeHeader user={user} />
           {children}
           <HomeFooter />
         </UserProvider>

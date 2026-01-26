@@ -1,10 +1,10 @@
 import Container from '@/components/container';
 import { SignToggler } from '@/components/header/sign-toggler';
-import UserToggler from '@/components/header/user-toggler';
 import { Button } from '@/components/ui/button';
 import { User } from '@/lib/server/constants';
 import { Grip } from 'lucide-react';
 import Link from 'next/link';
+import HomeUserToggler from './user-toggler';
 
 type HeaderProps = {
   user: User | null;
@@ -25,7 +25,7 @@ export default function HomeHeader({ user }: HeaderProps) {
         </Link>
         <aside className="flex flex-none items-center gap-2 md:gap-4">
           {!user && <SignToggler />}
-          {user && <UserToggler user={user} />}
+          {user && <HomeUserToggler user={user} />}
         </aside>
       </Container>
     </header>

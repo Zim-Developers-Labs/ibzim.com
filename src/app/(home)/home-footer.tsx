@@ -5,7 +5,7 @@ export default function HomeFooter() {
   return (
     <footer className="bg-white">
       <Container>
-        <div className="flex flex-col justify-between px-8 py-4 text-sm text-[#70757a] sm:flex-row">
+        <div className="flex flex-col justify-between py-4 text-sm text-[#70757a] sm:flex-row">
           <div className="mb-4 flex justify-center gap-6 sm:mb-0 sm:justify-start">
             <Link href="#" className="hover:underline">
               About
