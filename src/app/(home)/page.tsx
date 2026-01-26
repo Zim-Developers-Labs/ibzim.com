@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import HomeComponent from './component';
 import { preparePageMetadata } from '@/lib/metadata';
-import { getSearchData } from '@/lib/sanity/actions';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -12,8 +11,6 @@ export const generateMetadata = (): Metadata =>
     imageUrl: '/banner.webp',
   });
 
-export default async function HomePage() {
-  const { allDocuments } = await getSearchData();
-
-  return <HomeComponent documents={allDocuments} />;
+export default function HomePage() {
+  return <HomeComponent />;
 }

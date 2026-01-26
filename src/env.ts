@@ -33,6 +33,8 @@ export const env = createEnv({
     ENCRYPTION_KEY: z.string().trim().min(1),
     GOOGLE_CLIENT_ID: z.string().trim().min(1),
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1),
+    MEILI_HOST: z.string().url().min(1),
+    MEILI_API_KEY: z.string().trim().min(1),
   },
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
@@ -77,6 +79,8 @@ export const env = createEnv({
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
+    MEILI_HOST: process.env.MEILI_HOST,
+    MEILI_API_KEY: process.env.MEILI_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

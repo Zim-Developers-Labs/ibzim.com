@@ -1,51 +1,74 @@
 'use client';
 
-import { ChevronRightIcon, Search, SearchIcon } from 'lucide-react';
-import { useState } from 'react';
+import { Search, SearchIcon, Loader2 } from 'lucide-react';
+import { useState, useEffect, useDeferredValue, useTransition } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import {
+  getQuerySuggestions,
+  type QuerySuggestion,
+} from '@/lib/meilisearch/actions';
 
-export default function SearchToggler({ documents }: { documents?: any[] }) {
+export default function SearchToggler() {
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<QuerySuggestion[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const handleRequestContent = async () => {
-    if (query.length < 5) {
-      toast.error('Add more details to your query');
-      return;
+  // useDeferredValue for automatic debouncing (React 19)
+  const deferredQuery = useDeferredValue(query);
+  const isStale = query !== deferredQuery;
+
+  // Navigate to search page with query
+  const handleSearch = (searchQuery: string) => {
+    if (searchQuery.trim()) {
+      setOpen(false);
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
-    const phoneNumber = '263717238876';
-    const message = encodeURIComponent(`Hi I would like content on: ${query}`);
-    const whatsappLink = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappLink, '_blank');
   };
 
-  const handleLinkClick = () => {
-    setOpen(false);
+  // Handle Enter key press
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch(query);
+    }
   };
 
   const popularSearches = ['schools', 'starlink', 'rich'];
 
-  const filteredArticles: any =
-    query === ''
-      ? []
-      : documents?.filter((document: any) => {
-          const lowercaseQuery = query.toLowerCase();
-          return (
-            document.name.toLowerCase().includes(lowercaseQuery) ||
-            (document.title &&
-              document.title.toLowerCase().includes(lowercaseQuery)) ||
-            (document.seo?.description &&
-              document.seo.description.toLowerCase().includes(lowercaseQuery))
-          );
-        });
+  // Fetch suggestions when deferred query changes
+  useEffect(() => {
+    if (deferredQuery.trim().length < 2) {
+      setSuggestions([]);
+      setError(null);
+      return;
+    }
+
+    startTransition(async () => {
+      const response = await getQuerySuggestions(deferredQuery);
+      setSuggestions(response.suggestions);
+      setError(response.error ?? null);
+    });
+  }, [deferredQuery]);
+
+  // Reset state when dialog closes
+  useEffect(() => {
+    if (!open) {
+      setQuery('');
+      setSuggestions([]);
+      setError(null);
+    }
+  }, [open]);
 
   return (
     <div className="block w-full max-w-2xl">
@@ -62,15 +85,17 @@ export default function SearchToggler({ documents }: { documents?: any[] }) {
           </Button>
         </DialogTrigger>
         <DialogContent className="top-32 translate-y-0 sm:top-32 sm:max-w-xl sm:translate-y-0">
-          <DialogTitle className="sr-only">Search Articles</DialogTitle>
-          <div className="flex items-center border-b pb-4">
+          <DialogTitle className="sr-only">Search Documents</DialogTitle>
+          <div className="flex items-center border-b">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search Zimbabwe..."
               className="placeholder:text-muted-foreground flex h-10 w-full rounded-md border-0 bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
             />
           </div>
           <div
@@ -85,8 +110,8 @@ export default function SearchToggler({ documents }: { documents?: any[] }) {
                   {popularSearches.map((search) => (
                     <button
                       key={search}
-                      className="rounded bg-gray-700 px-3 py-1 text-sm text-white"
-                      onClick={() => setQuery(search)}
+                      className="rounded bg-gray-700 px-3 py-1 text-sm text-white hover:bg-gray-600"
+                      onClick={() => handleSearch(search)}
                     >
                       {search}
                     </button>
@@ -94,31 +119,65 @@ export default function SearchToggler({ documents }: { documents?: any[] }) {
                 </div>
               </div>
             )}
-            <div className="space-y-2 text-sm text-gray-700">
-              {query !== '' &&
-                filteredArticles.length > 0 &&
-                filteredArticles.map((document: any, i: number) => {
-                  const url = `/search?q=${encodeURIComponent(document.name)}`;
-                  return (
-                    <Link
-                      href={url}
-                      key={i}
-                      onClick={handleLinkClick}
-                      className="group flex cursor-default items-center rounded-md px-3 py-2 select-none hover:bg-yellow-600 hover:text-white hover:outline-none"
-                    >
-                      <SearchIcon
-                        className="size-4 flex-none text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span className="ml-3 flex-auto truncate">
-                        {document.name}
-                      </span>
-                      <span className="ml-3 flex-none text-xs font-semibold text-white">
-                        Search
-                      </span>
-                    </Link>
-                  );
-                })}
+            <div className="space-y-1 text-sm text-gray-700">
+              {/* Loading state */}
+              {(isPending || isStale) && query.length >= 2 && (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="size-5 animate-spin text-gray-400" />
+                  <span className="ml-2 text-gray-500">
+                    Loading suggestions...
+                  </span>
+                </div>
+              )}
+
+              {/* Error state */}
+              {error && !isPending && (
+                <div className="rounded-md bg-red-50 px-3 py-2 text-red-600">
+                  {error}
+                </div>
+              )}
+
+              {/* Show "Search for" option when typing */}
+              {query.length >= 2 && !isPending && !isStale && (
+                <Link
+                  href={`/search?q=${encodeURIComponent(query)}`}
+                  onClick={() => setOpen(false)}
+                  className={`group mt-2 flex cursor-pointer items-center rounded-md border-gray-100 px-2 py-2 select-none hover:bg-yellow-600 hover:text-white ${suggestions.length > 0 && 'border-b'}`}
+                >
+                  <SearchIcon
+                    className="size-4 flex-none text-gray-500 group-hover:text-white"
+                    aria-hidden="true"
+                  />
+                  <span className="ml-3 flex-auto">
+                    Search for{' '}
+                    <span className="font-semibold">&quot;{query}&quot;</span>
+                  </span>
+                  <kbd className="ml-3 flex-none text-xs text-gray-400 group-hover:text-yellow-200">
+                    Enter ↵
+                  </kbd>
+                </Link>
+              )}
+
+              {/* Suggestions list */}
+              {!isPending &&
+                !isStale &&
+                suggestions.length > 0 &&
+                suggestions.map((suggestion) => (
+                  <Link
+                    href={`/search?q=${encodeURIComponent(suggestion.title)}`}
+                    key={suggestion.id}
+                    onClick={() => setOpen(false)}
+                    className="group flex cursor-pointer items-center rounded-md px-2 py-2 select-none hover:bg-yellow-600 hover:text-white"
+                  >
+                    <SearchIcon
+                      className="size-4 flex-none text-gray-400 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                    <span className="ml-3 flex-auto truncate">
+                      {suggestion.title}
+                    </span>
+                  </Link>
+                ))}
             </div>
           </div>
         </DialogContent>

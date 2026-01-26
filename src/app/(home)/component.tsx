@@ -52,7 +52,7 @@ export const menuItems = [
   },
 ];
 
-export default function HomeComponent({ documents }: { documents?: any[] }) {
+export default function HomeComponent() {
   const { user } = useUser();
   return (
     <div className="relative w-full bg-zinc-100">
@@ -73,7 +73,7 @@ export default function HomeComponent({ documents }: { documents?: any[] }) {
 
           {/* Search Box */}
           <div className="relative mb-8 flex w-full justify-center">
-            <SearchToggler documents={documents} />
+            <SearchToggler />
           </div>
 
           {/* OR Divider */}
