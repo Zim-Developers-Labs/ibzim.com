@@ -286,16 +286,13 @@ export default function SERPageComponents({
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuContent align="end" className="w-40 sm:w-48">
           <DropdownMenuLabel>Search Filters</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Time Range</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {allFilters.timeRange}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {timeRangeOptions.map((option) => (
@@ -318,9 +315,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Safe Search</span>
-                <span className="text-muted-foreground ml-2 text-xs">
-                  {allFilters.safeSearch}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {safeSearchOptions.map((option) => (
@@ -347,16 +341,13 @@ export default function SERPageComponents({
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuContent align="end" className="w-40 sm:w-48">
           <DropdownMenuLabel>Image Filters</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Time Range</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {imageFilters.timeRange}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {timeRangeOptions.map((option) => (
@@ -381,9 +372,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Usage Rights</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {imageFilters.usageRights}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {usageRightsOptions.map((option) => (
@@ -404,9 +392,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Type</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {imageFilters.imageType}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {imageTypeOptions.map((option) => (
@@ -425,9 +410,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Size</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {imageFilters.size}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {sizeOptions.map((option) => (
@@ -465,16 +447,13 @@ export default function SERPageComponents({
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuContent align="end" className="w-40 sm:w-48">
           <DropdownMenuLabel>Video Filters</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Time Range</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {videoFilters.timeRange}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {timeRangeOptions.map((option) => (
@@ -499,9 +478,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Duration</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {videoFilters.duration}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {durationOptions.map((option) => (
@@ -520,9 +496,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Quality</span>
-                <span className="text-muted-foreground ml-2 text-xs">
-                  {videoFilters.quality}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {qualityOptions.map((option) => (
@@ -541,9 +514,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Safe Search</span>
-                <span className="text-muted-foreground ml-2 text-xs">
-                  {videoFilters.safeSearch}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {safeSearchOptions.map((option) => (
@@ -572,16 +542,13 @@ export default function SERPageComponents({
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-64">
+        <DropdownMenuContent align="end" className="w-40 sm:w-48">
           <DropdownMenuLabel>News Filters</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Time Range</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {newsFilters.timeRange}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {newsTimeRangeOptions.map((option) => (
@@ -604,9 +571,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Source Type</span>
-                <span className="text-muted-foreground ml-2 max-w-20 truncate text-xs">
-                  {newsFilters.sourceType}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {sourceTypeOptions.map((option) => (
@@ -625,9 +589,6 @@ export default function SERPageComponents({
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <span className="flex-1">Safe Search</span>
-                <span className="text-muted-foreground ml-2 text-xs">
-                  {newsFilters.safeSearch}
-                </span>
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {safeSearchOptions.map((option) => (
