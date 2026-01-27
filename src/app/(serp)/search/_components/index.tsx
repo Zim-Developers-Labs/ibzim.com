@@ -99,10 +99,14 @@ function FilterMenuItem({
   return (
     <DropdownMenuItem
       onClick={onSelect}
-      className={cn(isSelected && 'bg-yellow-50 font-medium')}
+      className={cn(
+        isSelected && 'bg-yellow-50 font-medium dark:bg-yellow-800',
+      )}
     >
       <span className="flex-1">{label}</span>
-      {isSelected && <Check className="ml-2 h-4 w-4 text-yellow-600" />}
+      {isSelected && (
+        <Check className="ml-2 h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+      )}
     </DropdownMenuItem>
   );
 }
