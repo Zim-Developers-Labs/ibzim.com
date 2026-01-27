@@ -1,12 +1,9 @@
 import HomeUserToggler from '@/app/(home)/user-toggler';
-import Container from '@/components/container';
 import { SignToggler } from '@/components/header/sign-toggler';
 import { Icons } from '@/components/icons';
-import { Button } from '@/components/ui/button';
 import { User } from '@/lib/server/constants';
-import { Grip } from 'lucide-react';
-import Link from 'next/link';
 import SERPSearchToggler from './search-toggler';
+import { SERPMenuDrawer } from './menu-drawer';
 
 type HeaderProps = {
   user: User | null;
@@ -25,17 +22,12 @@ export default function SERPHeader({ user, q }: HeaderProps) {
             <Icons.logo className="block h-6 w-fit cursor-pointer text-zinc-900" />
           </div>
           {/* desktop search toggler */}
-          <div className="hidden w-full max-w-2xl sm:block">
+          <div className="hidden w-full max-w-xl sm:block">
             <SERPSearchToggler q={q} />
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-2">
-          <Button variant="outline" asChild>
-            <Link href="#ib-tools">
-              <Grip className="h-5 w-5" />
-              <span className="sr-only">View Tools</span>
-            </Link>
-          </Button>
+          <SERPMenuDrawer />
           <aside className="flex flex-none items-center gap-2 md:gap-4">
             {!user && <SignToggler />}
             {user && <HomeUserToggler user={user} />}
