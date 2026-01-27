@@ -76,15 +76,15 @@ export default function SearchToggler() {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="h-fit w-full cursor-pointer rounded-t-3xl rounded-b-none border-zinc-200 bg-white py-5 text-base hover:bg-zinc-50"
+            className="h-fit w-full cursor-pointer rounded-t-3xl rounded-b-none border-zinc-200 bg-white py-5 text-base hover:bg-zinc-50 dark:bg-zinc-700"
           >
-            <Search className="size-5 text-zinc-600" />
-            <div className="pr-2 text-sm text-zinc-600">
+            <Search className="size-5 text-zinc-600 dark:text-zinc-100" />
+            <div className="pr-2 text-sm text-zinc-600 dark:text-zinc-100">
               Search/Request Information
             </div>
           </Button>
         </DialogTrigger>
-        <DialogContent className="top-32 translate-y-0 sm:top-32 sm:max-w-xl sm:translate-y-0">
+        <DialogContent className="top-32 translate-y-0 sm:top-32 sm:max-w-xl sm:translate-y-0 dark:bg-zinc-900">
           <DialogTitle className="sr-only">Search Documents</DialogTitle>
           <div className="flex items-center border-b">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
@@ -183,10 +183,10 @@ export default function SearchToggler() {
         </DialogContent>
       </Dialog>
       <aside
-        className="mx-auto overflow-hidden rounded-t-none rounded-b-2xl bg-white"
+        className="mx-auto overflow-hidden rounded-t-none rounded-b-2xl bg-white dark:bg-zinc-900"
         role="banner"
       >
-        <div className="relative isolate flex items-center justify-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 md:gap-x-6">
+        <div className="relative isolate flex items-center justify-center gap-x-2 overflow-hidden bg-yellow-500/50 px-6 py-2.5 sm:px-3.5 md:gap-x-6 dark:bg-yellow-500/20">
           <div
             aria-hidden="true"
             className="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl"
@@ -212,7 +212,7 @@ export default function SearchToggler() {
             />
           </div>
           <div className="flex items-center gap-x-4 gap-y-2">
-            <p className="text-xs text-gray-800">
+            <p className="text-xs text-gray-800 dark:text-zinc-100">
               Work in progress, try it out😊
             </p>
           </div>

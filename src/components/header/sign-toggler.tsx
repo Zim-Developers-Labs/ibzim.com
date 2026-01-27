@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/popover';
 import { Icons } from '../icons';
 import Link from 'next/link';
+import { Button } from '../ui/button';
 
 type Props = {
   bgColor?: string;
@@ -29,24 +30,27 @@ export function SignToggler({ bgColor, linkText, textColor }: Props) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
-        className={`group block h-fit cursor-pointer rounded-md px-4 py-2 text-sm ${
+        className={`group cursor-pointer ${
           bgColor
             ? `text-[${textColor}] bg-[${bgColor}] hover:bg-[${bgColor}]/85`
             : 'bg-teal-400 text-zinc-900 hover:bg-teal-500'
         }`}
         asChild
       >
-        <span>
+        <Button>
           <span className="hidden md:inline">
             {linkText ? linkText : 'Login / Register'}
           </span>
           <span className="inline md:hidden">
             {linkText ? linkText : 'Login'}
           </span>
-        </span>
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="z-50 mx-2 mt-2 w-full rounded-md border border-zinc-200 bg-white p-4 shadow-lg sm:w-80">
-        <div className="mb-4 flex items-center gap-2 border-b border-b-zinc-200 pb-4">
+      <PopoverContent
+        className="z-50 mt-2 w-full rounded-md border p-4 shadow-lg sm:w-80"
+        align="end"
+      >
+        <div className="mb-4 flex items-center gap-2 border-b border-b-zinc-200 pb-4 dark:border-b-zinc-700">
           <Icons.ibLogoSM className="h-6 w-6" />
           <span className="text-xs">Sign in to IBZim with your IB Account</span>
         </div>

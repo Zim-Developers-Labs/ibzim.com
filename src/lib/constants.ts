@@ -38,6 +38,10 @@ export const domainUrls = [
     development: 'http://localhost:3005',
   },
   {
+    production: 'https://business.ibzim.com',
+    development: 'http://localhost:3006',
+  },
+  {
     production: 'https://www.peyapeya.com',
     development: 'http://localhost:4000',
   },
@@ -59,5 +63,6 @@ export const DOMAIN_URLS = {
   HELP: () => getDomainUrl(2),
   EARN: () => getDomainUrl(3),
   ADVERTISE: () => getDomainUrl(4),
-  PEYA_CHECKOUT: () => getDomainUrl(5),
+  BUSINESS: () => getDomainUrl(5),
+  PEYA_CHECKOUT: () => getDomainUrl(6),
 } as const;

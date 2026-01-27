@@ -9,6 +9,7 @@ import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
 import HomeHeader from './home-header';
 import HomeFooter from './home-footer';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,12 +33,19 @@ export default async function RootLayout({
       className={`${inter.className} h-full antialiased`}
     >
       <body>
-        <UserProvider dbUser={user}>
-          <Toaster position="top-center" />
-          <HomeHeader user={user} />
-          {children}
-          <HomeFooter />
-        </UserProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <UserProvider dbUser={user}>
+            <Toaster position="top-center" />
+            <HomeHeader user={user} />
+            {children}
+            <HomeFooter />
+          </UserProvider>
+        </ThemeProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={env.GA_SECRET!} />

@@ -33,15 +33,12 @@ export function SERPMenuDrawer() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="relative cursor-pointer border-zinc-200 bg-white"
-          >
+          <Button variant="outline" className="relative cursor-pointer">
             <Grip className="h-5 w-5" />
             <span className="">Menu</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="h-[90vh] bg-zinc-50 pl-0 sm:max-w-[756px]">
+        <DialogContent className="h-[90vh] bg-zinc-50 pl-0 sm:max-w-[756px] dark:bg-zinc-800">
           <DialogHeader className="pl-6">
             <DialogTitle>IBZim Suite</DialogTitle>
             {/* <DialogDescription>
@@ -60,15 +57,12 @@ export function SERPMenuDrawer() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button
-          variant="outline"
-          className="relative cursor-pointer border-zinc-200 bg-white"
-        >
+        <Button variant="outline" className="relative cursor-pointer">
           <Grip className="h-5 w-5" />
           <span className="sr-only">View Tools</span>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="bg-zinc-50 data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-t-4xl data-[vaul-drawer-direction=top]:max-h-[85vh]">
+      <DrawerContent className="bg-zinc-50 data-[vaul-drawer-direction=bottom]:max-h-[85vh] data-[vaul-drawer-direction=bottom]:rounded-t-4xl data-[vaul-drawer-direction=top]:max-h-[85vh] dark:bg-zinc-800">
         <DrawerHeader className="text-left">
           <DrawerTitle>IBZim Suite</DrawerTitle>
           {/* <DrawerDescription>
@@ -78,7 +72,7 @@ export function SERPMenuDrawer() {
         </DrawerHeader>
         {/*  Added scroll instruction for mobile users */}
         <div className="mb-4 px-4 pb-2">
-          <p className="flex items-center justify-center gap-1 text-center text-xs text-zinc-500">
+          <p className="flex items-center justify-center gap-1 text-center text-xs text-zinc-500 dark:text-zinc-400">
             <span>Scroll right for more tools</span>
             <ChevronRight className="h-3 w-3" />
           </p>
@@ -86,7 +80,7 @@ export function SERPMenuDrawer() {
         <div className="relative">
           <div className="overflow-x-auto overflow-y-clip">
             <MobileMenuItems className="px-4" />
-            <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-16 bg-gradient-to-l from-zinc-50 to-transparent" />
+            <div className="pointer-events-none absolute top-0 right-0 z-10 h-full w-16 bg-gradient-to-l from-zinc-50 to-transparent dark:from-zinc-800" />
           </div>
         </div>
         <DrawerFooter className="pt-2">
@@ -107,7 +101,7 @@ function MobileMenuItems({ className }: React.ComponentProps<'form'>) {
         className="grid w-[1100px] grid-cols-[repeat(5,_minmax(200px,_1fr))] grid-rows-2 gap-3 pr-20 pb-10"
       >
         <li className="col-span-2">
-          <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-zinc-50/50">
+          <Card className="group h-full cursor-pointer border bg-white py-2 shadow-none hover:bg-zinc-50/50 dark:bg-zinc-900">
             <CardContent className="p-4 text-center">
               <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
                 School Picker
@@ -189,32 +183,32 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
         className="grid -translate-y-40 grid-cols-2 gap-3 pt-40 sm:grid-cols-3 sm:gap-4 lg:gap-6"
       >
         <li className="col-span-2">
-          <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none hover:bg-zinc-50/50">
+          <Card className="group h-full cursor-pointer border bg-white py-2 shadow-none hover:bg-zinc-50/50 dark:bg-zinc-900">
             <CardContent className="p-4 text-center">
-              <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+              <h3 className="mb-1 text-sm leading-tight font-semibold sm:mb-2 sm:text-base">
                 School Picker
               </h3>
-              <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+              <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm dark:text-zinc-400">
                 Sort & Filter through schools
               </p>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <Link
                   href="/tools/school-picker/best-primary-schools-in-zimbabwe"
-                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300 dark:bg-teal-700 hover:dark:bg-teal-600"
                 >
                   Primary
                   <ChevronRight className="ml-1 inline-block h-4 w-4" />
                 </Link>
                 <Link
                   href="/tools/school-picker/best-o-level-schools-in-zimbabwe"
-                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300 dark:bg-teal-700 hover:dark:bg-teal-600"
                 >
                   O&nbsp;Level
                   <ChevronRight className="ml-1 inline-block h-4 w-4" />
                 </Link>
                 <Link
                   href="/tools/school-picker/best-a-level-schools-in-zimbabwe"
-                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300 dark:bg-teal-700 hover:dark:bg-teal-600"
                 >
                   A&nbsp;Level
                   <ChevronRight className="ml-1 inline-block h-4 w-4" />
@@ -222,7 +216,7 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
 
                 <Link
                   href="/tools/school-picker/best-tertiary-institutions-in-zimbabwe"
-                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300"
+                  className="w-full rounded-md bg-teal-200 py-2 text-center text-sm hover:bg-teal-300 dark:bg-teal-700 hover:dark:bg-teal-600"
                 >
                   Tertiary
                   <ChevronRight className="ml-1 inline-block h-4 w-4" />
@@ -236,20 +230,20 @@ function DesktopMenuItems({ className }: React.ComponentProps<'form'>) {
           return (
             <li key={index}>
               <Link href={feature.href}>
-                <Card className="group h-full cursor-pointer border border-zinc-200 bg-white py-2 shadow-none transition-all duration-300 hover:scale-105 hover:bg-yellow-100">
+                <Card className="group h-full cursor-pointer border py-2 shadow-none transition-all duration-300 hover:scale-105">
                   <CardContent className="p-4 text-center">
                     <div
-                      className={`from-primaryColor/10 via-secondaryColor/5 mx-auto mb-3 flex h-fit w-full items-center justify-center rounded-md bg-gradient-to-br to-transparent p-4 transition-transform duration-300 group-hover:scale-110 sm:mb-4`}
+                      className={`mx-auto mt-2 mb-2 flex h-fit w-full items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 sm:mb-3`}
                     >
                       <Icon
-                        className="h-6 w-6 text-zinc-700 sm:h-8 sm:w-8"
+                        className="h-10 w-10 sm:h-12 sm:w-12 dark:text-zinc-400"
                         strokeWidth={1}
                       />
                     </div>
-                    <h3 className="mb-1 text-sm leading-tight font-semibold text-zinc-900 sm:mb-2 sm:text-base">
+                    <h3 className="mb-1 text-sm leading-tight font-semibold sm:mb-2 sm:text-base">
                       {feature.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm">
+                    <p className="text-xs leading-relaxed text-zinc-600 sm:text-sm dark:text-zinc-400">
                       {feature.description}
                     </p>
                   </CardContent>

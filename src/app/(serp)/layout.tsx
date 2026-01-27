@@ -9,6 +9,7 @@ import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
 import HomeFooter from '../(home)/home-footer';
 import SERPHeader from './search/_components/header';
+import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,11 +33,18 @@ export default async function RootLayout({
       className={`${inter.className} h-full antialiased`}
     >
       <body>
-        <UserProvider dbUser={user}>
-          <Toaster position="top-center" />
-          {children}
-          <HomeFooter />
-        </UserProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <UserProvider dbUser={user}>
+            <Toaster position="top-center" />
+            {children}
+            <HomeFooter />
+          </UserProvider>
+        </ThemeProvider>
         <Analytics />
         {/* <SpeedInsights /> */}
         <GoogleAnalytics gaId={env.GA_SECRET!} />

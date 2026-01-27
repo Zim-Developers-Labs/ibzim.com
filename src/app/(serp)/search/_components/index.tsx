@@ -6,17 +6,7 @@ import { useUser } from '@/hooks/user-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  SlidersHorizontal,
-  Clock,
-  Shield,
-  Copyright,
-  ImageIcon,
-  Maximize,
-  Calendar,
-  Newspaper,
-  Check,
-} from 'lucide-react';
+import { SlidersHorizontal, Calendar, Check } from 'lucide-react';
 import Link from 'next/link';
 import {
   DropdownMenu,
@@ -282,7 +272,11 @@ export default function SERPageComponents({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="hover:bg-yellow-100">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-yellow-100 hover:dark:bg-yellow-800"
+          >
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
@@ -337,7 +331,11 @@ export default function SERPageComponents({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="hover:bg-yellow-100">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-yellow-100 hover:dark:bg-yellow-800"
+          >
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
@@ -443,7 +441,11 @@ export default function SERPageComponents({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="hover:bg-yellow-100">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-yellow-100 hover:dark:bg-yellow-800"
+          >
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
@@ -538,7 +540,11 @@ export default function SERPageComponents({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="hover:bg-yellow-100">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-yellow-100 hover:dark:bg-yellow-800"
+          >
             <SlidersHorizontal />
           </Button>
         </DropdownMenuTrigger>
@@ -768,35 +774,35 @@ export default function SERPageComponents({
   return (
     <>
       <SERPHeader user={user} q={q} />
-      <div className="relative w-full bg-zinc-100">
-        <div className="from-primaryColor/25 via-secondaryColor/5 flex h-screen w-full flex-col justify-start bg-gradient-to-b to-transparent pt-44 sm:pt-28">
+      <div className="relative w-full bg-zinc-100 dark:bg-zinc-800">
+        <div className="from-primaryColor/25 via-secondaryColor/5 flex h-screen w-full flex-col justify-start bg-gradient-to-b to-transparent pt-44 sm:pt-28 dark:from-zinc-800 dark:via-zinc-800">
           <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-10">
             <div className="flex max-w-xl items-center justify-between">
               <div className="flex items-center">
                 <Button
                   variant="ghost"
-                  className={`bg-transparent hover:bg-transparent ${type === 'all' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200' : 'hover:underline'}`}
+                  className={`bg-transparent hover:bg-transparent ${type === 'all' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
                   <Link href={`?q=${q}&type=all`}>All</Link>
                 </Button>
                 <Button
                   variant="ghost"
-                  className={`bg-transparent hover:bg-transparent ${type === 'images' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200' : 'hover:underline'}`}
+                  className={`bg-transparent hover:bg-transparent ${type === 'images' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
                   <Link href={`?q=${q}&type=images`}>Images</Link>
                 </Button>
                 <Button
                   variant="ghost"
-                  className={`bg-transparent hover:bg-transparent ${type === 'videos' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200' : 'hover:underline'}`}
+                  className={`bg-transparent hover:bg-transparent ${type === 'videos' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
                   <Link href={`?q=${q}&type=videos`}>Videos</Link>
                 </Button>
                 <Button
                   variant="ghost"
-                  className={`bg-transparent hover:bg-transparent ${type === 'news' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200' : 'hover:underline'}`}
+                  className={`bg-transparent hover:bg-transparent ${type === 'news' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
                   <Link href={`?q=${q}&type=news`}>News</Link>

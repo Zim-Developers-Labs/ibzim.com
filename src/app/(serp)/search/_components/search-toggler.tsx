@@ -86,7 +86,7 @@ export default function SERPSearchToggler({ q }: { q: string }) {
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <div className="flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-2 focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500">
+      <div className="flex items-center rounded-lg border bg-white px-3 py-2 focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500 dark:bg-zinc-700">
         <Search className="mr-2 h-4 w-4 shrink-0 text-zinc-400" />
         <input
           type="text"
@@ -101,12 +101,12 @@ export default function SERPSearchToggler({ q }: { q: string }) {
 
       {/* Suggestions dropdown */}
       {showSuggestions && (
-        <div className="absolute top-full left-0 z-50 mt-1 w-full rounded-lg border border-zinc-200 bg-white py-2 shadow-lg">
+        <div className="absolute top-full left-0 z-50 mt-1 w-full rounded-lg border bg-white py-2 shadow-lg dark:bg-zinc-700">
           {/* Loading state */}
           {(isPending || isStale) && (
             <div className="flex items-center justify-center py-3">
-              <Loader2 className="size-4 animate-spin text-gray-400" />
-              <span className="ml-2 text-sm text-gray-500">
+              <Loader2 className="size-4 animate-spin text-gray-400 dark:text-zinc-500" />
+              <span className="ml-2 text-sm text-zinc-500 dark:text-zinc-300">
                 Loading suggestions...
               </span>
             </div>
@@ -114,7 +114,7 @@ export default function SERPSearchToggler({ q }: { q: string }) {
 
           {/* Error state */}
           {error && !isPending && (
-            <div className="mx-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
+            <div className="mx-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900 dark:text-red-400">
               {error}
             </div>
           )}
@@ -124,7 +124,7 @@ export default function SERPSearchToggler({ q }: { q: string }) {
             <Link
               href={`/search?q=${encodeURIComponent(query)}`}
               onClick={() => setIsFocused(false)}
-              className={`group flex cursor-pointer items-center px-3 py-2 text-sm select-none hover:bg-yellow-600 hover:text-white ${suggestions.length > 0 ? 'border-b border-zinc-100' : ''}`}
+              className={`group flex cursor-pointer items-center px-3 py-2 text-sm select-none hover:bg-yellow-600 hover:text-white ${suggestions.length > 0 ? 'border-b' : ''}`}
             >
               <SearchIcon
                 className="size-4 flex-none text-gray-500 group-hover:text-white"

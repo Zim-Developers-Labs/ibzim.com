@@ -4,6 +4,7 @@ import { Icons } from '@/components/icons';
 import { User } from '@/lib/server/constants';
 import SERPSearchToggler from './search-toggler';
 import { SERPMenuDrawer } from './menu-drawer';
+import Link from 'next/link';
 
 type HeaderProps = {
   user: User | null;
@@ -18,9 +19,9 @@ export default function SERPHeader({ user, q }: HeaderProps) {
     >
       <div className="mb-4 flex w-full items-center justify-between sm:mb-0">
         <div className="flex w-full items-center gap-4">
-          <div>
-            <Icons.logo className="block h-6 w-fit cursor-pointer text-zinc-900" />
-          </div>
+          <Link href="/" className="flex items-center">
+            <Icons.logo className="block h-6 w-fit cursor-pointer text-zinc-900 dark:text-white" />
+          </Link>
           {/* desktop search toggler */}
           <div className="hidden w-full max-w-xl sm:block">
             <SERPSearchToggler q={q} />
