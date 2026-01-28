@@ -11,16 +11,13 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import {
-  getQuerySuggestions,
-  type QuerySuggestion,
-} from '@/lib/meilisearch/actions';
+import { getQueryPredictions, QueryPrediction } from '@/lib/typesense/actions';
 
 export default function SearchToggler() {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState<QuerySuggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<QueryPrediction[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -55,8 +52,8 @@ export default function SearchToggler() {
     }
 
     startTransition(async () => {
-      const response = await getQuerySuggestions(deferredQuery);
-      setSuggestions(response.suggestions);
+      const response = await getQueryPredictions(deferredQuery);
+      setSuggestions(response.predictions.map((hit) => hit.document));
       setError(response.error ?? null);
     });
   }, [deferredQuery]);
@@ -90,7 +87,7 @@ export default function SearchToggler() {
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <input
               type="text"
-              placeholder="Search Zimbabwe..."
+              placeholder="Search the Zimbabwean Web..."
               className="placeholder:text-muted-foreground flex h-10 w-full rounded-md border-0 bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -164,8 +161,8 @@ export default function SearchToggler() {
                 suggestions.length > 0 &&
                 suggestions.map((suggestion) => (
                   <Link
-                    href={`/search?q=${encodeURIComponent(suggestion.title)}`}
-                    key={suggestion.id}
+                    href={`/search?q=${encodeURIComponent(suggestion.term)}`}
+                    key={suggestion.term}
                     onClick={() => setOpen(false)}
                     className="group flex cursor-pointer items-center rounded-md px-2 py-2 select-none hover:bg-yellow-600 hover:text-white"
                   >
@@ -174,7 +171,7 @@ export default function SearchToggler() {
                       aria-hidden="true"
                     />
                     <span className="ml-3 flex-auto truncate">
-                      {suggestion.title}
+                      {suggestion.term}
                     </span>
                   </Link>
                 ))}

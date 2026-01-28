@@ -35,6 +35,9 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().trim().min(1),
     MEILI_HOST: z.string().url().min(1),
     MEILI_API_KEY: z.string().trim().min(1),
+    TYPESENSE_API_KEY: z.string().trim().min(1),
+    TYPESENSE_PORT: z.number().int().min(1).default(443),
+    TYPESENSE_PROTOCOL: z.enum(['http', 'https']).default('https'),
   },
   /**
    * Specify your client-side environment variables schema here. This way you can ensure the app
@@ -46,6 +49,7 @@ export const env = createEnv({
     NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().trim().min(1),
     NEXT_PUBLIC_SANITY_DATASET: z.string().trim().min(1),
     NEXT_PUBLIC_SANITY_API_VERSION: z.string().trim().optional(),
+    NEXT_PUBLIC_TYPESENSE_HOST: z.string().trim().min(1),
   },
   /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -79,6 +83,10 @@ export const env = createEnv({
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
+    NEXT_PUBLIC_TYPESENSE_HOST: process.env.NEXT_PUBLIC_TYPESENSE_HOST,
+    TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
+    TYPESENSE_PORT: parseInt(process.env.TYPESENSE_PORT ?? ''),
+    TYPESENSE_PROTOCOL: process.env.TYPESENSE_PROTOCOL,
     MEILI_HOST: process.env.MEILI_HOST,
     MEILI_API_KEY: process.env.MEILI_API_KEY,
   },

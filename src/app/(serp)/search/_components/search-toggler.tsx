@@ -10,15 +10,12 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  getQuerySuggestions,
-  type QuerySuggestion,
-} from '@/lib/meilisearch/actions';
+import { getQueryPredictions, QueryPrediction } from '@/lib/typesense/actions';
 
 export default function SERPSearchToggler({ q }: { q: string }) {
   const router = useRouter();
   const [query, setQuery] = useState(q);
-  const [suggestions, setSuggestions] = useState<QuerySuggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<QueryPrediction[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [isFocused, setIsFocused] = useState(false);
@@ -61,8 +58,8 @@ export default function SERPSearchToggler({ q }: { q: string }) {
     }
 
     startTransition(async () => {
-      const response = await getQuerySuggestions(deferredQuery);
-      setSuggestions(response.suggestions);
+      const response = await getQueryPredictions(deferredQuery);
+      setSuggestions(response.predictions.map((hit) => hit.document));
       setError(response.error ?? null);
     });
   }, [deferredQuery]);
@@ -90,7 +87,7 @@ export default function SERPSearchToggler({ q }: { q: string }) {
         <Search className="mr-2 h-4 w-4 shrink-0 text-zinc-400" />
         <input
           type="text"
-          placeholder="Search Zimbabwe..."
+          placeholder="Search the Zimbabwean Web..."
           className="flex h-8 w-full bg-transparent text-sm outline-none placeholder:text-zinc-400"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -145,8 +142,8 @@ export default function SERPSearchToggler({ q }: { q: string }) {
             !isStale &&
             suggestions.map((suggestion) => (
               <Link
-                href={`/search?q=${encodeURIComponent(suggestion.title)}`}
-                key={suggestion.id}
+                href={`/search?q=${encodeURIComponent(suggestion.term)}`}
+                key={suggestion.term}
                 onClick={() => setIsFocused(false)}
                 className="group flex cursor-pointer items-center px-3 py-2 text-sm select-none hover:bg-yellow-600 hover:text-white"
               >
@@ -155,7 +152,7 @@ export default function SERPSearchToggler({ q }: { q: string }) {
                   aria-hidden="true"
                 />
                 <span className="ml-3 flex-auto truncate">
-                  {suggestion.title}
+                  {suggestion.term}
                 </span>
               </Link>
             ))}
