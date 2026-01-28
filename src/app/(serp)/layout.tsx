@@ -8,7 +8,6 @@ import { getCurrentSession } from '@/lib/server/session';
 import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
 import HomeFooter from '../(home)/home-footer';
-import SERPHeader from './search/_components/header';
 import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -35,7 +34,7 @@ export default async function RootLayout({
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
