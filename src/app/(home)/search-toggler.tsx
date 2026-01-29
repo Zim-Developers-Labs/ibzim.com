@@ -139,13 +139,13 @@ export default function SearchToggler() {
                 <Link
                   href={`/search?q=${encodeURIComponent(query)}`}
                   onClick={() => setOpen(false)}
-                  className={`group mt-2 flex cursor-pointer items-center rounded-md border-gray-100 px-2 py-2 select-none hover:bg-yellow-600 hover:text-white ${suggestions.length > 0 && 'border-b'}`}
+                  className={`group mt-2 flex cursor-pointer items-center px-2 py-2 select-none hover:rounded-md hover:bg-yellow-600 hover:text-white`}
                 >
                   <SearchIcon
                     className="size-4 flex-none text-gray-500 group-hover:text-white"
                     aria-hidden="true"
                   />
-                  <span className="ml-3 flex-auto">
+                  <span className="ml-3 flex-auto dark:text-zinc-200">
                     Search for{' '}
                     <span className="font-semibold">&quot;{query}&quot;</span>
                   </span>
@@ -159,10 +159,10 @@ export default function SearchToggler() {
               {!isPending &&
                 !isStale &&
                 suggestions.length > 0 &&
-                suggestions.map((suggestion) => (
+                suggestions.map((suggestion, i) => (
                   <Link
                     href={`/search?q=${encodeURIComponent(suggestion.term)}`}
-                    key={suggestion.term}
+                    key={i}
                     onClick={() => setOpen(false)}
                     className="group flex cursor-pointer items-center rounded-md px-2 py-2 select-none hover:bg-yellow-600 hover:text-white"
                   >
@@ -170,7 +170,7 @@ export default function SearchToggler() {
                       className="size-4 flex-none text-gray-400 group-hover:text-white"
                       aria-hidden="true"
                     />
-                    <span className="ml-3 flex-auto truncate">
+                    <span className="ml-3 flex-auto truncate dark:text-zinc-200">
                       {suggestion.term}
                     </span>
                   </Link>
