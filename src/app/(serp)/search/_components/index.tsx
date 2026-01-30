@@ -186,11 +186,7 @@ export default function SERPageComponents({
   const qualityOptions = ['Any quality', 'HD', '4K'];
 
   // News specific options
-  const sourceTypeOptions = [
-    'Credible sources',
-    'All sources',
-    'Unofficial sources',
-  ];
+  const sourceTypeOptions = ['Credible sources', 'All sources'];
 
   // Handle custom range dialog
   const openCustomRangeDialog = (
