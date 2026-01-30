@@ -7,7 +7,6 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { getCurrentSession } from '@/lib/server/session';
 import { UserProvider } from '@/hooks/user-context';
 import { env } from '@/env';
-import HomeFooter from '../(home)/home-footer';
 import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ['latin'] });

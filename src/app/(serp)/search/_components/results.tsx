@@ -1,8 +1,18 @@
-import Container from '@/components/container';
 import { SearchIndexEntry } from '@/types';
 import { FetchAllEntriesResult } from './actions';
 import { Icons } from '@/components/icons';
-import { DollarSign, Flag } from 'lucide-react';
+import { Check, DollarSign, Flag } from 'lucide-react';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 function ExternalSearch({ q }: { q: string }) {
   return (
@@ -22,7 +32,7 @@ function ExternalSearch({ q }: { q: string }) {
         </p>
         <div className="flex items-center gap-2 sm:gap-4">
           <a
-            href="https://google.com"
+            href={`https://www.google.com/search?q=${encodeURIComponent(q)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-md bg-white px-2 py-2 text-sm text-zinc-600 shadow-sm transition hover:shadow sm:px-4 dark:bg-zinc-900 dark:text-zinc-200"
@@ -31,7 +41,7 @@ function ExternalSearch({ q }: { q: string }) {
             <span>Google</span>
           </a>
           <a
-            href="https://youtube.com"
+            href={`https://www.youtube.com/search?q=${encodeURIComponent(q)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-md bg-white px-2 py-2 text-sm text-zinc-600 shadow-sm transition hover:shadow sm:px-4 dark:bg-zinc-900 dark:text-zinc-200"
@@ -40,7 +50,7 @@ function ExternalSearch({ q }: { q: string }) {
             <span>YouTube</span>
           </a>
           <a
-            href="https://amazon.com"
+            href={`https://www.amazon.com/s?k=${encodeURIComponent(q)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 rounded-md bg-white px-2 py-2 text-sm text-zinc-600 shadow-sm transition hover:shadow sm:px-4 dark:bg-zinc-900 dark:text-zinc-200"
@@ -70,18 +80,67 @@ export default function ResultsComponent({
           </div>
           <div className="mt-4 flex items-center gap-1 text-sm text-green-600 sm:mt-0 dark:text-green-400">
             <DollarSign className="size-3" />
-            <span
-              className="cursor-pointer"
-              onClick={() => {
-                window.open(
-                  `https://wa.me/+263717238876?text=Hi Tino, Can I have my dollar 😂. My search was ${q}.`,
-                  '_blank',
-                );
-              }}
-            >
-              Claim Dollar
-              {/* Will give dollar if user is signed up, search term is Zimbabwe based and if i have the dollar xd*/}
-            </span>
+            <Dialog>
+              <DialogTrigger asChild>
+                <span className="cursor-pointer">
+                  Claim Dollar
+                  {/* Will give dollar if user is signed up, search term is Zimbabwe based and if i have the dollar xd*/}
+                </span>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <DollarSign className="size-5 text-green-600" />
+                    Claim Your Dollar
+                  </DialogTitle>
+                  <DialogDescription>
+                    Terms & Conditions for the dollar bet
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3 py-4">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                      <Check className="size-3 text-green-600 dark:text-green-400" />
+                    </div>
+                    <p className="text-foreground text-sm">
+                      You have been signed up for at least 3 days
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                      <Check className="size-3 text-green-600 dark:text-green-400" />
+                    </div>
+                    <p className="text-foreground text-sm">
+                      Your search query is Zimbabwe related
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                      <Check className="size-3 text-green-600 dark:text-green-400" />
+                    </div>
+                    <p className="text-foreground text-sm">
+                      {"You haven't claimed a dollar before (we track IP)"}
+                    </p>
+                  </div>
+                </div>
+                <DialogFooter className="gap-2">
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    onClick={() => {
+                      window.open(
+                        `https://wa.me/+263780105064?text=Hi Tino, Can I have my dollar 😂. My search was ${q}.`,
+                        '_blank',
+                      );
+                    }}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    I Qualify - Claim Now
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <ExternalSearch q={q} />
