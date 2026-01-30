@@ -632,3 +632,41 @@ export type NomineeType = {
     title: string;
   };
 };
+
+export interface SearchIndexEntry {
+  name: string;
+  url: string;
+  created_at: number; // Unix timestamp
+  description?: string;
+  imageUrl?: string;
+  content?: string;
+  updated_at?: number; // Unix timestamp
+  isInternal?: boolean; // whether the URL is published by us or an external link
+
+  // Ranking Signals
+  last30DaysClicks?: number;
+  safetyScore?: number; // 0.0 to 1.0
+  readabilityScore?: number; // 0.0 to 1.0
+  coreWebVitalsScore?: number; // 0.0 to 1.0
+
+  // Location
+  city?: string;
+  country?: string;
+  contentLocation?: { lat: number; lng: number };
+
+  // Discriminator
+  '@type': string; // e.g., "Product", "VideoObject", "NewsArticle", "image"
+
+  // Type-specific fields
+  width?: number;
+  height?: number;
+  format?: string;
+  usageRights?: string;
+  duration?: number;
+  quality?: string;
+  thumbnail_url?: string;
+  sourceType?: string;
+
+  // Payload
+  json_ld_payload?: string;
+}

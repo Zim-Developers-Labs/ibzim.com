@@ -36,6 +36,9 @@ import {
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { SearchIndexEntry } from '@/types';
+import ResultsComponent from './results';
+import { FetchAllEntriesResult } from './actions';
 
 // Filter state types
 interface AllFilters {
@@ -112,9 +115,11 @@ function FilterMenuItem({
 }
 
 export default function SERPageComponents({
+  searchResults,
   q,
   type,
 }: {
+  searchResults: FetchAllEntriesResult | null;
   q: string;
   type?: string;
 }) {
@@ -775,8 +780,8 @@ export default function SERPageComponents({
     <>
       <SERPHeader user={user} q={q} />
       <div className="relative w-full bg-zinc-100 dark:bg-zinc-800">
-        <div className="from-primaryColor/25 via-secondaryColor/5 flex h-screen w-full flex-col justify-start bg-gradient-to-b to-transparent pt-44 sm:pt-28 dark:from-zinc-800 dark:via-zinc-800">
-          <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-10">
+        <div className="from-primaryColor/25 via-secondaryColor/5 flex min-h-screen w-full flex-col justify-start bg-gradient-to-b to-transparent pt-44 sm:pt-28 dark:from-zinc-800 dark:via-zinc-800">
+          <div className="relative mx-auto mb-4 w-full max-w-7xl px-4 sm:px-8 lg:px-10">
             <div className="flex max-w-xl items-center justify-between">
               <div className="flex items-center">
                 <Button
@@ -811,6 +816,7 @@ export default function SERPageComponents({
               <div>{renderTunerDropdown()}</div>
             </div>
           </div>
+          <ResultsComponent results={searchResults} q={q} />
         </div>
       </div>
 

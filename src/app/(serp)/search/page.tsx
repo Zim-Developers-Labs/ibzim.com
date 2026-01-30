@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import SERPageComponents from './_components';
 import { Metadata } from 'next';
+import { getResultsForQuery } from './_components/actions';
 
 type Props = {
   searchParams: Promise<{ q?: string; type?: string }>;
@@ -28,5 +29,7 @@ export default async function SERPage({ searchParams }: Props) {
     return redirect('/');
   }
 
-  return <SERPageComponents q={q} type={type} />;
+  const searchResults = await getResultsForQuery(q.trim());
+
+  return <SERPageComponents q={q} type={type} searchResults={searchResults} />;
 }

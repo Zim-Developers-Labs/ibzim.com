@@ -17,7 +17,7 @@ const client = new Typesense.Client({
     },
   ],
   apiKey: env.TYPESENSE_API_KEY,
-  connectionTimeoutSeconds: 2,
+  connectionTimeoutSeconds: 10,
 });
 
 export const typesenseSearchIndex = client.collections('search_index');
