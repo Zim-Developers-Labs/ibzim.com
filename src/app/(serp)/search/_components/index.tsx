@@ -39,6 +39,8 @@ import { cn } from '@/lib/utils';
 import { SearchIndexEntry } from '@/types';
 import ResultsComponent from './results';
 import { FetchAllEntriesResult } from './actions';
+import HomeFooter from '@/app/(home)/home-footer';
+import { toast } from 'sonner';
 
 // Filter state types
 interface AllFilters {
@@ -796,21 +798,48 @@ export default function SERPageComponents({
                   className={`bg-transparent hover:bg-transparent ${type === 'images' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
-                  <Link href={`?q=${q}&type=images`}>Images</Link>
+                  <Link
+                    href={`?q=${q}&type=images`}
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      toast.info('Image search is coming soon!');
+                    }}
+                  >
+                    Images
+                  </Link>
                 </Button>
                 <Button
                   variant="ghost"
                   className={`bg-transparent hover:bg-transparent ${type === 'videos' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
-                  <Link href={`?q=${q}&type=videos`}>Videos</Link>
+                  <Link
+                    href={`?q=${q}&type=videos`}
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      toast.info('Video search is coming soon!');
+                    }}
+                  >
+                    Videos
+                  </Link>
                 </Button>
                 <Button
                   variant="ghost"
                   className={`bg-transparent hover:bg-transparent ${type === 'news' ? 'border border-yellow-200 bg-yellow-100 font-semibold hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900 dark:hover:bg-yellow-800' : 'hover:underline'}`}
                   asChild
                 >
-                  <Link href={`?q=${q}&type=news`}>News</Link>
+                  <Link
+                    href={`?q=${q}&type=news`}
+                    onClick={(e) => {
+                      e.preventDefault();
+
+                      toast.info('News search is coming soon!');
+                    }}
+                  >
+                    News
+                  </Link>
                 </Button>
               </div>
               <div>{renderTunerDropdown()}</div>
@@ -823,6 +852,7 @@ export default function SERPageComponents({
       {/* Custom Dialogs */}
       <CustomRangeDialog />
       <ExactSizeDialog />
+      <HomeFooter />
     </>
   );
 }

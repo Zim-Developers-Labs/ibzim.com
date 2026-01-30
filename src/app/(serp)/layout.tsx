@@ -39,9 +39,8 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <UserProvider dbUser={user}>
-            <Toaster position="top-center" />
+            <Toaster position="bottom-right" />
             {children}
-            <HomeFooter />
           </UserProvider>
         </ThemeProvider>
         <Analytics />
