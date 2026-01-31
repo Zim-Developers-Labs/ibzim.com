@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,7 +11,7 @@ import ResultsComponent from './results';
 import HomeFooter from '@/app/(home)/home-footer';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/user-context';
-import { FetchAllEntriesResult } from './actions';
+import { FetchAllEntriesResult, trackSearchView } from './actions';
 
 // Refactored Imports
 import { FilterType } from './search-config';
@@ -28,11 +28,33 @@ export default function SERPageComponents({
   type = 'all',
   searchId,
 }: {
-  searchResults: FetchAllEntriesResult | null;
+  searchResults: FetchAllEntriesResult;
   q: string;
   type?: string;
   searchId: string;
 }) {
+  // This ensures if the user searches for "A" then "B", both are logged.
+  const lastLoggedQuery = useRef<string | null>(null);
+
+  useEffect(() => {
+    // Only log if the query is different from the last one we logged
+    if (lastLoggedQuery.current !== q) {
+      // Prepare data safely inside effect
+      const topResultUrls = searchResults.entries
+        .slice(0, 20)
+        .map((entry) => entry.url);
+
+      trackSearchView({
+        q,
+        resultUrls: topResultUrls,
+        searchId,
+      });
+
+      // Update the ref so we don't log this 'q' again until it changes
+      lastLoggedQuery.current = q;
+    }
+  }, [q]);
+
   const { user } = useUser();
   const validType = (
     type.match(/^(all|images|videos|news)$/) ? type : 'all'

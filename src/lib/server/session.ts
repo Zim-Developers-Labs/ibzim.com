@@ -13,7 +13,6 @@ import {
   SessionValidationResult,
   User,
 } from './constants';
-import { getLocationFromIP } from '@/lib/server/geolocation';
 import { env } from '@/env';
 import parseUserAgent from './user-agent';
 
@@ -166,7 +165,21 @@ export async function updateSessionActivity(sessionId: string): Promise<void> {
 
   if (ipAddress && !session.ipAddress) {
     updates.ipAddress = ipAddress;
-    const location = await getLocationFromIP(ipAddress);
+
+    // NEW: Get location from Vercel headers (0 latency, no rate limits)
+    const headersList = await headers();
+    const city = headersList.get('x-vercel-ip-city');
+    const country = headersList.get('x-vercel-ip-country');
+
+    let location = null;
+
+    if (city && country) {
+      location = `${decodeURIComponent(city)}, ${country}`;
+    } else if (process.env.NODE_ENV === 'development') {
+      // Fallback for local development
+      location = 'Harare, Zimbabwe (Dev)';
+    }
+
     if (location) {
       updates.location = location;
     }
