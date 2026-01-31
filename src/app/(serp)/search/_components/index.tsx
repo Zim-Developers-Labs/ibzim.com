@@ -26,10 +26,12 @@ export default function SERPageComponents({
   searchResults,
   q,
   type = 'all',
+  searchId,
 }: {
   searchResults: FetchAllEntriesResult | null;
   q: string;
   type?: string;
+  searchId: string;
 }) {
   const { user } = useUser();
   const validType = (
@@ -137,7 +139,11 @@ export default function SERPageComponents({
             )}
           </div>
 
-          <ResultsComponent results={filteredResults} q={q} />
+          <ResultsComponent
+            results={filteredResults}
+            q={q}
+            searchId={searchId}
+          />
         </div>
       </div>
 

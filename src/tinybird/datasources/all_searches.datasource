@@ -1,0 +1,15 @@
+SCHEMA >
+    `search_id` String `json:$.search_id`,
+    `search_query` String `json:$.search_query`,
+    `user_id` LowCardinality(String) `json:$.user_id`,
+    `timestamp` DateTime `json:$.timestamp`,
+    `shown_results` Array(Tuple(Int32, String)) `json:$.shown_results[:]`,
+
+    `device_type` LowCardinality(String) `json:$.device_type`,
+    `browser_name` LowCardinality(String) `json:$.browser_name`,
+    `browser_version` String `json:$.browser_version`,
+    `os_name` LowCardinality(String) `json:$.os_name`, 
+    `location` String `json:$.location`
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "search_query, timestamp"

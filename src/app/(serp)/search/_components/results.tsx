@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { logLinkClick } from '@/tinybird/analytics';
 
 function ExternalSearch({ q }: { q: string }) {
   return (
@@ -65,9 +66,11 @@ function ExternalSearch({ q }: { q: string }) {
 }
 
 export default function ResultsComponent({
+  searchId,
   results,
   q,
 }: {
+  searchId: string;
   results: FetchAllEntriesResult | null;
   q: string;
 }) {
@@ -147,6 +150,20 @@ export default function ResultsComponent({
       </div>
     );
   }
+
+  const linkClick = async ({
+    result,
+    searchId,
+    position,
+  }: {
+    result: SearchIndexEntry;
+    searchId: string;
+    position: number;
+  }) => {
+    await logLinkClick(searchId, result.url, position);
+    window.open(result.url, '_blank');
+  };
+
   return (
     <div className="relative mx-auto mb-4 w-full max-w-7xl px-4 sm:px-8 lg:px-10">
       <div>
@@ -207,7 +224,7 @@ export default function ResultsComponent({
         </aside>
         {/* Results */}
         <ul className="flex max-w-xl flex-col space-y-10">
-          {results.entries.map((entry: SearchIndexEntry) => (
+          {results.entries.map((entry: SearchIndexEntry, i) => (
             <li key={entry.url}>
               <div className="flex items-start gap-2 sm:gap-4">
                 <div className="grid h-8 w-8 place-content-center rounded-sm bg-white">
@@ -222,8 +239,11 @@ export default function ResultsComponent({
               </div>
               <a
                 href={entry.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  linkClick({ result: entry, searchId, position: i + 1 });
+                }}
                 className="mb-2 block text-lg text-[#434fcf] hover:underline dark:text-[#b2c3ff]"
               >
                 {entry.name}

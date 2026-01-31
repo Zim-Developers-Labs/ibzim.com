@@ -1,0 +1,15 @@
+{
+    "host": "https://api.eu-west-1.aws.tinybird.co",
+    "id": "10448136-a834-4873-90a1-96bc9633b26c",
+    "name": "ibzim_workspace",
+    "scope": "user",
+    "token": "p.eyJ1IjogIjEwNDQ4MTM2LWE4MzQtNDg3My05MGExLTk2YmM5NjMzYjI2YyIsICJpZCI6ICJkNmNhYzE3OC03MDJhLTQyNzctYmZmNy04MTJkM2U4OWM2MDkiLCAiaG9zdCI6ICJhd3MtZXUtd2VzdC0xIn0.6Osjlw9Rklxp46pWGkwPFz1yEEkOHMsbcTFNbXSlmiM",
+    "tokens": {
+        "https://api.eu-central-1.aws.tinybird.co": "p.eyJ1IjogIjY3YjhhNDNhLThlYTktNDc1ZC1hZWQ4LTY1ZDE3MzVhZjJlYSIsICJpZCI6ICJhOWQzYmUxZS1lZTJmLTQyNzMtYmE4YS0yNjNlMWZiNDM0N2MiLCAiaG9zdCI6ICJhd3MtZXUtY2VudHJhbC0xIn0.doKa-_HSBUymEFLxh0Ra3Gas_-KhPfh9fIOE-wjIfco",
+        "https://api.eu-west-1.aws.tinybird.co": "p.eyJ1IjogIjEwNDQ4MTM2LWE4MzQtNDg3My05MGExLTk2YmM5NjMzYjI2YyIsICJpZCI6ICJkNmNhYzE3OC03MDJhLTQyNzctYmZmNy04MTJkM2U4OWM2MDkiLCAiaG9zdCI6ICJhd3MtZXUtd2VzdC0xIn0.6Osjlw9Rklxp46pWGkwPFz1yEEkOHMsbcTFNbXSlmiM"
+    },
+    "user_email": "tinomazorodze.mt@gmail.com",
+    "user_id": "79479e21-fd3b-47d4-b93c-783090b7b724",
+    "user_token": "p.eyJ1IjogIjc5NDc5ZTIxLWZkM2ItNDdkNC1iOTNjLTc4MzA5MGI3YjcyNCIsICJpZCI6ICJlZjBhYTQ3MC0zNjg3LTRmNmUtYTFjZC1jMTdhNzM0NDMyMzIiLCAiaG9zdCI6ICJhd3MtZXUtd2VzdC0xIn0.rkuPr8xXpzcbvM8b4zqb6n2wzcwQhlyzgxMsMktd80M",
+    "version": "3.1.0"
+}
