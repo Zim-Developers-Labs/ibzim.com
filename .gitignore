@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/docker/typesense
 
 # next.js
 /.next/
