@@ -58,6 +58,10 @@ export default function HomeFooter() {
             <Link
               target="_blank"
               href={DOMAIN_URLS.BUSINESS()}
+              onClick={(e) => {
+                e.preventDefault();
+                toast.info('Business Platform is coming soon');
+              }}
               className="hover:underline"
             >
               Business

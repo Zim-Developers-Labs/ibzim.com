@@ -1,7 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import { SearchIndexEntry } from '@/types';
 import { FetchAllEntriesResult } from './actions';
 import { Icons } from '@/components/icons';
-import { Check, DollarSign, Flag } from 'lucide-react';
+import { Check, DollarSign, Flag, ArrowUp } from 'lucide-react';
 import {
   Dialog,
   DialogClose,
@@ -65,6 +68,9 @@ function ExternalSearch({ q }: { q: string }) {
   );
 }
 
+const INITIAL_RESULTS = 10;
+const LOAD_MORE_INCREMENT = 12;
+
 export default function ResultsComponent({
   searchId,
   results,
@@ -74,6 +80,18 @@ export default function ResultsComponent({
   results: FetchAllEntriesResult | null;
   q: string;
 }) {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_RESULTS);
+  const [hasLoadedMore, setHasLoadedMore] = useState(false);
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + LOAD_MORE_INCREMENT);
+    setHasLoadedMore(true);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (!results || results.entries.length === 0) {
     return (
       <div className="relative mx-auto mb-4 w-full max-w-7xl px-4 sm:px-8 lg:px-10">
@@ -169,7 +187,8 @@ export default function ResultsComponent({
       <div>
         <div className="mb-8 flex max-w-xl items-center justify-between text-sm">
           <div className="text-zinc-700 dark:text-zinc-300">
-            Found {results.entries.length} results in {results.timeTaken}ms
+            Found {results.entries.length} results in{' '}
+            {(results.timeTaken / 1000).toFixed(3)}s
           </div>
           <div className="flex items-center gap-1 text-red-600 dark:text-red-400">
             <Flag className="size-3" />
@@ -224,37 +243,61 @@ export default function ResultsComponent({
         </aside>
         {/* Results */}
         <ul className="flex max-w-xl flex-col space-y-10">
-          {results.entries.map((entry: SearchIndexEntry, i) => (
-            <li key={entry.url}>
-              <div className="flex items-start gap-2 sm:gap-4">
-                <div className="grid h-8 w-8 place-content-center rounded-sm bg-white">
-                  <Icons.ibLogoSM className="h-3 w-fit text-zinc-900" />
-                </div>
-                <div className="-mt-1">
-                  <div className="">IBZIM</div>
-                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                    www.ibzim.com
+          {results.entries
+            .slice(0, visibleCount)
+            .map((entry: SearchIndexEntry, i) => (
+              <li key={entry.url} className="last:mb-8">
+                <div className="flex items-start gap-2 sm:gap-4">
+                  <div className="grid h-8 w-8 place-content-center rounded-sm bg-white">
+                    <Icons.ibLogoSM className="h-3 w-fit text-zinc-900" />
+                  </div>
+                  <div className="-mt-1">
+                    <div className="">IBZIM</div>
+                    <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                      www.ibzim.com
+                    </div>
                   </div>
                 </div>
-              </div>
-              <a
-                href={entry.url}
-                onClick={(e) => {
-                  e.preventDefault();
+                <a
+                  href={entry.url}
+                  onClick={(e) => {
+                    e.preventDefault();
 
-                  linkClick({ result: entry, searchId, position: i + 1 });
-                }}
-                className="mb-2 block text-lg text-[#434fcf] hover:underline dark:text-[#b2c3ff]"
-              >
-                {entry.name}
-              </a>
-              <p className="text-sm text-zinc-600 dark:text-zinc-300">
-                {entry.description}
-              </p>
-            </li>
-          ))}
+                    linkClick({ result: entry, searchId, position: i + 1 });
+                  }}
+                  className="mb-2 block text-lg text-[#434fcf] hover:underline dark:text-[#b2c3ff]"
+                >
+                  {entry.name}
+                </a>
+                <p className="text-sm text-zinc-600 dark:text-zinc-300">
+                  {entry.description}
+                </p>
+              </li>
+            ))}
         </ul>
-        <ExternalSearch q={q} />
+
+        {/* Show More Button */}
+        {visibleCount < results.entries.length && (
+          <div className="my-8 flex max-w-xl items-center gap-3">
+            <Button
+              onClick={handleShowMore}
+              className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary flex-1 font-normal"
+            >
+              Show more results
+            </Button>
+            {hasLoadedMore && (
+              <Button
+                onClick={scrollToTop}
+                className="bg-primary-foreground hover:bg-primary-foreground/90 text-primary px-3"
+                aria-label="Scroll to top"
+              >
+                <ArrowUp className="size-4" />
+              </Button>
+            )}
+          </div>
+        )}
+
+        {results && results.entries.length < 10 && <ExternalSearch q={q} />}
       </div>
     </div>
   );

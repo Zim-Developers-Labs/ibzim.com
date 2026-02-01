@@ -11,6 +11,7 @@
     "db:studio": "drizzle-kit studio",
     "test": "node db-test.mjs",
     "seed:keywords": "tsx src/scripts/seed-keywords-index.ts",
+    "test:search": "tsx tests/search-tests/test-search.ts",
     "db:seed": "tsx src/scripts/seed.ts",
     "db:clear": "tsx src/scripts/clear.ts"
   },

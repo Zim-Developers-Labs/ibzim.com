@@ -15,41 +15,25 @@ export interface FetchAllEntriesResult {
 export async function getResultsForQuery(
   query: string,
 ): Promise<FetchAllEntriesResult | null> {
-  const perPage = 250;
-  let currentPage = 1;
-  let allEntries: SearchIndexEntry[] = [];
-  let timeTaken = 0;
-  let keepFetching = true;
-
   try {
-    while (keepFetching) {
-      const searchResults = await typesenseSearchIndex.documents().search({
-        q: query,
-        query_by: 'description',
-        per_page: perPage,
-        page: currentPage,
-        exclude_fields: 'embedding',
-      });
-      const hits = searchResults.hits || [];
-      timeTaken += searchResults.search_time_ms || 0;
+    const searchResults = await typesenseSearchIndex.documents().search({
+      q: query,
+      query_by: 'name,description,content,embedding',
+      prefix: 'true,true,false,false',
+      query_by_weights: '4,1,2,1',
+      prioritize_exact_match: true,
+      per_page: 66,
+      page: 1,
+    });
 
-      if (hits.length > 0) {
-        const pageDocs = hits.map((hit) => hit.document as SearchIndexEntry);
-        allEntries = [...allEntries, ...pageDocs];
-        // If we received fewer than 250 results, we've reached the last page
-        if (hits.length < perPage) {
-          keepFetching = false;
-        } else {
-          currentPage++;
-        }
-      } else {
-        // No more hits found
-        keepFetching = false;
-      }
-    }
+    const hits = searchResults.hits || [];
+    const timeTaken = searchResults.search_time_ms || 0;
+
+    // Map the documents
+    const entries = hits.map((hit) => hit.document as SearchIndexEntry);
 
     return {
-      entries: allEntries,
+      entries: entries,
       timeTaken: timeTaken,
     };
   } catch (error) {

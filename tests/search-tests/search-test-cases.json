@@ -1,0 +1,75 @@
+[
+  {
+    "category": "Core Relevance",
+    "description": "High volume, brand-specific queries that must rank #1",
+    "tests": [
+      {
+        "query": "EcoCash",
+        "type": "exact_rank_1",
+        "expectedKeywords": ["EcoCash", "Login", "Services"]
+      },
+      {
+        "query": "Passport application",
+        "type": "contains_relevant",
+        "expectedKeywords": ["Registrar", "ZRP", "Application"]
+      },
+      {
+        "query": "CBZ",
+        "type": "exact_rank_1",
+        "expectedKeywords": ["CBZ Holdings", "Bank"]
+      }
+    ]
+  },
+  {
+    "category": "Negative Constraints (Out of Scope)",
+    "description": "International content that should return 0 results or strictly local context",
+    "tests": [
+      {
+        "query": "Elon Musk",
+        "type": "zero_or_local_context",
+        "forbiddenKeywords": ["Tesla CEO", "Biography"],
+        "allowedKeywords": ["Starlink Zimbabwe", "Licensing"]
+      },
+      {
+        "query": "Taylor Swift",
+        "type": "zero_results"
+      },
+      {
+        "query": "New York weather",
+        "type": "zero_results"
+      }
+    ]
+  },
+  {
+    "category": "Location & Specificity",
+    "description": "Queries with geographic intent",
+    "tests": [
+      {
+        "query": "Tyres in Harare",
+        "type": "contains_relevant",
+        "expectedKeywords": ["Harare", "Tiger Wheel", "Dunlop"]
+      },
+      {
+        "query": "Weather in Byo",
+        "type": "contains_relevant",
+        "expectedKeywords": ["Bulawayo", "Forecast"]
+      }
+    ]
+  },
+  {
+    "category": "Typos & Fuzzy",
+    "description": "Testing tolerance for bad spelling",
+    "tests": [
+      {
+        "query": "Ecocsh",
+        "type": "fuzzy_match",
+        "expectedKeywords": ["EcoCash"]
+      },
+      {
+        "query": "Bulwayo",
+        "type": "fuzzy_match",
+        "expectedKeywords": ["Bulawayo"]
+      }
+    ]
+  }
+]
