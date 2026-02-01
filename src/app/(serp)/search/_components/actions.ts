@@ -2,7 +2,7 @@
 
 import { typesenseSearchIndex } from '@/lib/typesense/client';
 import { SearchIndexEntry } from '../../../../types';
-import { logSearch } from '@/tinybird/analytics';
+import { logSearch } from '@/lib/tinybird/analytics';
 import { getCurrentSession } from '@/lib/server/session';
 import { headers } from 'next/headers';
 import parseUserAgent from '@/lib/server/user-agent';
@@ -28,6 +28,7 @@ export async function getResultsForQuery(
         query_by: 'description',
         per_page: perPage,
         page: currentPage,
+        exclude_fields: 'embedding',
       });
       const hits = searchResults.hits || [];
       timeTaken += searchResults.search_time_ms || 0;

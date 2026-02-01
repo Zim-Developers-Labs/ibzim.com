@@ -1,8 +1,0 @@
-SCHEMA >
-    `search_id` String `json:$.search_id`,
-    `clicked_url` String `json:$.clicked_url`,
-    `position` UInt8 `json:$.position`,
-    `timestamp` DateTime `json:$.timestamp`
-
-ENGINE "MergeTree"
-ENGINE_SORTING_KEY "timestamp, search_id"

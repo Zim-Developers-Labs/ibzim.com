@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { logLinkClick } from '@/tinybird/analytics';
+import { logLinkClick } from '@/lib/tinybird/analytics';
 
 function ExternalSearch({ q }: { q: string }) {
   return (
