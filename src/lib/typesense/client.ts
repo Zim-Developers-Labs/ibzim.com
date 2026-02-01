@@ -11,9 +11,19 @@ import Typesense from 'typesense';
 const client = new Typesense.Client({
   nodes: [
     {
-      host: env.NEXT_PUBLIC_TYPESENSE_HOST,
-      port: env.TYPESENSE_PORT,
-      protocol: env.TYPESENSE_PROTOCOL,
+      host: 'bo0xwvmspi34yel5p-1.a1.typesense.net',
+      port: 443,
+      protocol: 'https',
+    },
+    {
+      host: 'bo0xwvmspi34yel5p-2.a1.typesense.net',
+      port: 443,
+      protocol: 'https',
+    },
+    {
+      host: 'bo0xwvmspi34yel5p-3.a1.typesense.net',
+      port: 443,
+      protocol: 'https',
     },
   ],
   apiKey: env.TYPESENSE_API_KEY,
