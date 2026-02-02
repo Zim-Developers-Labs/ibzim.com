@@ -21,17 +21,7 @@ const client = new Typesense.Client({
       ]
     : [
         {
-          host: 'bo0xwvmspi34yel5p-1.a1.typesense.net',
-          port: 443,
-          protocol: 'https',
-        },
-        {
-          host: 'bo0xwvmspi34yel5p-2.a1.typesense.net',
-          port: 443,
-          protocol: 'https',
-        },
-        {
-          host: 'bo0xwvmspi34yel5p-3.a1.typesense.net',
+          host: 'synkjlzpvoa5xbm1p-1.a1.typesense.net',
           port: 443,
           protocol: 'https',
         },
