@@ -8,6 +8,9 @@ export const WHATSAPP_SENDER = '+15558998392';
 export const devConString =
   'postgres://postgres:postgres@db.localtest.me:5432/main';
 
+export const whatsappGroupLink =
+  'https://chat.whatsapp.com/FfXS39iLv7k36jrskKjOfX';
+
 export enum Paths {
   Home = '/',
   Login = '/sign-in',

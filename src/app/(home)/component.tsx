@@ -1,11 +1,17 @@
 'use client';
 
-import { ChevronRight, ChevronDownCircle } from 'lucide-react';
+import {
+  ChevronRight,
+  ChevronDownCircle,
+  Sparkles,
+  ArrowRight,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import SearchToggler from './search-toggler';
 import { useUser } from '@/hooks/user-context';
+import StarCounter from './star-counter';
 
 export const menuItems = [
   {
@@ -68,10 +74,12 @@ export default function HomeComponent() {
               <span className="font-semibold text-zinc-900 dark:text-white">
                 IB
               </span>
-              <span className="text-primaryColor font-semibold">ZIM</span>, a
-              search engine for Zimbabwe
+              <span className="text-primaryColor font-semibold">ZIM</span>, an
+              open source search engine for Zimbabwe.
             </p>
           </div>
+
+          <StarCounter />
 
           {/* Search Box */}
           <div className="relative mb-8 flex w-full justify-center">

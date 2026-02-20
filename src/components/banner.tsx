@@ -1,5 +1,6 @@
 'use client';
 
+import { whatsappGroupLink } from '@/lib/constants';
 import { ChevronRightIcon } from 'lucide-react';
 
 export default function Banner() {
@@ -31,20 +32,19 @@ export default function Banner() {
           />
         </div>
         <div className="flex items-center gap-x-4 gap-y-2">
-          <span className="text-sm leading-6 text-gray-900">
-            {/* Ever made money online? */}
-            We are Launching soon 😊
+          <span className="hidden text-sm leading-6 text-gray-900 sm:inline">
+            Maintained by Zim Developers Labs 😊
+          </span>
+          <span className="text-sm leading-6 text-gray-900 sm:hidden">
+            By Zim Developers 😊
           </span>
           <button
             onClick={() => {
-              window.open(
-                'https://wa.me/+263717238876?text=Hey%20IBZim%20Team%2C%20I%27m%20%5BYour%20name%5D.%20I%20am%20excited%20for%20the%20launch.%20Notify%20me!',
-                '_blank',
-              );
+              window.open(whatsappGroupLink, '_blank');
             }}
             className="flex cursor-pointer items-center gap-1 rounded-full bg-gray-900 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-gray-900"
           >
-            Join Waitlist
+            Join Community
             <ChevronRightIcon className="h-4 w-4" />
           </button>
         </div>

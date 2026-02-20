@@ -1,0 +1,25 @@
+name: Update GitHub Stars
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch Stats
+        run: |
+          STARS=$(curl -s https://api.github.com/repos/${{ github.repository }} | jq '.stargazers_count')
+          echo "{\"stars\": $STARS}" > public/stats.json
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/stats.json
+          git commit -m "chore: update star count to $STARS" || exit 0
+          git push
