@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import HomeComponent from './component';
 import { preparePageMetadata } from '@/lib/metadata';
+import { getStarsCount } from './actions';
 
 export const generateMetadata = (): Metadata =>
   preparePageMetadata({
@@ -11,6 +12,8 @@ export const generateMetadata = (): Metadata =>
     imageUrl: '/banner.webp',
   });
 
-export default function HomePage() {
-  return <HomeComponent />;
+export default async function HomePage() {
+  const starsCount = await getStarsCount();
+
+  return <HomeComponent starsCount={starsCount} />;
 }

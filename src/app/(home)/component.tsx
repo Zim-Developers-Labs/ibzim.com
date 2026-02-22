@@ -11,7 +11,8 @@ import Link from 'next/link';
 import { Icons } from '@/components/icons';
 import SearchToggler from './search-toggler';
 import { useUser } from '@/hooks/user-context';
-import StarCounter from './star-counter';
+import React from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export const menuItems = [
   {
@@ -58,7 +59,7 @@ export const menuItems = [
   },
 ];
 
-export default function HomeComponent() {
+export default function HomeComponent({ starsCount }: { starsCount: number }) {
   const { user } = useUser();
   return (
     <div className="relative w-full bg-zinc-100 dark:bg-zinc-800">
@@ -79,7 +80,23 @@ export default function HomeComponent() {
             </p>
           </div>
 
-          <StarCounter />
+          <Link
+            href="https://github.com/Zim-Developers-Labs/ibzim.com"
+            className="border-border bg-foreground hover:bg-foreground/80 mx-auto mb-6 flex w-fit items-center gap-2 rounded-full border px-4 py-1.5"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+            <span className="text-background text-xs font-medium">
+              <React.Suspense
+                fallback={<Skeleton className="inline h-4 w-[42px]" />}
+              >
+                {starsCount > 1000
+                  ? `${(starsCount / 1000).toFixed(1)}k`
+                  : starsCount.toLocaleString()}
+              </React.Suspense>{' '}
+              stars on Github
+            </span>
+            <ArrowRight className="h-3.5 w-3.5 text-amber-500" />
+          </Link>
 
           {/* Search Box */}
           <div className="relative mb-8 flex w-full justify-center">

@@ -1,5 +1,4 @@
 import Container from '@/components/container';
-import { Notifications } from '@/components/header/notifications';
 import SearchToggler from '@/components/header/search-toggler';
 import { SignToggler } from '@/components/header/sign-toggler';
 import UserToggler from '@/components/header/user-toggler';
@@ -7,6 +6,7 @@ import { Icons } from '@/components/icons';
 import Link from 'next/link';
 import { MenuDrawer } from './menu-drawer';
 import { NotificationType } from '@/types';
+import { Button } from '../ui/button';
 
 export const tools = [
   {
@@ -23,16 +23,14 @@ type HeaderProps = {
   user?: any;
   articles?: any[];
   popularArticles?: any[];
-  sanityGlobalNotifications?: NotificationType[];
-  neonUserNotifications?: NotificationType[];
+  starsCount: number;
 };
 
 export default function Header({
   articles,
   popularArticles,
   user,
-  neonUserNotifications,
-  sanityGlobalNotifications,
+  starsCount,
 }: HeaderProps) {
   return (
     <header
@@ -66,11 +64,22 @@ export default function Header({
             </div>
           )}
           <div className="flex flex-none items-center gap-2 md:gap-4">
-            <Notifications
-              user={user}
-              neonUserNotifications={neonUserNotifications}
-              sanityGlobalNotifications={sanityGlobalNotifications}
-            />
+            <Button
+              variant="outline"
+              className="relative cursor-pointer border-zinc-600 bg-transparent text-white hover:bg-zinc-800 hover:text-white"
+              asChild
+            >
+              <Link
+                href="https://github.com/Zim-Developers-Labs/ibzim.com"
+                target="_blank"
+              >
+                <Icons.gitHub className="h-5 w-5" />
+                {starsCount > 1000
+                  ? `${(starsCount / 1000).toFixed(1)}k`
+                  : starsCount.toLocaleString()}{' '}
+                <span className="hidden md:inline">stars</span>
+              </Link>
+            </Button>
             {!user && <SignToggler />}
             {user && <UserToggler user={user} />}
           </div>

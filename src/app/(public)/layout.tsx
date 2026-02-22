@@ -14,6 +14,7 @@ import Header from '@/components/header';
 import { getSearchData } from '@/lib/sanity/actions';
 import { siteConfig } from '@/lib/config';
 import GoogleAdsense from '@/components/google-adsense';
+import { getStarsCount } from '../(home)/actions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,10 +24,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const { user } = await getCurrentSession();
-  const sanityGlobalNotifications = await getAllNotifications();
-  const neonUserNotifications = user ? await getUserNotifications(user.id) : [];
 
   const { allDocuments } = await getSearchData();
+  const starsCount = await getStarsCount();
 
   return (
     <html
@@ -45,12 +45,7 @@ export default async function RootLayout({
             closeButton
           />
           <Banner />
-          <Header
-            user={user}
-            sanityGlobalNotifications={sanityGlobalNotifications}
-            neonUserNotifications={neonUserNotifications}
-            articles={allDocuments}
-          />
+          <Header starsCount={starsCount} user={user} articles={allDocuments} />
           {children}
           <Footer siteShortName="IBZIM" />
         </UserProvider>
